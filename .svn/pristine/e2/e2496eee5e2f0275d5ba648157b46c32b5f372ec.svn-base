@@ -1,0 +1,68 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var gift={
+	/*点击显示设置游戏道具界面*/
+	BindEvent:function(){		
+		/*点击显示修改道具配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunYing c=GiftPackage a=showAddGiftPackageHtml}';
+				setting.Params = '&SpID='+$(this).attr('id');
+{literal}
+				window.parent.main.AddTab($(this).attr('title'),'GiftPackage'+$(this).attr('id'),setting.Url+setting.Params);
+				/*window.location.href=setting.Url+setting.Params;*/
+			});	
+		});			
+		/*点击上架或下架商城道具,如果不存在,则插入*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunYing c=GiftPackage a=delGiftPackage}';
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.Url,'SpID='+$(this).attr('id'),'callback.DelGiftPackage');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="7%" bgcolor="#FFFFFF">序号</th>
+    <th width="10%" bgcolor="#FFFFFF">礼包展示图</th>
+    <th width="13%" bgcolor="#FFFFFF">礼包名称</th>
+    <th width="13%" bgcolor="#FFFFFF">资源编号</th>
+	<th width="10%" bgcolor="#FFFFFF">礼包编号</th>
+	<th width="8%" bgcolor="#FFFFFF">礼包概率</th>
+	<th width="13%" bgcolor="#FFFFFF">礼包分类</th>
+    <th width="12%" bgcolor="#FFFFFF">使用场景</th>
+    <th width="14%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SpList item=sp}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$sp.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF"><img src="{$sp.ImgPath}" width="50" /></td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.GoodsName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.ResourceID}</td>
+	<td align="center" bgcolor="#FFFFFF">{$sp.SpNumber}</td>
+	<td align="center" bgcolor="#FFFFFF">{$sp.GiftProb}</td>
+	<td align="center" bgcolor="#FFFFFF">{$sp.CateName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.Place}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='del' id="{$sp.SpID}">删除</a>
+      <a href="javascript:void(0)" class="edit" id="{$sp.SpID}" title="{$sp.GoodsName}">修改</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SpList}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

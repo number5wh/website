@@ -1,0 +1,48 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+	<th width="20%" bgcolor="#FFFFFF">角色名(玩家编号)</th>
+    <th width="8%" bgcolor="#FFFFFF">赢</th>
+    <th width="8%" bgcolor="#FFFFFF">输</th>
+    <th width="8%" bgcolor="#FFFFFF">和</th>
+	<th width="8%" bgcolor="#FFFFFF">逃</th>
+    <th width="8%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Search('WinRate')">胜率↓</a></th>
+    <th width="10%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Search('TotalMoney')">金币↓</a></th>
+    <th width="15%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Search('TotalHappyBean')">吞吐量↓</a></th>
+	<th width="15%" bgcolor="#FFFFFF">最近更新时间</th>
+  </tr>
+  {foreach from=$GameRateList item=List}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" class="aLink" title="{$List.LoginID}" id="{$List.RoleID}" KindID='{$List.KindID}' Date='{$List.Date}'>{$List.LoginName}({$List.LoginID})</a></td>
+	<td align="center" bgcolor="#FFFFFF">{$List.WinCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.LostCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.DrawCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.FleeCount}</td>	
+	<td align="center" bgcolor="#FFFFFF">{$List.WinRate}%</td>	
+    <td align="center" bgcolor="#FFFFFF">{$List.Money}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.TotalHappyBean}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.UpdateTime}</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $GameRateList}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script>
+{literal}
+$(function(){
+	$('.aLink').click(function(){
+{/literal}
+		setting.Url='{au d=YunYing c=GameRate a=showLineCharts}';
+		var Params='&RoleID='+$(this).attr('id')+'&KindID='+$(this).attr('KindID')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+		window.parent.main.AddTab($(this).attr('title'),'GameRate'+$(this).attr('id')+$(this).attr('KindID'),setting.Url+Params);
+{literal}
+	})
+});
+{/literal}
+</script>

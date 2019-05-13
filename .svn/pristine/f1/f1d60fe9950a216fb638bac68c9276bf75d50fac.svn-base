@@ -1,0 +1,109 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">用户名</th>
+    <th width="10%" bgcolor="#FFFFFF">工号</th>
+    <th width="10%" bgcolor="#FFFFFF">部门</th>
+    <th width="9%" bgcolor="#FFFFFF">姓名</th>
+    <th width="9%" bgcolor="#FFFFFF">绑定手机或邮箱</th>
+	<th width="14%" bgcolor="#FFFFFF">添加时间</th>
+	<th width="10%" bgcolor="#FFFFFF">状态</th>
+	<th width="10%" bgcolor="#FFFFFF">操作人</th>
+	<th width="20%" bgcolor="#FFFFFF">操作</th>
+	<th width="6%" bgcolor="#FFFFFF">&nbsp;</th>
+  </tr>
+  {foreach from=$SysUserList item=U}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$U.UserName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.JobNumber}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.DeptName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.RealName}</td>
+     <td align="center" bgcolor="#FFFFFF">{$U.BindAccount}</td>
+	<td align="center" bgcolor="#FFFFFF">{$U.AddTime}</td>
+	<td align="center"bgcolor="#FFFFFF">{if $U.Locked == 1} <font color="red">锁定</font><font color="orange"><a href="javascript:void(0)" class="UnLock" id="{$U.ID}">&nbsp解锁</a></font>{else}<font color="green">正常</font>{/if}</td>
+	<td align="center" bgcolor="#FFFFFF">{$U.SysUserName}</td>	
+    <td align="center" bgcolor="#FFFFFF">
+		{if $U.UserName != 'admin'}
+		<a href="javascript:void(0)" class="ResetUserPwd" id="{$U.ID}">重置密码</a>
+		配置权限		
+			<a href="javascript:void(0)" class="DeleteUser" id="{$U.ID}">删除用户</a>
+		{/if}
+	</td>
+	<td align="center" bgcolor="#FFFFFF" id="Msg_{$U.ID}">&nbsp;</td>	
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SysUserList}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*重置密码*/
+	$('.ResetUserPwd').click(function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=SysUser a=resetSysUserPwd}';
+		setting.Params = 'ID='+$(this).attr('id');
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackResetSysUserPwd);
+{literal}
+	});
+	/*删除用户*/
+	$('.DeleteUser').click(function(){
+		if(confirm('确定要删除此用户吗?删除后将无法恢复')){
+{/literal}		
+			setting.Url = '{au d=YunWei c=SysUser a=deleteSysUser}';
+			setting.Params = 'ID='+$(this).attr('id');
+			ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackDeleteSysUser);
+{literal}
+		}
+	});
+	/*解锁用户*/
+	$('.UnLock').click(function(){
+		{/literal}
+				setting.Url = '{au d=YunWei c=SysUser a=UnLockSysUser}';
+				setting.Params = 'ID='+$(this).attr('id');
+				ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackUnLockSysUser);
+		{literal}
+			});
+});
+var SysUser={
+	/*重置密码后的回调函数*/
+	CallBackResetSysUserPwd:function(data){
+		if(data.iResult==0)
+			$('#Msg_'+data.ID).html('密码重置成功');
+		else
+			$('#Msg_'+data.ID).html('密码重置失败');
+	},
+	/*删除用户后的回调函数*/
+	CallBackDeleteSysUser:function(data){
+		if(data.iResult==0){
+			var DeptID = $.trim($('#DeptID').val());
+			var SearchType = $.trim($('#SearchType').val());
+			var Key = $.trim($('#Key').val());
+			setting.Params = '&DeptID='+DeptID+'&SearchType='+SearchType+'&Key='+encodeURIComponent(Key);
+			page.GetPage($('.txtPage').val(),"callback.GetPagerSysAdminList");
+		}
+		else
+			$('#Msg_'+data.ID).html('用户删除失败');
+	},
+	/*解锁用户后的回调函数*/
+	CallBackUnLockSysUser:function(data){
+	if(data.iResult==0){
+		var DeptID = $.trim($('#DeptID').val());
+		var SearchType = $.trim($('#SearchType').val());
+		var Key = $.trim($('#Key').val());
+		setting.Params = '&DeptID='+DeptID+'&SearchType='+SearchType+'&Key='+encodeURIComponent(Key);
+		page.GetPage($('.txtPage').val(),"callback.GetPagerSysAdminList");
+	}
+	else{
+		$('#Msg_'+data.ID).html('用户删除失败');
+	 }
+   }
+};
+{/literal}
+</script>

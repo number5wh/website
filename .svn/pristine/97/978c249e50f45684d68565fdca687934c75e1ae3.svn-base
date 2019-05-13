@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>如何绑定账号</title>
+	<style type="text/css">
+{literal}
+		.content{
+		width:80%;
+		margin:0 auto;
+		text-align:center;
+		font-family: "微软雅黑";
+		}
+		.content h1{
+			color:#2782d7;
+			margin-bottom: 45px;
+		}
+		.content p{
+			color: #2782d7;
+			font-size:1.2em;
+			line-height: 1.5em;
+		}
+		.content p span{
+			color:#fff;
+			width:1.5em;
+			height:1.5em;
+			display: inline-block;
+			border-radius: 50%;
+			background-color:#2782d7;
+		}
+		.content .TDCode{
+			width: 300px;
+			height: 300px;
+		}
+{/literal}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<h1 style="color:red">请登陆电脑客户端绑定微信</h1>
+		<h1>如何绑定账号？</h1>
+		<p><span>1</span>&nbsp;掏出手机，打开微信扫一扫</p>
+		<img src="images/do_01.png">
+		<p><span>2</span>&nbsp;关注公众平台，获取最新信息</p>
+		<img src="images/do_02.png">
+		<p><span>3</span>&nbsp;关注成功，实时获取验证码</p>
+		<img src="images/do_03.png">
+	</div>
+</body>
+</html>

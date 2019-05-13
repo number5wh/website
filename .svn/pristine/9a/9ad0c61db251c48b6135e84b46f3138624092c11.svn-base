@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Match={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		M.BindEvent();//绑定列表页事件		
+		//绑定分页
+		var Param = '$(this).attr("pg"),"Match.CallBackGetPagerRecharge"';
+		var Param1 = '$(this).val(),"Match.CallBackGetPagerRecharge"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	},
+	/*分页回调*/
+	CallBackGetPagerRecharge:function(data){
+		$('#PageList').html(data);
+		Match.SetProperty();		
+	},
+	/*充值状态*/
+	CallBackSetRecharge:function(data){
+		data=$.evalJSON(data);//字符串格式转为json对象,extend.js	
+		if(data.CurPage>0){
+			$('#UpdateMsg').html('更新进度:'+data.CurPage+'/'+data.TotalPage);
+			ajax.RequestUrl(setting.Url,'curPage='+data.CurPage+setting.Params,"Match.CallBackSetRecharge");
+		}
+		else{
+			$('.btnUpdate').removeAttr('disabled');
+			$('#UpdateMsg').html('更新完成,请<a href="javascript:void(0)" class="blue" onclick="window.location.reload()">刷新</a>页面');
+		}
+	}
+};
+
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunYing c=MatchRecharge a=getPagerRechargeList}';
+{literal}
+	Match.SetProperty();	
+	/*绑定搜索*/
+	$('#btnSearch').click(function(){
+		var Mobile = $('#Mobile').val();
+		var LoginID = $('#LoginID').val();
+
+		setting.Params = '&Mobile='+Mobile+'&LoginID='+LoginID;
+		page.GetPage(1,"Match.CallBackSetRecharge");
+	});
+	/*绑定更新充值状态*/
+	$('.btnUpdate').click(function(){
+		$('.btnUpdate').attr('disabled','disabled');
+		$('#UpdateMsg').html('开始更新,请稍候.');
+{/literal}
+		setting.Url = '{au d=YunYing c=MatchRecharge a=setRecharge}';
+{literal}
+		setting.Params = '&RID='+$(this).attr('id');
+		ajax.RequestUrl(setting.Url,'curPage=1'+setting.Params,"Match.CallBackSetRecharge");
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset class="left">
+<legend>搜索</legend>
+手机号:<input type="text" id="Mobile" size="11" maxlength="11"/>
+玩家编号:<input type="text" id="LoginID" size="11" />
+<input type="button" id="btnSearch" class="btn f2" value="搜索"/>
+</fieldset>
+<fieldset class="left">
+<legend>更新充值状态</legend>
+<input type="button" class="btn f2 btnUpdate" id="0" value="更新充值状态" /><span id="UpdateMsg"></span>
+</fieldset>
+<div id="PageList">
+{include file="$skin/YunYing/GameMatchRechargeListPage.html"}
+</div>
+
+</body>
+</html>

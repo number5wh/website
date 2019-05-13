@@ -1,0 +1,40 @@
+<?php
+require_once __DIR__.'/DALBase.php';
+
+include_once ROOT_PATH.'Common/Comm.php';
+include_once ROOT_PATH.'Common/SvrPtl/MySocket.class.php';
+include_once ROOT_PATH.'Common/SvrPtl/Socket.php';
+include_once ROOT_PATH.'Common/SvrPtl/PHPStream.php';;
+include_once ROOT_PATH.'Common/SePtlDCToOW.php';
+include_once ROOT_PATH.'Common/SePtlOWToDC.php';
+
+class IndexServiceDAL extends DALBase
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    /*
+     * 获取活动信息
+     */
+    public function getPagerHappyBeanSortTop100(){
+        $roleid = $_GET['roleid'];
+        $strSelectKeySys = "getPagerHappyBeanSortTop100".$roleid;
+        $arrReturns = $this->objMemcache->get($strSelectKeySys);
+        if(!$arrReturns){
+            $ch = curl_init('http://dey6kxqf.xiyugg.top/?d=Game&c=HappyBean&a=getPagerHappyBeanSortTop100&roleid='.$roleid);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            if ($output) {//
+                $arrReturns = $output;
+                $this->objMemcache->set($strSelectKeySys,$arrReturns,0,600);
+            } else {
+                $arrReturns = "[]";
+            }
+        }
+        return $arrReturns;
+    }
+}
+?>

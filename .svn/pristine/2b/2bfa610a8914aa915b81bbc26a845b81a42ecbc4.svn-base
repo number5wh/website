@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+    {literal}
+$(function(){
+  init.SetTableRows();
+  //点击显示修改服务器配置界面
+  $('.edit').each(function(){
+    $(this).click(function(){
+{/literal}
+      setting.Url='{au d=YunWei c=RoomLuckyEggMoney a=showEditRoomLuckyEggMoneyHtml}';
+{literal}
+      ajax.RequestUrl(setting.Url,'ID='+$(this).attr('id'),'callback.showEditRoomLuckyEggMoneyHtml');
+    }); 
+  });
+
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="11%" bgcolor="#FFFFFF">房间ID</th>
+    <th width="21%" bgcolor="#FFFFFF">房间名称</th>
+    <th width="20%" bgcolor="#FFFFFF">彩蛋金额</th>
+    <th width="20%" bgcolor="#FFFFFF">彩蛋税率</th>
+    <th width="20%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$List item=vo}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$vo.RoomID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$vo.RoomName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$vo.LuckyEggMoney/1000}</td>
+    <td align="center" bgcolor="#FFFFFF">{$vo.LuckyEggTax/1000}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$vo.RoomID}">修改</a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

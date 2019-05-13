@@ -1,0 +1,81 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var e={
+	BindEvent:function(){		
+		/*点击显示添加事件界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Event a=showAddEventHtml}';
+				setting.Params = 'EvtID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddEventHtml');
+			});	
+		});		
+		/*点击显示添加事件属性界面*/
+		$('.set').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Event a=showAddEventDetailHtml}';
+				setting.Params = 'EvtID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddEventDetailHtml');
+			});	
+		});		
+		/*点击删除事件信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Event a=delEvent}';
+				setting.Params = 'EvtID='+$(this).attr('id');
+{literal}
+				if(confirm('删除后将无法恢复，确认礼包是否含有该事件'))
+					ajax.Request(setting.Url,setting.Params,'callback.DelEvent');
+			});	
+		});	
+		/*点击禁用或启用事件*/
+		$('.locked').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Event a=setEventLocked}';
+{literal}
+				setting.Params = 'EvtID='+$(this).attr('id');
+				ajax.Request(setting.Url,setting.Params,'callback.SetEventLocked');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="14%" bgcolor="#FFFFFF">事件ID</th>
+    <th width="24%" bgcolor="#FFFFFF">事件名称</th>
+	<th width="19%" bgcolor="#FFFFFF">事件大类</th>
+    <th width="22%" bgcolor="#FFFFFF">事件小类</th>   
+    <th width="21%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$EventList item=Evt}
+  <tr id="Row_{$Evt.EvtID}">
+    <td align="center" bgcolor="#FFFFFF">{$Evt.EvtID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Evt.EvtTitle}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Evt.CateName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Evt.SubCateName}</td>
+	<td align="center" bgcolor="#FFFFFF">
+	  <a href="javascript:void(0)" class="set" id="{$Evt.EvtID}">事件属性</a>
+	  <a href="javascript:void(0)" class="locked" id="{$Evt.EvtID}">{if $Evt.Locked==1}<font class="orange">发布</font>{else}下线{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$Evt.EvtID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$Evt.EvtID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $EventList}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

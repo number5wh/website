@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;width:400px" class="left">
+    <legend>搜索</legend>
+    <div style="margin-bottom:3px">
+            实&nbsp;&nbsp;&nbsp;&nbsp;卡：<input name="CardNo" size="10" id="CardNo"/>
+            手机号：<input name="RoleID" size="11" id="RoleID"/>
+            <input type="button" id="btnSearch" class="btn f2" value="搜 索" />
+    </div>
+</fieldset>
+<br class="clearfix" />
+<div id="RealCardList">
+
+</div>
+<script>
+    {literal}
+    $(function(){
+        {/literal}
+
+        setting.PageUrl = '{au d=Service c=ServiceRealCardGet a=getRealCardListPager}';
+        {literal}
+        $('#btnSearch').click(function(){
+            page.GetServiceRealCard(1,'callback.GetServiceRealCard');
+        })
+    })
+    {/literal}
+
+</script>
+</body>
+</html>

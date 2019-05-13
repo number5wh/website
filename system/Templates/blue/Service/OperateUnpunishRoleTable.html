@@ -1,0 +1,43 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>解除处罚</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<td class='txt_R'>解封要求：　</td>
+			<td class='txt_L pad5'>{$CaseOperateInfo.Requirement}</td>
+		</tr>
+		<tr>
+			<td class='txt_R'>解除处罚原因：<br/><br/>(50字内)　</td>
+			<td class='txt_L pad5'><textarea id='Remarks' style='width:200px; height:75px;'></textarea></td>
+		</tr>
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad8 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad8'>
+				<input id='RoleID' type='hidden' name='roleID' value='{$roleID}' />
+				<input id='iLoginID' type='hidden' value='{$loginID}' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){
+	$('#applyBtn').click(function(){
+		var roleID = $.trim($('#RoleID').val());
+		var loginID = $.trim($('#iLoginID').val());
+		var remarks = $.trim($('#Remarks').val());
+
+		if(remarks == ''){
+			$('#errorMsg').html('解除处罚原因不能为空！');
+			$('#Remarks').focus();
+			return false;
+		}
+		
+		var params = 'Remarks='+remarks+'&roleID='+roleID+'&loginID='+loginID;
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=unpunishRoleTable', params, 'callback.GetEditOperationResult');
+	})
+})
+{/literal}
+</script>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();	
+	//点击显示设置游戏种类界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameKind a=showAddGameKindHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'KindID='+$(this).attr('id'),'callback.ShowAddGameKindHtml');
+		});	
+	});	
+	//点击禁用或启用游戏种类
+	$('.locked').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameKind a=setGameKindLocked}';
+{literal}
+			setting.Params = 'KindID='+$(this).attr('id');
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.SetGameKindLocked');
+		});	
+	});	
+	//点击显示设置游戏级别界面
+	$('.level').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameKind a=showSetGameKindLevelHtml}';
+{literal}
+			setting.Params = 'KindID='+$(this).attr('id');
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowSetGameKindLevelHtml');
+		});	
+	});	
+	//点击显示设置游戏版本界面
+	$('.version').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameKind a=showAddGameVersionHtml}';
+{literal}
+			setting.Params = 'KindID='+$(this).attr('id')+'&KindName='+encodeURIComponent($(this).attr('name'));
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddGameVersionHtml');
+		});	
+	});	
+	//删除游戏种类
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.DelUrl='{au d=YunWei c=GameKind a=delGameKind}';
+{literal}
+			setting.Params = 'KindID='+$(this).attr('id');
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.DelUrl,setting.Params,'callback.DelGameKind');
+		});	
+	});	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加游戏种类" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">游戏种类标识</th>
+    <th width="14%" bgcolor="#FFFFFF">游戏种类名称</th>
+    <th bgcolor="#FFFFFF"></th>
+  </tr>
+  {foreach from=$GameKindList item=GameKind}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$GameKind.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$GameKind.KindID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$GameKind.KindName}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="locked" id="{$GameKind.KindID}">{if $GameKind.Locked==1}<span class="orange">启用</span>{else}禁用{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$GameKind.KindID}">修改</a>
+	  <a href="javascript:void(0)" class="level" id="{$GameKind.KindID}">级别</a>
+	  <a href="javascript:void(0)" class="version" id="{$GameKind.KindID}" name="{$GameKind.KindName}">版本</a>
+    <a href="javascript:void(0)" class="del" id="{$GameKind.KindID}">删除</a>	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

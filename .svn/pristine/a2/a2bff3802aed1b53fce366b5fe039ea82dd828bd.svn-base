@@ -1,0 +1,54 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var hall={
+	/*点击显示设置游戏种类界面*/
+	BindEvent:function(){
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=GameMobileVersion a=showAddGameHallVersioniHtml}';
+				setting.Params = 'VerID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddGameHallVersioniHtml');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="19%" bgcolor="#FFFFFF">文件名称</th>
+    <th width="14%" bgcolor="#FFFFFF">文件目录</th>
+    <th width="16%" bgcolor="#FFFFFF">安装类型</th>
+	<th width="10%" bgcolor="#FFFFFF">下载地址</th>
+	<th width="10%" bgcolor="#FFFFFF">大厅版本</th>
+    <th width="15%" bgcolor="#FFFFFF">更新时间</th>
+    <th width="13%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$VersionList item=Ver}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Ver.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Ver.FileName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Ver.FileURL}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Ver.FileCategory}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Ver.ServerIP}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Ver.Version}</td>	
+    <td align="center" bgcolor="#FFFFFF">{$Ver.LastUpdateTime}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$Ver.VerID}">修改</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $VersionList}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

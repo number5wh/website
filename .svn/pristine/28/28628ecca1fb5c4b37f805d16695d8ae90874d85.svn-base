@@ -1,0 +1,74 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="12%" bgcolor="#FFFFFF">玩家昵称</th>
+	<th width="12%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Sort(this)" id="SummaryMoney" data-order-field="SummaryMoney">金币数量↓</a></th>
+    <th width="12%" bgcolor="#FFFFFF">赢</th>
+    <th width="12%" bgcolor="#FFFFFF">输</th>
+    <th width="12%" bgcolor="#FFFFFF">逃</th>
+    <th width="12%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Sort(this)" id="WinRate" data-order-field="WinRate">胜率(%)↓</a></th>
+    <th width="16%" bgcolor="#FFFFFF">最近更新时间</th>
+    <th width="12%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$UserList item=List}
+  <tr id="Row_{$List.RoleID}{$List.KindID}{$List.RoomType}">
+    <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.RoleName}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.SummaryMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.WinCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.LostCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.FleeCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.WinRate}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" class="ClearMoney" RoomType="{$List.RoomType}" KindID="{$List.KindID}" RoleID="{$List.RoleID}" TotalMoney="{$List.TotalMoney}" KindName="{$List.KindName}">清零</a></td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $UserList}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    <td align="center" bgcolor="#FFFFFF"><input type="button" class="btn f2" id="ClearZero" value="一键清零" /></td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$(".ClearMoney").click(function(){
+		if(window.confirm("确定要对该玩家数据清零吗?")){
+{/literal}
+			setting.Url = '{au d=YunYing c=GameSort a=setUserGameDataTotalMoney}';
+			var Params = 'RoomType='+$(this).attr('RoomType')+'&KindID='+$(this).attr('KindID')+'&RoleID='+$(this).attr('RoleID')+'&TotalMoney='+$(this).attr('TotalMoney')+'&KindName='+encodeURIComponent($(this).attr('KindName'));
+			ajax.RequestJsonCallBack(setting.Url,Params,callback.SetUserGameDataTotalMoney);
+{literal}
+		}
+	});
+	$('#ClearZero').click(function(){
+		if(window.confirm("确定要对"+KindName+"进行清零操作吗?")){
+{/literal}
+			setting.Url = '{au d=YunYing c=GameSort a=setUserGameDataTotalMoneyAll}';
+			var Params = 'KindID='+KindID+'&KindName='+encodeURIComponent(KindName);
+			ajax.RequestJsonCallBack(setting.Url,Params,callback.SetUserGameDataTotalMoneyAll);
+{literal}
+		}
+	});
+});
+var callback={
+		SetUserGameDataTotalMoney:function(data){
+			if(data.iResult==0){
+				$('#Row_'+data.RoleID+data.KindID+data.RoomType+' td:eq(2)').html(0);
+				$('#Row_'+data.RoleID+data.KindID+data.RoomType).addClass('red');
+			}
+		},
+		SetUserGameDataTotalMoneyAll:function(data){
+			if(data.iResult==0){
+				setting.Params = '&KindID='+KindID+'&KindName='+encodeURIComponent(KindName)+'&OrderBy='+OrderBy;
+				ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerGameSort');
+			}
+		}
+};
+{/literal}
+</script>

@@ -1,0 +1,19 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: admin
+ * Date: 2018/11/30
+ * Time: 10:05
+ */
+
+//商户id
+$mchId  = "20000030";
+
+//应用id
+$appId ="545ac2b4d0a3464fbd54542d999a93bc";
+
+
+$product ="8005";
+
+//商户key
+$key ="6LQ2N5XGHAMR1I2VTUXCVKGVB8ZNVTX9FGYHDRXPN6HMTHZEW2ZCWBXAMFQUYVG5WO6BXIKHDDO5KWQJHQPGDBPJT1GHPPZXULPGMF9EVPM6ONHYUCSNUPO4PFGRCCPR";

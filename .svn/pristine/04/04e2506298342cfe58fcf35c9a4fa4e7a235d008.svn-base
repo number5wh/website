@@ -1,0 +1,80 @@
+<div class="sysWin" style="width:900px;">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置新闻
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'News')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+	  <tr class="bg_color">
+		<td width="10%" align="right">新闻类别:</td>
+		<td>
+			<select id="CateID">
+				{foreach from=$NewsCate item=v}
+				<option value="{$v.CateID}" {if $v.CateID==$result.CateID}selected{/if}>{$v.CateName}</option>
+				{/foreach}
+			</select>
+		</td>
+	  </tr>
+	  <tr class="bg_color">
+		<td align="right">新闻标题:</td>
+		<td><input type="text" class="txt" id="NewsTitle" value="{$result.NewsTitle}"></td>
+	  </tr>
+	  <tr class="bg_color">
+		<td align="right" valign="top">新闻内容:</td>		
+		<td><textarea id="NewsContent" class="textarea">{$result.NewsContent}</textarea></td>
+	  </tr>		 
+	</table>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="NewsID" value="{if $result.NewsID}{$result.NewsID}{else}0{/if}" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'News')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddNews" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var newEdit={
+	BindEvent:function(){
+		$('#btnAddNews').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=News a=addNews}';
+{literal}			
+			var NewsID = $('#NewsID').val();
+			var CateID = $('#CateID').val();
+			var NewsTitle = $.trim($('#NewsTitle').val());
+			var NewsContent = $.trim($('#NewsContent').val());
+			if(NewsTitle==''){
+				$('#ResultMsg').html('新闻标题不能为空');
+				return false;
+			}
+			if(NewsContent==''){
+				$('#ResultMsg').html('新闻内容不能为空');
+				return false;
+			}
+			setting.Params = 'NewsID='+NewsID+'&NewsTitle='+encodeURIComponent(NewsTitle)+'&CateID='+CateID+'&NewsContent='+encodeURIComponent(NewsContent);
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddNews');
+		});
+	}
+};
+$(function(){
+	$('#NewsContent').xheditor({
+		tools:'full',
+		skin:'vista',
+		showBlocktag:true,
+		internalScript:false,
+		internalStyle:true,
+		width:'800',
+		height:'300',
+		fullscreen:false,
+		sourceMode:false,
+		forcePtag:true
+	});
+});
+{/literal}
+</script>

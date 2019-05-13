@@ -1,0 +1,85 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var spc={
+	BindEvent:function(){
+		/*点击显示设置分类界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+	{/literal}
+				setting.Url='{au d=YunWei c=SpClass a=showAddSpClassHtml}';
+				ajax.RequestUrl(setting.Url,'ClassID='+$(this).attr('id'),'callback.ShowAddSpClassHtml');
+	{literal}
+			});	
+		});	
+		/*点击禁用或启用分类*/
+		$('.locked').each(function(){
+			$(this).click(function(){
+	{/literal}
+				setting.Url='{au d=YunWei c=SpClass a=setSpClassLocked}';
+	{literal}
+				setting.Params = 'ClassID='+$(this).attr('id');
+				ajax.Request(setting.Url,setting.Params,'callback.SetSpClassLocked');
+			});	
+		});		
+		/*删除分类*/
+		$('.del').each(function(){
+			$(this).click(function(){
+	{/literal}
+				setting.DelUrl='{au d=YunWei c=SpClass a=delSpClass}';
+	{literal}
+				setting.Params = 'ClassID='+$(this).attr('id')+'&ParentID='+$(this).attr('parentid');
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.Request(setting.DelUrl,setting.Params,'callback.DelSpClass');
+			});	
+		});	
+		/*展开子类*/
+		$('.SpClassYes').each(function(){
+			$(this).click(function(){
+				spc.GetSubClassList($(this).attr('id'));
+			});
+		});
+	},
+	/*读取子类*/
+	GetSubClassList:function(classid){
+{/literal}
+		setting.Url='{au d=YunWei c=SpClass a=getSubClassList}';
+		ajax.Request(setting.Url,'ClassID='+classid,'callback.GetSubClassList');
+{literal}
+	}
+};
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="5%" bgcolor="#FFFFFF">点击打开</th>
+    <th width="20%" bgcolor="#FFFFFF">类别名称</th>
+    <th width="20%" bgcolor="#FFFFFF">所属大类</th>
+	<th width="20%" bgcolor="#FFFFFF">应用目标</th>
+	<th width="20%" bgcolor="#FFFFFF">类别键值</th>
+	<th width="20%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SpClassList item=SpClass}
+  <tr id="Row_{$SpClass.ClassID}">
+    <td align="center" bgcolor="#FFFFFF">
+	<div class="{if $SpClass.AllSubID=='0'}SpClassNo{else}SpClassYes{/if} icongif" id="{$SpClass.ClassID}"></div>
+	</td>
+	<td align="center" bgcolor="#FFFFFF">{$SpClass.CateName}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $SpClass.TypeID==1}服装{elseif $SpClass.TypeID==2}道具{elseif $SpClass.TypeID==3}礼包{else}事件{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $SpClass.Target==1}有{else}--{/if}</td>
+	<td align="center" bgcolor="#FFFFFF">{$SpClass.KeyID}</td>
+    <td align="center" bgcolor="#FFFFFF">
+		<a href="javascript:void(0)" class="locked" id="{$SpClass.ClassID}" locked="{$SpClass.Locked}">{if $SpClass.Locked==1}<span class="orange">启用</span>{else}禁用{/if}</a>
+		<a href="javascript:void(0)" class="edit" id="{$SpClass.ClassID}">修改</a>
+		<a href="javascript:void(0)" class="del" id="{$SpClass.ClassID}" parentid="{$SpClass.ParentID}">删除</a>	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SpClassList}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

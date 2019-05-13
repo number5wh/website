@@ -1,0 +1,40 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+	<th width="20%" bgcolor="#FFFFFF">角色名(玩家编号)</th>
+	<th width="20%" bgcolor="#FFFFFF">房间名</th>
+    <th width="8%" bgcolor="#FFFFFF">彩蛋值</th>
+    <th width="8%" bgcolor="#FFFFFF">时间</th>
+  </tr>
+  {foreach from=$ColorEggList item=List}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" class="aLink" title="{$List.RoleName}({$List.RoleID})" id="{$List.RoleID}" Date='{$List.Date}'>{$List.RoleName}({$List.RoleID})</a></td>
+    <td align="center" bgcolor="#FFFFFF">{$List.RoomName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.Money}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.BuyTime}</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $ColorEggList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script>
+    {literal}
+    $(function(){
+        $('.aLink').click(function(){
+            {/literal}
+    setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+            var params = setting.Params;
+    setting.Params='&loginID='+$(this).attr('id');
+    window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('id'),setting.Url+setting.Params);
+            setting.Params = params;
+            {literal}
+        })
+    });
+    {/literal}
+</script>

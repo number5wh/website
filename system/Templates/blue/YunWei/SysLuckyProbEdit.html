@@ -1,0 +1,101 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置运势
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysLucky')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	{if $LuckyProbList}
+	<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" id="Prob">
+		<tr>
+			<th bgcolor="#FFFFFF">掉落个数</th>
+			<th bgcolor="#FFFFFF">掉落概率</th>
+			<th bgcolor="#FFFFFF">操作</th>
+		</tr>
+		{foreach from=$LuckyProbList item=Prob}
+		<tr id="Row_{$Prob.ID}">
+			<td align="center" bgcolor="#FFFFFF">{$Prob.DropNum}</td>
+			<td align="center" bgcolor="#FFFFFF">{$Prob.Probability}</td>
+			<td align="center" bgcolor="#FFFFFF">
+				<a href="javascript:void(0)" class="edit" num="{$Prob.ID}" onclick="lucky.Edit({$Prob.ID},{$Prob.DropNum},{$Prob.Probability})">修改</a>
+				<a href="javascript:void(0)" class="del" num="{$Prob.ID}" onclick="lucky.DEL({$Prob.ID})">删除</a>			</td>
+		</tr>	
+		{/foreach}		    
+	</table>
+	{/if}
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td align="right">掉落个数:</td>
+			<td><input type="text" class="txt" name="DropNum" id="DropNum" value="{$Lucky.DropNum}" /> <span class="orange">*范围:0~255</span></td>
+			<td align="right">掉落概率:</td>
+			<td><input type="text" class="txt" name="Probability" id="Probability" value="{$Lucky.Probability}"/> <span class="orange">*</span></td>
+		</tr>			    
+	</table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysLucky')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddLuckyProb" num="0" />
+		<input type="hidden" id="LuckyID" value="{$LuckyID}"  />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var lucky={
+	BindEvent:function(){
+		$('#btnAddLuckyProb').click(function(){
+			var ID = $(this).attr('num');
+			var LuckyID = $('#LuckyID').val();
+			var DropNum = $('#DropNum').val();
+			var Probability = $('#Probability').val();
+			$('#LuckyID').next().html('*');
+			$('#DropNum').next().html('*');
+			$('#Probability').next().html('*');
+			if(isNaN(ID) || ID<0){
+				$('#ResultMsg').html('*参数错误');
+				return false;
+			}
+			if(isNaN(LuckyID) || LuckyID<=0){
+				$('#LuckyID').next().html('*请输入正确的运势级别');
+				$('#LuckyID').focus();
+				return false;
+			}
+			if(isNaN(DropNum) || DropNum<0 || DropNum>255){
+				$('#DropNum').next().html('*请输入正确的掉落数量');
+				$('#DropNum').focus();
+				return false;
+			}
+			if(isNaN(Probability) || Probability<0){
+				$('#Probability').next().html('*请输入正确的掉落概率');
+				$('#Probability').focus();
+				return false;
+			}
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=addLuckyProb}';
+{literal}
+			setting.Params='ID='+ID+'&LuckyID='+LuckyID+'&DropNum='+DropNum+'&Probability='+Probability;
+			ajax.Request(setting.Url,setting.Params,'callback.AddLuckyProb');
+		});
+	},
+	Edit:function(id,DropNum,Probability){
+		$('#btnAddLuckyProb').attr('num',id);
+		$('#DropNum').val(DropNum);
+		$('#Probability').val(Probability);
+	},
+	DEL:function(id){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=delLuckyProb}';
+{literal}
+		if(confirm('删除后将无法恢复,确定删除?'))
+			ajax.Request(setting.Url,'ID='+id,'callback.DelLuckyProb');
+	}
+};
+{/literal}
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>779游戏推出第二十六期活动</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<style type="text/css">
+    {literal}
+		.strong{
+    		font-size:18px;
+    		color:red;
+		}
+		table{
+			text-align: center;
+			margin: 10px;
+			padding: 5px;
+			font-size: 16px;
+			text-indent:0;
+		}
+		td{
+			border:1px solid;
+		}
+    {/literal}
+	</style>
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>779游戏推出第二十六期活动</b></div><br>
+							  <div>
+					                <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										 <p>值此五一国际劳动节来临之际，779游戏推出第二十六期活动</p>
+										 <p>活动游戏类型：所有通比牛牛房间。</p>
+										 <p>活动开始时间：2018年4月28日17时</p>
+										 <p>具体规则如下：</p>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										 <p>1、前一天签到成功并且在通比牛牛内游戏时间满1小时，即可获得相应的连签奖励</p>
+										 <p>2、签到功能目前只在电脑客户端有效（手机端签到功能请留意官方公告）</p>
+										 <br>
+										 <p>奖励规则：</p>
+										 <table   width="90%" cellspacing="0" cellpadding="0" style="color:#FFF">
+										 	<tr><td></td><td>连续签到天数</td><td>一天</td><td>两天</td><td>三天</td><td>四天</td><td>五天</td><td>五天以上</td></tr>
+										 	 <tr><td></td><td>奖励欢乐豆数</td><td>2万</td><td>4万</td><td>8万</td><td>16万</td><td>32万</td><td>32万</td></tr>
+										 </table>
+										 <br/>
+										 <p>如果疑问，请联系779游戏中心官方客服</p>
+										 <p>客服QQ:---</p>
+										 <p>客服电话：---</p>
+										 <br/>
+										 <br/>
+										 <br/>
+										</span>
+									</div>
+									<div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-04-28</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

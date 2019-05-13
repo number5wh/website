@@ -1,0 +1,59 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="10%">操作</th>
+    <th width="10%">状态</th>
+    <th width="10%">案件类型</th>
+    <th width="10%">案件编号</th>
+    <th width="12%">案发时间</th>
+    <th width="10%">涉案数量</th>
+	<th width="12%">最后操作时间</th>
+	<th width="16%">游戏玩家</th>
+	<th width="10%">处罚决定</th>
+  </tr>
+  {foreach from=$CaseInfoList item=case}
+  <tr class="bg_color txt_M">
+  	<td>{if $case.Step != 10}<a class="blue" href="javascript:getCaseDetailPage({$case.CaseSerial},0);">处理</a>{/if}</td>
+  	<td>{$case.Status}</td>
+  	<td>{if $case.CaseType == 1}盗号{else}违规{/if}</td>
+  	<td><a class="blue" href="javascript:getCaseDetailPage({$case.CaseSerial},1);">{$case.CaseSerial}</a></td>
+  	<td>{$case.HappenTime}</td>
+  	<td>{$case.iNumber}</td>
+  	<td>{$case.UpdateTime}</td>
+  	<td><a class="blue" href="javascript:showUserInfo({$case.RoleID},'{$case.LoginName}({$case.LoginID})');">{$case.LoginName}({$case.LoginID})</a></td>
+  	<td>{$case.Decision}</td>
+  	<!-- <td><a class="blue"  href="#">打印</a></td> -->
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="10">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  
+  {if $CaseInfoList}
+  <tr class="bg_color txt_M">
+    <td id="caseInfoPageBar" colspan="10">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+	function getCaseDetailPage(id,flag) {
+		var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+		var title = '案件'+id;
+		var iNum = flag==0 ? 'CaseInfor'+id : 'CaseInfo'+id;
+		var param = '&id='+id;
+		if(flag){
+			param = param +'&flag=1';
+		}
+		window.parent.main.AddTab(title,iNum,url+param);
+	}
+
+	function showUserInfo(id,name){
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+{literal}
+		setting.Params='&roleID='+id;
+		window.parent.main.AddTab(name,'ServiceRole'+id,setting.Url+setting.Params);
+	}
+{/literal}
+</script>

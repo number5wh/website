@@ -1,0 +1,129 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function() {
+            $('.edit1').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=showEdit1}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'menuid='+$(this).attr('thisid')+'&menuname='+$(this).attr('thisname')+'&order='+$(this).attr('order'),'callback.ShowEditMenu1');
+                    });
+            });
+            $('.edit2').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=showEdit2}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'menuid='+$(this).attr('thisid')+'&menuname='+$(this).attr('thisname')+'&controller='+$(this).attr('controller'),'callback.ShowEditMenu2');
+                    });
+            });
+            $('.delete').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=deleteMenu}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'menuid='+$(this).attr('thisid'),'callback.DeleteMenu');
+                    });
+            });
+            $('.show').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=showMenu}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'id='+$(this).attr('thisid')+'&status='+$(this).attr('status'),'callback.ShowMenu');
+                    });
+            });
+            $('.order').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=showOrder}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'id='+$(this).attr('thisid')+'&order='+$(this).attr('order'),'callback.ShowMenuOrder');
+                    });
+            });
+            $('.submenu').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=showAddMenu}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'id='+$(this).attr('thisid')+'&name='+$(this).attr('thisname'),'callback.ShowAddMenu');
+                    });
+            });
+            $('#add').click(function(){
+                {/literal}
+                    setting.Url='{au d=Yunwei c=SysMenu a=showAddMenu2}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url,'','callback.ShowAddMenu2');
+                });
+        }
+
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <td width="10%">菜单级别</td>
+        <th width="10%">编号</th>
+        <th width="20%">菜单名称</th>
+        <th width="20%">控制器</th>
+        <th width="10%">排序</th>
+        <th width="10%">是否显示</th>
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$MenuList item=menu}
+
+    <tr class="bg_color">
+        <td>1</td>
+        <td></td>
+        <td style="text-align: left" colspan="5">{$menu.val}</td>
+    </tr>
+    {foreach from=$menu.sublist item=msub}
+    <tr class="bg_color">
+        <td>2</td>
+        <td>{$msub.Id}</td>
+        <td style="text-align: left" colspan="2">| --{$msub.MenuName}</td>
+
+        <td>{$msub.OrderId}</td>
+        <td>{if $msub.isShow==1}显示{else /}隐藏{/if}</td>
+        <td>
+            <a href="javascript:;" thisid="{$msub.Id}" thisname="{$msub.MenuName}" class="submenu">新增子菜单</a>
+            <a href="javascript:;" class="edit1" thisid="{$msub.Id}" thisname="{$msub.MenuName}" order="{$msub.OrderId}">修改</a>
+            <a href="javascript:;" class="delete" thisid="{$msub.Id}">删除</a>
+            <a href="javascript:;" class="order" thisid="{$msub.Id}" order="{$msub.OrderId}">排序</a>
+            {if $msub.isShow==1}
+            <a href="javascript:;" class="show" status='0' thisid="{$msub.Id}">隐藏</a>
+            {else /}
+            <a href="javascript:;" class="show" status='1' thisid="{$msub.Id}">显示</a>
+            {/if}
+        </td>
+    </tr>
+    {foreach from=$msub.sublist item=msub2}
+    <tr class="bg_color">
+        <td>3</td>
+        <td>{$msub2.Id}</td>
+
+        <td style="text-align: left">| -- | --{$msub2.MenuName}</td>
+        <td>{$msub2.Controler}</td>
+        <td>{$msub2.OrderId}</td>
+        <td>{if $msub2.isShow==1}显示{else /}隐藏{/if}</td>
+        <td>
+            <a href="javascript:;" class="edit2" thisid="{$msub2.Id}" thisname="{$msub2.MenuName}" controller="{$msub2.Controler}">修改</a>
+            <a href="javascript:;" class="delete" thisid="{$msub2.Id}">删除</a>
+            <a href="javascript:;" class="order" thisid="{$msub2.Id}" order="{$msub2.OrderId}">排序</a>
+            {if $msub2.isShow==1}
+            <a href="javascript:;" class="show" status='0' thisid="{$msub2.Id}">隐藏</a>
+            {else /}
+            <a href="javascript:;" class="show" status='1' thisid="{$msub2.Id}">显示</a>
+            {/if}
+        </td>
+    </tr>
+    {/foreach}
+    {/foreach}
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="5">暂无记录</td>
+    </tr>
+    {/foreach}
+
+</table>

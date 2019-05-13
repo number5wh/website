@@ -1,0 +1,25 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="14%" bgcolor="#FFFFFF">类型</th>
+        <th width="14%" bgcolor="#FFFFFF">总钱数</th>
+        <th width="14%" bgcolor="#FFFFFF">数量</th>
+    </tr>
+    {foreach from=$FormList item=List}
+    <tr>
+        <td align="center" bgcolor="#FFFFFF">{$List.StateTips}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.TotalMoney}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.TotalNum}</td>
+    </tr>
+    {/foreach}
+    {if $FormList}
+    <tr style="font-weight:bold; background-color:#99CCFF">
+        <td align="center" bgcolor="#99CCFF">总计</td>
+        <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalMoney}</td>
+        <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalNum}</td>
+    </tr>
+    {else}
+    <tr>
+        <td colspan="3" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/if}
+</table>

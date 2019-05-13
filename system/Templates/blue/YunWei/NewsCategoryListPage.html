@@ -1,0 +1,58 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var NewsCate={
+	/*点击显示设置游戏道具界面*/
+	BindEvent:function(){		
+		/*点击显示修改道具配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=NewsCategory a=showNewsCategoryHtml}';
+				setting.Params = 'CateID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddNewsCateHtml');
+			});	
+		});		
+		/*点击删除公库道具信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=NewsCategory a=delNewsCategory}';
+				setting.Params = 'CateID='+$(this).attr('id');
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.Request(setting.Url,setting.Params,'callback.DelAdPos');
+			});	
+		});			
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="8%" bgcolor="#FFFFFF">新闻类别ID</th>
+	<th width="11%" bgcolor="#FFFFFF">新闻类别名称</th>
+    <th width="12%" bgcolor="#FFFFFF">发布时间</th>    
+    <th width="13%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$NewsCateList item=v}
+  <tr>
+    <td bgcolor="#FFFFFF">{$v.CateID}</td>
+    <td bgcolor="#FFFFFF">{$v.CateName}</td>
+    <td bgcolor="#FFFFFF">{$v.AddTime}</td>
+    <td bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$v.CateID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$v.CateID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $NewsCateList}
+  <tr>
+    <td colspan="4" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

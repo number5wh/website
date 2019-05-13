@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript">
+{literal}
+function selectDay(id, n){
+	var date = new Date();
+	var mydate = new Date(Date.parse(date) - (86400000  * n));
+	var startDate = mydate.getFullYear()+'-'+(parseInt(mydate.getMonth())+1)+'-'+mydate.getDate();
+	var endDate = date.getFullYear()+'-'+(parseInt(date.getMonth())+1)+'-'+date.getDate();
+	$('#dtBegin'+id).val(startDate);
+	$('#dtEnd'+id).val(endDate);
+}
+
+function searchAuthVerify(){
+	var startDate = $.trim($("#dtBegin2").val());
+	var endDate = $.trim($("#dtEnd2").val());
+	var status = $("#sel_AuthStatus").val();
+	var arrType = new Array();
+	$("input[name='AuthVerifyType']:checkbox").each(function(){
+		if($(this).attr('checked')){
+			arrType.push($(this).val());
+		}
+	});
+	var keyword = $("#sel_keyword1").val();
+	var keyvalue = $.trim($("#txt_keywords1").val());
+	var Param = '';
+	if(startDate){
+		Param += "startTime="+startDate;
+	}
+	if(endDate){
+		Param += "&endTime="+endDate;
+	}
+	if(status){
+		Param += "&status="+status;
+	}
+	if(arrType.length>0){
+		Param += "&arrType="+arrType;
+	}else{
+		alert("请选择操作类型");
+		return false;
+	}
+	if(keyvalue){
+		if(keyword=='reason')/*根据案件编号搜索,忽略其他条件*/
+			Param = "keyword="+keyword;
+		else
+			Param += "&keyword="+keyword;
+		Param += "&keyvalue="+keyvalue;
+	}
+	/*if(keyvalue){
+		Param += "&"+keyword+"="+keyvalue;
+	}*/
+	
+	ajax.RequestUrl('/?d=Service&c=ServiceCheckOther&a=authVerifyList', Param,'getAuthVerifyList');
+}
+
+function getAuthVerifyList(data){
+	$('#AuthorizeVerifyList').html(data);
+	init.SetTableRows();//初始化鼠标移到表格行显示背景
+	
+	//绑定分页
+	var Param = '$(this).attr("pg"),"getAuthVerifyList"';
+	var Param1 = '$(this).val(),"getAuthVerifyList"';
+	evt.BindPageClick('#verifyPageBar ','getPagerAuthVerify',Param,Param1);	
+}
+
+function getPagerAuthVerify(curPage,Callback){
+	var maxPage = parseInt($('#LinkLast').attr('pg'),10);
+	var iPage = parseInt($('#lab_curpage').html(),10);
+	if(curPage != iPage && curPage > 0 && curPage <= maxPage){
+		setting.Params='curPage='+curPage;
+		ajax.RequestUrl('/?d=Service&c=ServiceCheckOther&a=authVerifyList', setting.Params,Callback);
+	}
+}
+
+function getAddApplyPage(){
+	ajax.RequestCallBack('/?d=Service&c=ServiceCheckOther&a=getAddApplyTreasurePage', '',function(data) {
+		main.OpenBox(data);
+	});
+}
+{/literal}
+</script>
+</head>
+<body>
+<fieldset style="margin-bottom:3px" class="left" style="width:100%">
+    <legend>查询</legend>
+    <div style="margin-bottom:3px">
+    <table   border="0" cellpadding="0" cellspacing="0" class="bg_color" style="margin-bottom:3px">  
+    	<tr >
+    		<td> 	申请时间:</td>
+   	 	<td>
+	 		 <input id="dtBegin2" type="text" value="{$strStatrTime}" />
+	          <img onClick="new Calendar().show(document.getElementById('dtBegin2'));" class="calendar_img" src="images/common/u896_normal.gif" /> 至
+	          <input id="dtEnd2" type="text" value="{$strEndTime}" />
+	          <img onClick="new Calendar().show(document.getElementById('dtEnd2'));" class="calendar_img" src="images/common/u896_normal.gif" />
+	          <a class="blue" href="javascript:selectDay(2,0)">今&nbsp;天</a>
+	          <a class="blue" href="javascript:selectDay(2,7)">7&nbsp;天</a>
+	          <a class="blue" href="javascript:selectDay(2,30)">1个月</a>
+	          <a class="blue" href="javascript:selectDay(2,90)">3个月</a>
+      	 </td>
+     </tr>
+     <tr >
+        	<td> 申请状态 </td>
+	     <td>
+	          <select id="sel_AuthStatus" style="width:100px;">
+			 <option value="0">待审核</option>
+	          <option value="">全&nbsp;部</option>
+	          <option value="1">批&nbsp;准</option>
+	          <option value="2">拒&nbsp;绝</option>
+	          </select>
+          </td>
+      </tr>
+      <tr >
+      	<td>操作类型</td>
+		  <td>
+		    {foreach from=$AuthVerifyType item=type key=index name=foo}       		
+        		  <label>
+	            <input type='checkbox' name="AuthVerifyType" value="{$index}" checked="checked" />
+	            {$type}</label>
+	          {/foreach}
+		 </td>
+      </tr>
+      <tr >
+      	<td>关键词:</td>
+      	<td>
+	 		  <select id="sel_keyword1" style="width:100px;">
+	            <option value="loginId">玩家编号</option>
+	            <option value="loginName">玩家昵称</option>
+				<option value="reason">案件编号</option>
+	          </select>
+	          <input id="txt_keywords1" type="text" maxlength="20" />
+	          <input type="button" value="查&nbsp;&nbsp;询" class="bnStyle f2" onClick="searchAuthVerify()" />&nbsp;&nbsp;
+      	<td>
+      </tr>
+  	</table>
+    </div>
+</fieldset>
+  <div id="AuthorizeVerifyList"></div>
+</body>
+</html>

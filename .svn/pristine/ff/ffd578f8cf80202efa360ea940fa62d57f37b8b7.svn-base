@@ -1,0 +1,114 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var gkl={
+	GetPage:function(){
+{/literal}
+		var PayTypeID = {$GameKind.PayTypeID};
+{literal}
+		if((PayTypeID & 1) > 0){	
+			setting.Params='LevelType=1&curPage=1&KindID='+$('#KindID').html();
+			ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.getPagerLevelScore');
+			$('#Level1').show();
+			$('#LevelType').append('<option value="1">积分级别</option>');
+		}
+		if((PayTypeID & 2) > 0){	
+			setting.Params='LevelType=2&curPage=1&KindID='+$('#KindID').html();
+			ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.getPagerLevelHappyBean');	
+			$('#Level2').show();
+			$('#LevelType').append('<option value="2">金币级别</option>');
+		}
+	}
+};
+$(function(){
+	for(i=1;i<=30;i++){
+		$('#LevelID').append('<option value="'+i+'">'+i+'</option>');
+	}
+	/*添加游戏等级*/
+	$('#btnAddGameLevel').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameKind a=addGameLevel}';	
+		sys.AddGameLevel();	
+{literal}		
+	});
+{/literal}
+	/*分页显示游戏等级列表*/
+	setting.PageUrl='{au d=YunWei c=GameKind a=getPagerLevel}';	
+	gkl.GetPage();
+
+	setting.DelUrl='{au d=YunWei c=GameKind a=delGameLevel}';
+{literal}	
+});
+{/literal}
+</script>
+<div class="sysWin sysWindow" style="width:920px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏级别
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'GameKind')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy clearfix">
+		<fieldset>
+			<legend class="orange">游戏基本信息</legend>
+			<span>游戏名: {$GameKind.KindName}</span>
+			<span>游戏标识: <span id="KindID">{$GameKind.KindID}</span></span>
+			<span>进程名称: {$GameKind.ProcessName}</span>
+		</fieldset>
+		<fieldset>
+			<legend class="orange">游戏级别设置</legend>
+			<input type="hidden" id="ID" value="{$Level.ID}" />
+			<select name="LevelType" id="LevelType">
+				<option value="0">选择级别类型</option>
+			</select>
+			<select name="LevelID" id="LevelID">
+				<option value="0">选择等级</option>
+			</select>
+			级别名称:<input type="text" class="txt" size="10" id="LevelName" />
+			积分/金币下限:<input type="text" class="txt" size="10" id="LBound" value="0" />
+			对局额:<input type="text" class="txt" size="10" id="CellAmount" value="0" />
+			衣服图片编号:<input type="text" class="txt" size="2" id="ClothesImage" value="0" />
+			<div class="refresh icon right" style="margin-top:3px" onclick="gkl.GetPage()" title="点击刷新"></div>
+			<input type="button" class="btn f2 right" value="重 置" onclick="main.ResetGameKind()"/>
+			<input type="button" class="btn f2 right" value="提 交" id="btnAddGameLevel" />
+			
+		</fieldset>
+		<fieldset class="left hide" style="width:373px;" id="Level1">
+			<legend class="orange">积分级别设置</legend>
+			<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			  <tr>
+				<th width="11%" align="center">级别</th>
+				<th width="17%" align="center">级别名称</th>
+				<th width="18%" align="center">所需积分</th>
+				<th width="17%" align="center">对局分</th>
+				<th with="15%" align="center">衣服图片</th>
+				<th width="22%" align="center">操作</th>
+			  </tr>	
+			</table>
+			<div id="LevelScoreList">
+			</div>			
+		</fieldset>
+		<fieldset class="left hide" style="width:373px;" id="Level2">
+			<legend class="orange">金币级别设置</legend>
+			<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			  <tr>
+				<th width="11%" align="center">级别</th>
+				<th width="17%" align="center">级别名称</th>
+				<th width="18%" align="center">所需积分</th>
+				<th width="17%" align="center">对局分</th>
+				<th with="15%" align="center">衣服图片</th>
+				<th width="22%" align="center">操作</th>
+			  </tr>	
+			</table>
+			<div id="LevelHappyBeanList">			
+			</div>			
+		</fieldset>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<div class="orange left" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>

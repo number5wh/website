@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*初始化上传控件*/
+	$('.file_upload').each(function(){
+{/literal}
+		main.InitUploadControl($(this).attr('id'),'SpThumb','http://{$Server.ServerIP}/GameFiveUpFile.php');
+{literal}
+	});
+			
+	sp.GetSpClass();
+	sp.GetGameKind();
+	$('#btnAddSpPublic').click(function(){
+		var GoodsName = $('#GoodsName').val();
+		var SpNumber = $('#SpNumber').val();
+		var ResourceID = $('#ResourceID').val();
+		var ClassID = $('#ClassID').val();
+		var Sex = $('#Sex').val();
+		var Level = $('#Level').val();
+		var VipID = $('#VipID').val();		
+		var KindID = $('#KindID').val();
+		var EffectiveType = $('#EffectiveType').val();
+		var Unit = $('#Unit').val();
+		var iNumber = $('#Number').val();
+		var Intro = $('#Intro').val();
+		var SpID = $('#SpID').val();
+		var ImgPath = $('#ImgPath_FileUpload').val();
+		var ImgPath1 = $('#ImgPath_FileUpload1').val();
+		var ImgPath2 = $('#ImgPath_FileUpload2').val();
+		var ServerID = $('#ServerID').val();
+		var CustomField = $('#CustomField').val();
+		var Place = 0;
+		$('input[name="Place"]:checked').each(function(){ 
+			Place += parseInt($(this).val()); 
+		}); 
+		$('#GoodsName').next().html('*');
+		$('#SpNumber').next().html('*');
+		$('#ResourceID').next().html('*');
+		$('#ClassID').next().html('*');
+		$('#ImgMsg').html('*');
+		$('#ImgMsg1').html('*');
+		$('#ImgMsg2').html('*');
+		$('#Level').next().html('*0表示不限等级');
+		$('#PlaceMsg').html('*');
+		$('#Unit').next().html('*');
+		if(GoodsName==''){
+			$('#GoodsName').next().html('*请输入道具名称');
+			$('#GoodsName').focus();
+			return false;
+		}
+		if(SpNumber==''){
+			$('#SpNumber').next().html('*请输入道具编号');
+			$('#SpNumber').focus();
+			return false;
+		}
+		if(ResourceID==''){
+			$('#ResourceID').next().html('*请输入道具资源编号');
+			$('#ResourceID').focus();
+			return false;
+		}
+		if(isNaN(ClassID) || ClassID==0){
+			$('#ClassID').next().html('*请选择正确的道具分类');
+			$('#ClassID').focus();
+			return false;
+		}
+		if(ImgPath==''){
+			$('#ImgMsg').html('*请上传道具缩略图');
+			$('#ImgPath_FileUpload').focus();
+			return false;
+		}
+		if($('#KeyID').val()==1001){
+			if(ImgPath1==''){
+				$('#ImgMsg1').html('*请上传道具形象图(头像)');
+				$('#ImgPath_FileUpload1').focus();
+				return false;
+			}
+			if(ImgPath2==''){
+				$('#ImgMsg2').html('*请上传道具形象图');
+				$('#ImgPath_FileUpload2').focus();
+				return false;
+			}
+		}
+		if(isNaN(Level) || Level<0){
+			$('#Level').next().html('*请输入正确的等级限制');
+			$('#Level').focus();
+			return false;
+		}
+		if(isNaN(Place) || Place==0){
+			$('#PlaceMsg').html('*请选择使用场景');
+			return false;
+		}
+		if(isNaN(iNumber) || iNumber<0){
+			$('#Unit').next().html('*请输入正确的使用效果');
+			$('#iNumber').focus();
+			return false;
+		}
+		if(isNaN(ServerID) || ServerID<=0){
+			$('#ResultMsg').html('*图片上传服务器可能未配置,请先配置WEB站点服务器');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunWei c=Sp a=addSpPublic}';
+		setting.Params = 'GoodsName='+encodeURIComponent(GoodsName)+'&SpNumber='+SpNumber+'&ResourceID='+ResourceID+'&ClassID='+ClassID+'&Sex='+Sex+'&Level='+Level+'&VipID='+VipID+'&KindID='+KindID+'&EffectiveType='+EffectiveType+'&Unit='+encodeURIComponent(Unit)+'&iNumber='+iNumber+'&Intro='+encodeURIComponent(Intro)+'&Place='+Place+'&SpID='+SpID+'&ImgPath='+ImgPath+'&ImgPath1='+ImgPath1+'&ImgPath2='+ImgPath2+'&ServerID='+ServerID+'&CustomField='+CustomField;
+		ajax.Request(setting.Url,setting.Params,'callback.AddSpPublic');
+{literal}	
+	});
+});
+var sp={
+	/*道具分类*/
+	GetSpClass:function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=Sp a=getSpClass}';
+		setting.Params = 'TypeID='+$('#TypeID').val()+'&ClassID={$SpPublic.ClassID}';
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpClass');
+	},
+	/*有效期单位*/
+	GetUnit:function(){
+		if($('#CurUnit').val()!='')
+			$('#Unit').val($('#CurUnit').val());
+		$('#CurUnit').val('');
+	},
+	/*游戏种类*/
+	GetGameKind:function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=Sp a=getGameKind}';
+		setting.Params = 'ClassID='+$('#GameKindClass').val()+'&iCurKindID={$SpPublic.KindID}'+'&KeyID='+$('#KeyID').val();
+{literal}	
+		ajax.Request(setting.Url,setting.Params,'callback.GetGameKindList');
+	},
+	/*是否显示应用目标选项*/
+	ShowTargetSelect:function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=Sp a=showTargetSelect}';
+		setting.Params = 'TypeID='+$('#TypeID').val()+'&ClassID='+$('#ClassID').val();
+{literal}	
+		ajax.Request(setting.Url,setting.Params,'callback.ShowTargetSelect');
+	}
+};
+{/literal}
+</script>
+</head>
+
+<body>
+<a href="/?d=YunWei&c=Sp">返回列表</a>
+<form method="post">
+<input type="hidden" name="SpID" id="SpID" value="{$SpPublic.SpID}" />
+<input type="hidden" name="CurUnit" id="CurUnit" value="{$SpPublic.Unit}" />
+<input type="hidden" name="KeyID" id="KeyID" value="0" />
+<input type="hidden" name="ServerID" id="ServerID" value="{$Server.ServerID}" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">道具名称:</td>
+    <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="GoodsName" id="GoodsName" value="{$SpPublic.GoodsName}"> <span class="orange">*</span></td>
+  </tr>		  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">道具编号:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="SpNumber" id="SpNumber" value="{$SpPublic.SpNumber}"> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">资源编号:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="ResourceID" id="ResourceID" value="{$SpPublic.ResourceID}"> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">道具分类:</td>
+    <td bgcolor="#FFFFFF">
+   	  <select name="TypeID" id="TypeID" onchange="sp.GetSpClass();">
+            {foreach from=$SpClass item=Sp}
+            <option value="{$Sp.TypeID}" {if $Sp.TypeID==$SpPublic.TypeID}selected{/if}>{$Sp.TypeName}</option>
+            {/foreach}
+       </select>
+       <select name="ClassID" id="ClassID" onchange="sp.ShowTargetSelect()" style="width:90px">
+       </select> <span class="orange">*</span>
+    </td>
+  </tr>	
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">缩略图:</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="text" class="txt left" name="ImgPath" id="ImgPath_FileUpload" value="{$SpPublic.ImgPath}" size="30">
+    	<div class="left"><input id="FileUpload" name="file_upload" type="file" multiple="false" class="file_upload" /></div>
+         <span class="orange left" id="ImgMsg">*</span>
+        <div id="queue_FileUpload" class="left"></div>
+        <br class="clear" />
+    </td>
+  </tr>  
+  <tr class="RowImg">
+    <td align="right" bgcolor="#FFFFFF">形象图(头像):</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="text" class="txt left" name="ImgPath1" id="ImgPath_FileUpload1" value="{$SpPublic.ImgPath1}" size="30">
+    	<div class="left"><input id="FileUpload1" name="file_upload1" type="file" multiple="false" class="file_upload" /></div>
+         <span class="orange left" id="ImgMsg1">*</span>
+        <div id="queue_FileUpload1" class="left"></div>
+        <br class="clear" />
+    </td>
+  </tr>
+  <tr class="RowImg">
+    <td align="right" bgcolor="#FFFFFF">形象图:</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="text" class="txt left" name="ImgPath2" id="ImgPath_FileUpload2" value="{$SpPublic.ImgPath2}" size="30">
+    	<div class="left"><input id="FileUpload2" name="file_upload2" type="file" multiple="false" class="file_upload" /></div>
+         <span class="orange left" id="ImgMsg2">*</span>
+        <div id="queue_FileUpload2" class="left"></div>
+        <br class="clear" />
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">性别使用限制:</td>
+    <td bgcolor="#FFFFFF">			
+       <select name="Sex" id="Sex">
+            <option value="-1" selected="selected">不限</option>
+            <option value="0" {if 0==$SpPublic.Sex}selected{/if}>男</option>
+            <option value="1" {if 1==$SpPublic.Sex}selected{/if}>女</option>
+       </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">等级使用限制:</td>
+    <td bgcolor="#FFFFFF">			
+        <input type="text" name="Level" id="Level" value="{$SpPublic.Level}" class="txt" size="6"/> 级 <span class="orange">*0表示不限等级</span>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">黄钻使用限制:</td>
+    <td bgcolor="#FFFFFF">
+    	<select name="VipID" id="VipID">
+            <option value="0" selected="selected">不限</option>
+            <option value="1" {if 1==$SpPublic.VipID}selected{/if}>黄钻专用</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">使用场景:</td>
+    <td bgcolor="#FFFFFF">
+        {foreach from=$PlaceList item=P}
+        <input type="checkbox" name="Place" id="Place_{$P.TypeID}" value="{$P.TypeID}" {if $SpPublic.Place & $P.TypeID}checked{/if}> {$P.TypeName} 
+        {/foreach}
+         <span class="orange" id="PlaceMsg">*</span>
+    </td>
+  </tr>
+  <tr id="target" class="">
+    <td align="right" bgcolor="#FFFFFF">应用目标游戏:</td>
+    <td bgcolor="#FFFFFF">
+        <select name="GameKindClass" id="GameKindClass" onchange="sp.GetGameKind()">
+			<option value="-1" selected="selected">所有游戏</option>
+            {foreach from=$GameKindClassList item=c}
+            <option value="{$c.ClassID}" {if $c.ClassID==$SpPublic.GameClassID}selected{/if}>{$c.ClassName}</option>
+            {/foreach}
+        </select>
+        <select name="KindID" id="KindID" style="width:100px">
+            <option value="0">请选择游戏</option>
+            {foreach from=$GameKindList item=kind}
+            <option value="{$kind.KindID}" {if $kind.KindID==$SpPublic.KindID}selected{/if}>{$kind.KindName}</option>
+            {/foreach}
+        </select> <span class="orange">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF">    	
+    	<input type="hidden" id="EffectiveType" value="0" />
+    	<input type="text" class="txt" name="Number" id="Number" value="{$SpPublic.Number}" size="5">
+        <select name="Unit" id="Unit">
+        </select>
+    <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">道具简介:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="Intro" id="Intro" value="{$SpPublic.Intro}" size="50" maxlength="250"></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">自定义字段:</td>
+    <td bgcolor="#FFFFFF">
+	<input type="text" class="txt" name="CustomField" id="CustomField" value="{$SpPublic.CustomField}" size="30" maxlength="20">
+	此字段作为保留扩展字段,用于道具使用效果,现在暂时无用
+	</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="button" class="btn f2" value="提 交" id="btnAddSpPublic" />
+    	<input type="reset" class="btn f2" value="重 置" /> 	<span id="ResultMsg" class="orange"></span>
+    </td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>

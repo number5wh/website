@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysAdminList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysAdminList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	},
+	SetPlayerA:function(LoginCode){
+{/literal}
+		setting.Url = '{au d=YunWei c=PlayerA a=SetPlayerA}';
+		setting.Params = 'LoginCode='+LoginCode;
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.SetPlayerA);
+{literal}
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysAdminList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetPlayerA:function(data){
+		if(data.iResult==0){			
+			$('.red').html('添加成功');
+			$('#LoginCode').val('');			
+		}
+		else if(data.iResult==-2){
+			$('.red').html('账号已存在');
+		}else if(data.iResult == -3){
+			$('.red').html('角色不存在');
+		}else {
+			$('.red').html('添加失败');
+		}
+	}
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=PlayerA a=getPagerPlayerAList}';
+{literal}
+	pl.SetProperty();
+	/*批量添加*/
+	$('#btnSubmit').click(function(){
+		var LoginCode = $.trim($('#LoginCode').val());
+		$('.red').html('提交中');
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').css('border','1px solid #ff0000');
+			$('.red').html('请输入通行证账号');
+			return false;
+		}		
+		pl.SetPlayerA(LoginCode);
+	});	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;">
+	<legend>添加设置</legend>
+    通行证账号:<input type="text" class="txt" name="LoginCode" id="LoginCode" value="" />    
+    <input type="button" class="btn f2" id="btnSubmit" value="批量添加" />
+    <span class="red"></span>
+</fieldset>
+<br class="clearfix" />
+<div id="PageList">
+	{include file="$skin/YunWei/PlayerAListPage.html"}
+</div>
+
+</body>
+</html>

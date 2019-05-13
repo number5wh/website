@@ -1,0 +1,26 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="50%" bgcolor="#FFFFFF">关键词</th>
+    <th width="50%" bgcolor="#FFFFFF">外挂名称</th>
+    <th width="24%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ExtraProgramList item=sys}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$sys.ExtraProgramKey}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sys.ExtraProgramName}</td>   
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" key="{$sys.ExtraProgramKey}">修改</a>
+	  <a href="javascript:void(0)" class="del" key="{$sys.ExtraProgramKey}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $ExtraProgramList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

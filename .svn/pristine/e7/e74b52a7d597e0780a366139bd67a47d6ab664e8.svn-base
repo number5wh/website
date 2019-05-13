@@ -1,0 +1,167 @@
+<div class="sysWin" style="width:700px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置事件属性
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'Event')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList {if $EventDetailList==null}hide{/if}" id="list" style="margin-bottom:5px">
+	  <tr>
+		<th width="14%" bgcolor="#FFFFFF">事件编号</th>
+		<th width="24%" bgcolor="#FFFFFF">事件分类</th>
+		<th width="19%" bgcolor="#FFFFFF">数量</th>
+		<th width="22%" bgcolor="#FFFFFF">概率</th>
+		<th width="21%" bgcolor="#FFFFFF">操作</th>
+	  </tr>
+	  {foreach from=$EventDetailList item=ED}
+	  <tr id="Row_{$ED.ID}">
+		<td align="center" bgcolor="#FFFFFF">{$EvtID}</td>
+		<td align="center" bgcolor="#FFFFFF">{$ED.CateName}</td>
+		<td align="center" bgcolor="#FFFFFF">{$ED.iNumber}</td>
+		<td align="center" bgcolor="#FFFFFF">{$ED.Probability}</td>
+		<td align="center" bgcolor="#FFFFFF">
+		  <a href="javascript:void(0)" class="del" id="{$ED.ID}" onclick="ed.DelEventDetail({$ED.ID})">删除</a>
+		</td>
+	  </tr>
+	  {/foreach}
+	</table>
+	<fieldset>
+		<legend class="orange">添加事件属性</legend>
+		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+		  <tr>
+			<td width="10%"  align="right" bgcolor="#FFFFFF">事件编号:</td>
+			<td width="5%"  bgcolor="#FFFFFF" id="EvtID">{$EvtID}</td>
+			<td width="13%"  align="right" bgcolor="#FFFFFF">事件类别:</td>
+			<td width="10%" bgcolor="#FFFFFF">
+				<select id="ClassID" onchange="ed.InitData()">
+					{foreach from=$ClassList item=C}
+					<option value="{$C.ClassID}">{$C.CateName}</option>
+					{foreachelse}
+					<option value="0">请先添加事件子类</option>
+					{/foreach}
+				</select>
+				{foreach from=$ClassList item=C}
+				<input type="hidden" id="Class_{$C.ClassID}" value="{$C.Target}" KeyID="{$C.KeyID}" />
+				{/foreach}
+			</td>
+
+			<td width="8%" align="right" bgcolor="#FFFFFF">数量:</td>
+			<td width="5%" bgcolor="#FFFFFF">
+				<input type="text" class="txt" name="iNumber" id="iNumber" value="0" maxlength="5" size="5">
+			</td>
+			
+			<td width="10%" align="right" bgcolor="#FFFFFF" id="title">事件对象:</td>				
+			<td width="39%" bgcolor="#FFFFFF" id="Row_EvtProb"><input type="text" class="txt" name="Probability" id="Probability" value="0" maxlength="5" size="5"></td>
+			<td width="39%" bgcolor="#FFFFFF" id="Row_EvtObj">
+				<select id="ObjID">
+				</select>
+			</td>
+		  </tr>		 
+		</table>
+	</fieldset>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'Event')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAdd" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var ed={
+	/*初始化页面数据*/
+	InitData:function(){		
+		var ClassID = $('#ClassID').val();
+		if($('#Class_'+ClassID).val()==1){
+			$('#Row_EvtObj').show();
+			$('#Row_EvtProb').hide();
+			$('#title').html('事件对象:');
+		}
+		else{
+			$('#Row_EvtObj').hide();			
+			$('#Row_EvtProb').show();
+			$('#title').html('概率:');
+		}
+		ed.GetObjList();
+	},
+	/*读取目标对象*/
+	GetObjList:function(){
+{/literal}
+		var ClassID = $('#ClassID').val();		
+		setting.Url='{au d=YunWei c=Event a=getObjList}';
+		setting.Params = 'KeyID='+$('#Class_'+ClassID).attr('KeyID');
+		ajax.Request(setting.Url,setting.Params,'callback.GetObjList');
+{literal}
+	},
+	/*读取子类*/
+	GetBigClass:function(){
+{/literal}
+		setting.Url='{au d=YunWei c=Event a=getBigClass}';
+		setting.Params = 'BigClassID='+$('#BigClassID').val();
+		ajax.Request(setting.Url,setting.Params,'callback.GetBigClass');
+{literal}	
+	},
+	/*读取子类下的道具*/
+	GetSpList:function(){
+{/literal}
+		setting.Url='{au d=YunWei c=Event a=getStagePropertyList}';
+		setting.Params = 'SubClassID='+$('#SubClassID').val();
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpList');
+{literal}	
+	},
+	/*删除*/
+	DelEventDetail:function(id){
+{/literal}
+			setting.Url='{au d=YunWei c=Event a=delEventDetail}';
+			setting.Params = 'ID='+id;
+			if(confirm('删除后将无法恢复，确认删除'))
+				ajax.Request(setting.Url,setting.Params,'callback.DelEventDetail');
+{literal}	
+	},
+	BindEvent:function(){
+		/*添加*/
+		$('#btnAdd').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=Event a=addEventDetail}';
+{literal}			
+			$('#ResultMsg').html('');
+			var EvtID = $('#EvtID').html();
+			var ClassID = $('#ClassID').val();
+			var ObjID = $('#ObjID').val();
+			var iNumber = $('#iNumber').val();
+			var Probability = $('#Probability').val();
+			if(isNaN(EvtID) || EvtID=='' || EvtID<=0){
+				$('#ResultMsg').html('*事件编号异常,请关闭后重试');
+				return false;
+			}
+			if(isNaN(ClassID) || ClassID==''){
+				$('#ResultMsg').html('*请选择正确的类别');
+				$('#ClassID').focus();
+				return false;
+			}
+			if(isNaN(ObjID) || ObjID==''){
+				$('#ResultMsg').html('*请选择正确的目标对象');
+				$('#ObjID').focus();
+				return false;
+			}	
+			if(isNaN(iNumber) || iNumber==''){
+				$('#ResultMsg').html('*请输入正确的数量');
+				$('#iNumber').focus();
+				return false;
+			}	
+			if(isNaN(Probability) || Probability=='' || Probability<-1 || Probability>1){
+				$('#ResultMsg').html('*请输入正-1到1之间的小数');
+				$('#Probability').focus();
+				return false;
+			}			
+			setting.Params = 'EvtID='+EvtID+'&ClassID='+ClassID+'&ObjID='+ObjID+'&iNumber='+iNumber+'&Probability='+Probability;
+			ajax.Request(setting.Url,setting.Params,'callback.AddEventDetail');
+		});		
+	}
+};
+{/literal}
+</script>

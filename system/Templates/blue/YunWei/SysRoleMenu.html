@@ -1,0 +1,79 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>角色菜单设置
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysRole')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+            {foreach from=$Info.Menulist item=menu}
+            {foreach from=$menu.sublist item=msub}
+
+
+            <input value="{$msub.Id}" class="first" {if in_array($msub.Id, $Info.SelfMenu)}checked{/if} name="chooselist" type="checkbox" title="{$msub.MenuName}">{$msub.MenuName}
+
+            <div>
+            {foreach from=$msub.sublist item=msub2}
+                <input type="checkbox" {if in_array($msub2.Id, $Info.SelfMenu)}checked{/if} class="child" name="chooselist" value="{$msub2.Id}" title="{$msub2.MenuName}">{$msub2.MenuName}&nbsp;
+            {/foreach}
+            </div>
+
+            <br>
+            <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+            {/foreach}
+            {/foreach}
+
+        </table>
+        <div class="bot f2">
+            <div class="botLeft f1 left"></div>
+            <div class="botRight f1 right"></div>
+            <input type="text" name="roleid" id="roleid" value="{$Info.Roleid}" hidden>
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysRole')"/>
+            <input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysRole a=editSet}';
+                        {literal}
+                        $('#ResultMsg').next().html('');
+                        var set = [];
+                        $("input[name='chooselist']:checked").each(function(){
+                            set.push($(this).val())
+                        });
+                        var roleid = $('#roleid').val();
+                        if(set.length <=0 || !roleid){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+                        setting.Params = 'set='+set+'&roleid='+roleid;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.EditRole');
+                    });
+                $('.first').click(function(){
+                    var check = $(this).is(':checked');
+                    if (check) {
+                        $(this).next().children().attr('checked', 'true');
+                    }else{
+                        $(this).next().children().removeAttr('checked');
+                    }
+                });
+                $('.child').click(function(){
+                    var check = $(this).is(':checked');
+                    if (check) {
+                        $(this).parent().prev().attr('checked', 'true');
+                    }
+                });
+            }
+        }
+        {/literal}
+    </script>

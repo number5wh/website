@@ -1,0 +1,708 @@
+<div class="sysWin sysWindow" style="width:800px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏房间
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'GameRoom')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<div class="tab">
+			<ul>
+				<li class="curTab">房间基本信息</li>
+				<li>房间属性</li>
+				<li>聊天属性</li>	
+				<li>房间规则</li>	
+				<li>底分规则</li>	
+				<li>布局设置</li>	
+				<li class="hide">掉宝设置</li>
+				<li class="hide">比赛规则</li>	
+				<br class="left" />
+			</ul>	
+			<!--房间基本信息-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_1" class="RoomPro">
+			  <tr>
+				<td width="15%" align="right" bgcolor="#FFFFFF">游戏类型:</td>
+				<td width="16%" bgcolor="#FFFFFF">
+           	  		<select name="GameKindClass" id="GameKindClass" onchange="room.GetGameKind($(this).val())" disabled="true">
+                    	{foreach from=$GameKindClassList item=c}
+                    	<option value="{$c.ClassID}" {if $c.ClassID==$GameRoom.ClassID}selected{/if}>{$c.ClassName}</option>
+                        {/foreach}
+                    </select>
+                    <select name="KindID" id="KindID" style="width:100px" onchange="room.SetRoomProperty('KindID',$(this).val())" disabled="true">
+                    	<option value="0">请选择游戏</option>
+                        {foreach from=$GameKindList item=kind}
+                        <option value="{$kind.KindID}" {if $kind.KindID==$GameRoom.KindID}selected{/if}>{$kind.KindName}</option>
+                        {/foreach}
+                    </select> <span class="orange">*</span>
+                </td>
+				<td width="10%" align="right" bgcolor="#FFFFFF">房间类型:</td>
+				<td width="24%" bgcolor="#FFFFFF">
+               	  <select name="RoomType" id="RoomType"  disabled="true">
+                    	<option value="0">请选择</option>
+                  </select>
+				  <select name="MatchType" id="MatchType" class="hide" onchange="room.ShowMatchRule()">
+				  		{foreach from=$MatchTypeList item=Match}
+                    	<option value="{$Match.MatchTypeID}" {if $GameRoom.MatchTypeID==$Match.MatchTypeID}selected{/if}>{$Match.MatchName}</option>
+						{/foreach}
+                  </select>
+                  {foreach from=$MatchTypeList item=Match}
+                  <input type="hidden" id="MatchTypeID_{$Match.MatchTypeID}" value="{$Match.TypeID}" />
+                  {/foreach}
+                </td>
+                <td width="10%" align="right" bgcolor="#FFFFFF">房间设置:</td>
+                <td width="25%" bgcolor="#FFFFFF">
+					<input type="checkbox" id="PCheating"  value="16"  {if $GameRoom.RoomType & 16}checked{/if} disabled="true"/> 防作弊
+					<input type="checkbox" id="HundredRoom" value="64"  {if $GameRoom.RoomType & 64}checked{/if} disabled="true"/> 百人房间
+                	<label class="hide" id="tyRoom">
+					<input type="checkbox" id="expRoom"  value="8"  {if $GameRoom.RoomType & 8}checked{/if} disabled="true"/> 体验房
+					</label>
+                </td>
+			  </tr>
+              <tr>                
+                <td align="right" bgcolor="#FFFFFF">房间名称:</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt"size="10" id="RoomName" value="{$GameRoom.RoomName}" ></td>
+				<td align="right" bgcolor="#FFFFFF">桌子数量:</td>
+				<td bgcolor="#FFFFFF"><input type="text"  class="txt" size="10" id="MaxTableCount" value="{$GameRoom.MaxTableCount}" disabled="true"></td>
+                <td align="right" bgcolor="#FFFFFF">房间最大人数:</td>
+				<td bgcolor="#FFFFFF">               	  
+				  <input type="text" class="txt" size="10" id="MaxPlayerCount" value="{$GameRoom.MaxPlayerCount}" disabled="true">
+                </td>
+               
+			  </tr>
+              <tr>
+              	<td align="right" bgcolor="#FFFFFF">房间服务器:</td>
+				<td bgcolor="#FFFFFF">
+					<select name="ServerID" id="ServerID" style="width:150px">
+                  		<option value="0">请选择服务器</option>
+                  		{foreach from=$ServerList item=server}
+                    	<option value="{$server.ServerID}" {if $server.ServerID==$GameRoom.ServerID}selected{/if}>({$server.ServerName}){$server.ServerIP}</option>
+                        {/foreach}
+                  </select> <span class="orange">*</span>
+				</td>
+				<td align="right" bgcolor="#FFFFFF" class="ExpMoney">&nbsp;</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt hide" size="10" id="ExpMoney" value="{$GameRoom.ExpMoney}"></td>
+				  <td align="right" bgcolor="#FFFFFF">彩蛋税率:</td>
+				<td bgcolor="#FFFFFF">               	  
+				  <input type="text" class="txt" size="10" id="LuckyEggTaxRate" value="{$GameRoom.LuckyEggTaxRate}" disabled="true">
+                </td>              
+			  </tr>	
+              <tr>
+				<td align="right" bgcolor="#FFFFFF">房间提示:</td>
+				<td colspan="5" bgcolor="#FFFFFF"><textarea class="textarea" cols="90" rows="3" id="EnterPrompt" disabled="true">{$GameRoom.EnterPrompt}</textarea> 多条用"|"分隔开</td>				
+			  </tr>	
+              <tr id="RulePromptRow">
+				<td align="right" bgcolor="#FFFFFF">规则提示:</td>
+				<td colspan="5" bgcolor="#FFFFFF"><textarea class="textarea" cols="90" rows="3" id="RulePrompt" disabled="true">{$GameRoom.RulePrompt}</textarea></td>				
+			  </tr>		
+	  	  	</table>
+			<!--房间属性-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_2" class="hide RoomPro">
+			  <tr>
+				<td width="16%" align="right" bgcolor="#FFFFFF">是否允许旁观:</td>
+				<td width="14%" bgcolor="#FFFFFF">
+                	<select name="AllowLook" id="AllowLook" onchange="room.SetRoomProperty('AllowLook',$(this).val())" disabled="true">
+                    	<option value="1" selected="selected">是</option>
+                        <option value="0" {if 0==$GameRoom.AllowLook}selected{/if}>否</option>
+                    </select>           	  		                 
+                </td>
+				<td width="16%" align="right" bgcolor="#FFFFFF">等待开始游戏:</td>
+				<td width="20%" bgcolor="#FFFFFF">
+               	  <select name="StartMode" id="StartMode" onchange="room.SetRoomProperty('StartMode',$(this).val())" disabled="true">
+                    	<option selected="selected" value="0">由时间控制开始</option>
+                    	<option value="1" {if 1==$GameRoom.StartMode}selected{/if}>所有玩家准备好后开始</option>
+                        <option value="2" {if 2==$GameRoom.StartMode}selected{/if}>部分玩家准备好后开始</option>
+                        <option value="3" {if 3==$GameRoom.StartMode}selected{/if}>由游戏程序控制开始</option>
+                  </select>
+                </td>
+                <td width="20%" align="right" bgcolor="#FFFFFF">&nbsp;<span class="hide StartForMinUser">至少几组准备好后开始游戏:</span></td>
+				<td width="14%" bgcolor="#FFFFFF"><input type="text" class="txt hide StartForMinUser" size="10" id="StartForMinUser" value="{$GameRoom.StartForMinUser}">&nbsp;</td>
+			  </tr>
+              <tr>
+				<td align="right" bgcolor="#FFFFFF">游戏开始后允许坐下:</td>
+				<td bgcolor="#FFFFFF">
+                	<select name="CanJoinWhenPlaying" id="CanJoinWhenPlaying" disabled="true">
+                    	<option value="1" selected="selected">是</option>
+                        <option value="0" {if 0==$GameRoom.CanJoinWhenPlaying}selected{/if}>否</option>
+                    </select>
+                </td>
+				<td align="right" bgcolor="#FFFFFF">单桌最大旁观数:</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="MaxLookUser" value="{$GameRoom.MaxLookUser}" disabled="true"></td>
+                <td align="right" bgcolor="#FFFFFF">&nbsp;<span class="AutoRun">自动启动客户端:</span></td>
+				<td bgcolor="#FFFFFF">
+                	<select name="AutoRun" id="AutoRun" class="AutoRun" disabled="true">                    	
+                    	<option value="1" selected="selected">是</option>
+                        <option value="0" {if 0==$GameRoom.AutoRun}selected{/if}>否</option>
+                    </select>&nbsp;
+                </td>
+			  </tr>	      
+              <tr>
+				<td align="right" bgcolor="#FFFFFF">自动起立(坐下时长):</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="MaxSitTime" value="{$GameRoom.MaxSitTime}" disabled="true"></td>
+				<td align="right" bgcolor="#FFFFFF">自动起立(举手时长):</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="MaxStartTime" value="{$GameRoom.MaxStartTime}" disabled="true"></td>
+                <td align="right" bgcolor="#FFFFFF">自动踢出(进入房间时长):</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="MaxFreeTime" value="{$GameRoom.MaxFreeTime}" disabled="true"></td>
+			  </tr>	 
+			  <tr>
+				<td align="right" bgcolor="#FFFFFF">房间权限:</td>
+				<td bgcolor="#FFFFFF" colspan="5">
+				<input type="checkbox" class="SetFlag" value="1" {if ($GameRoom.SetFlag & 1)>0}checked{/if} disabled="true">房间禁止设置
+				</td>				
+			  </tr>             
+
+			  <tr>
+				<td align="right" bgcolor="#FFFFFF">机器人权限:</td>
+				<td bgcolor="#FFFFFF" colspan="5">
+				<input type="checkbox" id="RobotJoinWhenPlaying" class="RobotJoinWhenPlaying" value="1" {if $GameRoom.RobotJoinWhenPlaying  == 1}checked{/if} disabled="true">允许游戏中加入
+				</td>				
+			  </tr>      
+              <tr class="hide CustomField">
+				<td bgcolor="#FFFFFF" colspan="6"><span id="CustomFieldTitle"></span>
+                <input type="text" class="txt hide CustomField" size="100" id="CustomField" value="{$GameRoom.CustomField}">&nbsp;
+                </td>
+			  </tr>	           
+	  	  	</table>
+			<!--聊天属性-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_3" class="hide RoomPro">
+			  <tr>
+				<td width="18%" align="center" bgcolor="#FFFFFF">
+               		<input type="checkbox" id="AllowChatOption1" value="1" {if 1 & $GameRoom.AllowChatOption}checked{/if} disabled="true"/> 允许大厅公聊</td>				
+				<td width="15%" align="left" bgcolor="#FFFFFF">
+                	<input type="checkbox" id="AllowChatOption2" value="2" {if 2 & $GameRoom.AllowChatOption}checked{/if} disabled="true"/> 允许游戏聊天</td>				
+                <td width="67%" align="left" bgcolor="#FFFFFF">
+                	<span id="AllowLookChat">
+                    <input type="checkbox" id="AllowChatOption4" value="4" {if 4 & $GameRoom.AllowChatOption}checked{/if} disabled="true"/> 允许旁观用户聊天
+                    </span>
+                </td>
+			  </tr>		  
+		  	</table>
+			<!--房间规则-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_4" class="hide RoomPro">
+			  <tr class="Wealth">
+				<td width="15%" align="right" bgcolor="#FFFFFF" id="RoomWealthMinTitle">进入房间最小积分:</td>
+				<td width="9%" bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="RoomWealthMin" value="{$GameRoom.RoomWealthMin}" disabled="true"></td>
+				<td width="14%" align="right" bgcolor="#FFFFFF" id="RoomNumMax1Title">进入房间最大积分:</td>
+				<td width="11%" bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="RoomNumMax1" value="{$GameRoom.RoomNumMax1}" disabled="true"></td>
+                <td width="14%" align="right" bgcolor="#FFFFFF" id="TableWealthMinTitle">坐下游戏最小积分:</td>
+				<td width="9%" bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="TableWealthMin" value="{$GameRoom.TableWealthMin}" disabled="true"></td>
+                <td width="15%" align="right" bgcolor="#FFFFFF" id="RoomNumMax2Title">坐下游戏最大积分:</td>
+				<td width="13%" bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="RoomNumMax2" value="{$GameRoom.RoomNumMax2}" disabled="true"></td>
+			  </tr>	
+              <tr class="SpRoomSetting hide">
+				<td align="right" bgcolor="#FFFFFF">消耗体力:</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="PlayCountMax" value="{$GameRoom.PlayCountMax}"></td>
+				<td align="right" bgcolor="#FFFFFF">逃跑上限:</td>
+				<td bgcolor="#FFFFFF"><input type="text" class="txt" size="10" id="FleeCountMax" value="{$GameRoom.FleeCountMax}"></td>
+                <td align="right" bgcolor="#FFFFFF">角色等级下限:</td>
+				<td bgcolor="#FFFFFF" colspan="3"><input type="text" class="txt" size="10" id="RoleLevelMin" value="{$GameRoom.RoleLevelMin}"></td>
+              </tr>			 
+		  	</table>
+			<!--底分规则-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_5" class="hide RoomPro">
+			  <tr>
+				<td width="17%" align="right" bgcolor="#FFFFFF">游戏对局底分类型:</td>
+				<td width="12%" bgcolor="#FFFFFF">
+                	<select name="CellScoreType" id="CellScoreType" disabled="true">
+                        <option value="0" selected="selected">程序自动计算</option>
+                        <option value="1" {if 1==$GameRoom.CellScoreType}selected{/if}>房间对局分</option>
+                        <option value="2" {if 2==$GameRoom.CellScoreType}selected{/if}>玩家对局分</option>
+                    </select>
+                </td>
+				<td width="16%" align="right" bgcolor="#FFFFFF"><span class="CellScore">房间对局底分:</span></td>
+				<td width="55%" bgcolor="#FFFFFF"><input type="text" class="txt CellScore" size="10" id="CellScore" value="{$GameRoom.CellScore}" disabled="true"></td>
+              </tr>			  
+		  	</table>
+			<!--布局设置-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_6" class="hide RoomPro">
+			  <tr>
+				<td width="12%" align="right" bgcolor="#FFFFFF">桌子类型:</td>
+				<td width="17%" bgcolor="#FFFFFF">
+                	<select name="TableSchemeId" id="TableSchemeId" disabled="true">
+                    	<option value="0" selected="selected">请选择桌子类型</option>
+                    	{foreach from=$TableList item=table}
+                        <option value="{$table.TableSchemeID}" {if $table.TableSchemeID==$GameRoom.TableSchemeId}selected{/if}>{$table.SchemeName}</option>
+                        {/foreach}
+                    </select>
+                </td>
+				<td width="16%" align="right" bgcolor="#FFFFFF">&nbsp;</td>
+				<td width="55%" bgcolor="#FFFFFF">&nbsp;</td>
+              </tr>				  
+		  	</table>
+			<!--底分规则-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="Room_7" class="hide RoomPro">
+			  <tr>
+				<td width="15%" align="right" bgcolor="#FFFFFF">选择道具:</td>
+				<td width="85%" bgcolor="#FFFFFF">
+                	<select name="TypeID" id="TypeID" onchange="gift.GetSpClass();">
+						{foreach from=$SpTypeList item=Sp}
+						<option value="{$Sp.TypeID}" {if $Sp.TypeID==$SpPublic.TypeID}selected{/if}>{$Sp.TypeName}</option>
+						{/foreach}
+				   </select>
+				   <select name="SubClassID" id="SubClassID" onchange="gift.GetSpPublicList();" style="width:90px">
+				   </select>
+                </td>				
+              </tr>		
+			  <tr>
+				<td bgcolor="#FFFFFF">&nbsp;</td>
+				<td bgcolor="#FFFFFF" id="SpList">    </td>
+			  </tr>	  
+			  <tr>
+				<td align="right" bgcolor="#FFFFFF">掉落道具:</td>
+				<td bgcolor="#FFFFFF" id="DropSp">
+					{foreach from=$DropSpList item=sp}
+					<div id="Sp_{$sp.SpID}" class="left" style="line-height:22px; margin-right:15px;margin-bottom:3px">
+						<span class="left">{$sp.GoodsName}</span>
+						<input type="text" id="Prob_{$sp.SpID}" class="txt left" size="5" value="{$sp.Probability}" />
+						<a href="javascript:void(0)" title="点击移除" class="no icon left" style="margin-top:5px" id="RemoveSp_{$sp.SpID}" onclick="room.DelDropSp({$sp.ID},{$sp.SpID})"></a>
+					</div>
+					{/foreach}
+				</td>
+			  </tr>
+		  	</table>
+			<!--比赛规则-->
+			<div id="Room_8" class="hide RoomPro" style="margin-top:5px">
+				<!--66人斗地主比赛规则-->
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px" class="MatchRule_1 MatchRule">
+				  <tr>
+					<td width="23%" align="right" bgcolor="#FFFFFF">每天比赛局数上限:</td>
+					<td width="27%" bgcolor="#FFFFFF"><input type="text" class="txt" id="MaxMatchs" size="10" maxlength="4" value="{$GameRoomMatch.MaxMatchs}" /></td>				
+					<td width="22%" align="right" bgcolor="#FFFFFF">同时开赛上限场数:</td>
+					<td bgcolor="#FFFFFF" ><input type="text" class="txt" id="MaxMatchNumber" size="10" maxlength="6" value="{$GameRoomMatch.MaxMatchNumber}" /></td>
+				  </tr>
+				  <tr>
+					<td align="right" bgcolor="#FFFFFF">比赛开始时间:</td>
+					<td bgcolor="#FFFFFF" >
+                    <input type="text" class="txt" id="MatchStartDate" size="20" maxlength="20" value="{$GameRoomMatch.MatchStartDate}" />
+                    </td>
+					<td align="right" bgcolor="#FFFFFF">比赛结束时间:</td>
+					<td bgcolor="#FFFFFF">
+                    <input type="text" class="txt" id="MatchEndDate" size="20" maxlength="20" value="{$GameRoomMatch.MatchEndDate}" />
+                    </td>
+				  </tr>
+                  <tr>
+					<td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+					<td bgcolor="#FFFFFF" ><input type="text" class="txt" id="MatchStartTime" size="20" maxlength="20" value="{$GameRoomMatch.MatchStartTime}" /></td>
+					<td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+					<td bgcolor="#FFFFFF"><input type="text" class="txt" id="MatchEndTime" size="20" maxlength="20" value="{$GameRoomMatch.MatchEndTime}" /></td>
+				  </tr>
+                  <tr>
+					<td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+					<td bgcolor="#FFFFFF" colspan="3">
+                    <input type="checkbox" id="MatchTimeStatus" value="1" {if $GameRoomMatch.MatchTimeStatus}checked{/if} /> 按每天时间段比赛
+                    </td>
+				  </tr>
+				  <tr>
+					<td align="right" bgcolor="#FFFFFF">获奖条件:</td>
+					<td bgcolor="#FFFFFF" >
+                    <select id="GetPrizeType">
+						{foreach from=$GetPrizeTypeList item=List}
+						<option value="{$List.TypeID}" {if $List.TypeID==$GameRoomMatch.GetPrizeType}selected{/if}>{$List.TypeName}</option>
+						{/foreach}
+					</select>
+					<select id="GetStatus">
+						{foreach from=$GetStatusList item=List}
+						<option value="{$List.TypeID}" {if $List.TypeID==$GameRoomMatch.GetStatus}selected{/if}>{$List.TypeName}</option>
+						{/foreach}
+					</select>
+                    </td>
+					<td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+					<td bgcolor="#FFFFFF">&nbsp;</td>
+				  </tr>
+				</table>				
+			</div>
+		</div>		
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'GameRoom')" style="margin-right:30px;"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameRoom" />
+		<div class="orange left" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+{literal}
+var room={
+	/*移除道具*/
+	DelDropSp:function(ID,SpID){
+		if(confirm('删除后将无法恢复,确定删除?')){
+{/literal}
+			setting.Url='{au d=YunWei c=GameRoom a=delPresentRoomSp}';
+{literal}
+			ajax.Request(setting.Url,'ID='+ID+'&SpID='+SpID,'callback.DelPresentRoomSp');
+		}		
+	},
+	/*读取游戏种类*/
+	GetGameKind:function(classid){
+{/literal}
+		setting.Url='{au d=YunWei c=GameRoom a=getGameKind}';
+{literal}
+		ajax.RequestUrl(setting.Url,'classid='+classid,'callback.GetGameKind');
+	},
+	/*设置房间规则*/
+	SetRoomRule:function(RuleType,Value){
+		if(RuleType=='RoomType'){
+			$('#tyRoom').addClass('hide');/*体验房*/
+			$('.SpRoomSetting').hide();
+			$('.Wealth').show();			
+			/*选项卡显示*/
+			$('.tab li:eq(1)').show();
+			$('.tab li:eq(2)').show();
+			$('.tab li:eq(3)').show();
+			$('.tab li:eq(4)').show();
+			$('.tab li:eq(5)').show();	
+			/*选项卡隐藏*/
+			$('.tab li:eq(6)').hide();	
+			$('.tab li:eq(7)').hide();	
+			/*比赛类型隐藏*/
+			$('#MatchType').hide();
+			if(Value==1){/*积分房间*/
+				$('#RoomWealthMinTitle').html('进入房间最小积分:');
+				$('#RoomNumMax1Title').html('进入房间最大积分:');
+				$('#TableWealthMinTitle').html('坐下游戏最小积分:');
+				$('#RoomNumMax2Title').html('坐下游戏最大积分:');
+			}
+			else if(Value==2){/*金币房间*/
+				$('#RoomWealthMinTitle').html('进入房间最小财富:');
+				$('#RoomNumMax1Title').html('游戏最大财富:');
+				$('#TableWealthMinTitle').html('坐下游戏最小财富:');
+				$('#RoomNumMax2Title').html('游戏弹起财富:');
+				$('#tyRoom').removeClass('hide');/*体验房*/
+				this.SetRoomProperty('ExpRoom');
+			}	
+			else if(Value==4){/*比赛房间*/
+				$('#PCheating').attr('checked','checked');
+				/*选项卡隐藏*/
+				$('.tab li:eq(1)').hide();
+				$('.tab li:eq(2)').hide();
+				$('.tab li:eq(3)').hide();				
+				$('.tab li:eq(6)').hide();	
+				/*选项卡显示*/
+				$('.tab li:eq(7)').show();
+				/*比赛类型显示*/
+				$('#MatchType').show();	
+				room.ShowMatchRule();
+			}
+			else if(Value==32){/*打宝房间*/
+				$('#PCheating').attr('checked','checked');
+				$('.SpRoomSetting').show();
+				$('.Wealth').hide();
+				/*桌子数量*/
+				/*选项卡隐藏*/
+				$('.tab li:eq(1)').hide();				
+				$('.tab li:eq(4)').hide();
+				$('.tab li:eq(5)').hide();	
+				$('.tab li:eq(7)').hide();	
+				/*选项卡显示*/		
+				$('.tab li:eq(6)').show();		
+			}			
+			/*隐藏体验房和体验金额*/
+			if($('#tyRoom').attr('class')=='hide'){
+				$('#expRoom').attr('checked','');
+				this.SetRoomProperty('ExpRoom');
+			}
+			
+			this.SetRoomProperty('PCheating');
+		}
+		/*else{
+			是否显示道具房间规则设置,32:打宝/道具房间
+			if(Value==32){
+				$('#SpRoomSetting').show();
+				$('#RulePromptRow').show();
+			}
+			else
+				$('#SpRoomSetting').hide();
+			if(Value==16){
+				$('.AutoRun').show();
+				$('#RulePromptRow').show();
+			}
+			else
+				$('.AutoRun').hide();			
+			$('#RulePromptRow').hide();
+		}*/
+	},
+	/*根据比赛类型显示不同的比赛规则设置*/
+	ShowMatchRule:function(){
+		$('.MatchRule').hide();
+		var TypeID = 'MatchTypeID_'+$('#MatchType').val();
+		$('.MatchRule_'+$('#'+TypeID).val()).show();
+		/*初始化日历控件*/
+		$('#MatchStartDate').focus(function(){
+			WdatePicker({startDate:'%y-%M-01',dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true,readOnly:true});
+		});
+		$('#MatchEndDate').focus(function(){
+			WdatePicker({startDate:'%y-%M-01',dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true,readOnly:true});
+		});
+		$('#MatchStartTime').focus(function(){
+			WdatePicker({dateFmt:'H:mm:ss',readOnly:true});
+		});
+		$('#MatchEndTime').focus(function(){
+			WdatePicker({dateFmt:'H:mm:ss',readOnly:true});
+		});
+	},
+	/*设置房间属性*/
+	SetRoomProperty:function(ProType,Value){		
+		if(ProType=='AllowLook'){
+			if(Value==1)
+				$('#AllowLookChat').show();
+			else
+				$('#AllowLookChat').hide();
+		}
+		else if(ProType=='StartMode'){
+			if(Value==2)
+				$('.StartForMinUser').show();
+			else
+				$('.StartForMinUser').hide();
+		}
+		else if(ProType=='PCheating'){
+			if($('#PCheating').attr('checked')){
+				$('.AutoRun').val(1);
+				$('.AutoRun').attr('disabled','disabled');
+			}
+			else{
+				$('.AutoRun').val(0);
+				$('.AutoRun').attr('disabled','');
+			}
+		}
+		else if(ProType=='KindID'){
+			ajax.Request(setting.ReqUrl,'KindID='+Value,'callback.GetGameKindInfo');
+		}
+		else if(ProType=='ExpRoom'){
+			if($('#expRoom').attr('checked')){
+				$('.ExpMoney').html('体验金额:');
+				$('#ExpMoney').show();
+			}
+			else{
+				$('.ExpMoney').html('&nbsp;');
+				$('#ExpMoney').hide();
+			}
+		}
+	},
+	/*设置底分规则*/
+	SetCellScoreRule:function(Value){
+		if(Value==1)
+			$('.CellScore').show();
+		else
+			$('.CellScore').hide();
+	},
+	/*添加房间*/
+	AddGameRoom:function(){
+		$('#ResultMsg').html('数据提交中...');
+		var TmpAllowChatOption1 = 0;
+		var TmpAllowChatOption2 = 0;
+		var TmpAllowChatOption4 = 0;
+		var SpIDList = '';
+		var SpProb = '';
+		var KindID=$('#KindID').val();
+		/*房间类型*/		
+		var RoomType=$('#RoomType').val();
+		var MatchType = $('#MatchType').val();
+		var PCheating = $('input[id="PCheating"]:checked').val();
+		var HundredRoom = $('input[id="HundredRoom"]:checked').val();
+		var expRoom = $('input[id="expRoom"]:checked').val();
+		if(!isNaN(PCheating)) RoomType = parseInt(RoomType)+parseInt(PCheating);
+		if(!isNaN(expRoom)) RoomType = parseInt(RoomType)+parseInt(expRoom);
+		if(!isNaN(HundredRoom)) RoomType = parseInt(RoomType)+parseInt(HundredRoom);
+
+		var LuckyEggTaxRate = $('#LuckyEggTaxRate').val();
+		
+		var ExpMoney=$('#ExpMoney').val();		
+		var ServerID=$('#ServerID').val();
+		var RoomName=$('#RoomName').val();
+		var MaxTableCount=$('#MaxTableCount').val();
+		var MaxPlayerCount=$('#MaxPlayerCount').val();
+		var EnterPrompt=$('#EnterPrompt').val();
+		var RulePrompt=$('#RulePrompt').val();
+		var AllowLook=$('#AllowLook').val();
+		var StartMode=$('#StartMode').val();
+		var StartForMinUser=$('#StartForMinUser').val();
+		var CanJoinWhenPlaying=$('#CanJoinWhenPlaying').val();
+		var MaxLookUser=$('#MaxLookUser').val();
+		var AutoRun=$('#AutoRun').val();
+		var MaxSitTime=$('#MaxSitTime').val();
+		var MaxStartTime=$('#MaxStartTime').val();
+		var MaxFreeTime=$('#MaxFreeTime').val();
+		var SetFlag = 0;
+		$('.SetFlag').each(function(){
+			if($(this).attr('checked')) SetFlag += parseInt($(this).val());
+		});
+		var RobotJoinWhenPlaying =0;
+		$('.RobotJoinWhenPlaying').each(function(){
+			if($(this).attr('checked')) RobotJoinWhenPlaying += parseInt($(this).val());
+		});
+		var CustomField=$('#CustomField').val();
+		var AllowChatOption1=$('input[id="AllowChatOption1"]:checked').val();
+		var AllowChatOption2=$('input[id="AllowChatOption2"]:checked').val();
+		var AllowChatOption4=$('input[id="AllowChatOption4"]:checked').val();
+		if(!isNaN(AllowChatOption1)) TmpAllowChatOption1=AllowChatOption1;
+		if(!isNaN(AllowChatOption2)) TmpAllowChatOption2=AllowChatOption2;
+		if(!isNaN(AllowChatOption4)) TmpAllowChatOption4=AllowChatOption4;
+		var AllowChatOption = parseInt(TmpAllowChatOption1)+parseInt(TmpAllowChatOption2)+parseInt(TmpAllowChatOption4);
+		
+		var RoomWealthMin=$('#RoomWealthMin').val();
+		var RoomNumMax1=$('#RoomNumMax1').val();
+		var TableWealthMin=$('#TableWealthMin').val();
+		var RoomNumMax2=$('#RoomNumMax2').val();
+		var PlayCountMax=$('#PlayCountMax').val();
+		var FleeCountMax=$('#FleeCountMax').val();
+		var RoleLevelMin=$('#RoleLevelMin').val();
+		var CellScoreType=$('#CellScoreType').val();
+		var CellScore=$('#CellScore').val();
+		var TableSchemeId=$('#TableSchemeId').val();
+		
+		var MaxMatchs = $('#MaxMatchs').val();
+		var MaxMatchNumber = $('#MaxMatchNumber').val();		
+		var MatchStartDate = $('#MatchStartDate').val();	
+		var MatchStartTime = $('#MatchStartTime').val();
+		var MatchEndDate = $('#MatchEndDate').val();	
+		var MatchEndTime = $('#MatchEndTime').val();
+		var GetPrizeType = $('#GetPrizeType').val();
+		var GetStatus = $('#GetStatus').val();
+		var MatchTimeStatus = 0;
+		if($('#MatchTimeStatus').attr('checked')) MatchTimeStatus=1;
+		$('#DropSp div').each(function(){
+			var ID=$(this).attr('id').replace('Sp_','');
+			SpIDList += ID + ',';
+			SpProb += $('#Prob_'+ID).val() + ',';
+		});
+		if(isNaN(KindID) || KindID==''){
+			$('#ResultMsg').html('游戏种类类型错误');
+			return false;
+		}
+		if(isNaN(RoomType) || RoomType==''){
+			$('#ResultMsg').html('请选择正确的房间类型');
+			return false;
+		}
+		if(isNaN(ServerID) || ServerID==''){
+			$('#ResultMsg').html('请选择正确的服务器地址');
+			return false;
+		}
+		if(isNaN(MaxTableCount) || MaxTableCount==''){
+			$('#ResultMsg').html('请输入正确的桌子数');
+			return false;
+		}
+		if(isNaN(MaxPlayerCount) || MaxPlayerCount==''){
+			$('#ResultMsg').html('请输入正确的房间人数');
+			return false;
+		}
+		if(isNaN(MaxLookUser) || MaxLookUser==''){
+			$('#ResultMsg').html('请输入正确的最大旁观数');
+			return false;
+		}
+		if(isNaN(MaxSitTime) || MaxSitTime==''){
+			$('#ResultMsg').html('请输入正确的自动直立(坐下时长)值');
+			return false;
+		}
+		if(isNaN(MaxStartTime) || MaxStartTime==''){
+			$('#ResultMsg').html('请输入正确的自动直立(举手时长)值');
+			return false;
+		}
+		if(isNaN(MaxFreeTime) || MaxFreeTime==''){
+			$('#ResultMsg').html('请输入正确的自动直立(进入房间时长)值');
+			return false;
+		}
+		
+		if(isNaN(LuckyEggTaxRate) || LuckyEggTaxRate==''){
+			$('#ResultMsg').html('请输入正确的彩蛋税率');
+			return false;
+		}
+		var msg1 = '进入房间最小财富';
+		var msg2 = '游戏最大财富';
+		var msg3 = '坐下游戏最小财富';
+		var msg4 = '游戏弹起财富';
+		if($('#WealthType').val()==1){
+			msg1 = '进入房间最小积分';
+			msg2 = '进入房间最大积分';
+			msg3 = '坐下游戏最小积分';
+			msg4 = '坐下游戏最大积分';
+		}		
+		if(isNaN(RoomWealthMin) || RoomWealthMin==''){
+			$('#ResultMsg').html('请输入正确的'+msg1);
+			return false;
+		}
+		if(isNaN(RoomNumMax1) || RoomNumMax1==''){
+			$('#ResultMsg').html('请输入正确的'+msg2);
+			return false;
+		}
+		if(isNaN(TableWealthMin) || TableWealthMin==''){
+			$('#ResultMsg').html('请输入正确的'+msg3);
+			return false;
+		}
+		if(isNaN(RoomNumMax2) || RoomNumMax2==''){
+			$('#ResultMsg').html('请输入正确的'+msg4);
+			return false;
+		}
+		if(isNaN(CellScore) || CellScore==''){
+			$('#ResultMsg').html('请输入正确的房间对局底分');
+			return false;
+		}
+		if(MatchStartTime!='' && MatchStartDate=='' || MatchEndDate!='' && MatchStartDate==''){
+			$('#ResultMsg').html('请选择比赛开始日期');
+			return false;
+		}
+		if(MatchEndTime!='' && MatchEndDate==''){
+			$('#ResultMsg').html('请选择比赛结束日期');
+			return false;
+		}	
+		setting.Params='KindID='+KindID+'&RoomType='+RoomType+'&MatchType='+MatchType+'&ServerID='+ServerID+
+					   '&RoomName='+encodeURIComponent(RoomName)+'&MaxTableCount='+MaxTableCount+'&MaxPlayerCount='+MaxPlayerCount+
+					   '&EnterPrompt='+encodeURIComponent(EnterPrompt)+'&AllowLook='+AllowLook+'&StartMode='+StartMode+'&StartForMinUser='+StartForMinUser+
+					   '&CanJoinWhenPlaying='+CanJoinWhenPlaying+'&MaxLookUser='+MaxLookUser+'&AutoRun='+AutoRun+'&MaxSitTime='+MaxSitTime+
+					   '&MaxStartTime='+MaxStartTime+'&MaxFreeTime='+MaxFreeTime+
+					   '&CustomField='+encodeURIComponent(CustomField)+'&AllowChatOption='+AllowChatOption+'&RoomWealthMin='+RoomWealthMin+
+					   '&RoomNumMax1='+RoomNumMax1+'&TableWealthMin='+TableWealthMin+'&RoomNumMax2='+RoomNumMax2+'&PlayCountMax='+PlayCountMax+		
+					   '&FleeCountMax='+FleeCountMax+'&RoleLevelMin='+RoleLevelMin+'&CellScoreType='+CellScoreType+'&SpIDList='+SpIDList+'&SpProb='+SpProb+
+					   '&CellScore='+CellScore+'&TableSchemeId='+TableSchemeId+'&RulePrompt='+encodeURIComponent(RulePrompt)+'&ExpMoney='+ExpMoney+
+					   '&SetFlag='+SetFlag+'&MaxMatchs='+MaxMatchs+'&MaxMatchNumber='+MaxMatchNumber+'&MatchStartDate='+encodeURIComponent(MatchStartDate)+
+					   '&MatchStartTime='+encodeURIComponent(MatchStartTime)+'&MatchEndDate='+encodeURIComponent(MatchEndDate)+
+					   '&MatchEndTime='+encodeURIComponent(MatchEndTime)+'&MatchTimeStatus='+encodeURIComponent(MatchTimeStatus)+'&GetPrizeType='+GetPrizeType+
+					   '&GetStatus='+GetStatus+'&MatchModel=1'+'&LuckyEggTaxRate='+LuckyEggTaxRate+'&RobotJoinWhenPlaying='+RobotJoinWhenPlaying;
+{/literal}
+		setting.Url='{au d=YunWei c=GameRoom a=addGameRoom}';
+{literal}
+		ajax.Request(setting.Url,setting.Params,'callback.AddGameRoom');
+	}	
+};
+var gift={
+	/*道具分类*/
+	GetSpClass:function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=GameRoom a=getStagePropertyClass}';
+		setting.Params = 'TypeID='+$('#TypeID').val();
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetRoomSPClass');
+	},
+	/*读取道具*/
+	GetSpPublicList:function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=GameRoom a=getSpPublicList}';
+		setting.Params = 'ClassID='+$('#SubClassID').val();
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpPublicList');
+	},
+	/*选择道具*/
+	GetCurSp:function(TypeID,SpID,SpName){
+		if($('#DropSp #Sp_'+SpID).html()!=null) return;
+		$('#DropSp').append('<div id="Sp_'+SpID+'" class="left" style="line-height:22px; margin-right:15px;margin-bottom:3px"><span class="left">'+SpName+'</span><input type="text" id="Prob_'+SpID+'" class="txt left" size="5" /><a href="javascript:void(0)" title="点击移除" class="no icon left" style="margin-top:5px" id="RemoveSp_'+SpID+'"></a></div>');
+		$('#RemoveSp_'+SpID).click(function(){
+			$('#Sp_'+SpID).remove();
+		});
+	}
+};
+{/literal}
+/*以下是点击修改时,初始化各控件状态*/
+/*自定义字段*/
+setting.ReqUrl='{au d=YunWei c=GameRoom a=getGameKindInfo}';
+ajax.Request(setting.ReqUrl,'KindID='+$('#KindID').val()+'&RoomType={$GameRoom.RoomType}','callback.GetGameKindInfo');
+/*等待开始游戏(部分玩家准备好后开始)*/
+room.SetRoomProperty('StartMode',{$GameRoom.StartMode});
+/*防作弊房间
+room.SetRoomRule('RoomType',$('#RoomType').val());*/
+/*底分规则*/
+room.SetCellScoreRule($('#CellScoreType').val());
+gift.GetSpClass();
+</script>

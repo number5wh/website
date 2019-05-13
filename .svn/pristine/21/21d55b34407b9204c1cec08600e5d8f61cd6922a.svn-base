@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var User={
+    /*道具分类*/
+    CallBackSearch:function(data){
+        $('#tdNewPlayer').show();
+        $('#NewPlayer').html(data);
+    },
+    CallBackRoomOnline:function(data){
+        $('#RoomOnlinePageList').html(data);
+        Room.BindEvent();
+    }
+}
+function getRoomOnline() {
+    {/literal}
+    setting.Url = '{au d=YunYing c=User a=RoomOnline}';
+    setting.Params = 'type='+$('#type option:selected').val();
+    ajax.RequestUrl(setting.Url, setting.Params, 'User.CallBackRoomOnline');
+    {literal}
+}
+$(function(){
+	$('#btnSearch').click(function(){
+		var StartTime = $('#StartTime').val();
+		var EndTime = $('#EndTime').val();		
+{/literal}
+		setting.Url = '{au d=YunYing c=User a=search}';
+		setting.Params = 'StartTime='+StartTime+'&EndTime='+EndTime;
+		ajax.RequestUrl(setting.Url,setting.Params,'User.CallBackSearch');
+{literal}	
+	});
+
+    getRoomOnline();
+});
+
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset>
+	<legend>查询</legend>	
+	时间范围:
+	<input id="StartTime" class="Wdate" type="text" value="{$ad.StartTime}" size="12" onclick="WdatePicker({literal}{dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'EndTime\')}'}{/literal})" />
+	<input id="EndTime" class="Wdate" type="text" value="{$ad.EndTime}" size="12" onclick="WdatePicker({literal}{dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'StartTime\')||\'%y-%M-%d\'}'}{/literal})" />
+	<input type="button" id="btnSearch" class="btn f2" value="查询" />
+</fieldset>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+  <!--<tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">总玩家数:</td>
+    <td width="83%" bgcolor="#FFFFFF"> {$RecordsCount}</td>
+  </tr>
+  <tr>-->
+    <td width="17%" align="right" bgcolor="#FFFFFF">在线玩家数:</td>
+    <td width="83%" bgcolor="#FFFFFF" id="tdSpNumber">{$OnlineCount}</td>
+  </tr>
+  <tr class="hide" id="tdNewPlayer">
+    <td width="17%" align="right" bgcolor="#FFFFFF">某时间段注册玩家数:</td>
+    <td width="83%" bgcolor="#FFFFFF" id="NewPlayer"></td>
+  </tr>
+</table>
+<fieldset>
+  <legend>在线玩家信息</legend> 
+    <select id="type" name="type" onchange="getRoomOnline()">
+      <option value='1' selected="selected">按房间ID</option>
+      <option value='2'>按游戏类型</option>
+    </select>
+</fieldset>
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="getRoomOnline()">
+    <div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<div id="RoomOnlinePageList">
+</div>
+</body>
+</html>

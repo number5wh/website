@@ -1,0 +1,78 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/UserBLL.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+
+require_once ROOT_PATH . 'Link/GetRoleBaseInfo.php';
+require_once ROOT_PATH . 'Link/QuerySuperUserList.php';
+class HappyBeanAction extends PageBase {
+	public function __construct() {
+		$this->arrConfig = unserialize(SYS_CONFIG);
+	}
+
+	public function getPagerHappyBeanSortTop100() {
+
+		$strWhere = ' WHERE TotalMoney >= 1000000000';
+		$arrUserList = null;
+		$curPage = 1;
+
+		$arrParam['fields'] = 'RoleID,RoleName,TotalMoney';
+		//$arrParam['tableName']='(SELECT TOP 1000 UB.RoleID,ISNULL([Money],0) AS [Money],ISNULL(GameMoney,0) AS GameMoney,ISNULL([Money],0)+ISNULL(GameMoney,0) AS TotalMoney FROM T_UserBank AS UB LEFT JOIN (SELECT RoleID,SUM([Money]) AS GameMoney FROM T_UserGameWealth GROUP BY RoleID) AS T1 ON UB.RoleID=T1.RoleID ORDER BY TotalMoney DESC) AS TT';
+		//$arrParam['tableName']='(SELECT TOP 1000 ISNULL(UB.RoleID,T1.RoleID) AS RoleID,ISNULL(UB.RoleName,T1.RoleName) AS RoleName,ISNULL([BankMoney],0) AS [Money],ISNULL(GameMoney,0) AS GameMoney,ISNULL([BankMoney],0)+ISNULL(GameMoney,0) AS TotalMoney FROM T_BankMoneyRank AS UB FULL JOIN (SELECT TOP 1000 RoleID,min([RoleName]) AS RoleName,SUM([TotalMoney]) AS GameMoney FROM T_UserGameRank WITH(NOLOCK) WHERE [TotalMoney]>0 GROUP BY RoleID ORDER BY GameMoney DESC) AS T1 ON UB.RoleID=T1.RoleID ORDER BY TotalMoney DESC) AS TT';
+		$arrParam['tableName'] = '(SELECT TOP 100 RoleID,RoleName,ISNULL(BankMoney,0) as [Money],ISNULL(GameMoney,0) as GameMoney,(ISNULL(GameMoney,0)+ISNULL(BankMoney,0)) as TotalMoney FROM T_BankMoneyRank  ORDER BY TotalMoney DESC ) AS TT';
+		$arrParam['where'] = $strWhere;
+		$arrParam['order'] = 'TotalMoney DESC';
+		$arrParam['pagesize'] = 100;
+		$arrParam['function'] = 'HappyBeanSortTop100';
+		$objCommonBLL = new CommonBLL($this->arrConfig['MapType']['DataChangeLogs']);
+
+		$arrUserList = $objCommonBLL->getPageListSelect($arrParam, $curPage);
+		//var_dump($arrUserList);
+		$res1 = array();
+		$res2 = array();
+		$roleIdArray = array();
+		if ($arrUserList) {
+			foreach ($arrUserList as $val) {
+				if ($val['RoleID'] != 1039187 && $val['RoleID'] != 800036 && $val['RoleID'] != 1303689) {
+					if ($val['TotalMoney'] >= 6000000000) {
+						$val['TotalMoney'] = 6000000000;
+						array_push($res1, array($val['RoleID'], Utility::gb2312ToUtf8($val['RoleName']), $val['TotalMoney']));
+					} else {
+						array_push($res2, array($val['RoleID'], Utility::gb2312ToUtf8($val['RoleName']), $val['TotalMoney']));
+					}
+
+					array_push($roleIdArray, $val['RoleID']);
+					
+				}
+			}
+		}
+
+		$cnt = count($res1);
+		if ($cnt > 0) {
+			shuffle($res1);
+			$res = array_merge($res1, $res2);
+		} else {
+			$res = $res2;
+		}
+
+
+
+		$out_array = DSQuerySuperRoleList($roleIdArray);
+
+		$ret = array();
+		foreach ($res as $value) {
+			$RoleID = $value[0];
+			if ($out_array[$RoleID] && $out_array[$RoleID] > 0) {
+				array_push($ret, $value);
+			}
+		}
+
+
+		echo json_encode($ret);
+		
+
+		
+	}
+}
+?>

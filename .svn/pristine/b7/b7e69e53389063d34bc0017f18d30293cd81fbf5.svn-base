@@ -1,0 +1,42 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="10%" bgcolor="#FFFFFF">日期</th>
+        <th width="10%" bgcolor="#FFFFFF">玩家充值</th>
+        <th width="10%" bgcolor="#FFFFFF">商人进货</th>
+        <th width="10%" bgcolor="#FFFFFF">玩家提现</th>
+<!--        <th width="10%" bgcolor="#FFFFFF">玩家余额</th>-->
+        <th width="10%" bgcolor="#FFFFFF">税收收入</th>
+        <th width="10%" bgcolor="#FFFFFF">本日业绩</th>
+    </tr>
+    {foreach from=$arrInComeList item=List}
+    <tr>
+        <!--<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>-->
+        <td align="center" bgcolor="#FFFFFF">{$List.adddate}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.totalpay }</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.superchange}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.cashout}</td>
+<!--        <td align="center" bgcolor="#FFFFFF">{$List.playeraccout}</td>-->
+        <td align="center" bgcolor="#FFFFFF">{$List.tax}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.totalpay+$List.superchange-$List.cashout}</td>
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    <tr>
+        <!--<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>-->
+        <td align="center" bgcolor="#FFFFFF">合计</td>
+        <td align="center" bgcolor="#FFFFFF">{$arrtotal.totalpay}</td>
+        <td align="center" bgcolor="#FFFFFF">{$arrtotal.superchange}</td>
+        <td align="center" bgcolor="#FFFFFF">{$arrtotal.cashout}</td>
+<!--        <td align="center" bgcolor="#FFFFFF"></td>-->
+        <td align="center" bgcolor="#FFFFFF">{$arrtotal.tax}</td>
+        <td align="center" bgcolor="#FFFFFF">{$arrtotal.totalpay+$arrtotal.superchange-$arrtotal.cashout}</td>
+    </tr>
+    {if $arrRegUserList}
+    <tr>
+        <td colspan="11" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

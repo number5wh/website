@@ -1,0 +1,53 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="9%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="11%" bgcolor="#FFFFFF">玩家昵称</th>
+    <th width="11%" bgcolor="#FFFFFF">手机号码</th>
+    <th width="13%" bgcolor="#FFFFFF">订单号</th>
+	<th width="9%" bgcolor="#FFFFFF">充值金额</th>
+	<th width="8%" bgcolor="#FFFFFF">充值状态</th>
+    <th width="16%" bgcolor="#FFFFFF">充值结果</th>
+    <th width="14%" bgcolor="#FFFFFF">充值时间</th>
+    <th width="9%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$RechargeList item=R}
+  <tr id="Row_{$R.RID}">
+    <td align="center" bgcolor="#FFFFFF">{$R.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.LoginName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.Mobile}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.OrderID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.Amount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.RetCode}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.RetMsg}</td>
+    <td align="center" bgcolor="#FFFFFF">{$R.AddTime}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='btnUpdate' id="{$R.RID}" >更新</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $RechargeList}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var M={
+	/*绑定事件*/
+	BindEvent:function(){
+		$('.aDetail').click(function(){
+{/literal}
+			setting.Url = '{au d=YunYing c=MatchRecharge a=setRecharge}';
+			setting.Params = 'RID='+$(this).attr('id');
+			ajax.Request(setting.Url,setting.Params,'Match.CallBackSetRecharge');
+{literal}
+		})
+	}
+};
+{/literal}
+</script>

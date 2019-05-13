@@ -1,0 +1,46 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="15%" bgcolor="#FFFFFF">比赛ID</th>
+    <th width="13%" bgcolor="#FFFFFF">比赛名称</th>
+    <th width="7%" bgcolor="#FFFFFF">比赛时间</th>
+	<th width="7%" bgcolor="#FFFFFF">开始时间</th>
+	<th width="7%" bgcolor="#FFFFFF">结束时间</th>
+    <th width="13%" bgcolor="#FFFFFF">比赛场地</th>
+	<th width="7%" bgcolor="#FFFFFF">比赛单元</th>	
+	<th width="7%" bgcolor="#FFFFFF">弃赛人数</th>
+	<th width="7%" bgcolor="#FFFFFF">获奖人数</th>
+	<th width="7%" bgcolor="#FFFFFF">新玩家数</th>
+    <th width="10%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  <tr id="Row_{$Match.MatchUnitID}">
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchUnitID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.PlayDate}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchStartTime}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.MatchEndTime}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.RoomName}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.iTimes}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.GiveUpPeople}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.WinPeople}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.NewPlayer}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='aDetail' id="{$Match.MatchUnitID}" MatchTypeID="{$Match.MatchTypeID}" title="{$Match.MatchUnitID}">查看</a>
+	</td>
+  </tr>  
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var Search1={
+	/*绑定事件*/
+	BindEvent:function(){
+		$('.aDetail').click(function(){
+{/literal}
+			setting.Url = '{au d=YunYing c=Match a=getPagerGameMatchRankList}';
+			setting.Params = '&MatchUnitID='+$(this).attr('id')+'&MatchTypeID='+$(this).attr('MatchTypeID')+'&PlayDate='+$('#Row_'+$(this).attr('id')+' td:eq(2)').html();
+			window.parent.main.AddTab($(this).attr('title'),'GameMatch'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+		});
+	}
+};
+{/literal}
+</script>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	//点击显示修改服务器配置界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysGameConfig a=showAddGameConfigHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'TypeID='+$(this).attr('id'),'callback.ShowAddGameConfigHtml');
+		});	
+	});
+	//点击删除服务器配置信息
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysGameConfig a=delGameConfig}';
+{literal}
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.Url,'TypeID='+$(this).attr('id'),'callback.DelGameConfig');
+		});	
+	});		
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加游戏配置" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="11%" bgcolor="#FFFFFF">序号</th>
+    <th width="21%" bgcolor="#FFFFFF">描述</th>
+    <th width="19%" bgcolor="#FFFFFF">值</th>
+    <th width="24%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$GameConfigList item=cfg}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$cfg.CfgType}</td>
+    <td align="center" bgcolor="#FFFFFF">{$cfg.Description}</td>
+    <td align="center" bgcolor="#FFFFFF">{$cfg.CfgValue}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$cfg.CfgType}">修改</a>
+	 <a href="javascript:void(0)" class="del" id="{$cfg.CfgType}">删除</a> 
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

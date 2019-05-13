@@ -1,0 +1,56 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>菜单目录设置
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysMenu')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">菜单ID:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" readonly name="menuid" id="menuid" value="{$Info.menuid}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">菜单目录名称:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt"  name="menuname" id="menuname" value="{$Info.menuname}"></td>
+            </tr>
+
+        </table>
+        <div class="bot f2">
+            <div class="botLeft f1 left"></div>
+            <div class="botRight f1 right"></div>
+
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysMenu')"/>
+            <input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=edit1}';
+                        {literal}
+                        $('#ResultMsg').next().html('');
+                        var menuid = $('#menuid').val();
+                        var menuname = $('#menuname').val();
+
+                        if(isNaN(menuid) || menuid==''  ||menuname ==''){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+
+
+                        setting.Params = 'menuid='+menuid+'&menuname='+menuname;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.EditMenu1');
+                    });
+            }
+        }
+        {/literal}
+    </script>

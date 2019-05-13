@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>帮助中心</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>779游戏账号解绑介绍</b></div><br>
+							  <div>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block">    779游戏账号绑定的情况下，如果账号是在原来绑定的机器登录，需要解绑直接点击游戏客户端上面的绑机即可解绑绑定。
+ 
+如果登录的电脑不是在绑定的电脑上，系统会自动提示你是否解绑，如果点击解绑，系统会自动发送短信到注册的安全手机，通过短信验证之后即可解绑。
+										</span>
+									</div>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

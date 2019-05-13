@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+/*分页回调*/
+var callback={
+	AddPlayer:function(data){
+		if(data==0){
+			$('#LoginCode').val('');
+			$('#ResultMsg').html('角色创建成功');
+		}
+		else
+			$('#ResultMsg').html('角色创建失败');
+	}
+};
+$(function(){
+	/*添加玩家*/
+	$('#btnSubmit').click(function(){
+		$('#ResultMsg').html('');
+		$('#LoginCode').next().html('*');
+		var LoginCode = $.trim($('#LoginCode').val());		
+		var MasterRight = $.trim($('#MasterRight').val());
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').next().html('*请输入通行证账号')
+			return false;
+		}
+	
+{/literal}
+		setting.Url = '{au d=YunWei c=Player a=addPlayer}';
+		setting.Params = 'LoginCode='+LoginCode+'&MasterRight='+MasterRight;
+		ajax.RequestCallBack(setting.Url,setting.Params,callback.AddPlayer);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">通行证账号:</td>
+    <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="LoginCode" id="LoginCode" value="{$LoginCode}" /> <span class="orange">*</span></td>
+  </tr>	  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">玩家性质:</td>
+    <td bgcolor="#FFFFFF">
+		<select id="MasterRight">
+			<option value="-1" {if $MasterRight==-1}selected{/if}>普通玩家</option>
+			<!--<option value="1" {if $MasterRight==1}selected{/if}>jijiji</option>-->
+			<option value="32" {if $MasterRight==32}selected{/if}>管理员</option>
+			<!--<option value="4" {if $MasterRight==4}selected{/if}>系统玩家</option>-->
+		</select>
+	</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF"><input type="button" class="btn f2" id="btnSubmit" value="提交" /> <span class="orange" id="ResultMsg"></span></td>
+  </tr> 
+ </table>
+
+
+</body>
+</html>

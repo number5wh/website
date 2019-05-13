@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysIpList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysIpList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysIpList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetSysIp:function(data){
+		setting.Params = '';
+		if(data==0){
+			$('#ImgResult').removeClass('no');
+			$('#ImgResult').addClass('yes');
+			$('#IP').val('');
+			$('#Interval').val(5);
+			$('#Times').val(2);
+		}
+		else
+			$('#ImgResult').addClass('no');
+	}
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=SysIp a=getPagerSysIpList}';
+{literal}
+	pl.SetProperty();
+	/*绑定搜索事件*/
+	$('#btnSearch').click(function(){
+		var Key = $.trim($('#Key').val());
+		setting.Params = '&Key='+encodeURIComponent(Key);
+		page.GetPage(1,"callback.GetPagerSysIpList");
+	});	
+	/*添加*/
+	$('#btnAdd').click(function(){
+		var IP = $.trim($('#IP').val());
+		var Times = $.trim($('#Times').val());
+		var Interval = $.trim($('#Interval').val());		
+
+		if(IP=='' || Times=='' || Interval=='' || isNaN(Times) || isNaN(Interval)){
+			alert('请输入合理的值');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunWei c=SysIp a=setSysIp}';
+		setting.Params = 'IP='+IP+'&Times='+Times+'&Interval='+Interval;
+		ajax.RequestCallBack(setting.Url,setting.Params,callback.SetSysIp);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;width:400px" class="left">
+	<legend>搜索</legend>
+	<div style="margin-bottom:3px">
+	IP：<input type="text" class="txt" id="Key" />
+	<input type="button" id="btnSearch" class="btn f2" value="搜 索" />
+	</div>
+</fieldset>
+<fieldset style="margin-bottom:3px;width:730px" class="left">
+	<legend>添加</legend>
+	<div style="margin-bottom:3px" class="left">
+		IP:<input type="text" class="txt" id="IP" size="20" maxlength="20" />	
+		间隔时间:<input type="text" class="txt" id="Interval" size="10" maxlength="4" value="5" />
+		次数:<input type="text" class="txt" id="Times" size="10" maxlength="4" value="2" />
+		<input type="button" id="btnAdd" class="btn f2" value="添 加" />	
+	</div>
+	<div class="left" id="ImgResult" style="width:12px;height:10px;margin-bottom:3px;margin-top:8px"></div>
+	<div class="left" style="cursor:pointer;margin:4px 0px 3px 4px" onclick="page.GetPage(1,'callback.GetPagerSysIpList');">
+		<div class="refresh icon left"></div><span class="left">刷新</span>
+	</div>
+</fieldset>
+<br class="clearfix" />
+<div id="PageList">
+	{include file="$skin/YunWei/SysIpListPage.html"}
+</div>
+
+</body>
+</html>

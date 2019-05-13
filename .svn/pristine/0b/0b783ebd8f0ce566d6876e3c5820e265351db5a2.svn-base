@@ -1,0 +1,97 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>重置密码</span>
+	<table border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<td class='txt_M'>
+			重置密码类型：
+				<input type='checkbox' id='bankFreeze' />重置交易密码
+				<input type='passport' id='TransPwd' size='10' maxlength='6' /><br /><br />
+				
+				<input type='checkbox' id='knapFreeze' style='margin-left:90px' />重置登陆密码
+				<input type='passport' id='LoginPwd' size='10' />
+				
+			</td>
+		</tr>
+		<!--<tr>
+			<td class='txt_L'>安全手机：{$Mobile}</td>
+		</tr>-->
+		<tr>
+			<td class='txt_M pad5'>
+				<p id='ErrorMsg' class='txt_M pad8 orange'></p>
+				<input type='hidden' id='roleID' value='{$roleID}' />
+				<input id='iLoginID' type='hidden' value='{$loginID}' />
+				<input type='button' id='applyBtn'  class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+setting.Url = '{au d=Service c=ServiceRole a=resetPasswordTable}';
+{literal}
+$(function(){
+	$('#applyBtn').click(function(){
+		var roleID = $.trim($('#roleID').val());
+		var loginID = $.trim($('#iLoginID').val());
+		var bankChk = $('#bankFreeze').attr('checked');
+		var knapChk = $('#knapFreeze').attr('checked');
+		var TransPwd = $.trim($('#TransPwd').val());
+		var LoginPwd = $.trim($('#LoginPwd').val());
+		var pwdChked = 0;
+		
+		if(!bankChk && !knapChk){
+			$('#ErrorMsg').html('请选择重置密码类型！');
+			return false;
+		}
+		
+		if(bankChk && knapChk){
+			pwdChked = 3;
+			if(TransPwd=='' || LoginPwd==''){
+				$('#ErrorMsg').html('请输入重置的密码！');
+				return false;
+			}
+			else{
+				var regx2 = /^[0-9]{6}$/;
+				if(TransPwd.length!=6 || regx2.test(TransPwd)==false){
+					$('#ErrorMsg').html('交易密码必须为6位数字！');
+					return false;
+				}
+				var regx1 = /^[a-zA-Z0-9_]{6,16}$/;
+				if(LoginPwd.length>16 || LoginPwd.length<6 || LoginPwd.match(regx1)==null){
+					$('#ErrorMsg').html('登陆密码必须为6到16位数字、字母或下划线的组合！');
+					return false;
+				}
+			}
+		}else if(!bankChk && knapChk){
+			pwdChked = 2;
+			if(LoginPwd==''){
+				$('#ErrorMsg').html('请输入重置的密码！');
+				return false;
+			}
+			else{			
+				var regx1 = /^[a-zA-Z0-9_]{6,16}$/;
+				if(LoginPwd.length>16 || LoginPwd.length<6 || LoginPwd.match(regx1)==null){
+					$('#ErrorMsg').html('登陆密码必须为6到16位数字、字母或下划线的组合！');
+					return false;
+				}
+			}
+		}else if(bankChk && !knapChk){
+			pwdChked = 1;
+			if(TransPwd==''){
+				$('#ErrorMsg').html('请输入重置的密码！');
+				return false;
+			}
+			else{
+				var regx2 = /^[0-9]{6}$/;
+				if(TransPwd.length!=6 || regx2.test(TransPwd)==false){
+					$('#ErrorMsg').html('交易密码必须为6位数字！');
+					return false;
+				}
+				
+			}
+		}
+		var params = 'pswChked='+pwdChked+'&roleID='+roleID+'&loginID='+loginID+'&TransPwd='+TransPwd+'&LoginPwd='+LoginPwd;
+		ajax.RequestUrl(setting.Url, params, 'callback.GetEditOperationResult');
+	})
+})
+{/literal}
+</script>

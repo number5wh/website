@@ -1,0 +1,130 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置房间机器人信息		
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		{if $robot.RoomID eq null}
+		  <tr>
+			<td width="17%" align="right">房间名称:</td>
+			<td width="83%">
+				<select name="RoomID" id="RoomID">
+					{foreach from=$RoomInfo item=room}
+					<option value ="{$room.RoomID}">{$room.RoomName}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr>
+		  {else}
+		<input type="hidden" name="NameID" id="RoomID" value="{$robot.RoomID}" />
+		  {/if}
+		  <tr>
+			<td width="17%" align="right">最大机器人数:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxCount" id="MaxCount" value="{$robot.MaxCount}"></td>
+		  </tr>
+		  <tr>
+			<td width="17%" align="right">胜利权值:</td>
+			<td width="83%"><input type="text" class="txt" name="RobotWinWeighted" id="RobotWinWeighted" value="{$robot.RobotWinWeighted}"></td>
+		  </tr>
+		  <tr>
+			<td width="17%" align="right">需要赢的钱数:</td>
+			<td width="83%"><input type="text" class="txt" name="RobotWinMoney" id="RobotWinMoney" value="{$robot.RobotWinMoney}"></td>
+		  </tr>
+		    <tr>
+			<td width="17%" align="right">服务的桌子数:</td>
+			<td width="83%"><input type="text" class="txt" name="ServiceTables" id="ServiceTables" value="{$robot.ServiceTables}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">附加胜率:</td>
+			<td width="83%"><input type="text" class="txt" name="AddWinPre" id="AddWinPre" value="{$robot.AddWinPre}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最小带入分数:</td>
+			<td width="83%"><input type="text" class="txt" name="MinTakeScore" id="MinTakeScore" value="{$robot.MinTakeScore}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最大带入分数:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxTakeScore" id="MaxTakeScore" value="{$robot.MaxTakeScore}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最小游戏局数:</td>
+			<td width="83%"><input type="text" class="txt" name="MinPlayDraw" id="MinPlayDraw" value="{$robot.MinPlayDraw}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right"> 最大游戏局数:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxPlayDraw" id="MaxPlayDraw" value="{$robot.MaxPlayDraw}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最小游戏时间:</td>
+			<td width="83%"><input type="text" class="txt" name="MinReposeTime" id="MinReposeTime" value="{$robot.MinReposeTime}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最大游戏时间:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxReposeTime" id="MaxReposeTime" value="{$robot.MaxReposeTime}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">输钱逃跑百分比:</td>
+			<td width="83%"><input type="text" class="txt" name="MinLeavePre" id="MinLeavePre" value="{$robot.MinLeavePre}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">赢钱逃跑百分比:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxLeavePre" id="MaxLeavePre" value="{$robot.MaxLeavePre}"></td>
+		  </tr>
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right btnCancel" value="取 消" />
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddRoomRobot" />
+        <div class="orange right" id="AddRoomRobotMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var robotEdit={
+	BindEvent:function(TabTag,NameID){
+		/*提交*/
+		$('#btnAddRoomRobot').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=RoomRobot a=addRoomRobot}';	
+{literal}		
+			var RoomID = $('#RoomID').val();
+			var MaxCount = $('#MaxCount').val();
+			var RobotWinWeighted = $('#RobotWinWeighted').val();
+			var RobotWinMoney = $('#RobotWinMoney').val();
+			var ServiceTables = $('#ServiceTables').val();
+			var AddWinPre = $('#AddWinPre').val();
+			var MinTakeScore = $('#MinTakeScore').val();
+			var MaxTakeScore = $('#MaxTakeScore').val();
+			var MinPlayDraw= $('#MinPlayDraw').val();
+			var MaxPlayDraw = $('#MaxPlayDraw').val();
+			var MinReposeTime = $('#MinReposeTime').val();
+			var MaxReposeTime = $('#MaxReposeTime').val();
+			var MinLeavePre = $('#MinLeavePre').val();
+			var MaxLeavePre = $('#MaxLeavePre').val();
+			setting.Params='RoomID='+RoomID+'&MaxCount='+MaxCount+'&RobotWinWeighted='+RobotWinWeighted+'&RobotWinMoney='+RobotWinMoney+'&ServiceTables='+ServiceTables+'&AddWinPre='+AddWinPre+'&MinTakeScore='+MinTakeScore+'&MaxTakeScore='+MaxTakeScore+'&MinPlayDraw='+MinPlayDraw+'&MaxPlayDraw='+MaxPlayDraw+'&MinReposeTime='+MinReposeTime+'&MaxReposeTime='+MaxReposeTime+'&MinLeavePre='+MinLeavePre+'&MaxLeavePre='+MaxLeavePre;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddRoomRobot');
+		});	
+		/*关闭弹出层*/
+		$('.btnCancel').click(function(){
+			main.CloseMsgBox(false,TabTag);
+		});
+	}
+};
+{/literal}
+var ClassName='{$ClassName}';
+{literal}
+if(ClassName=='ServerGame'){
+	$('#wwwPort').removeClass('hide');
+	$('#LANServerIP').attr('disabled','disabled');
+}
+{/literal}
+</script>

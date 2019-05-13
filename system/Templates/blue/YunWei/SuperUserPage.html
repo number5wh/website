@@ -1,0 +1,67 @@
+
+<div class="sysWin" style="width: 400px">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>添加超级用户
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+    </h2>
+    <div class="bdy" style="padding:10px 10px 0 10px;">
+        <table id="tb_addApply" width="100%" border="0" cellpadding="0" cellspacing="0" class="bg_color">
+            <tr>
+                <td width="30%" class="txt_R">申请商人编号：</td>
+                <td class="txt_L pad5">
+                    <input type="text" id="txt_loginId" class="txt_inp" maxlength="8" />
+                    <span id="loginName" class="orange"></span><input id="roleId" type="hidden"/></td>
+            </tr>
+            <tr>
+                <td width="30%" class="txt_R">返还比例(万分比)：</td>
+                <td class="txt_L pad5">
+                    <input type="text" id="txt_number" class="txt_inp" maxlength="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+            </tr>
+        </table>
+    </div>
+    <div class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <input id="btn_submit" type="button" class="bnStyle f2" style="margin-left:180px;" value="确&nbsp;定" />
+        <div class="botRight f1 right"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+    {literal}
+    $('#txt_loginId').change(function(){
+        $('#errorMsg').html('');
+        $('#loginName').html('');
+        var loginId = $.trim($(this).val());
+        if(loginId == "" || isNaN(loginId)){
+            $('#errorMsg').html('请填写正确的玩家编号');
+            return false;
+        }
+        ajax.Request('/?d=Service&c=ServiceCase&a=getLoginName','loginId='+loginId,'getLoginNameCallback');
+    });
+
+    $('#btn_submit').click(function(){
+        var roleId = $('#roleId').val();
+        var number = $("#txt_number").val();
+        var param = "";
+        param += "roleId="+roleId;
+        param += "&number="+number;
+        ajax.RequestUrl('/?d=YunWei&c=SuperUser&a=addSuperUser',param,"callback.AddSuperUser");
+    })
+
+    function getLoginNameCallback(data){
+        data = $.evalJSON(data);
+        if(data.iResult == 1){
+            $('#loginName').html(data.msg);
+            $('#roleId').val(data.roleId);
+        }else{
+            alert(data.msg);
+        }
+    }
+
+    {/literal}
+</script>

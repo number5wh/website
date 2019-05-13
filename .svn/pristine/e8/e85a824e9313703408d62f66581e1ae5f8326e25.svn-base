@@ -1,0 +1,43 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+	<tr class="bg_color">
+		<th>记录时间</th>
+		<th>游戏名称</th>
+		<th>游戏流水</th>
+		<th>游戏结果</th>
+		<th>获得道具</th>
+	</tr>
+{foreach from=$result item=v}	
+	<tr class="bg_color">
+		<td>{$v.AddTime}</td>
+		<td>{$KindName}({$v.KindID})</td>
+		<td><a href="javascript:void(0);" class="blue SpSerialNum" DataTime="{$v.Dtime}">{$v.SerialNumber}</a></td>
+		<td>{$v.playTips}</td>
+		<td>{$v.Intro}</td>
+	</tr>
+{foreachelse}	
+	<tr class="bg_color">
+		<td colspan="5">很抱歉，没有您要查询的信息~</td>
+	</tr>
+{/foreach}
+{if $result}
+	<tr class="bg_color">
+		<td colspan="5">{include file="$skin/Inc/Page.inc.html"}</td>
+	</tr>
+{/if}
+</table>
+<input type="hidden" id="SpRoleID" value="{$RoleID}" />
+<input type="hidden" id="SpKindName" value="{$KindName}" />
+<script type="text/javascript">
+{literal}
+$(function(){
+	$(".SpSerialNum").click(function(){
+		var roleID = $("#SpRoleID").val();
+		var kindName = $("#SpKindName").val();
+		var dNum = $(this).attr("DataTime");
+		var sNum = $(this).html();
+		setting.Params = 'RoleID='+roleID+'&serialNum='+sNum+'&dataNum='+dNum+'&KindName='+kindName;
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getSpUserGameAllPeopleInfo',setting.Params,'callback.GetUserGameAllPeopleInfo');
+	})
+})
+{/literal}
+</script>

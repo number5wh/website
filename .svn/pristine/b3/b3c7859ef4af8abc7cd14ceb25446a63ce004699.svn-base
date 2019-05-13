@@ -1,0 +1,62 @@
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="10%" bgcolor="#FFFFFF">卡号</th>
+        <th width="15%" bgcolor="#FFFFFF">密码</th>
+        <th width="15%" bgcolor="#FFFFFF">手机号</th>
+        <th width="15%" bgcolor="#FFFFFF">创建时间</th>
+        <th width="15%" bgcolor="#FFFFFF">领取时间</th><!--
+        <th width="15%" bgcolor="#FFFFFF">操作</th>-->
+    </tr>
+    {foreach from=$RealCardList item=card}
+    <tr id="Row_{$robot.UserID}">
+        <td align ="center" bgcolor='#FFFFFF'>{$card.CardNo}</td>
+        <td align ="center" bgcolor='#FFFFFF'>{$card.CardPass}</td>
+        <td align="center" bgcolor="#FFFFFF">{$card.Mobile}</td>
+        <td align="center" bgcolor="#FFFFFF">{$card.CreateTime}</td>
+        <td align="center" bgcolor="#FFFFFF">{$card.GetTime}</td>
+        <!--<td align="center" bgcolor="#FFFFFF">
+            <a class="des" data-no="{$card.CardNo}">销毁</a>
+            <a href="javascript:void(0)" class="del" data-no="{$card.CardNo}">删除</a>
+        </td>-->
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $RealCardList}
+    <tr>
+        <td colspan="5" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+
+<script>
+    {literal}
+    $(function(){
+        $("#totalCheck").click(function(){
+            $("input[name*='selected']").attr('checked', this.checked);
+        })
+    });
+    $(".des").click(function(){
+        {/literal}
+        var url = '{au d=YunWei c=RealCard a=destroyRealCard}';
+        var params = 'CardNo='+$(this).attr("data-no");
+
+        {literal}
+        ajax.RequestJsonCallBack(url,params,window.parent.RealCard.destroyCallback);
+        return false;
+    });
+    $(".del").click(function(){
+        {/literal}
+        var url = '{au d=YunWei c=RealCard a=deleteRealCard}';
+        var params = 'CardNo='+$(this).attr("data-no");
+
+        {literal}
+        ajax.RequestJsonCallBack(url,params,RealCard.delCallback);
+        return false;
+    });
+
+    {/literal}
+</script>

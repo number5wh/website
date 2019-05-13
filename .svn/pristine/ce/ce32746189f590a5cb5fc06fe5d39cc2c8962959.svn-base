@@ -1,0 +1,61 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+	<th width="10%" bgcolor="#FFFFFF">角色名</th>
+    <th width="8%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="25%" bgcolor="#FFFFFF">玩家账号</th>
+    <th width="10%" bgcolor="#FFFFFF">会员等级</th>
+    <th width="10%" bgcolor="#FFFFFF">账号状态	</th>
+    <th width="10%" bgcolor="#FFFFFF">金币总额	</th>
+    <th width="10%" bgcolor="#FFFFFF">注册时间	</th>
+      <th width="10%" bgcolor="#FFFFFF">注册IP	</th>
+	<th width="10%" bgcolor="#FFFFFF">三日转账记录</th>
+	<th width="15%" bgcolor="#FFFFFF">当月转账记录</th>
+  </tr>
+  {foreach from=$arrRegUserList item=List}
+  <tr>
+    <!--<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>-->
+	<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.AccountID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.AccountName}</td>
+	<td align="center" bgcolor="#FFFFFF">{if $List.VipExpireTime gt $nowTime}已开通{else}未开通{/if}</td>     
+	<td align="center" bgcolor="#FFFFFF">{if $list.Locked && ($list.LockEndTime gt $nowTime )}<span class="red">封号/锁定</span>{else}{if $list.Locked}<span class="red">封号</span>{elseif $list.LockEndTime gt $nowTime }<span class="orange">锁定</span>{else}正常{/if}{/if}</td>     
+	<td align="center" bgcolor="#FFFFFF">{$List.Money}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.RegisterTime}</td>
+      <td align="center" bgcolor="#FFFFFF"  data-ip="{$List.RegIP}" class="ip-info">{$List.RegIP}</td>
+      <td align="center" bgcolor="#FFFFFF"><a href="#" class="bLink" id='{$List.AccountID}' >查看详细记录</a></td>
+	<td align="center" bgcolor="#FFFFFF"><a href="#" class="aLink" id='{$List.AccountID}' >查看详细记录</a></td>     
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="11" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $arrRegUserList}
+  <tr>
+    <td colspan="11" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+
+
+<script>
+{literal}
+$(function(){
+	$('.aLink').click(function(){
+
+		setting.Url='/?d=YunYing&c=UserBankIn&a=index';
+		var Params='&RoleID='+$(this).attr('id')+'&SuperUser=0&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+		window.parent.main.AddTab('查看月转入明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+
+	});
+	$('.bLink').click(function(){
+
+		setting.Url='/?d=YunYing&c=UserBankIn&a=index';
+		var Params='&RoleID='+$(this).attr('id')+'&days=3&LoginID='+$(this).attr('title');
+		window.parent.main.AddTab('查看3天转入明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+
+	})
+});
+{/literal}
+</script>
+<script language="javascript" type="text/javascript" src="/js/taobao_ip_info.js"></script>

@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysIntervalIpList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysIntervalIpList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysIntervalIpList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetSysIntervalIp:function(data){
+		setting.Params = '';
+		if(data==0){
+			$('#ImgResult').removeClass('no');
+			$('#ImgResult').addClass('yes');
+			$('#IP').val('');
+			$('#Interval').val(5);
+			$('#Times').val(2);
+		}
+		else
+			$('#ImgResult').addClass('no');
+	}
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=SysIntervalIp a=getPagerSysIntervalIpList}';
+{literal}
+	pl.SetProperty();
+	/*添加*/
+	$('#btnAdd').click(function(){
+		var StartIP = $.trim($('#StartIP').val());
+		var EndIP = $.trim($('#EndIP').val());			
+
+		if(StartIP=='' || EndIP==''){
+			alert('请输入IP段范围');
+			return false;
+		}
+		//ip地址
+		var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+		var reg1 = StartIP.match(exp);
+		if(reg1==null)		{
+			alert("IP地址不合法！");
+			$('#StartIP').focus();
+			return false;
+		}
+		var reg2 = EndIP.match(exp);
+		if(reg2==null)		{
+			alert("IP地址不合法！");
+			$('#EndIP').focus();
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunWei c=SysIntervalIp a=setSysIntervalIp}';
+		setting.Params = 'StartIP='+StartIP+'&EndIP='+EndIP;
+		ajax.RequestCallBack(setting.Url,setting.Params,callback.SetSysIntervalIp);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;">
+	<legend>添加</legend>
+	<div style="margin-bottom:3px" class="left">
+		IP始:<input type="text" class="txt" id="StartIP" size="20" maxlength="20" />	
+		IP止:<input type="text" class="txt" id="EndIP" size="20" maxlength="20" />		
+		<input type="button" id="btnAdd" class="btn f2" value="添 加" />	
+	</div>
+	<div class="left" id="ImgResult" style="width:12px;height:10px;margin-bottom:3px;margin-top:8px"></div>
+	<div class="left" style="cursor:pointer;margin:4px 0px 3px 4px" onclick="page.GetPage(1,'callback.GetPagerSysIntervalIpList');">
+		<div class="refresh icon left"></div><span class="left">刷新</span>
+	</div>
+</fieldset>
+<br class="clearfix" />
+<div id="PageList">
+	{include file="$skin/YunWei/SysIntervalIpListPage.html"}
+</div>
+
+</body>
+</html>

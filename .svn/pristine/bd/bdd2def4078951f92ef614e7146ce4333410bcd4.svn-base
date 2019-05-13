@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	//点击生成配置文件
+	$('.file').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=ServerGame a=createFiles}';
+{literal}
+			setting.Params = 'ServerID='+$(this).attr('id');
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.CreateFiles');
+		});	
+	});	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">服务器地址</th>
+    <th width="14%" bgcolor="#FFFFFF">房间数量</th>
+    <th width="16%" bgcolor="#FFFFFF">服务器地址</th>
+    <th width="25%" bgcolor="#FFFFFF">服务器描述</th>
+    <th width="7%" bgcolor="#FFFFFF">状态</th>
+    <th width="23%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ServerList item=server}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$server.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerName}</td>
+    <td align="center" bgcolor="#FFFFFF" class="hide cols">{if $ClassName=='ServerGame'}{$server.RoomCount}{else}{$server.AppName}{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerIP}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.Intro}</td>
+    <td align="center" bgcolor="#FFFFFF">正常</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='locked' id="{$server.ServerID}">{if $server.Locked==1}<span class="orange">启用服务</span>{else}禁用服务{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$server.ServerID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$server.ServerID}">删除</a>
+	  {if $ClassName=='ServerGame'}
+	  <a href="javascript:void(0)" class="file" id="{$server.ServerID}">生成配置文件</a>	
+	  {/if}  
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

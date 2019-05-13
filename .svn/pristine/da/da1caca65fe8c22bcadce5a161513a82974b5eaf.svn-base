@@ -1,0 +1,23 @@
+/* CSS Document */
+.f1{background-image:url(/images/blue/f1.gif);}
+.f2{background-image:url(/images/blue/f2.gif);}
+.f3{background-image:url(/images/blue/f3.gif);}
+.icon{background-image:url(/images/blue/icon.png);}
+.icongif{background-image:url(/images/blue/ico.gif);}
+th{background-image:url(/images/blue/f2.gif);}
+a.gfName{color:#2a7aa3}
+.txt{border:1px solid #4C9DC5;height:20px; margin-left:1px}
+.textarea{border:1px solid #4C9DC5;margin-left:1px; margin-top:1px;}
+.txtPage{border:1px solid #4C9DC5;height:16px; width:35px; text-align:center; }
+/*滑动门*/
+.gTab li.curTab,.gTab li.curTab span{ display:inline-block; height:26px; background:url(/images/blue/nav.png) no-repeat;}
+.gTab li.curTab span{background-position:right 0; padding:0 12px 0 0;line-height:26px; color:#ffffff}
+.gTab li,.gTab li span{ display:inline-block; height:26px; background:url(/images/blue/nav_1.png) no-repeat;}
+.gTab li span{background-position:right 1px; padding:0 12px 0 0;line-height:26px; color:#669eba}
+.gTab li{background-position:left 1px;}
+/*嵌套页选项卡*/
+.tab{width:100%;}
+.tab ul{background:url(/images/blue/dot.gif) left 24px repeat-x}
+.tab li{background:url(/images/blue/tab_line.gif) right top no-repeat;}
+table{background-color:#B5D6E6}
+

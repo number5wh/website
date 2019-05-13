@@ -1,0 +1,144 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置机器人信息		
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right btnCancel" onclick="javascript:main.CloseMsgBox(false,'');" /></a>
+		<br class="clear" />
+	</h2>
+
+    <div class="bdy">
+        <input type="hidden" name="NameID" id="NameID" value=""/>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="17%" align="right">数字M:</td>
+                <td width="83%"><input type="text" class="txt" name="NumM" id="NumM" value=""></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right">数字N:</td>
+                <td width="83%"><input type="text" class="txt" name="NumN" id="NumN" value=""></td>
+            </tr>
+<!--             <tr>
+                <td  width="17%" align="right">游戏房间:</td>
+                <td width="83%">
+                    <select name="RoomID" id="RoomID">
+                        {foreach from = $RoomInfo item = info}
+                        <option value="{$info.RoomID}" {if $info.RoomID eq $robot.RoomID} selected="selected"{/if}>{$info.RoomName}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr> -->
+            <tr>
+                <td width="17%" align="right">服务时间:</td>
+                <td width="83%">
+                    <!-- {section name="loop" loop=24}
+                    <input name"ServiceTime" class="txt" type="checkbox" value= "{$smarty.section.loop.index }" {if $robot.ServiceTime & $smarty.section.loop.index}checked{/if} >{$smarty.section.loop.index}
+                    {/section} -->
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1" checked >0
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2" checked >1
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4" checked >2
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8" checked >3
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="16" checked >4
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="32" checked >5
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="64" checked >6
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="128" checked >7
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="256" checked >8
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="512" checked >9
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1024" checked >10
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2048" checked >11
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4096" checked >12
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8192" checked >13
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="16384" checked >14
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="32768" checked >15
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="65536" checked >16
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="131072" checked >17
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="262144" checked >18
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="524288" checked >19
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1048576" checked >20
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2097152" checked>21
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4194304" checked >22
+                    <input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8388608" checked>23
+                </td>
+            </tr>
+         <!--    <tr>
+                <td width="17%" align="right">最小带入分数:</td>
+                <td width="83%"><input type="text" class="txt" name="MinTakeScore" id="MinTakeScore" value="{$robot.MinTakeScore}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right">最大带入分数:</td>
+                <td width="83%"><input type="text" class="txt" name="MaxTakeScore" id="MaxTakeScore" value="{$robot.MaxTakeScore}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right">最小游戏局数:</td>
+                <td width="83%"><input type="text" class="txt" name="MinPlayDraw" id="MinPlayDraw" value="{$robot.MinPlayDraw}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right">最大游戏局数:</td>
+                <td width="83%"><input type="text" class="txt" name="MaxPlayDraw" id="MaxPlayDraw" value="{$robot.MaxPlayDraw}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right">最小游戏时间:</td>
+                <td width="83%"><input type="text" class="txt" name="MinReposeTime" id="MinReposeTime" value="{$robot.MinReposeTime}"></td>
+            </tr>
+
+            <tr>
+                <td width="17%" align="right">最大游戏时间:</td>
+                <td width="83%"><input type="text" class="txt" name="MaxReposeTime" id="MaxReposeTime" value="{$robot.MaxReposeTime}"></td>
+            </tr> -->
+            <tr>
+                <td width="17%" align="right">服务类型:</td>
+                <td width="83%">
+                    <input name"ServiceGender" class="ServiceGender txt" type="checkbox" value="1" {if $robot.ServiceGender & 1}checked{/if} >相互模拟
+                    <input name"ServiceGender" class="ServiceGender txt" type="checkbox" value="2"{if $robot.ServiceGender & 2}checked{/if} >被动陪打
+                    <input name"ServiceGender" class="ServiceGender txt" type="checkbox" value="4"{if $robot.ServiceGender & 4}checked{/if} >主动陪玩
+                </td>
+            </tr>
+        </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right btnCancel" value="取 消" onclick="javascript:main.CloseMsgBox(false,'');"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnRobotCreator" />
+        <div class="orange right" id="AddRobotNameMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+    {literal}
+    $('#btnRobotCreator').click(function(){
+        {/literal}
+        setting.Url='{au d=YunWei c=RobotCreator a=addMulRobot}';
+        {literal}
+        var NumM = $('#NumM').val();
+        var NumN = $('#NumN').val();
+        var RoomID = $('#RoomID').val();
+        var ServiceTime = 0;
+        $('.ServiceTime').each(function(){
+            if($(this).attr('checked')) ServiceTime += parseInt($(this).val());
+        });
+        var MinTakeScore = $('#MinTakeScore').val();
+        var MaxTakeScore = $('#MaxTakeScore').val();
+        var MinPlayDraw = $('#MinPlayDraw').val();
+        var MaxPlayDraw = $('#MaxPlayDraw').val();
+        var MinReposeTime = $('#MinReposeTime').val();
+        var MaxReposeTime = $('#MaxReposeTime').val();
+        var ServiceGender = 0;
+
+        $('.ServiceGender').each(function(){
+            if($(this).attr('checked')) ServiceGender += parseInt($(this).val());
+        });
+        if(isNaN(NumM) || isNaN(NumN)){
+            $('#AddRobotUserMsg').html('M必须小于N');
+            return false;
+        }
+        setting.Params='NumN='+NumN+'&NumM='+NumM+'&RoomID='+RoomID+'&ServiceTime='+ServiceTime+'&MinTakeScore='+MinTakeScore+'&MaxTakeScore='+MaxTakeScore+'&MinPlayDraw='+MinPlayDraw+'&MaxPlayDraw='+MaxPlayDraw+'&MinReposeTime='+MinReposeTime+'&MaxReposeTime='+MaxReposeTime+'&ServiceGender='+ServiceGender;
+        ajax.RequestUrl(setting.Url,setting.Params,'callback.AddMulRobot');
+    });
+
+    $('#btnCancel').click(function(){
+        main.CloseMsgBox(false,'');
+    })
+    {/literal}
+</script>

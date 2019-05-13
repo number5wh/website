@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	$('#btnSubmit').click(function(){
+		$('#ResultMsg').html('');		
+		var FromAccType = $('#FromAccType').val();
+		var WealthType = $('#WealthType').val();
+		var Money = $('#Money').val();
+		var ToAccType = $('#ToAccType').val();		
+		if(isNaN(FromAccType) || FromAccType<=0){
+			$('#ResultMsg').html('请选择正确的转出账户');
+			$('#FromAccType').focus();
+			return false;
+		}	
+		if(isNaN(WealthType) || WealthType<=0){
+			$('#ResultMsg').html('请选择正确的财富类型');
+			$('#WealthType').focus();
+			return false;
+		}	
+		if(isNaN(Money) || Money<=0){
+			$('#ResultMsg').html('请输入正确的转出金额');
+			$('#Money').focus();
+			return false;
+		}	
+		if(isNaN(ToAccType) || ToAccType<=0){
+			$('#ResultMsg').html('请选择正确的转入账户');
+			$('#ToAccType').focus();
+			return false;
+		}		
+		if(ToAccType==FromAccType){
+			$('#ResultMsg').html('转出账户跟转入账户不能一致');
+			$('#ToAccType').focus();
+			return false;
+		}		
+{/literal}
+		setting.Url = '{au d=YunWei c=$ClassName a=transSysBankMoney}';
+		setting.Params = 'FromAccType='+FromAccType+'&WealthType='+WealthType+'&Money='+Money+'&ToAccType='+ToAccType;
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.TransSysBankMoney');
+{literal}	
+	});
+	//点击显示设置银行账户界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=showAddBankAccHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'AccType='+$(this).attr('id'),'callback.ShowAddBankAccHtml');
+		});	
+	});
+	//点击显示扩容界面
+	$('.add').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=showAddBankCapacityHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'','callback.ShowAddBankCapacityHtml');
+		});	
+	});
+});
+function RefreshSysBankList()
+{
+	window.location.reload();
+}
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" class="edit btn f2" value="添加银行账户" id="0" />
+<input type="button" class="add btn f2" value="系统扩容" id="0" />
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="RefreshSysBankList()">
+<div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<input type="hidden" id="WealthType" value="{$WealthType}" />
+扩容总计：{if $WealthType==1}<!--{$Sys.FwTotalCapacity}龙币-->{else}{$Sys.TotalCapacity/1000}元{/if}
+&nbsp;&nbsp;&nbsp;当前金币：{$CurrentHB/1000}元
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+  <tr>
+  	<th width="16%" align="center" bgcolor="#FFFFFF">账户类型</th>
+    <th width="32%" align="center" bgcolor="#FFFFFF">账户号</th>
+    <th width="33%" align="center" bgcolor="#FFFFFF">金币余额</th>
+    <th width="19%" align="center" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$BankList item=bank}
+  {if $bank.AccNo==''}
+  <tr id="Row_{$bank.AccType}" class="bold">
+    <td align="center" bgcolor="#F0F0F0">{$bank.AccTypeName}</td>
+    <td align="center" bgcolor="#F0F0F0">{$bank.AccNo}</td>
+    <td align="center" bgcolor="#F0F0F0">{if $WealthType==1}{$bank.FwMoney/1000}{else}{$bank.Balance/1000}{/if}</td>
+    <td align="center" bgcolor="#F0F0F0"><a href="javascript:void(0)" id='{$bank.AccType}' class="edit"></a></td>
+  </tr>
+  {else}
+  <tr id="Row_{$bank.AccType}">
+    <td align="center" bgcolor="#FFFFFF">{$bank.AccTypeName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.AccNo}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $WealthType==1}{$bank.FwMoney/1000}{else}{$bank.Balance/1000}{/if}</td>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" id='{$bank.AccType}' class="edit">修改</a></td>
+  </tr>
+  {/if}  
+  {foreachelse}
+  <tr><td colspan="4" align="center" bgcolor="#FFFFFF">请先创建银行账户</td></tr>
+  {/foreach}
+</table>
+{if $BankList}
+<fieldset style="margin-top:5px">
+	<legend>银行转账</legend>
+    从
+    <select name="FromAccType" id="FromAccType">
+        {section name=n loop=$AccTypeList}
+        <option value="{$smarty.section.n.iteration}">{$AccTypeList[$smarty.section.n.iteration]}</option>
+        {/section}
+    </select>
+    转出   
+    <input type="text" class="txt" name="Money" id="Money" value="0" size="14">
+    到
+    <select name="ToAccType" id="ToAccType">
+        {section name=n loop=$AccTypeList}
+        <option value="{$smarty.section.n.iteration}">{$AccTypeList[$smarty.section.n.iteration]}</option>
+        {/section}
+    </select>
+    <input type="button" class="btn f2" value="提 交" id="btnSubmit" /> <span class="orange" id="ResultMsg"></span>
+</fieldset>
+{/if}
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+  <tr>
+  	<th width="33%" align="center" bgcolor="#FFFFFF">玩家银行</th>
+    <th width="33%" align="center" bgcolor="#FFFFFF">玩家游戏银行</th>
+    <th width="34%" align="center" bgcolor="#FFFFFF">金币总额</th>
+  </tr>
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$UserWealth.TotalBankMoney/1000-$FinanceMoney/1000}</td>
+    <td align="center" bgcolor="#FFFFFF">{$UserWealth.TotalGameMoney/1000}</td>
+    <td align="center" bgcolor="#FFFFFF">{$UserWealth.TotalBankMoney/1000-$FinanceMoney+$UserWealth.TotalGameMoney/1000}</td>
+  </tr>
+</table>
+<h4>房间彩蛋金额</h4>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+  <tr>
+  	{foreach from = $RoomMoney  item = money}
+  	<th align="center" bgcolor="#FFFFFF">{$money.RoomName}</th>
+  	{/foreach}
+  	<th align="center" bgcolor="#FFFFFF">总计</th>
+  </tr>
+  <tr>
+
+  	{foreach from = $RoomMoney  item = money}
+  	<td align="center" bgcolor="#FFFFFF">{$money.money/1000}</td>
+  	{/foreach}
+  	<td align="center" bgcolor="#FFFFFF">{$total/1000}</td>
+  </tr>
+</table>
+</body>
+</html>

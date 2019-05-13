@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>后台接口JSON解析</title>
+
+
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css"/>
+</head>
+<body>
+<h1>呵呵哒</h1>
+<div>
+    <div>
+        <form action="{au d=Test c=Test a=generate}" method="post">
+            <div class="form-group">
+                <label class="control-label">参数</label>
+                <textarea name="json" placeholder="密码" class="form-control"></textarea>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default" id="submit">
+                    提交
+                </button>
+                <button class="btn btn-warning" id="change">切换</button>
+            </div>
+        </form>
+    </div>
+    <div class="form-group">
+        <label class="control-label">返回值</label>
+        <textarea class="form-control" readonly id="ta-result"></textarea>
+    </div>
+    <div class="form-group" id="div-html" style="display: none"></div>
+</div>
+</body>
+<script>
+    {literal}
+    $(function(){
+        $('#submit').click(function(){
+            var form = $('form').get(0);
+            console.log(form);
+            var btn = this;
+            var result = $('#ta-result');
+            var div_html = $('#div-html');
+            $.ajax({
+                'url':$(form).attr('action'),
+                'type':'post',
+                'dataType':'html',
+                'data':$(form).serialize(),
+                'beforeSend':function(){
+                    $(btn).prop("disabled","disabled").addClass("disabled");
+                },
+                'complete':function(){
+                    $(btn).prop("disabled",false).removeClass("disabled");
+                },
+                'success':function(data){
+                    $(result).val(data);
+                    $(div_html).html(data);
+                }
+            })
+            return false;
+        })
+        $('#change').click(function(){
+            showHtml();
+            return false;
+        })
+    })
+    function showHtml(){
+        $('#ta-result').toggle();
+        $('#div-html').toggle();
+    }
+    {/literal}
+</script>
+
+</html>

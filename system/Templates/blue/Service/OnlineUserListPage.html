@@ -1,0 +1,74 @@
+<script type="text/javascript" language="javascript">
+{literal}
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            defaultSeriesType: 'line'
+        },
+        title: {
+            text: '在线人数',
+            x: -20
+        },
+        subtitle: {
+            text: 'Source: game918.com',
+            x: -20
+        },
+        xAxis: {
+            categories: [{/literal}{foreach from=$arrHallOnlineUser item=Hall name=GD}{if $Hall.show eq '1'}'{$Hall.AddTime}'{else}''{/if}{if $smarty.foreach.GD.iteration<$arrHallOnlineUser|@count},{/if}{/foreach}{literal}]
+        },
+        yAxis: {
+            title: {
+                text: '在线人数'
+            },
+            labels: {
+                rotation: -45,
+                align: 'right',
+                style: {
+                    fontSize: '9px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+        },
+        tooltip: {
+            valueSuffix: '人'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        plotOptions: {  
+            line: {  
+                lineWidth: 1,  
+                fillOpacity: 1,  
+                 marker: {  
+                    enabled: false,  
+                    states: {  
+                        hover: {  
+                            enabled: true,  
+                            radius: 4
+                        }  
+                    }  
+                },  
+                shadow: false  
+            }  
+        },  
+        series: [{
+                name: '大厅在线',
+                data:  [{/literal}{foreach from=$arrHallOnlineUser item=Hall name=GE}{$Hall.OnLineCount}{if $smarty.foreach.GE.iteration<$arrHallOnlineUser|@count},{/if}{/foreach}{literal}]
+            }, {
+                name: '玩家房间在线',
+                data: [{/literal}{foreach from=$arrRoomOnlineUser item=Room name=GA}{$Room.OnLineCount}{if $smarty.foreach.GA.iteration<$arrRoomOnlineUser|@count},{/if}{/foreach}{literal}]
+            }, {
+                name: '机器人房间在线',
+                data: [{/literal}{foreach from=$arrRoomOnlineUser item=Room name=GB}{$Room.RobotCount}{if $smarty.foreach.GB.iteration<$arrRoomOnlineUser|@count},{/if}{/foreach}{literal}]
+            }, {
+                name: '手机端房间在线',
+                data: [{/literal}{foreach from=$arrRoomOnlineUser item=Room name=GC}{$Room.MobileCount}{if $smarty.foreach.GC.iteration<$arrRoomOnlineUser|@count},{/if}{/foreach}{literal}]
+            }]
+    });
+});    
+{/literal}
+</script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

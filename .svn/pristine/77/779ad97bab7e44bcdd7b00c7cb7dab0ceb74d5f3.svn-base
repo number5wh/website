@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+    <script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+    <script type="text/javascript" language="javascript">
+        var RoleID = {$RoleID};
+        var DivID="{$DivID}";
+        {literal}
+        var re={
+            GetBankInfoDetail:function(){
+                setting.Params = 'RoleID='+RoleID;
+                ajax.RequestUrl('/?d=Service&c=ServiceTransfer&a=getBankInfoDetail',setting.Params,'callback.GetBankInfoDetail');
+            }
+        };
+        $(function(){
+           // re.GetBankInfoDetail();
+        });
+        {/literal}
+    </script>
+</head>
+
+<body>
+<fieldset>
+    <legend>转账记录</legend>
+    <div style="float:left;">
+        起始时间:<input id="registertimeFrom1" type="text" value="{$FromDate}" size="10" class="" />
+        <input id="registertimeTo1" type="text" value="{$ToDate}" size="10" />
+
+
+        借贷标志:
+        <select id="DCFlag" style="margin-right:10px">
+            <option value="-1">全部</option>
+            <option value="1">存入</option>
+            <option value="2">支出</option>
+        </select>
+    </div>
+    <div style="float:left; margin-right:10px; position:relative; top:5px;">
+        交易类型:
+        <select id="TransType_1" style="float:right; display:none;">
+            <option value="-1">全部</option>
+            <option value="1">充值</option>
+            <option value="6">财富补偿</option>
+            <option value="3">消费</option>
+        </select>
+        <select id="TransType_2" style="float:right;">
+            <option value="-1">全部</option>
+            {foreach key=key item=item from=$ChangeType}
+            <option value="{$item.value}">{$item.name}</option>
+            {/foreach}
+            <!--<option value="1">取款</option>
+            <option value="2">赠送</option>
+            <option value="3">冻结</option>
+            <option value="4">存款</option>
+            <option value="5">收款</option>
+            <option value="6">解冻</option>
+            <option value="7">充值</option>
+            <option value="8">工资</option>
+            <option value="9">转账返还</option>
+            <option value="10">系统存款</option>
+            <option value="11">系统赠送</option>
+            <option value="12">转账扣税</option>-->
+        </select>
+        <div style="clear:both;"></div>
+    </div>
+    查询类型:
+    <select id="SearchType" style="margin-right:10px">
+        <option value="2">金币</option>
+        <!--<option value="1">永凡币</option>-->
+    </select>
+    <span class="orange" id="ErrBankMsg"></span>
+    <input type="button" id="BankSearchBtn" class="bnStyle f2" value="查 询" />
+    <!--<input type="button" onclick="re.ChooseDownload(1);" class="bnStyle f2" value="下 载" />-->
+</fieldset>
+<div id="TransferRecords"></div>
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    {literal}
+    $(function(){
+        $('#registertimeFrom1').focus(function(){
+            WdatePicker({{/literal}minDate:'{$FromDate}',{literal}maxDate:"#F{$dp.$D('registertimeTo1')}"});
+            });
+            $('#registertimeTo1').focus(function(){
+                WdatePicker({minDate:"#F{$dp.$D('registertimeFrom1')}",{/literal}maxDate:'{$ToDate}'{literal}});
+                });
+                $("#SearchType").change(function(){
+                    var searchVal = $(this).val();
+                    if(searchVal == 2){
+                        $("#TransType_1").css({display:'none'});
+                        $("#TransType_2").css({display:'block'});
+                    }else{
+                        $("#TransType_1").css({display:'block'});
+                        $("#TransType_2").css({display:'none'});
+                    }
+                });
+                $("#BankSearchBtn").click(function(){
+                    var stime = $.trim($("#registertimeFrom1").val());
+                    var etime = $.trim($("#registertimeTo1").val());
+                    var dcFlag = $.trim($("#DCFlag").val());
+                    var searchType = $.trim($("#SearchType").val());
+                    var transType = (searchType == 2?$.trim($("#TransType_2").val()):$.trim($("#TransType_1").val()));
+                    if(stime == '' || etime == ''){
+                        $("#ErrBankMsg").html("请选择正确的查询时间！");
+                        return false;
+                    }
+                    cookieCommon.c_del(RoleID+'iUserBankRecordsCount'+searchType);
+                        var param = 'RoleID='+RoleID+"&Stime="+stime+"&Etime="+etime+"&DCFlag="+dcFlag+"&SearchType="+searchType+"&TransType="+transType+'&sFlag=1';
+                    {/literal}
+                        setting.Url = '{au d=Service c=ServiceTransfer a=getPageUserTransferRecords}';
+                    {literal}
+                        ajax.RequestUrl(setting.Url, param,'callback.GetPageUserTransferRecords');
+                    });
+
+                    var stime = $.trim($("#registertimeFrom1").val());
+                    var etime = $.trim($("#registertimeTo1").val());
+                    var dcFlag = $.trim($("#DCFlag").val());
+                    var searchType = $.trim($("#SearchType").val());
+                    var transType = (searchType == 2?$.trim($("#TransType_2").val()):$.trim($("#TransType_1").val()));
+                    cookieCommon.c_del(RoleID+'iUserBankRecordsCount'+searchType);
+                    var param = 'RoleID='+RoleID+"&Stime="+stime+"&Etime="+etime+"&DCFlag="+dcFlag+"&SearchType="+searchType+"&TransType="+transType+'&sFlag=1';
+                    {/literal}
+                    setting.Url = '{au d=Service c=ServiceTransfer a=getPageUserTransferRecords}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url, param,'callback.GetPageUserTransferRecords');
+            });
+            {/literal}
+</script>
+    </body>
+</html>

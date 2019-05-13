@@ -1,0 +1,79 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="8%">操作</th>
+    <th width="12%">冻结时间</th>
+    <th width="14%">案件编号</th>
+    <th width="12%">冻结玩家</th>
+    <th width="10%">冻结数量</th>
+    <th width="16%">冻结原因</th>
+    <th width="10%">冻结客服</th>
+	<th width="10%">可申返余额</th>
+	<th width="8%">其他</th>
+  </tr>  
+ {foreach from=$TreasureLockedList item=list}
+  <tr class="bg_color txt_M">
+  	<td>{if $list.iNumber>0}<a class="blue" href="javascript:getApplicationPage({$list.FID},{$list.iNumber},{$list.LoginID},'{$list.LoginName}');">申请返还</a>{/if}</td>
+  	<td>{$list.AddTime}</td>
+  	<td>{$list.CaseSerial}</td>
+  	<td><a class="blue" href="javascript:showUserInfo({$list.RoleID},'{$list.LoginName}({$list.LoginID})');">{$list.LoginName}({$list.LoginID})</a></td>
+  	<td>{$list.iNumber+$list.ReturnNumber}</td>
+  	<td>{$list.Reason}</td>  	
+  	<td>{$list.SysUserName}</td>
+  	<td>{$list.iNumber}</td>
+  	<td><a class="blue" href="javascript:getApplicationList({$list.FID})">申返记录</a></td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="9">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  
+  {if $TreasureLockedList}
+  <tr class="bg_color txt_M">
+    <td id="wealthLockedPageBar" colspan="10">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+var url2 = '{au d=Service c=ServiceWealth a=getApplicationPage}';
+{literal}
+	function getApplicationPage(id,num,loginId,loginName) {		
+		var param = '&id='+id+'&num='+num+'&loginId='+loginId+'&loginName='+encodeURIComponent(loginName);
+		
+		ajax.RequestCallBack(url2, param,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+
+	function getCaseDetailPage(id) {
+		var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+		var title = '案件'+id;
+		var iNum = 'CaseInfo'+id;
+		var param = '&id='+id+'&flag=1';
+		window.parent.main.AddTab(title,iNum,url+param);
+	}
+
+	function showUserInfo(id,name){
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+{literal}
+		setting.Params='&roleID='+id;
+		window.parent.main.AddTab(name,'ServiceRole'+id,setting.Url+setting.Params);
+	}
+
+	function getApplicationList(fid){
+		var param = '&fid='+fid;		
+		ajax.RequestCallBack('/?d=Service&c=ServiceWealth&a=getApplyWealthBackList', param,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+{/literal}
+</script>

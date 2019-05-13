@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px" class="left">
+    <legend>搜索</legend>
+    <div style="margin-bottom:3px">
+        状态：<select class="txt" id="RealCardStatus" >
+        {foreach from=$RealCardStatus item=Status}
+        <option value="{$Status.value}">{$Status.name}</option>
+        {/foreach}
+    </select>
+        <input type="button" id="btnSearch" class="btn f2" value="搜 索" />
+        <input type="button" id="btnDownload" class="btn f2" value="下 载" />
+        <input type="button" id="btnDelete" class="btn f2" value="删除选中" />
+        <input type="button" id="btnDestroy" class="btn f2" value="销毁选中" />
+        <input type="button" id="btnPublish" class="btn f2" value="发布" />
+    </div>
+</fieldset>
+<fieldset style="margin-bottom:3px;width:730px" class="left">
+    <legend>生成</legend>
+    <div style="margin-bottom:3px" class="left">
+        金币:<input type="text" class="txt" id="CreateMoney" size="10" maxlength="10" />
+        数量:<input type="text" class="txt" id="CreateNum" size="10" maxlength="3"/>
+        <input type="button" id="btnAdd" class="btn f2" value="添 加" />
+    </div>
+    <div class="left" id="ImgResult" style="width:12px;height:10px;margin-bottom:3px;margin-top:8px"></div>
+    <div class="left" style="cursor:pointer;margin:4px 0px 3px 4px" onclick="page.GetRealCard(1,'callback.GetRealCard');">
+        <div class="refresh icon left"></div><span class="left">刷新</span>
+    </div>
+</fieldset>
+<br class="clearfix" />
+<div id="RealCardList">
+
+</div>
+<script>
+    {literal}
+        $(function(){
+
+            {/literal}
+            setting.PageUrl = '{au d=YunWei c=RealCard a=getRealCardListPager}';
+            {literal}
+            page.GetRealCard(1,'callback.GetRealCard');
+
+            $('#btnSearch').click(function(){
+                page.GetRealCard(1,'callback.GetRealCard');
+            })
+            $('#btnAdd').click(function(){
+                {/literal}
+                var url = '{au d=YunWei c=RealCard a=addRealCard}';
+
+                {literal}
+                var money = $('#CreateMoney').val();
+                var num = $('#CreateNum').val();
+                if(!(/[0-9]+/.test(money))){
+                    $('#CreateMoney').val(0);
+                    alert("金额非法");
+                    return;
+                }
+                if(!(/[0-9]+/.test(num))){
+                    $('#CreateMoney').val(0);
+                    alert("数量非法非法");
+                    return;
+                }
+                var params = 'money='+ money + '&num='+num;
+                ajax.RequestJsonCallBack(url,params,RealCard.addRealCardCallback);
+            })
+            $('#btnDownload').click(function(){
+                {/literal}
+                var url = '{au d=YunWei c=RealCard a=download}';
+                var params = '';
+                {literal}
+
+                ajax.RequestJsonCallBack(url,params,RealCard.downloadCallback);
+            })
+            $('#btnPublish').click(function(){
+                {/literal}
+                var url = '{au d=YunWei c=RealCard a=publish}';
+                var params = '';
+                {literal}
+
+                ajax.RequestJsonCallBack(url,params,RealCard.publishCallback);
+            })
+            $('#btnDelete').click(function(){
+                {/literal}
+                var url = '{au d=YunWei c=RealCard a=delete}';
+                var params = $("input").serialize();
+                {literal}
+                ajax.RequestJsonCallBack(url,params,RealCard.deleteCallback);
+            })
+            $('#btnDestroy').click(function(){
+                {/literal}
+                var url = '{au d=YunWei c=RealCard a=destroy}';
+                var params = $("input").serialize();
+                {literal}
+                ajax.RequestJsonCallBack(url,params,RealCard.destroyCallback);
+            })
+        })
+
+    var RealCard= {
+        addRealCardCallback:function(data){
+            if(data.status == 1){
+                alert("创建成功");
+            }else{
+                alert("创建失败");
+            }
+        },
+        downloadCallback:function(data){
+            if(data.status == 1){
+                window.parent.console.log(data.url);
+                downloadFile("实卡Excel",data.url);
+            }
+        },
+        publishCallback:function(data){
+            if(data.status == 1){
+                alert("发布成功");
+            }else{
+                alert("发布失败");
+            }
+        },
+        deleteCallback:function(data){
+            if(data.status == 1){
+                alert("删除成功");
+                page.GetRealCard(1,'callback.GetRealCard');
+            }else{
+                alert("删除失败");
+                page.GetRealCard(1,'callback.GetRealCard');
+            }
+        },
+        destroyCallback:function(data){
+            if(data.status == 1){
+                alert("销毁成功");
+                page.GetRealCard(1,'callback.GetRealCard');
+            }else{
+                alert("销毁失败");
+                page.GetRealCard(1,'callback.GetRealCard');
+            }
+        }
+    }
+    function downloadFile(fileName, content){
+        var aLink = document.createElement('a');
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", false, false);
+        aLink.download = fileName;
+        aLink.href = content;
+        aLink.dispatchEvent(evt);
+    }
+    {/literal}
+</script>
+</body>
+</html>

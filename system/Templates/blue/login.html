@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录</title>
+	<link rel="stylesheet" href="/css/login.css">
+	<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<form action="javascript:;">
+			<h2>登录</h2>
+	        <input type="text" name="UserName" id="UserName" class="form-control" placeholder="请输入用户名">
+	        <input type="password" name="UserPwd" id="UserPwd" class="form-control" placeholder="请输入密码">
+	         <input type="text" name="bindaccout" id="bindaccout" class="form-control" placeholder="请输入绑定手机或邮箱">
+	        <input type="text" name="ChkCode" id="ChkCode" class="form-control form-control2" placeholder="请输入验证码">&nbsp;
+	        <img src="/Common/ChkCode.class.php" width="72" height="36" id="vCode" style="cursor: pointer;" />
+	        &nbsp;<a href="javascript:;" id="ResetCode">换一张</a>
+	        <button type="button" class="form-control form-login" id="btnLogin" >登录</button>
+		</form>
+	</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+{/literal}
+	setting.LoginUrl='{au d=login c=login a=login}';
+	setting.Url='{au d=main c=index a=index}';
+{literal}
+	$("#ResetCode").click(function(){
+		$('#vCode').attr('src', "/Common/ChkCode.class.php?" + Math.random());
+	});
+	$("#btnLogin").click(function(){
+		login.CheckLogin();
+	});	
+})
+{/literal}
+</script>
+</body>
+</html>

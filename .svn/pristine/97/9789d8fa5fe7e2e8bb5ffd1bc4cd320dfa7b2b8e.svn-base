@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+</head>
+<body>
+<div style="padding:10px;">
+	<div style="width:580px; float:left;">
+		<h2 style="text-align:center; font-size:20px; margin:20px 0;">案件信息</h2>	
+		<span style="float:left;">案件编号：{$case.CaseSerial}</span>
+		<span style="float:right;">案件状态：{$case.CaseStatus} </span>
+		<div class="clearFloat"></div>
+		<table width="100%" border="1" cellspadding="0" cellspacing="0" style="background:#fff">
+			<tr>
+				<td width="16%" class="txt_M">案件类型：</td>
+				<td width="30%" class="txt_L">{if $case.CaseType ==1}盗号{else}违规{/if}</td>
+				<td width="20%" class="txt_M">案发时间：</td>
+				<td width="34%" class="txt_L">{$case.HappenTime}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">游戏玩家：</td><td class="txt_L"><a class="blue" href="javascript:showUserInfo({$case.RoleID},'{$case.LoginName}({$case.LoginID})');">{$case.LoginName}({$case.LoginID})</a></td>
+				<td class="txt_M">{if $case.CaseType ==1}涉案数量：{/if}</td><td class="txt_L">{if $case.CaseType ==1}{$case.iNumber}{/if}</td>
+			</tr>
+			{if $case.CaseType ==1}
+			<tr>
+				<td class="txt_M">玩家姓名：</td><td class="txt_L">{$case.RealName}</td>
+				<td class="txt_M">追回金额：</td><td class="txt_L">{$case.ReturnNumber}&nbsp;
+				{if $case.Step == 8}<a href="javascript:updateReturnNum(8,{$case.CaseType});" style="margin-left:20px;" class="orange">修改</a>{/if}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">身份证号：</td><td class="txt_L">{$case.IdCard}</td>
+				<td class="txt_M">联系电话：</td><td class="txt_L">{$case.Mobile}&nbsp;&nbsp;{$case.TEL}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">涉案玩家：</td><td colspan="3" class="txt_L">{$case.CaseSuspect}&nbsp;
+				{if $case.Step > 1 && $case.Step < 8}<a href="javascript:getAddCaseSuspectPage();" style="margin-left:20px;" class="orange">+ 添加涉案人</a>{/if}</td>
+			</tr>
+			{/if}
+			<tr>
+				<td class="txt_M">案件描述：</td><td style="height:100px;" colspan="3" class="txt_L"><span id="caseIntro">{$case.CaseIntro}</span>&nbsp;
+				{if $case.Step > 1 && $case.Step < 8}<a href="javascript:editCaseIntro();" style="margin-left:20px;" class="orange">修改案件描述</a>{/if}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">案件进展：</td><td style="height:100px;" colspan="3" class="txt_L">{$case.Progress}&nbsp;
+				<br />{if $case.Step == 2 || $case.Step == 4 || $case.Step == 7}<a class="orange" href="javascript:getAddProgressPage();">+ 新增进展</a>{/if}</td>				
+			</tr>
+			<tr>
+				<td class="txt_M">处罚决定：</td><td style="height:100px;" colspan="3" class="txt_L">{$case.Decision}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">上传的文件：</td><td colspan="3" class="txt_L">{$case.Files}&nbsp;
+				{if $case.Step == 4 || $case.Step == 9}<a href="javascript:getAddFilesPage();" style="margin-left:20px;" class="orange">+ 上传文件</a>{/if}</td>
+			</tr>
+			<tr>
+				<td class="txt_M">案件备注：</td><td id="td_remark" colspan="3" class="txt_L">{$case.Remarks}</td>
+			</tr>
+		</table>
+		<div style="text-align:center; margin:15px 0;">
+			{if $case.Step == 1}
+			<input class="bnStyle f2" type="button" value="设为处理中" onClick="operateCase(2,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 2}
+			<input class="bnStyle f2" type="button" value="设为待复核" onClick="operateCase(3,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 3}
+			<input class="bnStyle f2" type="button" value="设为复核中" onClick="operateCase(4,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 4}
+			<input class="bnStyle f2" type="button" value="案件撤销" onClick="operateCase(10,this.value,{$case.CaseType});" />&nbsp;
+			<input class="bnStyle f2" type="button" value="设为待移交" onClick="operateCase(5,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 5}
+			<input class="bnStyle f2" type="button" value="退回重新复核" onClick="operateCase(99,this.value,{$case.CaseType});" />&nbsp;
+			<input class="bnStyle f2" type="button" value="设为待执行" onClick="operateCase(6,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 6}
+			<input class="bnStyle f2" type="button" value="设为执行中" onClick="operateCase(7,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 7}
+			<input class="bnStyle f2" type="button" value="退回重新复核" onClick="operateCase(99,this.value,{$case.CaseType});" />&nbsp;
+			<input class="bnStyle f2" type="button" value="设为执行完毕" onClick="operateCase(8,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 8}			
+			<input class="bnStyle f2" type="button" value="立即处罚" onClick="operateCase(9,this.value,{$case.CaseType});" />
+			{elseif $case.Step == 9}			
+			<input class="bnStyle f2" type="button" value="填写备注" onClick="operateCase(100,this.value,{$case.CaseType});" />
+			{/if}
+		</div>
+	</div>	
+	<div style="width:300px; heigth:500px; margin:30px 0  0 30px; float:left;">
+		<h2 style="background:#EAF1F7; padding:5px;">跟踪信息</h2>
+		<ul style="margin:10px 0;">
+			{foreach from=$arrOperateLog item=log name=foo}
+			<li>{$smarty.foreach.foo.iteration}、{$log.AddTime} {$log.SysUserName} {$log.Intro} </li>			
+			{/foreach}
+		</ul>
+	</div>
+	<div class="clearFloat"></div>
+</div>
+<script type="text/javascript" language="javascript">
+var id = {$case.CaseSerial};
+{literal}
+	function operateCase(iStatus,content,type) {
+{/literal}
+		var url = '{au d=Service c=ServiceCase a=caseUpdate}';
+{literal}
+		iStatus = parseInt(iStatus,10);
+		if((iStatus>1 && iStatus<8) || (type==2 && iStatus==8)){
+			content = "您确定要将案件"+content+"吗？";
+			if(confirm(content)){
+			var param = "id="+id+"&step="+iStatus+"&type="+type;
+			ajax.RequestCallBack(url, param,function(result) {
+				if(result == 1){
+					window.location.reload();
+				}else{
+					var remark = $.trim($('#td_remark').html());
+					if(iStatus==100){
+						result=result.replace('**',remark);
+					}
+					main.OpenBox(result);
+				}
+			});
+			}
+		}else{
+			var param = "id="+id+"&step="+iStatus+"&type="+type;
+			ajax.RequestCallBack(url, param,function(result) {
+				if(result == 1){
+					window.location.reload();
+				}else{
+					var remark = $.trim($('#td_remark').html());
+					if(iStatus==100){
+						result=result.replace('**',remark);
+					}
+					main.OpenBox(result);
+				}
+			});
+		}
+	}
+
+	function editCaseIntro(){
+		var url = '/?d=Service&c=ServiceCase&a=getEditCaseIntroPage';
+		var param = "id="+id;
+		ajax.RequestCallBack(url, param,function(result) {			
+			var caseIntro = $.trim($('#caseIntro').html());				
+			result=result.replace('***',caseIntro);				
+			main.OpenBox(result);			
+		});
+	}
+
+	function updateReturnNum(iStatus,type){
+{/literal}
+		var url = '{au d=Service c=ServiceCase a=caseUpdate}';
+{literal}		
+		var param = "id="+id+"&step="+iStatus+"&type="+type+"&flag=1";
+		ajax.RequestCallBack(url, param,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+
+	function getAddCaseSuspectPage(){
+		ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=getAddCaseSuspectPage', 'id='+id,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+
+	function getAddProgressPage(){
+		ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=getAddProgressPage', 'id='+id,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+
+	function getAddFilesPage(){
+		ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=getUploadFilePage', 'id='+id,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+
+	function showUserInfo(roleId,name){
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+{literal}
+		setting.Params='&roleID='+roleId;
+		window.parent.main.AddTab(name,'ServiceRole'+roleId,setting.Url+setting.Params);
+	}
+
+	function deleteFile(fileId,name){
+		var content = '您确定要删除 '+name+' 吗？';
+		if(confirm(content)){
+			ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=deleteFile', 'fid='+fileId+'&fname='+name+'&id='+id,function(result) {
+				if(result == 1){
+					window.location.reload();
+				}else{
+					alert('删除 '+name+' 失败！');
+				}
+			});
+		}
+	}
+
+	function deleteCaseSuspect(roleId,name){
+		var content = '您确定要删除 '+name+' 吗？';
+		if(confirm(content)){
+			ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=deleteCaseSuspect', 'roleId='+roleId+'&name='+name+'&id='+id,function(result) {
+				if(result == 1){
+					window.location.reload();
+				}else{
+					alert('删除 '+name+' 失败！');
+				}
+			});
+		}
+	}
+
+	function getOperateLogs(roleId){
+		ajax.RequestCallBack('/?d=Service&c=ServiceCase&a=getOperateSucpectInfo', 'id='+id+'&roleId='+roleId,function(data) {
+			if(data == -1){
+				alert('参数异常');
+			}else{
+				main.OpenBox(data);
+			}
+		});
+	}
+{/literal}
+</script>
+</body>
+</html>

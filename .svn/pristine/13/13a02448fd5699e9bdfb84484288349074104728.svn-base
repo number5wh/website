@@ -1,0 +1,79 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var ad={
+	BindEvent:function(){
+		/*点击显示修改广告界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Ad a=showAddAdHtml}';
+				setting.Params = 'AdID='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddAdHtml');
+{literal}
+			});
+		});
+		/*点击删除广告*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Ad a=delAd}';
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.Url,'AdID='+$(this).attr('id'),'callback.DelAd');
+			});
+		});
+		/*点击禁用或启用广告*/
+		$('.locked').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Ad a=setAdLocked}';
+{literal}
+				setting.Params = 'AdID='+$(this).attr('id');
+				ajax.Request(setting.Url,setting.Params,'callback.SetAdLocked');
+			});
+		});
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="6%" bgcolor="#FFFFFF">序号</th>
+    <th width="15%" bgcolor="#FFFFFF">广告名称</th>
+    <th width="12%" bgcolor="#FFFFFF">广告位</th>
+    <th width="16%" bgcolor="#FFFFFF">开始时间</th>
+	<th width="15%" bgcolor="#FFFFFF">结束时间</th>
+    <th width="11%" bgcolor="#FFFFFF">过期状态</th>
+	<th width="10%" bgcolor="#FFFFFF">锁定状态</th>
+    <th width="15%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$AdList item=ad key=index}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$index+1}</td>
+    <td align="center" bgcolor="#FFFFFF">{$ad.AdTitle}</td>
+    <td align="center" bgcolor="#FFFFFF">{$ad.PositionName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$ad.StartTime}</td>
+	<td align="center" bgcolor="#FFFFFF">{$ad.EndTime}</td>
+    <td align="center" bgcolor="#FFFFFF">
+	{if $ad.Expire==0}正常{else}<font class="orange">过期</font>{/if}
+	</td>
+	<td align="center" bgcolor="#FFFFFF">
+	{if $ad.Status==0}正常{else}<font class="orange">锁定</font>{/if}
+	</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='locked' id="{$ad.AdID}">{if $ad.Status==1}<span class="orange">启用</span>{else}禁用{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$ad.AdID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$ad.AdID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $AdList}
+  <tr>
+    <td colspan="8" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

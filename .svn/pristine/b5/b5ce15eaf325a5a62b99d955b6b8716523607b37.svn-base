@@ -1,0 +1,101 @@
+<?php
+require_once __DIR__ . '/Smarty/Smarty.class.php';
+require_once ROOT_PATH.'Class/Filter/HtmlSpecialCharFilter.class.php';
+
+class PageBase
+{
+	//页面访问相关参数
+	protected $strClassName = 'Recommend';
+	protected $strActionName = 'Recommend';
+	protected $smarty = NULL;
+	protected $arrConfig = null;
+	protected $strServerType = null;
+    protected $_filter_list = array();
+
+	/**
+	 * 设置类名
+	 * @param string $strClassName 类名
+	 */
+	public function setClassName($strClassName)
+	{
+		$this->strClassName = $strClassName;
+	}
+	/**
+	 * 设置Action名
+	 * @param string $strActionName Action名
+	 */
+	public function setActionName($strActionName)
+	{
+		$this->strActionName = $strActionName;
+	}
+	/**
+	 * Action初始化
+	 */
+	final function init()
+	{	
+		$this->smarty = new Smarty();
+		$this->initSmartyEnvironment();
+		$this->smarty->register_function('au', 'getSmartyActionUrl');
+
+        //过滤器加载
+        array_push($this->_filter_list,HtmlSpecialCharFilter::getFilter());
+        foreach($this->_filter_list as &$val){
+            $val->doFilter();
+        }
+        //
+	}
+	/**
+	 * 初始化smarty环境
+	 */
+	function initSmartyEnvironment()
+	{
+		if (!file_exists(ROOT_PATH.'temp/caches'))
+		{
+		    @mkdir(ROOT_PATH.'temp/caches', 0777);
+		    @chmod(ROOT_PATH.'temp/caches', 0777);
+		}
+		if (!file_exists(ROOT_PATH.'temp/compiled'))
+		{
+		    @mkdir(ROOT_PATH.'temp/compiled', 0777);
+		    @chmod(ROOT_PATH.'temp/compiled', 0777);
+		}
+		if (!file_exists(ROOT_PATH.'temp/compiled/templates'))
+		{
+		    @mkdir(ROOT_PATH.'temp/compiled/templates', 0777);
+		    @chmod(ROOT_PATH.'temp/compiled/templates', 0777);
+		}
+		$this->smarty->template_dir   = ROOT_PATH . $this->arrConfig['template_dir'];
+		$this->smarty->cache_dir      = ROOT_PATH . 'temp/caches/';
+		$this->smarty->compile_dir    = ROOT_PATH . 'temp/compiled/templates/';
+		$this->smarty->plugins_dir    = ROOT_PATH . 'Class/Common/Smarty/plugins/';
+		$this->smarty->compile_check  = true;//当模板修改时候，缓存文件将会重建
+		$this->smarty->debugging	  = false;//弹出变量窗口
+		$this->smarty->caching        = false;//是否缓存
+	}
+}
+/**
+ * 注册smarty方法
+ * @param unknown_type $params
+ */
+function getSmartyActionUrl($params)
+{	
+	$strUrl = '/?';
+	if (isset($params['d']) && !empty($params['d']))
+	{
+		$strUrl .= "d={$params['d']}&";
+	}
+	if (isset($params['c']) && !empty($params['c']))
+	{
+		$strUrl .= "c={$params['c']}&";
+	}
+	if (isset($params['a']) && !empty($params['a']))
+	{
+		$strUrl .= "a={$params['a']}";
+	}	
+	if (!empty($params['p']))
+	{
+		$strUrl .='&' . $params['p'];
+	}
+	return $strUrl;
+}
+?>

@@ -1,0 +1,60 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置敏感词
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysConfine')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">   
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">敏感词:</td>
+		<td bgcolor="#FFFFFF"><textarea name="LoginName" id="LoginName" cols="30" rows="5" class="textarea">{$confine.LoginName}</textarea> 
+		<span>*多个请用逗号隔开</span></td>
+	  </tr>	 
+	</table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="ConfineID" value="{$confine.ID}" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysConfine')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAdd" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var confine={
+	BindEvent:function(){
+		/*提交*/
+		$('#btnAdd').click(function(){
+			$('#ResultMsg').html('*');
+			$('#LoginName').next().html('*多个请用逗号隔开');
+			var ConfineID = $('#ConfineID').val();
+			var LoginName = $('#LoginName').val();
+			
+			if(isNaN(ConfineID) || ConfineID<0){
+				$('#ResultMsg').html('*您提交的参数异常');
+				$('#ResultMsg').focus();
+				return false;
+			}
+			if(LoginName==''){
+				$('#LoginName').next().html('*请输入敏感词');
+				$('#LoginName').focus();
+				return false;
+			}
+			
+			setting.Params = 'ConfineID='+ConfineID+'&LoginName='+encodeURIComponent(LoginName);
+{/literal}
+			setting.Url='{au d=YunWei c=SysConfine a=addSysConfineName}';	
+{literal}
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddSysConfineName');	
+		});
+	}
+};
+{/literal}
+</script>

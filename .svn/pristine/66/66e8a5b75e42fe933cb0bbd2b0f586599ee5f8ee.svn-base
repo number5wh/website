@@ -1,0 +1,65 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏配置
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			{if $ConfigInfo.CfgType <> 0}
+				  <input style ="display:none" name="CfgType" id="CfgType" value="{$ConfigInfo.CfgType}"/>
+			{else}
+			  <tr>
+				<td width="32%" align="right">ID</td>
+				<td width="68%"><input type="text" class="txt" name="CfgType" id="CfgType" value=""/> <span class="orange">*</span></td>
+			</tr>
+			{/if}
+		    <tr>
+			<td width="32%" align="right">描述</td>
+			<td width="68%"><input type="text" class="txt" name="Description" id="Description" value="{$ConfigInfo.Description}"/> <span class="orange">*</span></td>
+		  </tr>	
+		    <tr>
+			<td width="32%" align="right">值</td>
+			<td width="68%"><input type="text" class="txt" name="CfgValue" id="CfgValue" value="{$ConfigInfo.CfgValue}"/> <span class="orange">*</span></td>
+		  </tr>	
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddTypeLevel" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var cfg={
+	BindEvent:function(){
+		$('#btnAddTypeLevel').click(function(){
+			var TypeID =$('#CfgType').val();
+			var CfgValue = $('#CfgValue').val();
+			var Description = $('#Description').val();
+			$('#TypeID').next().html('*');
+			$('#Description').next().html('*');
+			$('#CfgValue').next().html('*');
+			if(isNaN(TypeID) || TypeID==''){
+				$('#ResultMsg').html('请填写正确的ID');
+				$('#TypeID').focus();
+				return false;
+			}
+{/literal}
+			setting.Url='{au d=YunWei c=SystemTurn a=addSystemTurn}';
+{literal}
+			setting.Params='TypeID='+TypeID+'&CfgValue='+CfgValue+'&Description='+Description;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddSystemTurn');
+		});
+	}
+};
+{/literal}
+</script>

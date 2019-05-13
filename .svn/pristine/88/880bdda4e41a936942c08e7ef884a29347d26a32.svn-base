@@ -1,0 +1,77 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function(){
+            /*点击显示修改广告界面*/
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GamePost a=ShowAddMsgHtml}';
+                        setting.Params = 'msgID='+$(this).attr('id');
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddMsgHtml');
+                        {literal}
+                    });
+            });
+            /*点击删除广告*/
+            $('.del').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GamePost a=delMsg}';
+                        {literal}
+                        if(confirm('删除后将无法恢复,确定删除?'))
+                            ajax.RequestUrl(setting.Url,'msgID='+$(this).attr('id'),'callback.DelMsg');
+                    });
+            });
+            /*点击禁用或启用广告*/
+            $('.locked').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GamePost a=setMsgLocked}';
+                        {literal}
+                        setting.Params = 'msgID='+$(this).attr('id');
+                        ajax.Request(setting.Url,setting.Params,'callback.SetMsgLocked');
+                    });
+            });
+        }
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpmsgding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="6%" bgcolor="#FFFFFF">序号</th>
+        <th width="15%" bgcolor="#FFFFFF">主题</th>
+        <th width="25%" bgcolor="#FFFFFF">内容</th>
+        <th width="10%" bgcolor="#FFFFFF">开始时间</th>
+        <th width="10%" bgcolor="#FFFFFF">结束时间</th>
+        <th width="8%" bgcolor="#FFFFFF">排序</th>
+        <th width="8%" bgcolor="#FFFFFF">状态</th>
+        <th width="15%" bgcolor="#FFFFFF">操作</th>
+    </tr>
+    {foreach from=$MsgList item=msg key=index}
+    <tr>
+        <td align="center" bgcolor="#FFFFFF">{$index+1}</td>
+        <td align="center" bgcolor="#FFFFFF">{$msg.MsgTitle}</td>
+        <td align="center" bgcolor="#FFFFFF">{$msg.MsgContent}</td>
+        <td align="center" bgcolor="#FFFFFF">{$msg.StartTime}</td>
+        <td align="center" bgcolor="#FFFFFF">{$msg.EndTime}</td>
+        <td align="center" bgcolor="#FFFFFF">{$msg.Sortid}</td>
+        <td align="center" bgcolor="#FFFFFF">
+            {if $msg.Status==1}正常{else}<font class="orange">下架</font>{/if}
+        </td>
+        <td align="center" bgcolor="#FFFFFF">
+            <a href="javascript:void(0)" class='locked' id="{$msg.MsgID}">{if $msg.Status==1}<span class="orange">下架</span>{else}上架{/if}</a>
+            <a href="javascript:void(0)" class="edit" id="{$msg.MsgID}">修改</a>
+            <a href="javascript:void(0)" class="del" id="{$msg.MsgID}">删除</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="8" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $MsgList}
+    <tr>
+        <td colspan="8" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

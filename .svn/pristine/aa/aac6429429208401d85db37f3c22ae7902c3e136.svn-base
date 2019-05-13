@@ -1,0 +1,60 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var news={
+	BindEvent:function(){		
+		/*点击显示修改广告界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=News a=showAddNewsHtml}';
+				setting.Params = 'NewsID='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddNewsHtml');
+{literal}
+			});	
+		});		
+		/*点击删除广告*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=News a=delNews}';
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.Url,'NewsID='+$(this).attr('id'),'callback.DelNews');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="10%">新闻编号</th>
+	<th width="10%">所属分类</th>
+    <th width="20%">新闻标题</th>
+    <th width="40%">新闻内容</th>    
+	<th width="10%">发布时间</th>
+    <th width="10%">操作</th>
+  </tr>
+  {foreach from=$NewsList item=v}
+  <tr class="bg_color">
+    <td>{$v.NewsID}</td>
+	<td>{$v.CateName}</td>
+    <td>{$v.NewsTitle}</td>
+    <td>{$v.NewsContent}</td>
+    <td>{$v.AddTime}</td>
+    <td>
+      <a href="javascript:void(0)" class="edit" id="{$v.NewsID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$v.NewsID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="6">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $NewsList}
+  <tr class="bg_color">
+    <td colspan="6">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

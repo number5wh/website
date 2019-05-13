@@ -1,0 +1,62 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置外挂
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysConfine')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">   
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">关键词:</td>
+		<td bgcolor="#FFFFFF"><input maxlength="32" id="ExtraProgramKey"  value="{$ExtraProgram.ExtraProgramKey}"/>
+		<span>*</span></td>
+	  </tr>	 
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">外挂名称:</td>
+		<td bgcolor="#FFFFFF"><input id="ExtraProgramName" value="{$ExtraProgram.ExtraProgramName}"/>
+		<span>*</span></td>
+	  </tr>	 
+	</table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysConfine')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAdd" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var confine={
+	BindEvent:function(){
+		/*提交*/
+		$('#btnAdd').click(function(){
+			var ExtraProgramKey = $('#ExtraProgramKey').val();
+			var ExtraProgramName = $('#ExtraProgramName').val();
+
+			if(ExtraProgramKey==''){
+				$('#ExtraProgramKey').next().html('*请输入关键词');
+				$('#ExtraProgramKey').focus();
+				return false;
+			}
+			if(ExtraProgramName==''){
+				$('#ExtraProgramName').next().html('*请输入外挂名称');
+				$('#ExtraProgramName').focus();
+				return false;
+			}
+
+{/literal}			
+			setting.Params ='OldExtraProgramKey='+"{$ExtraProgram.ExtraProgramKey}"+'&ExtraProgramKey='+encodeURIComponent(ExtraProgramKey)+'&ExtraProgramName='+encodeURIComponent(ExtraProgramName);
+			setting.Url='{au d=YunWei c=ExtraProgram a=addExtraProgram}';	
+{literal}
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddSysConfineName');	
+		});
+	}
+};
+{/literal}
+</script>

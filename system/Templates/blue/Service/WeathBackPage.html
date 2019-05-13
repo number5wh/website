@@ -1,0 +1,104 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="2%"></th>
+        <th width="9%">操作</th>
+        <th width="10%">申请时间</th>
+        <th width="7%">申请类型</th>
+        <th width="5%">状态</th>
+        <th width="7%">财富数量</th>
+        <th width="10%">申请原因</th>
+        <th width="15%">备注</th>
+        <th width="10%">追回玩家</th>
+        <th width="5%">申请人</th>
+        <th width="5%">审核人</th>
+        <th width="7%">审核时间</th>
+        <th width="15%">审核意见</th>
+    </tr>
+    {foreach from=$AuthVerifyList item=list}
+    <tr class="bg_color txt_M" id="Row_{$list.PID}">
+        <td>
+            {if $list.OperationType==6 && $list.Reason!=''}
+            <img src="/images/common/bulb_on.png" />
+            {/if}
+        </td>
+
+        <td>{if $list.Status==0}<a class="blue" href="javascript:getVerifyPage({$list.PID},{$list.RoleID},{$list.OperationType},{$list.iNumber},{$list.FID});">授权/拒绝</a>{/if}
+        </td>
+
+        <td>{$list.AddTime}</td>
+
+        <td>{$list.OperationTypeName}</td>
+        <td>{if $list.Status==0}待审核{elseif $list.Status==1}批&nbsp;准{else}拒&nbsp;绝{/if}</td>
+
+        <td>{$list.Amount}</td>
+        <td>
+            {if $list.OperationType==6 && $list.Reason!=''}
+            <a style="margin:0px;" class="blue" href="javascript:getCaseDetailPage({$list.Reason});">{$list.Reason}</a>
+            {else}
+            {$list.Reason}
+            {/if}
+        </td>
+        <td>{$list.Remarks}</td>
+
+        <td>
+            <a style="margin:0px;" class="blue" href="javascript:showUserInfo({$list.RoleID},'{$list.LoginName}({$list.LoginID})');" LoginName='{$list.LoginName}' LoginID='{$list.LoginID}'>
+                {$list.LoginName}({$list.LoginID})
+            </a>
+        </td>
+        <td>{$list.SysUserName}</td>
+        <td>{$list.Checker}</td>
+        <td>{$list.CheckTime}</td>
+        <td>{$list.CheckRemarks}</td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="13">很抱歉，没有您要查询的信息~</td>
+    </tr>
+    {/foreach}
+
+    {if $AuthVerifyList}
+    <tr class="bg_color txt_M">
+        <td id="verifyPageBar" colspan="15">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript">
+    {literal}
+        function getVerifyPage(id,roleId,type,num,fid){
+        {/literal}
+            setting.Url = "{au d=Service c=ServiceWeathBack a=getOperateVerifyPage}";
+            {literal}
+            var param = "id="+id+"&roleId="+roleId+"&type="+type+'&num='+num+'&fid='+fid;
+            ajax.RequestCallBack(setting.Url, param,function(data) {
+                if(data == -1){
+                    alert('参数异常');
+                }else{
+                    main.OpenBox(data);
+                }
+            });
+        }
+
+        function getAuthProcessFile(id){
+            var param = "pid="+id;
+            ajax.RequestCallBack('/?d=Service&c=ServiceWeathBack&a=getAuthProcessFile', param,function(data) {
+                main.OpenBox(data);
+            });
+        }
+
+        function getCaseDetailPage(id) {
+            var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+            var title = '案件'+id;
+            var iNum = 'CaseInfo'+id;
+            var param = '&id='+id+'&flag=1';
+            window.parent.main.AddTab(title,iNum,url+param);
+        }
+
+        function showUserInfo(id,name){
+            {/literal}
+                var url='{au d=Service c=ServiceRole a=getRoleInfo}';
+                {literal}
+                setting.Params='&roleID='+id;
+                window.parent.main.AddTab(name,'ServiceRole'+id,url+setting.Params);
+            }
+            {/literal}
+</script>

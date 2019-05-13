@@ -1,0 +1,11 @@
+操作时间:<input id="registertimeFrom2" type="text" class="txt" /><img onclick="new Calendar().show(document.getElementById('registertimeFrom2'));" class="calendar_img" src="images/common/u896_normal.gif" />-<input type="text" id="registertimeTo2" class="txt" /><img onclick="new Calendar().show(document.getElementById('registertimeTo2'));" style="position:relative; top:6px; cursor:pointer;" src="images/common/u896_normal.gif" />
+操作类型:
+<select style="margin-right:10px">
+    <option value="">全部</option>
+    <option value="">登录日志</option>
+    <option value="">玩家操作日志</option>
+    <option value="">账号安全日志</option>
+</select>
+<input type="button" class="bnStyle f2" onclick="ajax.RequestData('{au d=Service c=ServiceRole a=getPlayerLogsDetail}','','#PlayerLogsDetail',1);" value="查 询" />
+
+<div id="PlayerLogsDetail"></div>

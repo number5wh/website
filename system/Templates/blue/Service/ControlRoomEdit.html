@@ -1,0 +1,70 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>设置房间输赢概率
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'ControlleUser')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">概率（0-200）:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="Ratio" id="Ratio" value="{$Room.nCtrlRatio}"></td>
+            </tr>
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">设置初始库存:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="Storage" id="Storage" value="{$Room.nInitStorage/1000}"></td>
+            </tr>
+
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">设置当前库存:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="CurrentStorage" id="CurrentStorage" value="{$Room.nCurrentStorage/1000}"></td>
+            </tr>
+
+
+
+        </table>
+        <div class="bot f2">
+            <div class="botLeft f1 left"></div>
+            <div class="botRight f1 right"></div>
+            <input type="hidden" name="RoomId" id="RoomId" value="{$Room.nServerID}" />
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'ControlleUser')"/>
+            <input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+        {/literal}
+                setting.Url='{au d=Service c=ControlleUser a=sendctrl}';
+        {literal}
+                        $('#ResultMsg').next().html('');
+                        var RoomId = $('#RoomId').val();
+                        var Ratio = $('#Ratio').val();
+                        var Storage = $('#Storage').val();
+                        var CurrentStorage = $('#CurrentStorage').val();
+
+                        if(isNaN(RoomId) || RoomId=='' ){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+                        if(parseInt(Ratio)>200){
+                            $('#ResultMsg').html('*输赢概率不能大于200');
+                            return false;
+                        }
+                        setting.Params = 'RoomId='+RoomId+'&Storage='+Storage+'&CurrentStorage='+CurrentStorage+"&Ratio="+Ratio;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.AddCtrlRool');
+                    });
+            }
+        }
+        {/literal}
+
+    </script>

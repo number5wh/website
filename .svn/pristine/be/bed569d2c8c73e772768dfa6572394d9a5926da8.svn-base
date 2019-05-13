@@ -1,0 +1,81 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+  	<th width="5%">房间ID</th>
+    <th width="14%">游戏标识</th>
+    <th width="12%">房间名称</th>
+	<th width="8%">房间类型</th>    
+    <th width="7%">桌子数</th>
+	<th width="6%">最大人数</th>
+    <th width="12%">连接地址</th>
+	<th width="9%">房间状态</th>
+	<th width="9%">房间布局</th>
+	<th width="9%">服务状态</th>
+	<th width="12%"></th>
+  </tr>
+  {foreach from=$GameRoomList item=GameRoom}
+  <tr class="bg_color">
+  	<td>{$GameRoom.RoomID}</td>
+    <td>{$GameRoom.GameKindIDName}</td>
+    <td>{$GameRoom.RoomName}</td>
+	<td>{$GameRoom.RoomTypeName}</td>    
+    <td>{$GameRoom.MaxTableCount}</td>
+	<td>{$GameRoom.MaxPlayerCount}</td>
+	<td>{$GameRoom.ServerIP}</td>
+	<td>正常</td>
+	<td>{$GameRoom.TableSchemeName}</td>
+	<td>正常</td>
+    <td>
+      <a href="javascript:void(0)" class="copy" id="{$GameRoom.RoomID}">复制</a>
+      <a href="javascript:void(0)" class="edit" id="{$GameRoom.RoomID}">修改</a>
+      <a href="javascript:void(0)" class="del" id="{$GameRoom.RoomID}" type="{$GameRoom.RoomType}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="11">暂无房间记录</td>
+  </tr>
+  {/foreach}
+  {if $GameRoomList}
+  <tr class="bg_color">
+    <td colspan="11">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var rm={
+	/*点击显示设置游戏种类界面*/
+	BindEvent:function(){
+		/*复制房间*/
+		$('.copy').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=GameRoom a=showCopyGameRoomHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'RoomID='+$(this).attr('id'),'callback.ShowAddGameRoomHtml');
+			});	
+		});		
+		/*修改房间*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=GameRoom a=showAddGameRoomHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'RoomID='+$(this).attr('id'),'callback.ShowAddGameRoomHtml');
+			});	
+		});		
+		/*删除房间*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.DelUrl='{au d=YunWei c=GameRoom a=delGameRoomInfo}';
+{literal}
+				setting.Params = 'RoomID='+$(this).attr('id')+'&RoomType='+$(this).attr('type');
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.DelUrl,setting.Params,'callback.DelGameRoomInfo');
+			});	
+		});		
+	}
+}
+{/literal}
+</script>

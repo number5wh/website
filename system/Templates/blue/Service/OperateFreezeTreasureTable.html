@@ -1,0 +1,98 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>冻结财富</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<!--<td class='txt_M'>背包中金币：{$M.knapsack}</td>-->
+			<td class='txt_M'>游戏中金币：{$M.game}</td>
+		</tr>
+		<tr>
+			<td class='txt_R'>银行金币余额：</td>
+			<td class='txt_L'><font class='orange'>{$M.bank}</font><input type='checkbox' id='ChkAll' style='margin-left:20px;' />全部冻结</td>
+		</tr>		
+		<tr>
+			<td class='txt_R'>冻结金币数量：</td>
+			<td class='txt_L pad5'><input type='text' id='number' class='txt_inp' /> </td>
+		</tr>		
+		<tr>
+			<td class='txt_R'>案件编号：</td>
+			<td class='txt_L pad5'><input type='text' id='caseSerial' class='txt_inp' /> <span id='Msg'></span></td>
+		</tr>
+		<tr>
+			<td class='txt_R'>冻结原因：<br/><br/>(250字内)　</td><td class='txt_L pad5'><textarea id='remarks' style='width:200px; height:75px;'></textarea></td>
+		</tr>
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad8 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad8'>
+				<input type='hidden' id='bankMoney' value='{$M.bank}' />
+				<input type='hidden' id='chkFlag' value='1' />
+				<!-- input type='hidden' id='bankFwMoney' value='{$userBankMoney.FwMoney}' /-->
+				<input type='hidden' id='RoleID' value='{$roleID}' />
+				<input id='iLoginID' type='hidden' value='{$loginID}' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){
+	$('#ChkAll').click(function(){
+		var bankMoney = $.trim($('#bankMoney').val());
+		if($(this).attr('checked') == true){
+			$('#number').val(bankMoney);
+		}else{
+			$('#number').val('');
+		}
+	});
+	$('#caseSerial').blur(function(){
+		var caseSerial = $.trim($(this).val());
+		if(caseSerial){
+			$.post('/?d=Service&c=ServiceRole&a=checkCaseSerial', {iCaseSerial:caseSerial}, function(data){
+				if(data == 1){
+					var src='images/common/check.gif';
+					$('#Msg').html('<img src='+src+' />');
+				}else{
+					$('#errorMsg').html('案件编号匹配失败');
+					$('#chkFlag').val(0);
+					return false;
+				}
+			})
+		}
+		$('#chkFlag').val(1);
+	});
+	$('#applyBtn').click(function(){
+		var caseSerial = $.trim($('#caseSerial').val());
+		var number = parseInt($.trim($('#number').val()));
+		var remarks = $.trim($('#remarks').val());
+		var roleID = $.trim($('#RoleID').val());
+		var loginID = $.trim($('#iLoginID').val());
+		var money = parseInt($.trim($('#bankMoney').val()));
+		var flag = $('#chkFlag').val();
+		var reg = /^[0-9]*$/;
+		
+		if(!reg.test(number)){
+			$('#errorMsg').html('冻结数量必须填数字！');
+			return false;
+		}
+		if(number > money){
+			$('#errorMsg').html('冻结金币数量超过当前金币余额！');
+			$('#number').focus();
+			return false;
+		}
+		if(remarks == ''){
+			$('#errorMsg').html('冻结原因不能为空！');
+			$('#remarks').focus();
+			return false;
+		}
+		var params = 'caseSerial='+caseSerial+'&number='+number+'&Remarks='+remarks+'&roleID='+roleID+'&loginID='+loginID;	
+		if(flag==0){
+			$('#errorMsg').html('案件编号匹配失败');
+			return false;
+		}
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=freezeTreasureTable', params, 'callback.GetEditOperationResult');			
+	})
+})
+{/literal}
+</script>

@@ -1,0 +1,54 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function() {
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysRole a=showEdit}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'roleid='+$(this).attr('roleid')+'&rolename='+$(this).attr('rolename')+'&descript='+$(this).attr('descript'),'callback.ShowEditRole');
+                    });
+            });
+            $('.delete').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysRole a=deleteRole}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'roleid='+$(this).attr('roleid'),'callback.DeleteRole');
+                    });
+            });
+        }
+
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="20%">角色ID</th>
+        <th width="20%">角色名称</th>
+        <th width="40%">描述</th>
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$RoleList item=Role}
+    <tr class="bg_color">
+        <td>{$Role.Id}</td>
+        <td>{$Role.RoleName}</td>
+        <td>{$Role.Descript}</td>
+        <td>
+            <a href="javascript:void(0)" class="edit" roleid="{$Role.Id}" rolename="{$Role.RoleName}" descript="{$Role.Descript}">修改</a>
+            <a href="javascript:void(0)" class="delete" roleid="{$Role.Id}" rolename="{$Role.RoleName}" descript="{$Role.Descript}">删除</a>
+            <a href="javascript:void(0)" class="menu" roleid="{$Role.Id}" rolename="{$Role.RoleName}" descript="{$Role.Descript}">菜单设置</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="5">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $RoleList}
+    <tr class="bg_color">
+        <td colspan="5">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

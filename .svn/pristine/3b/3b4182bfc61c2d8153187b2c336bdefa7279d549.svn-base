@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>用户安全通告</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>用户安全通告</b></div><br>
+							  <div>
+					                <!-- <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p> -->
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block">
+											<p>尊敬的各位玩家：
+										</p>
+									</br>
+										<p>近期盗号现象比较多，请各位玩家保护好自己的电脑，做好安全措施。如是私人电脑，在不能确保电脑安全的情况下最好能够重做下系统，做系统不要光做系统盘，其他盘也要格式化过。如果是公共场合的电脑（如网吧，宾馆，酒店，咖啡厅等），游戏前请安装360之类的杀毒软件，先进行安全扫描，之后再进行游戏，游戏请一定到官网下载（唯一官网：www.game779.com).如果公共场合的电脑已经有779游戏，请删除到官网重新下载。注：手机版目前还是比较安全的，如果条件允许，可以选择使用手机或者平板电脑进行游戏，手机支持的游戏（龙虎30秒，通比牛牛，李逵捕鱼），安卓和IOS系统都支持。</p>
+										<p>账号安全防护措施：绑定主机，开启IP段控制，绑定微信，设置转账微信绑定。这些安全措施能够有效的预防一般的盗号手段，平台提供的安全措施只是防护的一部分，最主要的还是要玩家朋友们做好电脑的安全防护，任何平台防护措施只是辅助作用，因为电脑安全才是真正的安全。</p>
+										<p>出现以下情况请第一时间联系客服:</p>
+										<p>  1、账号无法登陆</p>
+										<p>  2、登陆时一直提示连接服务器中，但是无法登陆进游戏</p>
+										<p>  3、提示您的账号在其他地方登陆，是否锁定账号，请第一时间锁定账号</p>
+										<p>  4、登陆提示账号密码错误</p>
+										<p>  5、登陆游戏之后提示您的账号正在其他房间游戏</p>
+										<p>  6、登陆游戏之后发现欢乐豆和上次看到的欢乐豆不一致</p>
+									</br>
+										<p>唯一客服企业QQ：---。官网没有任何其他的电话和普通QQ，以及QQ群。请玩家朋友不要相信其他途径的官方客服，因为都是假冒的。为了确保玩家的账号安全，官方不会主动联系任何玩家，也不会向玩家索要账号密码，验证码等。</p>
+										</span>
+									</div>
+									</br>
+									</br>
+									 <div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-03-03</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

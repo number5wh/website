@@ -1,0 +1,83 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>赛事编辑
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'');window.location.reload();"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="17%" align="right">比赛类型ID:</td>
+			<td width="83%">
+			<input type="hidden" id="mId" value="{$MatchInfo.MID}" />
+			<input type="text" id="matchTypeID" class="txt" value="{$MatchInfo.MatchTypeID}" maxlength="10" /><span class="orange">*</span></td>			
+		  </tr>	
+		  <tr>
+			<td align="right">比赛名称:</td>
+			<td>
+			<input type="text" class="txt" value="{$MatchInfo.MatchName}" id="MatchName" maxlength="16"> <span class="orange">*</span></td>
+		  </tr>		  		   
+		  <tr>
+			<td align="right">比赛类型:</td>
+			<td>			
+				<select name="TypeID" id="TypeID">
+					{foreach from=$MatchMode item=M}
+					<option value="{$M.TypeID}"{if $M.TypeID==$MatchInfo.MatchType}selected="selected"{/if}>{$M.MatchModeName}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr>         
+	  </table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(false,'');window.location.reload();"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameMatch" />
+        <div class="orange right" id="AddGameMatchMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+		$('#btnAddGameMatch').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameMatch a=addGameMatch}';			
+{literal}
+			var matchTypeID = $.trim($('#matchTypeID').val());
+			var matchName = $.trim($('#MatchName').val());
+			var typeId = $('#TypeID').val();
+			var mId = $('#mId').val();
+			if(matchTypeID=='' || isNaN(matchTypeID)){
+				$('#AddGameMatchMsg').html('请填写正确的比赛类型ID');
+				$('#matchTypeID').focus();
+				return false;
+			}
+			if(matchName==''){
+				$('#AddGameMatchMsg').html('请填写比赛名称');
+				$('#MatchName').focus();
+				return false;
+			}
+			var param = 'MatchTypeID='+matchTypeID+'&MatchName='+matchName+'&TypeID='+typeId;
+			if(!isNaN(mId) && mId>0){
+				param += '&MID='+mId;
+			}
+			ajax.RequestCallBack(setting.Url, param, function(result) {
+				if(result==0){
+					$('#AddGameMatchMsg').html('赛事保存成功');
+					$('#MatchName').val('');
+					$('#matchTypeID').val('');
+				}else if(result == -99){
+					$('#AddGameMatchMsg').html('参数错误，请重试');
+				}else if(result == -2){
+					$('#AddGameMatchMsg').html('比赛类型ID已存在，请重新输入');
+				}else{
+					$('#AddGameMatchMsg').html('添加赛事失败，请重试');
+				}
+			});
+		});
+{/literal}
+</script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Sys={
+	SetProperty:function(){
+		setting.Params = '';
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"Sys.CallBackGetPagerLoginID"';
+		var Param1 = '$(this).val(),"Sys.CallBackGetPagerLoginID"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+		SysList.BindEvent();
+	},
+	/*分页回调*/
+	CallBackGetPagerLoginID:function(data){
+		$('#PageList').html(data);
+		Sys.SetProperty();
+	},
+	CallBackDelLoginID:function(data){
+		if(data==0){
+			setting.Params = '';
+			page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerLoginID');
+		}
+		else
+			main.OpenBox(data);
+	},
+	CallBackShowAddLoginIDHtml:function(data){
+		main.OpenBox(data);
+		slEdit.BindEvent();
+	}
+};
+
+$(function(){	
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=SysLoginID a=getPagerLoginIDList}';
+{literal}
+	Sys.SetProperty();	
+	/*点击显示玩家编号导入界面*/
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLoginID a=showAddLoginIDHtml}';
+			setting.Params = '';
+			ajax.RequestUrl(setting.Url,setting.Params,'Sys.CallBackShowAddLoginIDHtml');
+{literal}
+		});	
+	});		
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit left" value="添加玩家编号" />
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerLoginID');">
+	<div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<br class="clear" />
+<div id="PageList">
+{include file="$skin/YunWei/SysLoginIDListPage.html"}
+</div>
+
+</body>
+</html>

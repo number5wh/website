@@ -1,0 +1,193 @@
+.body {
+	BACKGROUND: url(../images/reg_bg.jpg) repeat-x 0px 156px
+}
+BODY {
+	FONT-SIZE: 14px
+}
+.login {
+	BACKGROUND: url(../images/reg_1.jpg) no-repeat left top
+}
+.login {
+	MARGIN: 64px auto; WIDTH: 1002px; HEIGHT: 403px
+}
+.loginBottom {
+	MARGIN: 64px auto; WIDTH: 1002px; HEIGHT: 403px
+}
+.loginBottom {
+	BACKGROUND: url(../images/line2.jpg) no-repeat center bottom; HEIGHT: 180px
+}
+.sign {
+	WIDTH: 300px; MARGIN-LEFT: 685px
+}
+.txt {
+	BORDER-BOTTOM: #d8d8d8 1px solid; BORDER-LEFT: #d8d8d8 1px solid; LINE-HEIGHT: 24px; WIDTH: 172px; HEIGHT: 24px; BORDER-TOP: #d8d8d8 1px solid; BORDER-RIGHT: #d8d8d8 1px solid
+}
+.sign DIV {
+	MARGIN-TOP: 5px; WIDTH: 63px; HEIGHT: 17px; MARGIN-RIGHT: 5px
+}
+.uname {
+	BACKGROUND: url(../images/icon4.gif) no-repeat 0px -73px
+}
+.upwd {
+	BACKGROUND: url(../images/icon4.gif) no-repeat 0px -93px
+}
+.sign UL {
+	PADDING-TOP: 90px
+}
+.sign UL LI {
+	HEIGHT: 40px
+}
+.sign LI SPAN {
+	MARGIN-LEFT: 180px; FONT-SIZE: 12px
+}
+.sign LI SPAN A {
+	COLOR: #ff8f2c
+}
+.btn {
+	MARGIN-TOP: 10px; MARGIN-LEFT: 685px
+}
+.btnLogin {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; MARGIN: 0px 24px 0px 12px; WIDTH: 102px; BACKGROUND: url(../images/icon4.gif) no-repeat 0px -36px; HEIGHT: 35px; COLOR: #ffffff; FONT-SIZE: 14px; BORDER-TOP: medium none; FONT-WEIGHT: bold; BORDER-RIGHT: medium none
+}
+.btnReg {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 102px; BACKGROUND: url(../images/icon4.gif) no-repeat 0px 0px; HEIGHT: 35px; FONT-SIZE: 14px; BORDER-TOP: medium none; FONT-WEIGHT: bold; BORDER-RIGHT: medium none
+}
+.loginBottom_0 {
+	HEIGHT: 150px
+}
+.loginBottom_1 {
+	WIDTH: 56px; BACKGROUND: url(../images/icon4.gif) no-repeat -209px 0px; HEIGHT: 80px
+}
+.loginBottom_2 {
+	WIDTH: 58px; BACKGROUND: url(../images/icon4.gif) no-repeat -148px 0px; HEIGHT: 76px
+}
+.loginBottom_3 {
+	WIDTH: 41px; BACKGROUND: url(../images/icon4.gif) no-repeat -104px 0px; HEIGHT: 79px
+}
+.loginBottom_4 {
+	WIDTH: 260px; MARGIN-LEFT: 15px; FONT-SIZE: 12px
+}
+.news {
+	LINE-HEIGHT: 30px; MARGIN-TOP: 30px; MARGIN-LEFT: 685px
+}
+.logo {
+	MARGIN: 32px auto 20px; WIDTH: 750px
+}
+.title {
+	MARGIN: auto; WIDTH: 803px
+
+}
+.title_1 {
+	WIDTH: 9px; /*BACKGROUND: url(../images/reg_left.jpg) no-repeat; HEIGHT: 45px*/
+}
+.title_2 {
+	WIDTH: 785px; /*BACKGROUND: url(../images/line5.jpg) repeat-x; HEIGHT: 45px*/
+}
+.title_2 IMG {
+	POSITION: absolute; MARGIN-TOP: -10px
+}
+.title_2 DIV {
+	WIDTH: 300px; HEIGHT: 35px
+}
+.title_2 DIV.emailAuth {
+	WIDTH: 300px; BACKGROUND: url(../images/emailAuth.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_3 {
+	WIDTH: 9px; /*BACKGROUND: url(../images/reg_right.jpg) no-repeat; HEIGHT: 45px*/
+}
+.regInfo {
+	MARGIN: auto; WIDTH: 803px; background-color: #fff; border-radius: 5px;/*BACKGROUND: url(../images/regInfo_bg.jpg) repeat-y*/
+}
+.regInfo .red {
+	FONT-SIZE: 12px
+}
+.regInfo .blue {
+	FONT-SIZE: 12px
+}
+.regInfo_title {
+	MARGIN: 0px auto 30px; WIDTH: 618px; PADDING-TOP: 30px
+}
+.regInfo_title UL LI {
+	PADDING-LEFT: 20px; WIDTH: 134px; BACKGROUND: url(../images/icon7.gif) no-repeat 0px -40px; FLOAT: left; HEIGHT: 20px; FONT-SIZE: 12px
+}
+.regInfo_bottom {
+	MARGIN: auto; WIDTH: 803px; background-color: #fff;/*BACKGROUND: url(../images/regInfo_bottom.jpg) no-repeat; HEIGHT: 26px*/
+}
+.regInfo_bg {
+	BACKGROUND: url(../images/www.jpg) no-repeat 460px bottom; HEIGHT: 172px
+}
+.success {
+	PADDING-BOTTOM: 20px; MARGIN: auto; PADDING-LEFT: 0px; WIDTH: 400px; PADDING-RIGHT: 0px;/* FONT-FAMILY: "ºÚÌå"; */HEIGHT: 70px; COLOR: #c41616; FONT-SIZE: 24px; PADDING-TOP: 50px
+}
+.regMsg {
+	LINE-HEIGHT: 50px; MARGIN: auto; WIDTH: 400px;/* FONT-FAMILY: "ºÚÌå"; */COLOR: #027cc2; FONT-SIZE: 14px
+}
+.line {
+	BORDER-BOTTOM: #027cc2 1px dotted; MARGIN: auto; WIDTH: 70%; HEIGHT: 30px
+}
+.login1 {
+	TEXT-ALIGN: center; MARGIN-TOP: 30px; WIDTH: 70%
+}
+.regInfo_email {
+	PADDING-BOTTOM: 30px; LINE-HEIGHT: 68px; MARGIN: auto; PADDING-LEFT: 70px; WIDTH: 380px; PADDING-RIGHT: 0px; BACKGROUND: url(../images/email.jpg) no-repeat left center; PADDING-TOP: 30px
+}
+.regInfo SPAN {
+	COLOR: #202020; FONT-SIZE: 18px; FONT-WEIGHT: bold
+}
+.regInfo LABEL {
+	COLOR: #c41616; FONT-SIZE: 12px
+}
+.regInfo_1 {
+	MARGIN: auto; WIDTH: 450px; COLOR: #3f3e3e
+}
+.regInfo_1 INPUT {
+	WIDTH: 260px
+}
+.regInfo .login1 {
+	MARGIN-LEFT: auto; MARGIN-RIGHT: auto
+}
+.regInfo_2 {
+	LINE-HEIGHT: 25px; MARGIN: auto; WIDTH: 500px; PADDING-TOP: 15px
+}
+.regInfo_2 B {
+	PADDING-TOP: 15px
+}
+.regInfo FONT.blue {
+	FONT-SIZE: 14px; TEXT-DECORATION: underline
+}
+.regInfo_email_bg {
+	BACKGROUND: url(../images/email_2.jpg) no-repeat 550px bottom; HEIGHT: 172px
+}
+.regInfo_mobile {
+	PADDING-BOTTOM: 30px; LINE-HEIGHT: 68px; MARGIN: auto; PADDING-LEFT: 70px; WIDTH: 380px; PADDING-RIGHT: 0px; BACKGROUND: url(../images/mobile.jpg) no-repeat left center; PADDING-TOP: 30px
+}
+.regInfo_1 .btn1 {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 266px; BACKGROUND: url(../images/btn.jpg) no-repeat; HEIGHT: 35px; BORDER-TOP: medium none; BORDER-RIGHT: medium none
+}
+.title_2 DIV.mobileAuth {
+	WIDTH: 300px; BACKGROUND: url(../images/mobileAuth.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.getpwd {
+	WIDTH: 300px; BACKGROUND: url(../images/getpwd.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.getPwdByMobile {
+	WIDTH: 300px; BACKGROUND: url(../images/getPwdByMobile.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.getPwdByEmail {
+	WIDTH: 300px; BACKGROUND: url(../images/getPwdByEmail.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.modiPwd {
+	WIDTH: 300px; BACKGROUND: url(../images/modiPwd.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.getPwdByResult {
+	WIDTH: 300px; BACKGROUND: url(../images/getPwdByResult.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.title_2 DIV.transPwd {
+	WIDTH: 300px; BACKGROUND: url(../images/transPwd.jpg) no-repeat 55px 13px; HEIGHT: 35px
+}
+.bottom {
+	TEXT-ALIGN: center; WIDTH: 100%; HEIGHT: 180px; FONT-SIZE: 12px
+}
+.bg {
+	MARGIN: auto; WIDTH: 960px
+}

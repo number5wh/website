@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>欢乐五张做任务活动</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>欢乐五张做任务活动</b></div><br>
+							  <div>
+					                <p align="left"><span style="font-size:18px;">尊敬的玩家，在游戏中完成指定局数可获取相应的欢乐豆。具体任务如下： </span></p>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										 <p> 完成50局可获得50000欢乐豆</p>
+										 <p> 完成100局可获得100000欢乐豆</p>
+										 <p>完成200局可获得150000欢乐豆</p>
+										 <p> 完成300局可获得200000欢乐豆</p>
+										 <p> 完成500局可获得500000欢乐豆</p>
+										 <br/>
+										 <p>如果疑问，请联系779游戏中心官方客服</p>
+										 <p>客服QQ:---</p>
+										 <br/>
+										 <br/>
+										 <p style="color:yellow">PS:安卓手机端欢乐五张、新摇钱树预计今晚18:00上线，敬请期待</p>
+										 <br/>
+										</span>
+									</div>
+									<div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-03-16</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

@@ -1,0 +1,4 @@
+<a href="javascript:void(0)" id="LinkPrev" pg="{$Page.PrevPage}" cp="{$Page.CurPage}" date="{$Page.NextStartDate}">上一页</a> &nbsp;&nbsp;&nbsp;
+第<label class="orange">{$Page.CurPage}</label>页/共<label class="orange">{$Page.TotalPage}</label>页 
+<a href="javascript:void(0)" id="LinkNext" logsid="{$Page.NextLogsID}" date="{$Page.NextStartDate}" pg="{$Page.NextPage}" tp="{$Page.TotalPage}" cp="{$Page.CurPage}">下一页</a> 
+跳转到<input type="text" class="txtPage" logsid="{$Page.NextLogsID}" date="{$Page.NextStartDate}" value='{$Page.CurPage}'/>页

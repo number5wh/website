@@ -1,0 +1,65 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="18%">比赛类型ID</th>
+    <th width="23%">比赛名称</th>
+	<th width="21%">比赛模式</th>
+    <th width="38%">操作</th>	
+  </tr>
+  {foreach from=$MatchList item=Match}
+  <tr class="bg_color">
+    <td>{$Match.MatchTypeID}</td>
+    <td>{$Match.MatchName}</td>
+	<td>{$Match.MatchTpye}</td>
+    <td>
+      <a href="javascript:void(0)" class="edit" id="{$Match.MatchTypeID}" title="修改({$Match.MatchName})">修改</a>
+      <a href="javascript:void(0)" MatchName="{$Match.MatchName}" class="delete" id="{$Match.MatchTypeID}" title="删除({$Match.MatchName})">删除</a>
+      <a href="javascript:void(0)" class="aSetRule" id="{$Match.MatchTypeID}" TypeID="{$Match.TypeID}" title="规则设置({$Match.MatchName})">规则设置</a>
+      <a href="javascript:void(0)" class="aSetPrize" id="{$Match.MatchTypeID}" title="奖品设置({$Match.MatchName})">奖品设置</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="4">暂无比赛记录</td>
+  </tr>
+  {/foreach}
+  {if $MatchList}
+  <tr class="bg_color">
+    <td colspan="10">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('.aSetRule').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameMatch a=showSetMatchRuleHtml}';
+		setting.Params='&MatchTypeID='+$(this).attr('id')+'&TypeID='+$(this).attr('TypeID');
+		window.parent.main.AddTab($(this).attr('title'),'GameMatchPrizeSet'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+	});
+
+	$('.aSetPrize').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameMatch a=showSetMatchPrizeHtml}';
+		setting.Params='&MatchTypeID='+$(this).attr('id');
+		window.parent.main.AddTab($(this).attr('title'),'GameMatchSet'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+	});
+	$('.delete').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameMatch a=deleteGameMatch}';
+{literal}
+		if(confirm("您确定要删除"+$(this).attr('MatchName')+"比赛吗？")){
+			ajax.RequestCallBack(setting.Url,'MatchTypeID='+$(this).attr('id'),function(result) {
+				if(result==0){
+					window.location.reload();
+				}else{
+					alert("删除比赛失败");
+				}
+			});
+		}
+	});	
+});
+{/literal}
+</script>

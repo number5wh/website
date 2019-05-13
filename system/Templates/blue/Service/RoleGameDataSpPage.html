@@ -1,0 +1,58 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="11%">游戏名称</th>
+    <th width="11%">日期</th>
+    <th width="10%">当前战斗次数</th>  
+    <th width="8%">赢（次）</th>  
+    <th width="8%">输（次）</th>  
+    <th width="8%">和（次）</th>  
+    <th width="8%">逃跑（次）</th>  
+    <th width="8%">胜率</th>    
+    <th width="9%">逃跑率</th>     
+    <th width="10%">道具总成绩</th>
+    <th width="9%">游戏记录</th>  
+  </tr>
+  {foreach from=$GameDetailList item=detail}
+  <tr class="bg_color">
+    <td>{$detail.KindName}({$detail.KindID})</td>
+    <td>{$detail.PlayTime}</td>
+    <td>{$detail.PlayCount}</td>
+    <td>{$detail.WinCount}</td>
+    <td>{$detail.LostCount}</td>
+    <td>{$detail.DrawCount}</td>
+    <td>{$detail.FleeCount}</td>    
+    <td>{$detail.Win}%</td>
+    <td>{$detail.Flee}%</td>
+    <td>{$detail.SpCount}</td>
+    <td><a href="javascript:void(0);" class="spGameDetail" title="{$detail.KindName}游戏明细" KindID="{$detail.KindID}" KName="{$detail.KindName}" Dtime="{$detail.Dtime}">查看详细</a></td>
+  </tr>    
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="11">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  {if $GameDetailList}
+  <tr class="bg_color">
+    <td colspan="11" id="RGDSP">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<input type="hidden" id="spRoleID" value="{$RoleID}" />
+<script type="text/javascript">
+{literal}
+$(function(){
+	$(".spGameDetail").click(function(){
+		var roleID = $.trim($("#spRoleID").val());
+		var kid = $(this).attr("KindID");
+		var kName = $(this).attr("KName");
+		var dtime = $(this).attr("Dtime");
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=getUserGameDataSpDetail}';
+		setting.Params = '&RoleID='+roleID+'&KindID='+kid+'&dTime='+dtime+'&KindName='+kName;
+		window.parent.main.AddTab($(this).attr('title'),roleID+'GameSpDetail'+kid,setting.Url+setting.Params);
+{literal}
+		
+	})
+})
+{/literal}
+</script>

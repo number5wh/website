@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();	
+	//点击显示设置游戏种类界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameTable a=showAddGameTableHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'TableSchemeID='+$(this).attr('id'),'callback.ShowAddGameTableHtml');
+		});	
+	});
+	//删除游戏种类
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.DelUrl='{au d=YunWei c=GameTable a=delGameTableInfo}';
+{literal}
+			setting.Params = 'TableSchemeID='+$(this).attr('id');
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.DelUrl,setting.Params,'callback.DelGameTableInfo');
+		});	
+	});	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加桌子类型" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr class="bg_color">
+    <th width="3%">序号</th>
+    <th width="12%">桌子类型标识</th>
+    <th width="14%">桌子类型名称</th>
+    <th></th>
+  </tr>
+  {foreach from=$GameTableList item=v}
+  <tr class="bg_color">
+    <td>{$v.id}</td>
+    <td>{$v.TableSchemeID}</td>
+    <td>{$v.SchemeName}</td>
+    <td>
+      	<a href="javascript:void(0)" class="edit" id="{$v.TableSchemeID}">修改</a>
+		<a href="javascript:void(0)" class="del" id="{$v.TableSchemeID}">删除</a></td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="4">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+</body>
+</html>

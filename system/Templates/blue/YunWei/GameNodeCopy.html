@@ -1,0 +1,187 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏节点
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'GameNode')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td align="right">父级节点:</td>
+			<td>{$GameNode.ParentNode}</td>
+		  </tr>
+		  <tr>
+			<td align="right">游戏标签:</td>
+			<td>
+				<select name="TagID" id="TagID" >		
+					<option value="0" selected="selected" disabled="true">选择标签</option>
+					{foreach from=$TagClassList item=tag}
+					<option value="{$tag.TagID}" {if '$tag.TagID'=='$GameNode.TagID'}selected{/if}>{$tag.TagName}</option>	
+					{/foreach}		
+				</select>
+			</td>
+		  </tr>		
+		  <tr>
+			<td width="17%" align="right">节点名称:</td>
+			<td width="83%"><input type="text" class="txt" name="NodeName" id="NodeName" value="{$GameNode.NodeName}" disabled="true"> <span class="orange">*</span></td>
+		  </tr>		  
+		  <tr>
+			<td align="right">节点类型:</td>
+			<td>
+				<select name="NodeType" id="NodeType" disabled="true">
+					{foreach from=$NodeTypeList item=node}
+					<option value="{$node.TypeID}" {if $node.TypeID==$GameNode.NodeType}selected{/if}>{$node.TypeName}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr>	
+		  <tr class="hide" id="k">
+			<td align="right">游戏种类:</td>
+			<td>
+				<select name="GameKindClass" id="GameKindClass" disabled="true">
+                    {foreach from=$GameKindClassList item=c}
+                    <option value="{$c.ClassID}" {if $c.ClassID==$GameNode.ClassID}selected{/if}>{$c.ClassName}</option>
+                    {/foreach}
+                </select>	
+				<select name="KindID" id="KindID" disabled="true">
+				</select>				
+			</td>
+		  </tr>
+		  <tr class="hide" id="k">
+			<td>
+				<input type="hidden" id="ParentId" value="{$GameNode.ParentId}">
+			</td>
+		  </tr>
+          <tr class="hide" id="r">
+			<td align="right">选择房间:</td>
+			<td>
+				<select name="RoomList" id="RoomList">
+                </select>
+			</td>
+		  </tr>
+          <tr class="hide" id="link">
+			<td align="right">链接地址:</td>
+			<td>
+				<input type="text" class="txt" name="Url" id="Url" value="{$GameNode.URL}" />
+			</td>
+		  </tr>
+		  <tr>
+			<td align="right">节点样式:</td>
+			<td>
+				<select name="StyleID" id="StyleID" disabled="true">		
+					<option value="0" selected="selected">选择样式</option>
+					{foreach from=$StyleSheetList item=style}
+					<option value="{$style.StyleID}" {if $style.StyleID==$GameNode.StyleID}selected{/if}>{$style.StyleName}</option>
+					{/foreach}			
+				</select>
+			</td>
+		  </tr>		
+		  <tr>
+			<td align="right">节点排序:</td>
+			<td><input type="text" class="txt" name="SortID" id="SortID" value="{$GameNode.SortID}"> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">是否禁用:</td>
+			<td>
+				<select name="Locked" id="Locked"  disabled="true">		
+					<option value="0" selected="selected">启用</option>
+					<option value="1" {if 1==$GameNode.Locked}selected{/if}>禁用</option>			
+				</select>
+			</td>
+		  </tr>		  
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="TypeID" value="{$GameNode.TypeID}" />
+		<input type="hidden" id="Action" value="{$GameNode.Action}" />
+		<input type="hidden" id="CurKindID" value="{$GameNode.KindID}" />		
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(false,'GameNode')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameNode" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnAddGameNode').click(function(){
+{/literal}
+		setting.ReqUrl='{au d=YunWei c=GameNode a=addGameType}';	
+{literal}
+		var NodeName = $('#NodeName').val();
+		var NodeType = $('#NodeType').val();
+		var SortID = $('#SortID').val();
+		var Locked = $('#Locked').val();
+		var TagID = $('#TagID').val();
+		var StyleID = $('#StyleID').val();
+		var TypeID = $('#TypeID').val();
+		var Action = $('#Action').val();
+		var KindID = $('#KindID').val();
+		var RoomID = $('#RoomList').val();
+		var Url = $('#Url').val();
+		var ParentId = $('#ParentId').val();
+		if(NodeName==''){
+			$('#NodeName').next().html('*请输入节点名称');
+			$('#NodeName').focus();
+			return false;
+		}
+		if(isNaN(SortID) || SortID==''){
+			$('#SortID').next().html('*请输入正确的排序号');
+			$('#SortID').focus();
+			return false;
+		}
+		setting.Params = 'ParentId='+ParentId+'&Action='+Action+'&NodeName='+encodeURIComponent(NodeName)+'&NodeType='+NodeType+'&SortID='+SortID+'&Locked='+Locked+'&TagID='+TagID+'&StyleID='+StyleID+'&TypeID='+TypeID+'&KindID='+KindID+'&RoomID='+RoomID+'&Url='+encodeURIComponent(Url);
+
+		ajax.RequestUrl(setting.ReqUrl,setting.Params,'callback.AddGameNode');	
+	});			
+});
+
+var node={
+	ShowGameNode:function(){
+		$('#k').hide();
+		$('#r').hide();
+		$('#link').hide();
+		/*链接节点*/
+		if($('#NodeType').val()==2){
+			$('#link').show();
+		}
+		/*游戏节点*/
+		else if($('#NodeType').val()==3){
+			$('#k').show();
+			this.GetGameKindList('');
+		}
+		/*房间节点*/
+		else if($('#NodeType').val()==5){
+			$('#k').show();
+			$('#r').show();
+			this.GetGameKindList('');
+		}
+	},
+	GetGameKindList:function(status){
+		if(status=='reset') $('#CurKindID').val(0);
+{/literal}
+		setting.ReqUrl = '{au d=YunWei c=GameNode a=getGameKind}';
+		setting.Params = 'GameKindClass='+$('#GameKindClass').val()+'&TypeID='+$('#TypeID').val()+'&CurKindID='+$('#CurKindID').val()+'&RoomID='+$('#RoomID').val();
+{literal}		
+		ajax.Request(setting.ReqUrl,setting.Params,'callback.GetGameKindList');
+	},
+	GetGameRoomList:function(){
+{/literal}
+		setting.ReqUrl = '{au d=YunWei c=GameNode a=getRoomList}';
+		setting.Params = 'CurKindID='+$('#KindID').val()+'&RoomID='+$('#RoomID').val();
+{literal}		
+		ajax.RequestUrl(setting.ReqUrl,setting.Params,'callback.GetRoomList');
+	}
+};
+/*游戏节点和房间节点*/
+if($('#NodeType').val()==2 || $('#NodeType').val()==3 || $('#NodeType').val()==5)	node.ShowGameNode();		
+
+{/literal}
+/*node.ShowGameNode();*/
+</script>

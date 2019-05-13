@@ -1,0 +1,61 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">服务器名称</th>
+    <th width="43%" bgcolor="#FFFFFF">外网地址</th>
+    <th width="12%" bgcolor="#FFFFFF">内网地址</th>
+    <th width="7%" bgcolor="#FFFFFF">状态</th>
+    <th width="23%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ServerList item=server}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$server.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerName}</td>
+    <td align="left" bgcolor="#FFFFFF">{$server.ServerIP}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.LANServerIP}</td>
+    <td align="center" bgcolor="#FFFFFF">正常</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='locked' id="{$server.ServerID}">{if $server.Locked==1}<span class="orange">启用服务</span>{else}禁用服务{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$server.ServerID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$server.ServerID}">删除</a>
+	  <a href="javascript:void(0)" class="file" id="{$server.ServerID}">生成配置文件</a>	
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var svr={
+	/*点击显示设置游戏种类界面*/
+	BindEvent:function(){
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=ServerGame a=showAddServerHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'ServerID='+$(this).attr('id'),'callback.ShowAddServerHtml');
+			});	
+		});		
+		/*删除房间*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.DelUrl='{au d=YunWei c=GameRoom a=delGameRoomInfo}';
+{literal}
+				setting.Params = 'RoomID='+$(this).attr('id');
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.DelUrl,setting.Params,'callback.DelGameRoomInfo');
+			});	
+		});		
+	}
+}
+{/literal}
+</script>

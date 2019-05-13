@@ -1,0 +1,72 @@
+<div class='borderGrayColor' style='padding:10px;'>
+    <span style='font-weight:bold;'>修改支付方式</span>
+    <table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+
+        <tr>
+            <td class='txt_R'>支付方式：</td>
+            <td class='txt_L pad5'>
+                <select id='PayWayType' style='width:150px;'>
+                    <option value=' '>选择支付方式</option>
+                    <option value='1' {if $payinfo.PayWayType==1}selected='true'{/if}>支付宝</option>
+                    <option value='2'  {if $payinfo.PayWayType==2}selected='true'{/if}>银行卡</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class='txt_R'>姓名：</td>
+            <td class='txt_L pad5'><input type='text' class='txt' maxlength='20' id='UserName' value='{$payinfo.UserName}' /></td>
+        </tr>
+
+
+        <tr>
+            <td class='txt_R'>开户银行：</td>
+            <td class='txt_L pad5'><input type='text' class='txt' maxlength='20' id='BankName' value='{$payinfo.BankName}' /></td>
+        </tr>
+        <tr>
+            <td class='txt_R'>支付宝账户/银行卡号：</td>
+            <td class='txt_L pad5'><input type='text' class='txt' maxlength='20' id='BankCardNo' value='{$payinfo.BankCardNo}' /></td>
+        </tr>
+        <tr>
+            <td colspan='2' id='errorMsg' class='txt_M pad5 orange'></td>
+        </tr>
+        <tr>
+            <td colspan='2' class='txt_M pad5'>
+                <input type='hidden' id='Passport' value='{$RoleID}' /><!--这里 参数改成使用roleID 等于 LoginID-->
+                <input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+            </td>
+        </tr>
+    </table>
+</div>
+<script type='text/javascript'>
+    {literal}
+    $(function(){
+        $('#applyBtn').click(function(){
+            var UserName = $.trim($('#UserName').val());
+            var BankName = $.trim($('#BankName').val());
+            var BankCardNo = $.trim($('#BankCardNo').val());
+            var Passport = $.trim($('#Passport').val());
+            var PayWayType = $.trim($('#PayWayType').val());
+            if(PayWayType==''){
+                $('#errorMsg').html('请选择充值类型');
+                return false;
+            }
+
+            if(UserName==''){
+                $('#errorMsg').html('请输入姓名');
+                return false;
+            }
+            if(BankName=='' && PayWayType==2){
+                $('#errorMsg').html('请输入银行名称');
+                return false;
+            }
+            if(BankCardNo==''){
+                $('#errorMsg').html('请输入银行卡号');
+                return false;
+            }
+            var params = 'roleID='+Passport+'&username='+UserName+'&BankName='+BankName+'&BankCardNo='+BankCardNo+'&PayWayType='+PayWayType;
+            ajax.Request('/?d=Service&c=ServiceRole&a=updatePayMent', params, 'callback.UpdateMobilePhone');
+        })
+    })
+    {/literal}
+</script>

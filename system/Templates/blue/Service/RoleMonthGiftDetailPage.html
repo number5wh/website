@@ -1,0 +1,23 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th>本月礼包</th>
+    <th>领取时间</th>
+    <th>礼包明细</th>   
+  </tr>
+{foreach from=$MonthDetailList item=v}
+  <tr class="bg_color">
+    <td>{$v.GiftDate}</td>
+    <td>{$v.ReceiveTime}</td>
+    <td>{$v.spIDInfo}</td>
+  </tr>
+{foreachelse}
+  <tr class="bg_color">
+    <td colspan="3">很抱歉，没有您要查询的信息~</td>
+  </tr>
+{/foreach}
+{if $MonthDetailList}
+  <tr class="bg_color">
+    <td colspan="3">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+{/if}
+</table>

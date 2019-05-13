@@ -1,0 +1,20 @@
+<div style="padding:20px 30px 10px;">
+	<span id="EditOperateBankUnFreezeDetail" class="EditOperateFreeze" style="cursor:pointer;">银行解冻记录</span> | <span id="EditOperateKnapsackUnFreezeDetail" class="EditOperateFreeze" style="cursor:pointer;">背包解冻记录</span>
+</div>
+
+<div id="EditOperateBlockDetailInfo"></div>
+
+<script type="text/javascript">
+var RoleID = {$iRoleID};
+{literal}
+$(function(){	
+	$(".EditOperateFreeze").click(function(){
+		if($(this).attr("id") == 'EditOperateKnapsackUnFreezeDetail'){
+			ajax.RequestUrl('/?d=Service&c=ServiceRole&a=EditOperateBlockInfo','roleID='+RoleID,'callback.GetBlockDetailInfo');
+		}else{
+			ajax.RequestUrl('/?d=Service&c=ServiceRole&a=EditOperateUnBlockInfo','roleID='+RoleID,'callback.GetUnBlockDetailInfo');
+		}
+	});
+})
+{/literal}
+</script>

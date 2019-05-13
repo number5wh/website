@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>欢乐五张做任务活动</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>港式五张彩金活动</b></div><br>
+							  <div>
+					           	     <p align="left">
+					           	     	<span style="font-size:18px;text-indent:2em;display: block">尊敬的玩家，即日起在港式五张游戏中抓到指定的牌型即可获取相应的彩金奖励。奖励牌型如下： </span></p>
+									<!--StartFragment -->
+									<div>
+										 <br/>
+										 <br/>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										 <p><span style="color:yellow"> [同花]</span>：奖励60,000欢乐豆</p>
+										 <p><span style="color:yellow"> [葫芦]</span>：奖励60,000欢乐豆</p>
+										 <p><span style="color:yellow"> [炸弹]</span>：奖励180,000欢乐豆</p>
+										 <p> <span style="color:yellow">[同花顺]</span>：奖励2,880,000欢乐豆</p>
+										 <p><span style="color:yellow"> [至尊同花顺]</span>：奖励8,880,000欢乐豆</p>
+										 <br/>
+										 <br/>
+										 <br/>
+										 <p>如果疑问，请联系779游戏中心官方客服</p>
+										 <p>客服QQ:---</p>
+										 <p>客服电话：---</p>
+										 <br/>
+										 <br/>
+										 <br/>
+										</span>
+									</div>
+									<div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-03-29</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

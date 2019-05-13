@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+  	<th width="14%" bgcolor="#FFFFFF">未支付</th>
+	<th width="14%" bgcolor="#FFFFFF">已支付</th>
+	<th width="14%" bgcolor="#FFFFFF">支付失败</th>
+	<th width="14%" bgcolor="#FFFFFF">已充值</th>
+	<th width="14%" bgcolor="#FFFFFF">充值失败</th>
+	<th width="14%" bgcolor="#FFFFFF">实际到账</th>
+	<th width="30%" bgcolor="#FFFFFF">充值类型</th>
+  </tr>
+  {foreach from=$RechargeFormList item=List}
+  <tr>
+  	<td align="center" bgcolor="#FFFFFF">{$List.UnpayedMoney}</td>
+  	<td align="center" bgcolor="#FFFFFF">{$List.PayedMoney}</td>
+  	<td align="center" bgcolor="#FFFFFF">{$List.PayFailMoney}</td>
+  	<td align="center" bgcolor="#FFFFFF">{$List.ChargedMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.ChargeFailMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.RealChargedMoney}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.CardTypeTip}</td>
+  </tr>
+  {/foreach}
+  {if $RechargeFormList}
+  <tr style="font-weight:bold; background-color:#99CCFF">
+  	<td align="center" bgcolor="#99CCFF">{$arrTotal.TotalUnpayed}</td>
+    <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalPayed}</td>
+    <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalPayFail}</td>
+    <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalCharged}</td>
+    <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalChargeFail}</td>
+    <td align="center" bgcolor="#99CCFF">{$arrTotal.TotalRealCharged}</td>
+	<td align="center" bgcolor="#99CCFF">&nbsp;</td>
+  </tr>
+  {else}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/if}  
+</table>

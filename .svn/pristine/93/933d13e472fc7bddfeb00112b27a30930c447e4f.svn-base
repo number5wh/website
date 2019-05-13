@@ -1,0 +1,15 @@
+@charset "utf-8";
+#wBox { position: absolute; top:0; left:0; z-index:100;  text-align:left; display:none;}
+#wBox_overlay { position: absolute; top:0; left:0; height:100%; width:100%; }
+.wBox_overlayBG { background-color: #666; z-index:99; }
+
+/*.bg_lt { background:url(/images/wbox/table_lt.png) no-repeat; width:6px; height:29px;}
+.bg_ct { background:url(/images/wbox/table_ct.png) repeat-x; height:29px; text-align:right;}
+.bg_ct div { background:url(/images/wbox/table_close.png) no-repeat; width:33px; height:24px; float:right; margin-top:-3px;}
+.bg_rt { background:url(/images/wbox/table_rt.png) no-repeat; width:6px; height:29px;}
+.bg_lc {background:url(/images/wbox/table_lc.png) repeat-y; width:6px;}
+.bg_rc {background:url(/images/wbox/table_rc.png) repeat-y; width:6px;}
+.bg_lbb { background:url(/images/wbox/table_lbb.png) no-repeat; width:6px; height:18px; }
+.bg_cbb { background:url(/images/wbox/table_bb.png) repeat-x; height:18px;}
+.bg_rbb { background:url(/images/wbox/table_rbb.png) no-repeat; width:6px; height:18px;}
+ */

@@ -1,0 +1,79 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var sp={
+	/*点击显示设置游戏道具界面*/
+	BindEvent:function(){		
+		/*点击显示修改道具配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Sp a=showAddSpPublicHtml}';
+				setting.Params = '&SpID='+$(this).attr('id');
+{literal}
+				/*window.parent.main.AddTab($(this).attr('title'),'Sp'+$(this).attr('id'),setting.Url+setting.Params);	*/
+				window.location.href=setting.Url+setting.Params;
+			});	
+		});		
+		/*点击删除公库道具信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Sp a=delSpPublic}';
+{literal}
+				if(confirm('删除后将无法恢复，确认商城、礼包、用户是否拥有该道具'))
+					ajax.RequestUrl(setting.Url,'SpID='+$(this).attr('id'),'callback.DelSpPublic');
+			});	
+		});	
+		/*点击禁用或启用公库道具*/
+		$('.locked').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=Sp a=setSpPublicLocked}';
+{literal}
+				setting.Params = 'SpID='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.SetSpPublicLocked');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="8%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">道具展示图</th>
+    <th width="11%" bgcolor="#FFFFFF">道具名称</th>
+    <th width="11%" bgcolor="#FFFFFF">资源编号</th>
+	<th width="10%" bgcolor="#FFFFFF">道具编号</th>
+    <th width="15%" bgcolor="#FFFFFF">使用场景</th>
+    <th width="10%" bgcolor="#FFFFFF">使用性别</th>
+    <th width="10%" bgcolor="#FFFFFF">黄钻专用</th>
+    <th width="13%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SpList item=sp}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$sp.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF"><img src="{$sp.ImgPath}" width="50" /></td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.GoodsName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.ResourceID}</td>
+	<td align="center" bgcolor="#FFFFFF">{$sp.SpNumber}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.Place}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.Sex}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sp.VipID}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='locked' id="{$sp.SpID}">{if $sp.Locked==1}<span class="orange">启用</span>{else}禁用{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$sp.SpID}" title="{$sp.GoodsName}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$sp.SpID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SpList}
+  <tr>
+    <td colspan="9" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

@@ -1,0 +1,53 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="33%" bgcolor="#FFFFFF">IP始</th>
+    <th width="33%" bgcolor="#FFFFFF">IP止</th>
+	<th width="34%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SysIntervalIpList item=Sys}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Sys.StartIP}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Sys.EndIP}</td>
+    <td align="center" bgcolor="#FFFFFF">		
+		<a href="javascript:void(0)" class="DeleteSysIntervalIp" id="{$Sys.ID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SysIntervalIpList}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){	
+	/*删除*/
+	$('.DeleteSysIntervalIp').click(function(){
+		if(confirm('确定要删除此记录吗?删除后将无法恢复')){
+{/literal}		
+			setting.Url = '{au d=YunWei c=SysIntervalIp a=deleteSysIntervalIp}';
+			setting.Params = 'ID='+$(this).attr('id');
+			ajax.RequestJsonCallBack(setting.Url,setting.Params,SysIntervalIp.CallBackDeleteSysIntervalIp);
+{literal}
+		}
+	});
+});
+var SysIntervalIp={
+	/*删除用户后的回调函数*/
+	CallBackDeleteSysIntervalIp:function(data){
+		if(data.iResult==0){
+			var Key = $.trim($('#Key').val());
+			setting.Params = '&Key='+encodeURIComponent(Key);
+			page.GetPage($('.txtPage').val(),"callback.GetPagerSysIntervalIpList");
+		}
+		else
+			alert('删除失败');
+	}
+};
+{/literal}
+</script>

@@ -1,0 +1,160 @@
+{if $result}
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList clear">
+  <tr class="bg_color">
+    <td class="bg_color2 txt_R">角色名:</td>
+	<td>{$result.RealName}</td>
+	<td class="bg_color2 txt_R">玩家编号:</td>
+	<td id="RoleBaseInfoLoginID">{$result.LoginID}</td>
+    <td class="bg_color2 txt_R">安全手机:</td>
+	<td>{$result.Mobile}</td>
+  </tr>
+  <tr class="bg_color">
+    <td class="bg_color2 txt_R">性别:</td>
+    <td>{$result.GenderName}</td>
+    <td class="bg_color2 txt_R">个性签名:</td>
+    <td>{$result.Signature}</td>
+    <td class="bg_color2 txt_R">体力值:</td>
+    <td>{$result.UseBasePower+$result.UseAccPower+$result.UseAdditivePower}</td>
+  </tr>	
+  <tr class="bg_color">
+    <td class="bg_color2 txt_R">会员等级:</td>
+    <td>{if $result.VipExpireTime gt $nowTime}{$result.VipID}{/if}</td>				
+    <td class="bg_color2 txt_R">角色等级:</td>
+    <td>{$result.LvlID}</td>
+    <td class="bg_color2 txt_R">魅力等级:</td>
+    <td>{if $result.Loveliness}{$result.Loveliness}{else}0{/if}</td>
+  </tr>		
+  <tr class="bg_color">				
+    <td class="bg_color2 txt_R">主机绑定:</td>
+    <td>{if $result.MoorMachine}<font color="red">已绑定</font>{else}<font color="green">未绑定</font>{/if}</td>				
+    <td class="bg_color2 txt_R">锁定状态:</td>
+    <td id="userInfoLockStatus">{if $lFlag}<font color="red">锁定</font>{else}<font color="green">正常</font>{/if}</td>	
+    <td class="bg_color2 txt_R">封号状态:</td>
+    <td id="userInfoBlockStatus">{if $result.Blocked eq 0}<font color="green">正常</font>{else}<font color="red">封号</font>{/if}</td>
+  </tr>	
+  <tr class="bg_color">
+  	<td class="bg_color2 txt_R">银行状态:</td>
+  	<td>{if !$BMStatus.iFreeze}<font color="green">正常</font>{else}<font color="red">冻结</font>{/if}</td>
+  	<!--<td class="bg_color2 txt_R">背包状态(系统冻结):</td>
+  	<td>{if !$BMStatus.Status}<font color="green">正常</font>{else}<font color="red">冻结</font>{/if}</td>-->
+  	<td class="bg_color2 txt_R">机器码：</td>
+  	<td>{$result.MachineSerial} {if $DeptID == 2 || $DeptID == 3} <button value="{$result.MachineSerial}" id="addBlack" class="btn f2" style="float:right">拉黑</button> {/if} </td>
+    <td class="bg_color2 txt_R">微信码：</td>
+  	<td>{if $result.WeChat != ''}{$result.WeChat}{else}未绑定{/if}</td>
+  </tr>
+  <tr class="bg_color">			
+    <td class="bg_color2 txt_R">登陆次数:</td>
+    <td>{$result.LoginCount}</td>
+    <td class="bg_color2 txt_R">上次登陆IP:</td>
+    <td id="LastLoginIP" data-ip="{$result.LastLoginIP}" class="ip-info">{$result.LastLoginIP}</td>
+    <td class="bg_color2 txt_R">上次登陆时间:</td>
+    <td>{$result.LastLoginTime}</td>
+  </tr>	
+  <tr class="bg_color">
+    <td class="bg_color2 txt_R">注册IP:</td>
+    <td id="RegIP" data-ip="{$result.RegIP}" class="ip-info">{$result.RegIP}</td>
+    <td class="bg_color2 txt_R">注册时间:</td>
+    <td>{$result.AddTime}</td>
+    <td class="bg_color2 txt_R">真实姓名:</td>
+    <td>{$result.PlayerName}</td>
+  </tr>	
+  <tr class="bg_color">
+    <td class="bg_color2 txt_R">注册手机:</td>
+    <td  id="RegTel" data-tel="{$result.MobilePhone}" class="tel-info">{$result.MobilePhone}</td>				
+    <td class="bg_color2 txt_R">身份证号:</td>
+    <td   data-idcard="{$result.IdCard}" class="idcard-info">{$result.IdCard}</td>
+    <td class="bg_color2 txt_R">QQ:</td>
+    <td>{$result.QQ}</td>
+  </tr>	  
+  <tr class="bg_color">
+      <td class="bg_color2 txt_R">当前登陆状态:</td>
+      <td colspan="">{$result.RoomName}</td>
+      <td class="bg_color2 txt_R">客户端:</td>
+      <td colspan="">{$result.ClientTypeTips}</td>
+      <td class="bg_color2 txt_R">游戏锁定:</td>
+      <td colspan="">{$result.GameLock}</td>
+  </tr>	 
+   <!--<tr class="bg_color">-->
+      <!--<td class="bg_color2 txt_R">登陆绑定微信:</td>-->
+      <!--<td colspan="">{if $result.iLoginBindWeChat eq 0}未绑定{elseif $result.iLoginBindWeChat eq 1}绑定{else}未知 {/if}</td>-->
+      <!--<td class="bg_color2 txt_R">银行绑定微信:</td>-->
+      <!--<td colspan="">{if $result.iBankBindWeChat eq 0}未绑定{elseif $result.iBankBindWeChat eq 1}绑定{else}未知 {/if}</td>-->
+      <!--<td class="bg_color2 txt_R"></td>-->
+      <!--<td colspan=""></td>-->
+  <!--</tr>-->
+  <!--<tr class="bg_color">
+    <td class="bg_color2 txt_R">发送账号和登陆密码:</td>
+    <td colspan="5">
+    	<input type="button" id="btnSend" class="btn f2" Passport="{$result.Passport}" RoleID="{$result.RoleID}" value="点击发送">
+        <span class="orange" id="SendResMsg"></span>
+    </td>				
+  </tr>-->
+</table>
+{else}
+<div style="margin:10px">很抱歉，用户信息不存在~</div>
+{/if}
+<script language="javascript" type="text/javascript" src="/js/taobao_ip_info.js"></script> 
+<script language="javascript" type="text/javascript" src="/js/tel_segment.js"></script> 
+<script language="javascript" type="text/javascript" src="/js/idcard.js"></script> 
+<script language="javascript" type="text/javascript">
+{literal}
+	$('#btnSend').click(function(){	
+		$('#SendResMsg').html('');
+		var d=new Date();			
+		var now = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes();	
+		var dt = cookieCommon.c_get('DateTime');
+		if(dt>now){
+			$('#SendResMsg').html('5分钟内请匆重复发送');
+			return false;
+		}
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=sendPassportInfo}';
+		var Params='Passport='+$(this).attr('Passport')+'&RoleID='+$(this).attr('RoleID');
+		ajax.RequestJsonCallBack(setting.Url,Params,RBI.SendPassportInfo);
+{literal}
+	});
+	var RBI={
+		SendPassportInfo:function(data){
+			$('#SendResMsg').html(data.ResMsg);
+			if(data.iResult==0){
+				cookieCommon.c_set('DateTime',RBI.GetDateTime(),300);
+				$('#btnSend').attr('disabled','disabled');
+			}
+		},
+		GetDateTime:function(){
+			var d=new Date();			
+			now = new Date(d-0+300000);/*当前时间加上5分钟*/
+			var temp = now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate()+" "+now.getHours()+":"+now.getMinutes();
+			return temp;
+		},
+    GetRegIPInfo:function(data){
+        console.log(data);
+        var str = $('#RegIP').html()+data.data.country+data.data.area+data.data.isp;
+        $('#RegIP').html(str);
+    },
+    GetLastLoginIPInfo:function(data){
+        var str = $('#LastLoginIP').html()+data.data.country+data.data.area+data.data.isp;
+        $('#LastLoginIP').html(str);
+    },
+    SetSysBlack:function(data){
+      if(data==0){
+        alert('加入黑名单成功');
+      }
+      else
+        alert('已在黑名单');
+    }
+	};
+
+  $('#addBlack').click(function(){
+    var MachineSerial = $('#addBlack').val();
+{/literal}
+    setting.Url='{au d=YunWei c=SysBlack a=setSysBlack}';
+    var Params = 'LimitStr='+MachineSerial+'&TypeID=2';
+    ajax.RequestCallBack(setting.Url,Params,RBI.SetSysBlack);
+{literal}
+  });
+
+{/literal}
+
+
+</script>

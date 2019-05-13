@@ -1,0 +1,54 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置新闻类别
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'NewsCategory')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">新闻类别名称:</td>
+		<td width="83%" bgcolor="#FFFFFF">
+			<input type="text" class="txt" name="CateName" id="CateName" value="{$result.CateName}">
+			<span id="ErrorTip"></span>
+		</td>
+	  </tr>
+	</table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="CateID" value="{$result.CateID}" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'NewsCategory')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddNewsCate" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var NewsCate={
+	BindEvent:function(){
+		/*提交*/
+		$('#btnAddNewsCate').click(function(){
+			var CateName = $('#CateName').val();
+			var CateID = $('#CateID').val();
+			if(!CateName){
+				$('#ErrorTip').html('新闻类别不能为空');
+				$('#CateName').focus();
+				return false;
+			}
+			
+			setting.Params = 'CateID='+CateID+'&CateName='+encodeURIComponent(CateName);
+{/literal}
+			setting.Url='{au d=YunWei c=NewsCategory a=addNewsCategory}';	
+{literal}
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.addNewsCategory');	
+		});
+	}
+};
+{/literal}
+</script>

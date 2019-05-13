@@ -1,0 +1,129 @@
+<div class="sysWin" style="width:400px;">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>申请金币退回
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+    </h2>
+    <div class="bdy" style="padding:10px 10px 0 10px;">
+        <table id="tb_addApply" width="100%" border="0" cellpadding="0" cellspacing="0" class="bg_color">
+            <tr>
+                <td width="30%" class="txt_R">追回对象：</td>
+                <td class="txt_L pad5">
+                    <input type="text" id="txt_loginId" class="txt_inp" maxlength="8" />
+                    <span id="loginName" class="orange"></span><input id="roleId" type="hidden"/></td>
+            </tr>
+
+
+            <tr>
+                <td class="txt_R">退回数量：</td>
+                <td class="txt_L pad5"><input type="text" id="txt_number" class="txt_inp" maxlength="11" />元</td>
+            </tr>
+            <tr>
+                <td class="txt_R">退回原因：</td>
+                <td class="txt_L pad5">
+                    <select id="sel_compensateReason" style="width:130px; height:20px;">
+                        {foreach from=$arrCompensateReason item=reason}
+                        <option value="{$reason}">{$reason}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="txt_R">备注(50字)：</td>
+                <td class="txt_L pad5"><textarea id="txt_remark" style="width:200px; height:75px;"></textarea></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+            </tr>
+        </table>
+    </div>
+    <div class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <input id="btn_submit" type="button" class="bnStyle f2" style="margin-left:180px;" value="确&nbsp;定" />
+        <div class="botRight f1 right"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+    setting.Url = "{au d=Service c=ServiceCase a=insertHappyBeanCompensate}"
+    {literal}
+    $(function(){
+        /*双击标签关闭页面，再重新打开页面，无法再次关闭，因为页面加载的flash中 ExternalInterface引起的bug，加上以下代码可屏蔽此问题*/
+        window.onerror = function() {return true;};
+        /*初始化上传控件*/
+    });
+
+
+
+    $('#btn_submit').click(function(){
+
+        var loginId = $.trim($('#txt_loginId').val());
+        var loginName = $('#loginName').html();
+        var roleId = $('#roleId').val();
+        var number = $.trim($('#txt_number').val());
+        var reason = $('#sel_compensateReason').val();
+        var remark = $.trim($('#txt_remark').val());
+        var param = 'reason='+encodeURIComponent(reason);
+        param += '&loginId='+loginId+'&loginName='+encodeURIComponent(loginName)+'&roleId='+roleId;
+        // if(loginName != '' && loginName.length >= 2){
+        //     param += '&loginId='+loginId+'&loginName='+encodeURIComponent(loginName)+'&roleId='+roleId;
+        // }else{
+        //     $('#errorMsg').html('请填写正确的玩家编号');
+        //     return false;
+        // }
+
+        if(number != '' && !isNaN(number) && number > 0){
+            param += '&number='+number;
+        }else{
+            $('#errorMsg').html('请填写正确的数量');
+            return false;
+        }
+        if(remark != ''){
+            if(remark.length <= 50){
+                param += '&remark='+remark;
+            }else{
+                $('#errorMsg').html('备注请不要超过50个字');
+                return false;
+            }
+        }
+        param += '&serverId='+$('#ServerID').val();
+        ajax.Request('/?d=Service&c=ServiceWeathBack&a=addApplyTreasure',param,'addApplyCallback');
+    });
+
+    $('#txt_loginId').change(function(){
+        $('#errorMsg').html('');
+        $('#loginName').html('');
+        var loginId = $.trim($(this).val());
+        if(loginId == "" || isNaN(loginId)){
+            $('#errorMsg').html('请填写正确的玩家编号');
+            return false;
+        }
+        ajax.Request('/?d=Service&c=ServiceCase&a=getLoginName','loginId='+loginId,'getLoginNameCallback');
+    });
+
+    //获取玩家昵称回调
+    function getLoginNameCallback(data){
+        data=$.evalJSON(data);//字符串格式转为json对象
+        if(data.iResult == 1){
+            $('#loginName').html(data.msg);
+            $('#roleId').val(data.roleId);
+        }else{
+            alert(data.msg);
+        }
+    }
+
+    //申请补偿回调
+    function addApplyCallback(data){
+        data=$.evalJSON(data);//字符串格式转为json对象
+        if(data.iResult == 1){
+            $('#tb_addApply input[type="text"]').val('');
+            $('#loginName').html('');
+            $('#txt_remark').val('');
+        }
+        $('#errorMsg').html(data.msg);
+    }
+    {/literal}
+</script>

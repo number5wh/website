@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="JS代码,gvChart，图表插件，jquery图表，谷歌图表库，谷歌gvChart,JS图片特效,JS广告代码，JS常用代码" />
+<meta name="description" content="jQuery统计图表插件gvChart 0.1版，更多gvChart，图表插件，jquery图表，谷歌图表库，谷歌gvChart代码请访问脚本之家JS代码频道。" />
+<title>jQuery统计图表插件gvChart 0.1版_脚本之家</title>
+<script src="/js/jquery-1.4.2.min.js"></script>
+<script src="/js/highcharts.js"></script>
+<script src="/js/exporting.js"></script>
+<script>
+{literal}
+$(function(){
+        $('#container').highcharts({
+            title: {
+                text: '玩家(<span style="color:#ff0000;font-size:12px">LoginID:{/literal}{$LoginID}{literal}, 游戏种类:{/literal}{$KindName}{literal}</span>)近15天内金币输赢报表',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: game918.com',
+                x: -20
+            },
+            xAxis: {
+                categories: [{/literal}{foreach from=$GameData item=Game name=GD}'{$Game.Day}'{if $smarty.foreach.GD.iteration<$GameData|@count},{/if}{/foreach}{literal}]
+            },
+            yAxis: {
+                title: {
+                    text: '金币'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '金币'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: '输赢',
+                data: [{/literal}{foreach from=$GameData item=Game name=GD}{$Game.TotalMoney}{if $smarty.foreach.GD.iteration<$GameData|@count},{/if}{/foreach}{literal}]
+            }]
+        });
+    });
+    
+{/literal}
+</script>
+
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>

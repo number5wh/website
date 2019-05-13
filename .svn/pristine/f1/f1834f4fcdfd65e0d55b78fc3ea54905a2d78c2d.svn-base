@@ -1,0 +1,82 @@
+<div class="sysWin" style="width:350px;">
+  <h2 class="f2 white">
+    <div class="tLeft f1 left"></div>服务事件编辑
+    <div class="tRight f1 right"></div>
+    <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+  </h2>
+  <div id="div_main" class="bdy" style="padding:10px 10px 0 10px;">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="bg_color">
+		<tr>
+			<td width="120px" class="txt_R">事件名称：</td>
+			<td class="txt_L pad5"><input type="text" id="evtName" class="txt_inp" maxlength="10" value="{$ServerEventInfo.EvtName}" />
+			<input type="hidden" id="evtId" class="txt_inp" maxlength="10" value="{$ServerEventInfo.ID}" />
+		</tr>
+		<tr>
+			<td class="txt_R">事件描述：</td>
+			<td class="txt_L pad5"><textarea id="evtDescription" style="width:200px; height:75px;">{$ServerEventInfo.EvtContent}</textarea></td>
+		</tr>
+		<tr>
+			<td class="txt_R">事件排序：</td>
+			<td class="txt_L pad5"><input type="text" id="evtSort" value="{$ServerEventInfo.EvtSortID}" class="txt_inp" maxlength="5" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+		</tr>
+	</table>
+</div>
+  <div id="div_bottom" class="bot f2">
+    <div class="botLeft f1 left"></div>
+    <input id="btn_submit" type="button" class="bnStyle f2" style="margin-left:120px;" value="确&nbsp;定" />
+    <input type="button" class="bnStyle f2" style="margin-left:10px;" value="取&nbsp;消" onClick="main.CloseMsgBox(false,'');" />
+    <div class="botRight f1 right"></div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+{literal}
+$("#btn_submit").click(function(){
+	var evtId = $('#evtId').val();
+	var evtName = $('#evtName').val();
+	var evtDescription = $('#evtDescription').val();
+	var evtSort = $('#evtSort').val();
+
+	var param = '';
+	if(evtId != ''){
+		param += '&evtId='+evtId;
+	}
+	if(evtName != ''){
+		param += '&evtName='+evtName;
+	}else{
+		$('#errorMsg').html('请填写正确事件名称');
+		return false;
+	}
+	if(evtDescription != '' && evtDescription.length<500){
+		param += '&evtDesc='+evtDescription;
+	}else{
+		$('#errorMsg').html('请填写正确的事件描述');
+		return false;
+	}
+	if(evtSort != '' && parseInt(evtSort,10)>=0){
+		param += '&evtSort='+evtSort;
+	}else{
+		$('#errorMsg').html('请填写正确的排序号，必须为非负整数');
+		return false;
+	}
+	
+	ajax.RequestCallBack('/?d=Service&c=ServiceManager&a=addServerEvent', param,function(data) {
+		data = $.evalJSON(data);//字符串格式转为json对象
+		if(data.iResult == 1){
+			if(evtId != '' && parseInt(evtId,10)>=0){
+				window.location.reload();
+			}
+			$('#evtName').val('');
+			$('#evtDescription').val('');
+			$('#evtSort').val('');				
+		}		
+		$('#errorMsg').html(data.msg);		
+	});
+});
+
+{/literal}
+</script>

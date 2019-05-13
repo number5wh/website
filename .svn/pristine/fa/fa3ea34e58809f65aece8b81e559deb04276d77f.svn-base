@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	//点击显示修改运势界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=showAddLuckyHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'LuckyID='+$(this).attr('id'),'callback.ShowAddLuckyHtml');
+		});	
+	});
+	//点击显示设置概率界面
+	$('.set').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=showAddLuckyProbHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'LuckyID='+$(this).attr('id'),'callback.ShowAddLuckyHtml');
+		});	
+	});
+	//点击删除运势信息
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=delLucky}';
+{literal}
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.Url,'LuckyID='+$(this).attr('id'),'callback.DelLucky');
+		});	
+	});		
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加运势" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="10%" bgcolor="#FFFFFF">运势级别</th>
+    <th width="13%" bgcolor="#FFFFFF">运势名称</th>
+    <th width="13%" bgcolor="#FFFFFF">掉落个数</th>
+    <th width="17%" bgcolor="#FFFFFF">掉落概率</th>
+	<th width="12%" bgcolor="#FFFFFF">随机概率</th>
+	<th width="13%" bgcolor="#FFFFFF">道具使用概率</th>
+    <th width="22%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$LuckyList item=Luck}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Luck.LuckyID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Luck.LuckyName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Luck.DropNum}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Luck.Probability}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Luck.RndProb}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Luck.SpProb}</td>
+    <td align="center" bgcolor="#FFFFFF">
+	  <a href="javascript:void(0)" class="set" id="{$Luck.LuckyID}">设置概率</a>
+      <a href="javascript:void(0)" class="edit" id="{$Luck.LuckyID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$Luck.LuckyID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

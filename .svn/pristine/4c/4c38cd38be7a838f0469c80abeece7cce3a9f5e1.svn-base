@@ -1,0 +1,48 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function() {
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GameTask a=showEdit}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'roomid='+$(this).attr('roomid')+'&reqround='+$(this).attr('reqround')+'&award='+$(this).attr('award')+'&taskname='+$(this).attr('taskname')+'&roomname='+$(this).attr('roomname'),'callback.ShowEditTask');
+                    });
+            });
+        }
+
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="20%">房间ID</th>
+        <th width="20%">房间名称</th>
+        <th width="10%">游戏局数</th>
+        <th width="10%">游戏奖励</th>
+        <th width="20%">任务名称</th>
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$TaskList item=Task}
+    <tr class="bg_color">
+        <td>{$Task.RoomId}</td>
+        <td>{$Task.RoomName}</td>
+        <td>{$Task.TaskReqRound}</td>
+        <td>{$Task.TaskAward}</td>
+        <td>{$Task.TaskName}</td>
+        <td>
+            <a href="javascript:void(0)" class="edit" roomname="{$Task.RoomName}" roomid="{$Task.RoomId}" reqround="{$Task.TaskReqRound}" award="{$Task.TaskAward}"  taskname="{$Task.TaskName}">修改</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="5">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $TaskList}
+    <tr class="bg_color">
+        <td colspan="5">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

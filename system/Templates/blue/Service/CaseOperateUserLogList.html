@@ -1,0 +1,27 @@
+<div class="sysWin" style="width:auto;">
+  <h2 class="f2 white">
+    <div class="tLeft f1 left"></div>操作用户记录
+    <div class="tRight f1 right"></div>
+    <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+  </h2>
+  <div style="border-left:1px solid #1e83b6;border-right:1px solid #1e83b6;border-bottom:1px solid #1e83b6;overflow:auto;width:817px;max-height:500px">
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbList txt_M">
+      <tr align="center" style="background-color:#FFF">
+        <td width="20%">操作时间</td>
+        <td width="60%">操作内容</td>       
+        <td width="20%">操作客服</td>
+      </tr>
+      {foreach from=$OperateUserLogList item=list}
+      <tr class="bg_color txt_M">        
+        <td>{$list.AddTime}</td>
+        <td>{$list.OpContent}</td>
+        <td>{$list.SysUserName}</td>
+      </tr>
+      {foreachelse}
+      <tr class="bg_color">
+        <td colspan="3">很抱歉，没有您要查询的信息~</td>
+      </tr>
+      {/foreach}
+    </table>
+  </div>  
+</div>

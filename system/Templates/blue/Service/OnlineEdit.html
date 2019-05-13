@@ -1,0 +1,58 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>添加备注
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <input type="hidden" name="RoleId" id="RoleId" value="{$online.roleid}" />
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="left" style="width:15%;padding-left:30px">备注:</td>
+                <td>
+                    <textarea name="descript" id="descript" cols="50" rows="15" class="textarea">{$online.descript}</textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <div class="botRight f1 left"></div>
+        <input type="button" class="btn f2 right btnCancel" value="取 消" />
+        <input type="button" class="btn f2 right" value="提 交" id="btnAddDes" />
+        <div class="orange right" id="AddOnlineDesMsg"></div>
+        <br class="clear" />
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var onlineEdit={
+        BindEvent:function(){
+            /*提交*/
+            $('#btnAddDes').click(function(){
+                    {/literal}
+                    setting.Url='{au d=YunYing c=Online a=addOnlineDes}';
+                    {literal}
+                    var RoleId = $('#RoleId').val();
+                    var descript = $('#descript').val();
+                    if(descript.length>0){
+                        setting.Params='RoleId='+RoleId+'&descript='+descript;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.AddOnlineDes');
+                    }
+                    else
+                    {
+                        alert("请填写备注");
+
+                    }
+                });
+            /*关闭弹出层*/
+            $('.btnCancel').click(function(){
+                main.CloseMsgBox(true,'Online')
+            });
+        }
+    }
+    {/literal}
+</script>

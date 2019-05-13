@@ -1,0 +1,80 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="6%">操作</th>
+    <th width="10%">申请时间</th>
+    <th width="8%">操作类型</th>
+    <th width="6%">状态</th>
+    <th width="12%">游戏玩家</th>
+    <th width="12%">申请原因</th>
+    <th width="12%">备注</th>
+	<th width="6%">申请人</th>
+	<th width="6%">审核人</th>
+	<th width="10%">审核时间</th>
+	<th width="12%">审核意见</th>
+  </tr>
+  {foreach from=$OperateVerifyList item=list}
+  <tr class="bg_color txt_M">
+  	<td>{if $list.Status==0}<a class="blue" href="javascript:getOperatePage({$list.PID},{$list.RoleID},{$list.OperationType},'{$list.Requirement}');">授权/拒绝</a>{/if}</td>
+  	<td>{$list.AddTime}</td>
+  	<td>{$list.OperationTypeName}</td>
+  	<td>{if $list.Status==0}待审核{elseif $list.Status==1}批&nbsp;准{else}拒&nbsp;绝{/if}</td>
+  	<td><a class="blue" href="javascript:showUserInfo({$list.RoleID},'{$list.LoginName}({$list.LoginID})');">{$list.LoginName}({$list.LoginID})</a></td>
+  	<td>{$list.Reason}</td>
+  	<td>{$list.Remarks}</td>
+  	<td>{$list.SysUserName}</td>
+  	<td>{$list.Checker}</td>
+  	<td>{$list.CheckTime}</td>
+  	<td>{$list.CheckRemarks}</td>
+  </tr>
+ {foreachelse}
+  <tr class="bg_color">
+    <td colspan="11">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  
+  {if $OperateVerifyList}
+  <tr class="bg_color txt_M">
+    <td id="operatePageBar" colspan="11">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript">
+{literal}
+	function getOperatePage(id,roleId,type,requirement){
+{/literal}
+		setting.Url = "{au d=Service c=ServiceAuth a=getOperateVerifyPage}";
+{literal}
+		type= parseInt(type,10);
+		if(type==5 && requirement!=''){
+			var content = "解除处罚的要求是"+requirement+"，请根据解封要求\\n对该用户做相应的处理再审核通过。"+"\\n\\n您确定已经对该用户"+requirement+"了吗？";
+			if(confirm(content)){
+				var param = "id="+id+"&roleId="+roleId+"&type="+type;
+				ajax.RequestCallBack(setting.Url, param,function(data) {
+					if(data == -1){
+						alert('参数异常');
+					}else{
+						main.OpenBox(data);
+					}
+				});
+			}
+		}else{
+			var param = "id="+id+"&roleId="+roleId+"&type="+type;
+			ajax.RequestCallBack(setting.Url, param,function(data) {
+				if(data == -1){
+					alert('参数异常');
+				}else{
+					main.OpenBox(data);
+				}
+			});
+		}
+	}
+
+	function showUserInfo(id,name){
+{/literal}
+		var url='{au d=Service c=ServiceRole a=getRoleInfo}';
+{literal}
+		setting.Params='&roleID='+id;
+		window.parent.main.AddTab(name,'ServiceRole'+id,url+setting.Params);
+	}
+{/literal}
+</script>

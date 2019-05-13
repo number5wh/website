@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+main .container{padding:28px;background:#fff;margin-top:4px;}
+.game-title {padding-bottom:20px;border-bottom:1px solid #eee;}
+.game-title .game-icon{width:86px;height:86px;border-radius:12px;}
+.game-title .game-icon img{width:86px;height:86px;border-radius:12px;}
+.game-title .fr{width:840px;}
+.game-title .fr h3{margin-top:6px;font-size:18px;color:#333;}
+.game-title .fr p{font-size:14px;line-height:24px;color:#666;}
+h4{border-left:5px solid #229fe7;color:#333;font-size:18px;padding-left:6px;margin:24px 0 10px;}
+.game-scroll{position:relative;border-bottom:1px solid #eee;padding-bottom:10px;}
+.game-scroll .hd a{position:absolute;display:inline-block;top:150px;}
+.game-scroll .hd .next{left:6px;}
+.game-scroll .hd .prev{right:6px;}
+.game-scroll .bd{width:862px;height:320px;margin:0 auto;}
+.game-scroll .bd li{width:400px;height:290px;margin:15px;float:left;}
+.game-scroll .bd img{width:400px;height:290px;}
+
+.explain h5{font-size:18px;color:#333;padding:10px 0;}
+.explain p{font-size:16px;color:#666;margin-bottom:0px;line-height:28px;}
+table td,table th{padding:8px;text-align:center;}

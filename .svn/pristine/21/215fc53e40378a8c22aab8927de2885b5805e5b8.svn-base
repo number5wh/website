@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运维后台</title>
+	<link type="text/css" rel="stylesheet" href="/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+	<link type="text/css" rel="stylesheet" href="/css/jquery.treeview.css" />
+	<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+	<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+	<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/jquery.cookie.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/jquery.treeview.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/main.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" language="javascript" src="/js/jquery.contextmenu.r2.js"></script>
+	<script type="text/javascript" src="/js/xheditor/xheditor.min.js"></script>
+
+	<script type="text/javascript" language="javascript">
+        {literal}
+        $(function(){
+            $('#logout').click(function(){
+                {/literal}
+                    setting.Url='{au d=login c=login a=logout}';
+                    {literal}
+                    ajax.Request(setting.Url,'');
+                });
+            {/literal}
+                var  AutoLogoutCheckTime = "{$AutoLogoutCheckTime}"*1000;
+                {literal}
+                setInterval("checkLastAction()",AutoLogoutCheckTime);//1000为1秒钟
+                setInterval("getReviwId()",300*1000);//1000为1秒钟
+            });
+        function checkLastAction()
+        {
+            {/literal}
+                setting.Url='{au d=Login c=login a=checkLastAction}';
+                var Params = '';
+                ajax.RequestCallBack(setting.Url,Params,login.checkLastAction);
+                {literal}
+            }
+            var login = {
+                checkLastAction:function (data){
+                    if(data!=0){
+                        {/literal}
+                            setting.Url='{au d=login c=login a=logout}';
+                            {literal}
+                            ajax.RequestCallBack(setting.Url,'',function(data){
+                                location.reload() ;
+                            });
+                        }
+                    }
+                }
+
+                function getReviwId()
+            {
+                {/literal}
+                    setting.Url='{au d=Main c=Index a=getReview}';
+                    {literal}
+                    var Params = '';
+                    ajax.RequestCallBack(setting.Url,Params,function(data){ $("#reviewid").html("("+data+")")});
+                }
+
+                function  synchroData(){
+
+                    {/literal}
+                        setting.Url='{au d=YunWei c=SynchroData a=synchroData}';
+                        {literal}
+                        ajax.RequestCallBack(setting.Url,'',function(data){
+                            alert("数据同步成功");
+                        });
+
+                    }
+                    {/literal}
+	</script>
+</head>
+
+<body class="gPage f1">
+<!--顶部-->
+<div class="gTop f2" id="gTop">
+	<div style="max-width: 1440px">
+		<div class="gLogo left">
+			<div  class="title"  style="margin: 10px 20px">
+			</div>
+		</div>
+		<span class="right" style="font-size: 14px">欢迎您:
+		<strong class="orange">{$UserName}</strong>
+		 {if  $DeptID!=1 && $DeptID !=5}
+		<a href="javascript:;" onclick="synchroData();">同步数据</a>
+		{/if}
+		<a href="" id="logout">注销</a> </span>
+	</div>
+	<div class="gTopRight left">
+		<div class="gTopInfo"></div>
+		<div class="gTab clear">
+			<ul>
+				<li id="Tab_desktop" class="curTab" onclick="main.Show('desktop')"><span>桌面</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="gMain">
+	<!--左边-->
+	<div class="gFpage left">
+		{$content}
+	</div>
+	<!--主区域-->
+	<div class="main left">
+		<iframe id="desktop" scrolling="auto" frameborder="0" src="/?d=main&c=Index&a=main"></iframe>
+	</div>
+	<!--右键菜单的源-->
+	<div class="contextMenu" id="myMenuSubFolder">
+		<ul>
+			<li id="close">关闭</li>
+			<li id="closeAll">关闭全部</li>
+			<li id="closeOthers">关闭其它</li>
+		</ul>
+	</div>
+</div>
+<br class="clear" />
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="10%" bgcolor="#FFFFFF">银行类型</th>
+  <th width="15%" bgcolor="#FFFFFF">取出金额</th>
+  <th width="15%" bgcolor="#FFFFFF">存入金额</th>
+  <th width="15%" bgcolor="#FFFFFF">转出金额</th>
+  <th width="15%" bgcolor="#FFFFFF">转入金额</th>
+  <th width="15%" bgcolor="#FFFFFF">扩容金额</th>
+  <th width="15%" bgcolor="#FFFFFF">系统收入</th>
+  </tr>
+  {foreach from=$BankChangeLogsList item=List offset=1}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$List.BankType}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.DrawMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.DepositMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.TransferInMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.TransferOutMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.ExpansionMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.SysMoney}</td>
+  </tr>
+  {/foreach}
+  {if $Total}
+  <tr style="font-weight:bold; background-color:#99CCFF">
+    <td align="center" bgcolor="#FFFFFF">总计</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.DrawMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.DepositMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.TransferInMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.TransferOutMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.ExpansionMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Total.SysMoney}</td>
+  </tr>
+  {else}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/if}  
+</table>

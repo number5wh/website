@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>游戏下载</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+{literal}
+
+{/literal}
+</style>
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="speed ">
+						<div class="form" style="text-align: center;">
+							<h1 style="color:#fff;margin-top: 20px;">每日签到</h1>
+							<a href="?n=index&a=activity&id=3"><h5 style="color:#fff;margin-top:10px;font-size:18px;">(每日签到送两万欢乐豆)</h5></a>
+						<form action="" method="post" class="register">
+							<table>
+								<tr>
+									<td class="one"><span>* </span>游戏账号 :</td>
+									<td><input type="text" name="txt_LoginCode" id="txt_LoginCode" style="width:300px;"></td>
+									<td><a href="#" onClick="SendSecCode();">发送验证码</a></td>
+								</tr>
+								<tr>
+									<td class="one"><span>* </span>验证码 :</td>
+									<td><input type="text" name="txt_CheckCode" id="txt_CheckCode"style="width:300px;"></td>
+									<td><span class="alert" style="width:180px"><img src="images/alert.png">微信公众号获取</span></td>
+								</tr> 
+							</table>
+							<input type="button" name="submit" id="submit" class="submit_res2" onClick="CheckInput();"value="">
+						</form>
+					</div>
+
+					</div>
+				</div>
+			</div>
+				<div style="clear: both"></div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+    <SCRIPT language="javascript" type="text/javascript">
+{literal}
+    function trim(str) {
+        return str.replace(/\s+/g, "");
+    }
+	
+    var codePat = /^[a-zA-Z]{1}([a-zA-Z0-9_]){2,15}$/;
+    var namePat = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/;
+
+    function CheckInput() {
+        var loginCode = $('#txt_LoginCode');
+		var CheckCode = $('#txt_CheckCode');
+		if(!CheckCode.val()){
+			alert('请输入验证码!');
+			CheckCode.focus();
+			return false;
+		}
+		var Url =  "?n=index&a=dailySign";
+		var Params = "LoginCode="+loginCode.val()+'&CheckCode='+CheckCode.val();
+		ajax.RequestJsonCallBack(Url,Params,function(data){
+			var iResult = data.iResult;
+					if(iResult==0){
+						location.href="?n=index&a=success";
+               		 }else if(iResult == -1){
+               		 	alert('验证码错误');
+               		 }
+					else {
+						alert('签到失败');
+					}
+	});
+    }
+    function SendSecCode(){
+        var loginCode = $('#txt_LoginCode');
+        var Url = "?n=index&a=sendSecCode";
+        var Params = "LoginCode="+loginCode.val();
+        			ajax.RequestJsonCallBack(Url,Params,function(data){
+					var iResult = data.iResult;
+                    if(iResult==-1)
+                    	alert('账号不存在')
+                    else if(iResult == -2)
+					alert('验证码发送失败');
+			   else if(iResult==0)
+					alert('验证码发送成功');
+			});
+    }
+    
+{/literal}
+</SCRIPT>
+</body>
+</html>

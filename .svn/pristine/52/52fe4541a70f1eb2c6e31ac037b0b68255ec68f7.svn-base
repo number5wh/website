@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var KindID = '';
+var KindName = '';
+var OrderBy = 'DESC';
+var OrderField = 'SummaryMoney';
+var Sys={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"Sys.CallBackGetPagerDayGameSort"';
+		var Param1 = '$(this).val(),"Sys.CallBackGetPagerDayGameSort"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+		
+	},
+	/*分页回调*/
+	CallBackGetPagerDayGameSort:function(data){
+		$('#PageList').html(data);
+		Sys.SetProperty();
+        if(OrderField == 'SummaryMoney'){
+            $('#WinRate').html("胜率(%)");
+            if(OrderBy == 'DESC'){
+                $('#SummaryMoney').html("金币数量↓")
+            }else{
+                $('#SummaryMoney').html("金币数量↑");
+            }
+        }else{
+            $('#SummaryMoney').html("金币数量");
+            if(OrderBy == 'DESC'){
+                $('#WinRate').html("胜率(%)↓")
+            }else{
+                $('#WinRate').html("胜率(%)↑");
+            }
+        }
+	},
+	Sort:function(that){
+		if(OrderBy=='DESC')
+			OrderBy = 'ASC';
+		else
+			OrderBy = 'DESC';
+		var EndTime = $('#EndTime').val();
+		setting.Params = '&KindID='+KindID+'&KindName='+encodeURIComponent(KindName)+'&OrderBy='+OrderBy+'&AddTime='+EndTime;
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerDayGameSort');
+	}
+};
+
+$(function(){	
+{/literal}
+	Sys.SetProperty();
+	setting.PageUrl = '{au d=YunYing c=DayGameSort a=getPagerGameSortList}';
+{literal}
+	$('.btn').click(function(){
+		KindID = $('select[name=\'GameKind\']').val();
+		KindName = $('select[name=\'GameKind\'] option[selected]').html();
+		var EndTime = $('#EndTime').val();
+		setting.Params = '&KindID='+KindID+'&KindName='+encodeURIComponent(KindName)+'&OrderBy='+OrderBy+'&AddTime='+EndTime;
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerDayGameSort');
+	});
+	$('#EndTime').focus(function(){
+		WdatePicker({minDate:'%y-%M-{%d-6}',{/literal}maxDate:'{$EndTime}'{literal}});
+	});		
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<!--<input type="button" class="btn f2" id="1020" value="欢乐五张" />
+<input type="button" class="btn f2" id="1100" value="快乐30秒" /> 
+<input type="button" class="btn f2" id="3160" value="幸运骰子" /> 
+<input type="button" class="btn f2" id="1010" value="牛牛" /> 
+<input type="button" class="btn f2" id="1140" value="通比牛牛" /> 
+<input type="button" class="btn f2" id="1000" value="诈金花梭哈版" />-->
+<fieldset class="left">
+<span class="left" style="margin:0">查询日期：</span>
+<input id="EndTime" class="txt left" type="text" value="{$EndTime}" size="12" />
+<span class="left" style="margin:0">游戏种类：</span>
+<select name="GameKind">
+    {foreach from=$GameList item=v}
+        <option value="{$v.KindID}">{$v.KindName}</option>
+    {/foreach}
+</select>
+</fieldset>
+<input type="button" class="btn f2" value="查找"/>
+<div id="PageList">
+{include file="$skin/YunYing/DayGameSortListPage.html"}
+</div>
+
+</body>
+</html>

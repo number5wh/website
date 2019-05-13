@@ -1,0 +1,101 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>权限配置
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+			 <tr><td >
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<input class="hide" id="RoleID" value="{$Role.RoleID}" />
+		  <tr>
+			<td width="32%" align="right">管理权限:</td>
+			<td width="68%">
+			</td>
+		  </tr>	
+			{foreach from = $MasterRight item = M}
+			<tr>
+			<td width="32%" align="right"></td>
+			<td width="68%">
+				<input type="checkbox" name="MasterRight" class="MasterRight" value="{$M.RightID}" {if $M.RightID & $Role.MasterRight} checked="checked" {/if}/>{$M.RightName} 
+			</td>
+		  </tr>	
+				{/foreach}
+			</table>
+				</td>
+				<td style="vertical-align :top">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="32%" align="right">玩家权限</td>
+			<td width="68%"></td>
+		  </tr>	
+		  {foreach from = $UserRight item = U}
+			<tr>
+			<td width="32%" align="right"></td>
+			<td width="68%">
+				<input type="checkbox" name="UserRight" class="UserRight"  {if $U.RightID & $Role.UserRight}checked="checked" {/if} value="{$U.RightID}"/>{$U.RightName} 
+			</td>
+		  </tr>	
+		{/foreach}
+			</table>
+				</td><td  style="vertical-align :top">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		 <tr>
+			<td width="32%" align="right">系统权限</td>
+			<td width="68%"></td>
+		  </tr>	
+		  {foreach from = $SystemRight item = U}
+			<tr>
+			<td width="32%" align="right"></td>
+			<td width="68%">
+				<input type="checkbox" name="SystemRight" class="SystemRight"  {if $U.RightID & $Role.SystemRight}checked="checked" {/if} value="{$U.RightID}"/>{$U.RightName} 
+			</td>
+		  </tr>	
+		{/foreach}
+		  <input style ="display:none" name="CfgType" id="CfgType" value="{$ConfigInfo.CfgType}"/>
+	  </table>
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnSetRoleRight" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var cfg={
+	BindEvent:function(){
+		$('#btnSetRoleRight').click(function(){
+			var RoleID = $('#RoleID').val();
+			var MasterRight = 0;
+			$('.MasterRight').each(function(){
+				if($(this).attr('checked')) MasterRight += parseInt($(this).val());
+			});
+			var UserRight = 0;
+			$('.UserRight').each(function(){
+				if($(this).attr('checked')) UserRight += parseInt($(this).val());
+			});
+			var SystemRight = 0;
+			$('.SystemRight').each(function(){
+				if($(this).attr('checked')) SystemRight += parseInt($(this).val());
+			});
+			
+{/literal}
+			setting.Url='{au d=YunWei c=PlayerA a=setRoleRight}';
+{literal}
+			setting.Params='RoleID='+RoleID+'&MasterRight='+MasterRight+'&UserRight='+UserRight+'&SystemRight='+SystemRight;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.setRoleRight');
+		});
+	}
+};
+{/literal}
+</script>

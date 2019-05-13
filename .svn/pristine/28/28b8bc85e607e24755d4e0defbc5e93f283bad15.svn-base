@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+/*分页回调*/
+var callback={
+	CallBackSysUserPwd:function(data){
+		if(data==0)
+			$('#btnUpdatePwd').next().html('密码修改成功');
+		else if(data==-1)
+			$('#btnUpdatePwd').next().html('密码修改失败');
+		else if(data==-2)
+			$('#btnUpdatePwd').next().html('用户不存在');
+		else if(data==-3)
+			$('#btnUpdatePwd').next().html('原密码输入错误');
+		else if(data==-4)
+			$('#btnUpdatePwd').next().html('新密码和确认密码输入不一致');
+	}
+};
+$(function(){
+	/*添加管理员*/
+	$('#btnUpdatePwd').click(function(){
+		var OldPwd = $.trim($('#OldPwd').val());
+		var NewPwd = $.trim($('#NewPwd').val());
+		var ConfirmPwd = $.trim($('#ConfirmPwd').val());
+		
+		$('#OldPwd').next().html('*');
+		$('#NewPwd').next().html('*');
+		$('#ConfirmPwd').next().html('*');
+		$('#btnUpdatePwd').next().html('');
+		if(OldPwd==''){
+			$('#OldPwd').focus();
+			$('#OldPwd').next().html('*请输入原密码');
+			return false;
+		}
+		if(NewPwd==''){
+			$('#NewPwd').focus();
+			$('#NewPwd').next().html('*请输入新密码');
+			return false;
+		}
+		if(ConfirmPwd==''){
+			$('#ConfirmPwd').focus();
+			$('#ConfirmPwd').next().html('*请输入确认密码');
+			return false;
+		}
+		if(NewPwd!=ConfirmPwd){
+			$('#ConfirmPwd').focus();
+			$('#ConfirmPwd').next().html('*新密码和确认密码输入不一致');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunWei c=SysUserPwd a=updateSysUserPwd}';
+		setting.Params = 'OldPwd='+OldPwd+'&NewPwd='+NewPwd+'&ConfirmPwd='+ConfirmPwd;
+		ajax.RequestCallBack(setting.Url,setting.Params,callback.CallBackSysUserPwd);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+
+<table width="50%" border="0" cellpadding="1" cellspacing="1" class="tbList">  
+  <tr>
+    <td width="21%" align="right" bgcolor="#FFFFFF">原密码:</td>
+    <td width="79%" align="left" bgcolor="#FFFFFF"><input type="password" id="OldPwd" class="txt"><span class="red">*</span></td>    
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">新密码:</td>
+    <td align="left" bgcolor="#FFFFFF"><input type="password" id="NewPwd" class="txt"><span class="red">*</span></td>    
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">确认密码:</td>
+    <td align="left" bgcolor="#FFFFFF"><input type="password" id="ConfirmPwd" class="txt"><span class="red">*</span></td>    
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td align="left" bgcolor="#FFFFFF"><input type="button" id="btnUpdatePwd" class="btn f2" value="修改密码"><span class="red"></span></td>    
+  </tr>
+</table>
+</body>
+</html>

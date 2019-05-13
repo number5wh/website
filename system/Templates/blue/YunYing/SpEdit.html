@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	sp.GetSpClass();
+	$('#btnAddSpPublic').click(function(){
+		var SpID = $('#SpList').val();
+		var Sex = $('#Sex').val();
+		var Level = $('#Level').val();
+		var VipID = $('#VipID').val();		
+		var SortID = $('#SortID').val();
+		var IsRecommend = $('#IsRecommend').val();
+		var Price = $('#Price').val();
+		var PublicSpID = $('#PublicSpID').val();		
+		var StartTime = $('#StartTime').val();
+		var EndTime = $('#EndTime').val();
+		var MaxStockNum = $('#MaxStockNum').val();
+		var MaxBuyNum = $('#MaxBuyNum').val();
+		var IconID = 0;
+		$('input[name="IconID"]').each(function(){
+			if($(this).attr('checked'))
+				IconID += parseInt($(this).val());
+		})
+		$('#SpList').next().html('*');
+		$('#Level').next().html('*0表示不限等级');
+		$('#SortID').next().html('*');
+		$('#Price').next().html('*');
+		$('#EndTime').next().html('');
+		if(isNaN(SpID) || SpID<=0){
+			$('#SpList').next().html('*请选择正确的道具');
+			$('#SpList').focus();
+			return false;
+		}
+		if(isNaN(Level) || Level<0){
+			$('#Level').next().html('*请输入正确的等级限制');
+			$('#Level').focus();
+			return false;
+		}
+		if(isNaN(SortID) || SortID<0){
+			$('#SortID').next().html('*请输入正确的排序号');
+			$('#SortID').focus();
+			return false;
+		}
+		if(isNaN(Price) || Price<0){
+			$('#Price').next().html('*请输入正确的单价');
+			$('#Price').focus();
+			return false;
+		}
+		if(StartTime=='' && EndTime!='' || StartTime!='' && EndTime==''){
+			$('#EndTime').next().html('*请输入正确的限购时间');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunYing c=SpRelease a=releaseSp}';
+		setting.Params = 'Sex='+Sex+'&Level='+Level+'&VipID='+VipID+'&SortID='+SortID+'&IsRecommend='+IsRecommend+'&SpID='+SpID+'&Price='+Price+'&IconID='+IconID+'&PublicSpID='+PublicSpID+'&StartTime='+StartTime+'&EndTime='+EndTime+'&MaxStockNum='+MaxStockNum+'&MaxBuyNum='+MaxBuyNum;
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.ReleaseSp');
+{literal}	
+	});
+});
+var sp={
+	/*道具分类*/
+	GetSpClass:function(action){
+{/literal}
+		setting.Url = '{au d=YunYing c=SpRelease a=getSpClass}';
+		setting.Params = 'TypeID='+$('#TypeID').val()+'&ClassID={$Sp.ClassID}';
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpReleaseClass');
+	},
+	/*指定分类下的道具列表*/
+	GetSpPublicList:function(){
+{/literal}
+		setting.Url = '{au d=YunYing c=SpRelease a=getSpPublicList}';
+		setting.Params = 'ClassID='+$('#ClassID').val()+'&SpID={$Sp.SpID}';
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpPubList');
+	},
+	/*指定道具信息*/
+	GetSpPublicInfo:function(){
+		/*如果是修改,控件禁选*/
+		if($('#PublicSpID').val()!=0){
+			$('#TypeID').attr('disabled','disabled');
+			$('#ClassID').attr('disabled','disabled');
+			$('#SpList').attr('disabled','disabled');
+			return;
+		}
+{/literal}
+		setting.Url = '{au d=YunYing c=SpRelease a=getSpPublicInfo}';
+		setting.Params = 'SpID='+$('#SpList').val();
+{literal}	
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpPublicInfo');
+	}
+}
+{/literal}
+</script>
+</head>
+
+<body>
+<!--<a href="{au d=YunYing c=SpRelease a=index}" style="display:block; line-height:22px">返回列表页</a>-->
+<form method="post">
+<input type="hidden" name="PublicSpID" id="PublicSpID" value="{$Sp.PublicSpID}" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">道具分类:</td>
+    <td width="83%" bgcolor="#FFFFFF">
+	   <select name="TypeID" id="TypeID" onchange="sp.GetSpClass();">
+            {foreach from=$SpClass item=SpC}
+            <option value="{$SpC.TypeID}" {if $SpC.TypeID==$Sp.TypeID}selected{/if}>{$SpC.TypeName}</option>
+            {/foreach}
+       </select>
+       <select name="ClassID" id="ClassID" onchange="sp.GetSpPublicList()" style="width:90px">
+       </select>
+	</td>
+  </tr>
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">道具名称:</td>
+    <td width="83%" bgcolor="#FFFFFF">
+		<select name="SpList" id="SpList" onchange="sp.GetSpPublicInfo()" style="width:120px">
+        </select> <span class="orange">*</span>
+	</td>
+  </tr>		  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">道具编号:</td>
+    <td bgcolor="#FFFFFF" id="tdSpNumber">{$Sp.SpNumber}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">资源编号:</td>
+    <td bgcolor="#FFFFFF" id="tdResourceID">{$Sp.ResourceID}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">缩略图:</td>
+    <td bgcolor="#FFFFFF"><img src="{$Sp.ImgPath}" width="50" height="50" id="tdImgPath"/></td>
+  </tr>  
+  <tr class="SpImg {if $Sp.KeyID!=1001}hide{/if}">
+    <td align="right" bgcolor="#FFFFFF">形象图(头像):</td>
+    <td bgcolor="#FFFFFF"><img src="{$Sp.ImgPath1}" width="50" height="50" id="tdImgPath1" /></td>
+  </tr>
+  <tr class="SpImg {if $Sp.KeyID!=1001}hide{/if}">
+    <td align="right" bgcolor="#FFFFFF">形象图:</td>
+    <td bgcolor="#FFFFFF"><img src="{$Sp.ImgPath2}" width="50" height="50" id="tdImgPath2" /></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">性别使用限制:</td>
+    <td bgcolor="#FFFFFF" id="tdSex">{if $Sp.Sex1==0}男{elseif $Sp.Sex1==1}女{else}不限{/if}   </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">等级使用限制:</td>
+    <td bgcolor="#FFFFFF" id="tdLevel">{$Sp.Level1} 级</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">黄钻使用限制:</td>
+    <td bgcolor="#FFFFFF" id="tdVipID">{if $Sp.VipID1==1}黄钻专用{else}不限{/if}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">使用场景:</td>
+    <td bgcolor="#FFFFFF" id="tdPlace">{$Sp.Place}
+        
+    </td>
+  </tr>
+  <tr class="{$SpPublic.Display}" id="tdTarget">
+    <td align="right" bgcolor="#FFFFFF">应用目标游戏:</td>
+    <td bgcolor="#FFFFFF" id="tdGameKind">{$Sp.GameKind}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF" id="tdTitle">{$Sp.Title}</td>
+    <td bgcolor="#FFFFFF" id="tdNumber">{$Sp.Number} {$Sp.Unit}</td>
+  </tr>    
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">道具简介:</td>
+    <td bgcolor="#FFFFFF" id="tdIntro">{$Sp.Intro}</td>
+  </tr>  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">单价:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="Price" id="Price" value="{$Sp.Price}" size="10"> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">排序:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="SortID" id="SortID" value="{$Sp.SortID}" size="6"> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">设为:</td>
+    <td bgcolor="#FFFFFF">    	
+        <select name="IsRecommend" id="IsRecommend">
+        	{foreach from=$RecList item=Rec}
+            <option value="{$Rec.TypeID}" {if $Sp.IsRecommend==$Rec.TypeID}selected{/if}>{$Rec.TypeName}</option>
+            {/foreach}
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">ICON图标:</td>
+    <td bgcolor="#FFFFFF">    	
+        <input type="checkbox" id="IconID_1" name="IconID" value="1" {if ($Sp.IconID & 1) >0}checked{/if}> 新品
+		<input type="checkbox" id="IconID_2" name="IconID" value="2" {if ($Sp.IconID & 2)  >0}checked{/if}> 热门
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">性别购买限制:</td>
+    <td bgcolor="#FFFFFF">			
+       <select name="Sex" id="Sex">
+            <option value="-1" selected="selected">不限</option>
+            <option value="0" {if 0==$Sp.Sex}selected{/if}>男</option>
+            <option value="1" {if 1==$Sp.Sex}selected{/if}>女</option>
+       </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">等级购买限制:</td>
+    <td bgcolor="#FFFFFF">			
+        <input type="text" name="Level" id="Level" value="{$Sp.Level}" class="txt"  size="6"/> 级 <span class="orange">*0表示不限等级</span>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">黄钻购买限制:</td>
+    <td bgcolor="#FFFFFF">
+    	<select name="VipID" id="VipID">
+            <option value="0" selected="selected">不限</option>
+            <option value="1" {if 1==$Sp.VipID}selected{/if}>黄钻专用</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">限购时间:</td>
+    <td bgcolor="#FFFFFF">
+	<input type="text" class="txt" name="StartTime" id="StartTime" value="{$Sp.StartTime}" size="10" onclick="new Calendar().show(this);" readonly="readonly" /> - 
+	<input type="text" class="txt" name="EndTime" id="EndTime" value="{$Sp.EndTime}" size="10" onclick="new Calendar().show(this);" readonly="readonly"/>   
+	 <span class="orange"></span>
+	</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">库存数量:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="MaxStockNum" id="MaxStockNum" value="{$Sp.MaxStockNum}" size="10"> <span class="orange">-1:表示不限库存</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">限购数量:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="MaxBuyNum" id="MaxBuyNum" value="{$Sp.MaxBuyNum}" size="6"></td>
+  </tr>  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="button" class="btn f2" value="发 布" id="btnAddSpPublic" />
+    	<input type="reset" class="btn f2" value="重 置" /> 	<span id="ResultMsg" class="orange"></span>
+    </td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>

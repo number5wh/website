@@ -1,0 +1,80 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置运势
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysLucky')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="22%" align="right">运势级别:</td>
+			<td width="78%"><input type="text" class="txt" name="LuckyID" id="LuckyID" value="{$Lucky.LuckyID}"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">运势名称:</td>
+			<td><input type="text" class="txt" name="LuckyName" id="LuckyName" value="{$Lucky.LuckyName}" maxlength="10"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">随机概率:</td>
+			<td><input type="text" class="txt" name="RndProb" id="RndProb" value="{$Lucky.RndProb}" maxlength="5"/> <span class="orange">*请输入小数</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">道具使用概率:</td>
+			<td><input type="text" class="txt" name="SpProb" id="SpProb" value="{$Lucky.SpProb}" maxlength="5"/> <span class="orange">*请输入小数</span></td>
+		  </tr>	    
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysLucky')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddLucky" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var lucky={
+	BindEvent:function(){
+		$('#btnAddLucky').click(function(){
+			var LuckyID = $('#LuckyID').val();
+			var LuckyName = $('#LuckyName').val();		
+			var RndProb = $('#RndProb').val();
+			var SpProb = $('#SpProb').val();
+			$('#LuckyID').next().html('*');
+			$('#LuckyName').next().html('*');		
+			if(isNaN(LuckyID) || LuckyID<=0){
+				$('#LuckyID').next().html('*请输入正确的运势级别');
+				$('#LuckyID').focus();
+				return false;
+			}
+			if(LuckyName==''){
+				$('#LuckyName').next().html('*请输入运势名称');
+				$('#LuckyName').focus();
+				return false;
+			}
+			if(isNaN(RndProb) || RndProb<0){
+				$('#RndProb').next().html('*请输入正确的随机概率');
+				$('#RndProb').focus();
+				return false;
+			}
+			if(isNaN(SpProb) || SpProb<0){
+				$('#SpProb').next().html('*请输入正确的道具使用概率');
+				$('#SpProb').focus();
+				return false;
+			}
+{/literal}
+			setting.Url='{au d=YunWei c=SysLucky a=addLucky}';
+{literal}
+			setting.Params='LuckyID='+LuckyID+'&LuckyName='+LuckyName+'&RndProb='+RndProb+'&SpProb='+SpProb;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddLucky');
+		});
+	}
+};
+{/literal}
+</script>

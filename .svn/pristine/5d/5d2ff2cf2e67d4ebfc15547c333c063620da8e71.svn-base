@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <title>游戏下载</title>
+  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="/js/common.js"></script>
+  <script type="text/javascript" src="js/fun.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+{literal}
+
+{/literal}
+</style>
+</head>
+<body>
+    {include file="public/header.tpl"}
+  <div id="main">
+    <div class="content">
+      <div class="details h">
+                {include file="public/leftMenu.tpl"}
+        <div class="detailsRight">
+          <div class="speed ">
+            <div class="form" style="text-align: center;">
+              <h1 style="color:#fff;margin-top: 20px;">签到成功!</h1>
+          </div>
+          </div>
+        </div>
+      </div>
+        <div style="clear: both"></div>
+    </div>
+  </div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

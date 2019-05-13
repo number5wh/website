@@ -1,0 +1,29 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="15%">设置时间</th>
+    <th width="20%">客户端IP</th>
+    <!--<th width="20%">机器码</th>  -->
+    <th width="15%">原始值</th>  
+    <th width="15%">设置值</th>  
+	<th width="20%">说明</th>  
+  </tr>
+  {foreach from=$OpLogsList item=Logs}
+  <tr class="bg_color">
+    <td>{$Logs.SetTime}</td>
+    <td>{$Logs.ClientIP}</td>
+    <!--<td>{$Logs.MachieSerial}</td>-->
+    <td>{$Logs.LastValue}</td>
+    <td>{$Logs.SetValue}</td>
+	<td>{$Logs.SetSevice} {$Logs.OperateType} {$Logs.DateType} {$Logs.Description}</td>
+  </tr>    
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="9">很抱歉，没有您要查询的信息~</td>   
+  </tr> 
+  {/foreach}
+  {if $OpLogsList}
+  <tr class="bg_color">
+    <td colspan="9" id="RPLD">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

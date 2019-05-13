@@ -1,0 +1,31 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="8%" bgcolor="#FFFFFF">玩家编号</th>
+  <th width="10%" bgcolor="#FFFFFF">角色名</th>
+    <th width="16%" bgcolor="#FFFFFF">机器码</th>
+    <th width="9%" bgcolor="#FFFFFF">IP地址</th>
+  <th width="6%" bgcolor="#FFFFFF">电话</th>
+  <th width="9%" bgcolor="#FFFFFF">身份证</th>
+  <th width="10%" bgcolor="#FFFFFF">添加时间</th>
+  </tr>
+  {foreach from=$LogsList item=List}
+  <tr>
+  <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.RoleName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.MachineSerial}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.ClientIP}</td>  
+  <td align="center" bgcolor="#FFFFFF">{$List.Phone}</td> 
+  <td align="center" bgcolor="#FFFFFF">{$List.CardNo}</td> 
+  <td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>     
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $LogsList}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

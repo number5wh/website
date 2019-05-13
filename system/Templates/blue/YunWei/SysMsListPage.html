@@ -1,0 +1,55 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="25%" bgcolor="#FFFFFF">IP</th>
+    <th width="25%" bgcolor="#FFFFFF">间隔时间(分钟)</th>
+	<th width="25%" bgcolor="#FFFFFF">次数</th>
+	<th width="25%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SysMsList item=Sys}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Sys.MachineSerial}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Sys.Interval}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Sys.Times}</td>
+    <td align="center" bgcolor="#FFFFFF">		
+		<a href="javascript:void(0)" class="DeleteSysMs" id="{$Sys.MachineSerial}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SysMsList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){	
+	/*删除*/
+	$('.DeleteSysMs').click(function(){
+		if(confirm('确定要删除此记录吗?删除后将无法恢复')){
+{/literal}		
+			setting.Url = '{au d=YunWei c=SysMs a=deleteSysMs}';
+			setting.Params = 'MS='+$(this).attr('id');
+			ajax.RequestJsonCallBack(setting.Url,setting.Params,SysMs.CallBackDeleteSysMs);
+{literal}
+		}
+	});
+});
+var SysMs={
+	/*删除用户后的回调函数*/
+	CallBackDeleteSysMs:function(data){
+		if(data.iResult==0){
+			var Key = $.trim($('#Key').val());
+			setting.Params = '&Key='+encodeURIComponent(Key);
+			page.GetPage($('.txtPage').val(),"callback.GetPagerSysMsList");
+		}
+		else
+			alert('删除失败');
+	}
+};
+{/literal}
+</script>

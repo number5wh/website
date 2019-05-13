@@ -1,0 +1,10 @@
+@charset "utf-8";
+
+main .container{margin-top:4px;padding:86px 0px 124px;background:#fff;text-align:center;}
+.payInforH2 {padding-left:80px;color:#3d3d3d;font:400 18px 'Microsoft YaHei';float:left;}
+.payInforMon{padding-right:80px;line-height:70px;float:right;font-size:18px;}
+.payInforH2-sp,.payInforMon-num{color:#fe7c08;font-weight:bold;}
+.payGoWeixin .payGoWeixinLeft{margin:60px 60px 0;height:230px;}
+.payGoWeixinRight h5{font-size:18px;color:#229fe7;}
+.payGoWeixinRight p{font-size:16px;}
+.payGoWeixinRight a{color:#229fe7;}

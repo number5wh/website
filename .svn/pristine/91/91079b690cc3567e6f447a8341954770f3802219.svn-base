@@ -1,0 +1,46 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var SysList={
+	BindEvent:function(){		
+		/*点击删除角色等级配置信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=SysLoginID a=delLoginID}';
+				setting.Params = 'LoginID='+$(this).attr('id');
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.Url,setting.Params,'Sys.CallBackDelLoginID');
+			});	
+		});			
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="17%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="27%" bgcolor="#FFFFFF">使用情况</th>
+    <th width="27%" bgcolor="#FFFFFF">是否可分配</th>
+    <th width="29%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$LoginIDList item=List}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$List.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $List.IsUsed}<font class="red">已使用</font>{else}未使用{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $List.Sales}<font class="red">不可分配</font>{else}可分配{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">
+	  <a href="javascript:void(0)" class="del" id="{$List.LoginID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $LoginIDList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

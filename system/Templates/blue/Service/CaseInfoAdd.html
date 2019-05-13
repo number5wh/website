@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+
+  <div style="padding:10px 10px 0 10px;">
+    <table id="tb_addCase" width="500" border="0" cellpadding="0" cellspacing="0" class="tbList">
+      <tr class="bg_color">
+        <td class="txt_R">案件类型：</td>
+        <td class="txt_L pad5">
+		  <select id="sel_type">
+            <option value="1">盗　号</option>
+            <option value="2">违　规</option>
+          </select>
+          &nbsp;<span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">玩家编号：</td>
+        <td class="txt_L pad5"><input id="loginId" type="text" class="txt_inp" maxlength="10" />
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">玩家昵称：</td>
+        <td class="txt_L pad5"><span id="loginName"></span>
+        <input id="roleId" type="hidden"/></td>
+      </tr>
+      <tr class="bg_color more">
+        <td class="txt_R">玩家姓名：</td>
+        <td class="txt_L pad5"><input id="realName" type="text" class="txt_inp" maxlength="16" />
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color more">
+        <td class="txt_R">玩家身份证：</td>
+        <td class="txt_L pad5"><input id="cardId" type="text" class="txt_inp" maxlength="18" />
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color more">
+        <td class="txt_R">玩家手机：</td>
+        <td class="txt_L pad5"><input id="mobile" type="text" class="txt_inp" maxlength="11" />
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color more">
+        <td class="txt_R">玩家电话：</td>
+        <td class="txt_L pad5"><input id="telephone" type="text" class="txt_inp" maxlength="18" />
+          <span class="orange">格式：区号&nbsp;-&nbsp;号码</span></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">案发时间：</td>
+        <td class="txt_L pad5">
+          <input id="caseTimeNow" class="Wdate" type="text" onclick="WdatePicker({literal}{dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'%y-%M-%d'}{/literal})" />        
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color more">
+        <td class="txt_R">涉案数量：</td>
+        <td class="txt_L pad5"><input id="amount" type="text" class="txt_inp" maxlength="10" />
+          <span class="orange">*</span></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">案件描述：</td>
+        <td class="txt_L pad5"><textarea id="description" rows="5" cols="40"></textarea>
+          <span class="orange">*&nbsp;200个字内</span></td>
+      </tr>
+      <tr class="bg_color">
+        <td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+      </tr>
+       <tr class="bg_color">
+        <td colspan="2" align="center">
+      		<input id="btn_submit" type="button" class="bnStyle f2" value="录&nbsp;入" />
+       </tr>
+    </table>
+  </div>
+  
+</body>
+</html>
+<script type="text/javascript" language="javascript">
+{literal}
+$('#sel_type').change(function(){
+	if($(this).val()== 1){
+		$('#tb_addCase .more').show();
+	}else{
+		$('#tb_addCase .more').hide();
+	}
+});
+$('#btn_submit').click(function(){
+	var typeId = $.trim($('#sel_type').val());
+	var loginId = $.trim($('#loginId').val());
+	var loginName = $.trim($('#loginName').html());
+	var realName = $.trim($('#realName').val());
+	var cardId = $.trim($('#cardId').val());
+	var mobile = $.trim($('#mobile').val());
+	var telephone = $.trim($('#telephone').val());
+	var happenTime = $.trim($('#caseTimeNow').val());
+	var amount = $.trim($('#amount').val());
+	var description = textFun.Trim($('#description').val());		
+    var roleId = $('#roleId').val();
+    
+	if(loginName == '' || loginName.length < 2){
+		$('#errorMsg').html('请填写正确的玩家编号');
+		return false;
+	}else if(typeId == 1 && (realName == '' || realName.length < 2)){
+		$('#errorMsg').html('请填写正确的玩家姓名');
+		return false;
+	}else if(typeId == 1 && (cardId == '' || isNaN(cardId) || (cardId.length != 15 && cardId.length != 18))){
+		$('#errorMsg').html('请填写正确的玩家身份证');
+		return false;
+	}else if(typeId == 1 && (mobile == '' || mobile.length < 8)){
+		$('#errorMsg').html('请填写正确的玩家手机');
+		return false;
+	}else if(!dateRegx.test(happenTime) && !dateTimeRegx.test(happenTime)){
+		$('#errorMsg').html('请填写正确的案发时间:YYYY-MM-DD');
+		return false;
+	}else if((amount== '' || isNaN(amount) || amount < 0) && typeId==1){
+		$('#errorMsg').html('请填写正确的涉案数量');
+		return false;
+	}else if(description== '' || description.length>200){
+		$('#errorMsg').html('请填写正确的案件描述');
+		return false;
+	}else{
+		$('#errorMsg').html('');
+	}
+	var param = 'caseType='+typeId+'&loginId='+loginId+'&loginName='+encodeURIComponent(loginName)+'&realName='+encodeURIComponent(realName)+'&cardId='+cardId+
+			'&mobile='+mobile+'&telephone='+telephone+'&happenTime='+happenTime+'&amount='+amount+'&description='+encodeURIComponent(description)+'&roleId='+roleId;
+	ajax.Request('/?d=Service&c=ServiceCase&a=caseInsert',param,'addCaseCallback');
+});
+
+$('#loginId').change(function(){
+	$('#errorMsg').html('');
+	$('#loginName').html('');
+	var loginId = $.trim($(this).val());
+	if(loginId == "" || isNaN(loginId)){
+		$('#errorMsg').html('请填写正确的玩家编号');
+		return false;
+	}
+	ajax.Request('/?d=Service&c=ServiceCase&a=getLoginName','loginId='+loginId,'getLoginNameCallback');	
+});
+
+//获取玩家昵称回调
+function getLoginNameCallback(data){
+	data=$.evalJSON(data);//字符串格式转为json对象
+	if(data.iResult == 1){
+		$('#loginName').html(data.msg);
+		$('#roleId').val(data.roleId);
+	}else{
+		alert(data.msg);
+	}
+}
+
+//案件录入回调
+function addCaseCallback(data){
+	data=$.evalJSON(data);//字符串格式转为json对象
+	if(data.iResult == 1){
+		$('#tb_addCase input[type="text"]').val('');
+		$('#loginName').html('');
+		$('#description').val('');
+	}
+	$('#errorMsg').html(data.msg);
+}
+{/literal}
+</script>

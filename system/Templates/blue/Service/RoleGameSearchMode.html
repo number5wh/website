@@ -1,0 +1,53 @@
+<input type="button" id="MatchSummery" class="bnStyle f2" value="比赛汇总" />
+<fieldset style="margin-top:10px;">
+    <legend>{$MatchModeName}比赛查询</legend>  
+	 比赛时间:<input id="FromDate" type="text" onclick="new Calendar().show(document.getElementById('FromDate'));" class="txt" value="{$nowDate}" />-<input type="text" id="ToDate" onclick="new Calendar().show(document.getElementById('ToDate'));" class="txt" value="{$nowDate}" />   
+   <div style="margin-top:5px">
+	比赛名称:
+	{foreach from=$GameMatchList item=Match}
+	<input type="radio" class="Match" name="TypeID" value="{$Match.MatchTypeID}" /> {$Match.MatchName}
+	{/foreach}
+	</div>
+	<div id="GameRoomList" style="margin-top:5px;margin-bottom:5px">
+		
+	</div>
+	<input type="hidden" id="matchRoleID" value="{$RoleID}">
+    <input type="button" id="MatchSearchBtn" class="bnStyle f2" value="查 询" />    
+</fieldset>
+<div id="GameSearchModeDetailList"></div>
+<script type="text/javascript">
+{literal}
+$(function(){
+	$(".Match").click(function(){
+		var matchTypeID = $(this).val();
+		if(matchTypeID){
+			$.post('/?d=Service&c=ServiceRole&a=getGameRoomList',{MatchTypeID:matchTypeID}, function(data){
+				$("#GameRoomList").html(data);
+			})
+		}
+	});	
+	$("#MatchSearchBtn").click(function(){
+		var StartTime = $('#FromDate').val();
+		var EndTime = $('#ToDate').val();
+		var MatchTypeID = '';
+		var RoomID = '';
+		var roleID = $('#matchRoleID').val();
+		$('.Match').each(function(){
+			if($(this).attr('checked'))
+				MatchTypeID = $(this).val();
+		});
+		$('.Room').each(function(){
+			if($(this).attr('checked'))
+				RoomID += $(this).val() + ',';
+		});
+		if(RoomID!='') RoomID = RoomID.substring(0,RoomID.length-1);
+		setting.Params = '&RoleID='+roleID+'&StartTime='+StartTime+'&EndTime='+EndTime+'&MatchTypeID='+MatchTypeID+'&RoomID='+RoomID;
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getGameSearchModeResultList',setting.Params,'callback.GetGameSearchResultList');	
+	});
+	$("#MatchSummery").click(function(){
+		setting.Params = 'RoleID='+$('#matchRoleID').val();
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getGameSummaryDetail',setting.Params,'callback.GetGameSummaryDetail');	
+	});
+})
+{/literal}
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var Sys={
+            SetProperty:function(){
+                //setting.Params = '';
+                init.SetTableRows();//初始化鼠标移到表格行显示背景
+                //绑定分页
+                var Param = '$(this).attr("pg"),"Sys.CallBackGetPagerUserBankRate"';
+                var Param1 = '$(this).val(),"Sys.CallBackGetPagerUserBankRate"';
+                evt.BindPageClick('','page.GetPage',Param,Param1);
+            },
+            /*分页回调*/
+            CallBackGetPagerUserBankRate:function(data){
+                $('#PageList').html(data);
+                Sys.SetProperty();
+            },
+            Search:function(){
+                var LoginID = $('#LoginID').val();
+                var searchtype = $('#searchtype').val();
+                if(LoginID!='' && isNaN(LoginID)){
+                    $('#Msg').html('请填写正确的玩家编号');
+                    return;
+                }
+                setting.Params = '&RoleID='+LoginID+'&searchtype='+searchtype;
+                ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerUserBankRate');
+            }
+        };
+
+        $(function(){
+            {/literal}
+                setting.PageUrl = '{au d=YunYing c=DayUserChange a=getBankChangepage}';
+                {literal}
+                Sys.SetProperty();
+                /*点击搜索*/
+                $('#btnSearch').click(function(){
+                    Sys.Search();
+                });
+            });
+        {/literal}
+    </script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;width:400px" class="left">
+    <legend>搜索</legend>
+    <div style="margin-bottom:3px">
+        类型：
+        <select id="searchtype">
+            <option value="">全部</option>
+            <option value="5">收入</option>
+            <option value="2">转出</option>
+        </select>
+        <input type="text" class="txt" id="LoginID" size="15" maxlength="12">
+        <input type="button" id="btnSearch" class="btn f2" value="搜 索">
+    </div>
+</fieldset>
+
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerUserBankRate');">
+    <div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<br class="clear" />
+<div id="PageList">
+    {include file="$skin/YunYing/DayUserChangePage.html"}
+</div>
+</body>
+</html>

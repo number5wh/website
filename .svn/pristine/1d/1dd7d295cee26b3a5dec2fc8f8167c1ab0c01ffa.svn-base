@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var rgdd={
+	GetUserGameDataDetailPage:function(sFlag){
+		if(!sFlag)sFlag=0;
+{/literal}
+		setting.PageUrl='{au d=Service c=ServiceRole a=getPagerUserGameDataDetail}';
+		setting.Params = 'RoleID='+$('#RoleID').val()+'&KindID='+$('#KindID').val()+'&StartTime='+$('#EndTime').val()+'&EndTime='+$('#EndTime').val()+'&RoomType='+$('#RoomType').val()+'&sFlag='+sFlag;
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerUserGameDataDetail');
+{literal}			
+	},
+	Search:function(){
+		cookieCommon.c_del('iRecordsCount'+$('#RoleID').val());
+		$('#KindID').val($('#KindList').val());
+		rgdd.GetUserGameDataDetailPage(1);
+	}
+};
+$(function(){
+	$('#StartTime').focus(function(){
+		WdatePicker({{/literal}minDate:'{$p.StartTime}',{literal}maxDate:'#F{$dp.$D(\'EndTime\')}'});
+	});
+	$('#EndTime').focus(function(){
+		WdatePicker({minDate:'#F{$dp.$D(\'StartTime\')}',{/literal}maxDate:'{$p.EndTime}'{literal}});
+	});
+});
+{/literal}
+</script>
+</head>
+<body>
+
+<h2 class="f2 white">
+	<div class="tLeft f1 left"></div>每日游戏成绩查询
+	<div class="tRight f1 right"></div>
+	<br class="clear" />
+</h2>
+
+<div class="bdy">
+   	<fieldset>
+           <legend>查询</legend>    
+           游戏日期:<input id="StartTime" type="text" value="{$p.StartTime}" size="10" class="hide" /> <input id="EndTime" type="text" value="{$p.EndTime}" size="10" />
+           游戏名称:
+           <select id="KindList" style="margin-right:10px">
+			{foreach from=$KindList item=kind}
+               <option value="{$kind.KindID}" {if $kind.KindID==$p.KindID}selected{/if}>{$kind.KindName}</option>
+			{/foreach}
+           </select>
+           房间类型：
+       	<select name="RoomType" id="RoomType" >
+			{foreach from=$RoomType item =t}
+				<option  value="{$t.TypeID}" {if $t.TypeID eq $p.RoomType} selected ="selected"{/if}>{$t.TypeName}</option>
+			{/foreach}
+		</select>
+           <input type="button" class="btn f2" value="搜 索" onclick="rgdd.Search()" />
+		<input type="hidden" id="RoleID" value="{$p.RoleID}" />
+		<input type="hidden" id="KindID" value="{$p.KindID}" />
+       </fieldset>
+       <div id="UseGameDataDetail">
+       </div>
+</div>
+</body>
+</html>

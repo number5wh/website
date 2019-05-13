@@ -1,0 +1,70 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏盾
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<input type="hidden" name="OldID" id="OldID" value="{$GameDun.ID}" />
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="17%" align="right">分组ID:</td>
+			<td width="83%"><input type="text" class="txt" name="ID" id="ID" value="{$GameDun.ID}"></td>
+		  </tr>
+		  <tr>
+			<td width="17%" align="right">分组名:</td>
+			<td width="83%"><input type="text" class="txt" name="GroupName" id="GroupName" value="{$GameDun.GroupName}"></td>
+		  </tr>
+		  <tr>
+			<td align="right">分组URL:</td>
+			<td width="83%"><input type="text" class="txt" name="GroupURL" id="GroupURL" value="{$GameDun.GroupURL}"></td>
+		  </tr>
+		  <tr>
+			<td align="right">类型:</td>
+			<td><input type="text" class="txt" name="Type" id="Type" value="{$GameDun.Type}"></td>
+		  </tr>
+		  <tr>
+			<td align="right">参数类型:</td>
+			<td><input type="text" class="txt" name="ParameterType" id="ParameterType" value="{$GameDun.ParameterType}"></td>
+		  </tr>
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right btnCancel" value="取 消" />
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameDun" />
+        <div class="orange right" id="AddGameDunMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var svrEdit={
+	BindEvent:function(){
+		/*提交*/
+		$('#btnAddGameDun').click(function(){
+{/literal}
+			var OldID=$('#OldID').val();
+            var ID=$('#ID').val();
+            var GroupName=$('#GroupName').val();
+            var GroupURL=$('#GroupURL').val();
+            var Type=$('#Type').val();
+            var ParameterType=$('#ParameterType').val();
+			setting.Url='{au d=YunWei c=GameDun a=addGameDun}';	
+			setting.Params ='OldID='+OldID+'&ID='+ID+'&GroupName='+GroupName+'&GroupURL='+GroupURL+'&Type='+Type+'&ParameterType='+ParameterType;
+			ajax.Request(setting.Url,setting.Params,'callback.addGameDun');
+{literal}		
+		});	
+		/*关闭弹出层*/
+		$('.btnCancel').click(function(){
+			main.CloseMsgBox(false,'GameDun');
+		});
+	}
+};
+{/literal}
+</script>

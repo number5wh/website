@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+main .container{padding:25px;background:#fff;margin-top:4px;}
+.help-lists{width:260px;border:1px solid #dcdcdc;border-bottom:none;}
+.help-list-title{height:35px;font-size:14px;color:#333;background:#e8e8e8;line-height:35px;border-bottom:1px solid #dcdcdc;text-align:center;}
+.help-list{height:46px;font-size:14px;line-height:46px;border-bottom:1px solid #dcdcdc;padding-left:20px;}
+.help-list a{color:#666666;}
+.help-list a:hover{color:#229fe7;}
+
+.help-box{width:520px;margin-left:100px;}
+.help-box h3{text-align:center;margin-top:0;color:#333;font-size:16px;}
+.help-box p{color:#666;font-size:14px;}

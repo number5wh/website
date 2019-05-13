@@ -1,0 +1,69 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th>开通方式</th>
+    <th>购买天数</th>
+    <th>购买时间</th>
+    <!--<th>开通状态</th>-->
+      <!--<th>会员等级</th>
+      <th>日工资领取</th>
+      <th>月礼包领取</th>-->
+  </tr>
+   {if $result}
+  {foreach from=$result item=v}
+  <tr class="bg_color">
+    <td>{if $v.BuyType eq 1}充值{elseif $v.BuyType eq 2}黄钻补偿{elseif $v.BuyType eq 3}黄钻回收{/if}</td>
+    <td>{$v.BuyDays}天</td>
+    <td>{$v.BuyTime}</td>
+
+      <!--<td>{$v.ExpireTime}</td>-->
+    <!--<td>{if $v.Status}成功{else}失败{/if}</td>-->
+      <!--<td>{$v.VipID}</td>
+      <td><a href="javascript:void(0)" onclick="detail.ShowSalaryDetail('{$v.startTime}', '{$v.expire}');">明细</a></td>
+      <td><a href="javascript:void(0)" onclick="detail.ShowGiftDetail('{$v.startTime}', '{$v.expire}');">明细</a></td>-->
+  </tr>
+  {/foreach}
+  {else}
+  <tr class="bg_color">
+    <td colspan="3">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/if}
+  {if $result}
+  <tr class="bg_color">
+    <td id="RoleVipPage" colspan="3">
+    	<input type="hidden" id="vipRoleID" value="{$RoleID}" />
+    	<input type="hidden" id="nowTime" value="{$nowTime}" />
+    	{include file="$skin/Inc/Page.inc.html"}
+    </td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript">
+{literal}
+var detail={
+		GetEndTime:function(expireTime){
+			var nowDate = $('#nowTime').val();
+			if(nowDate > expireTime){
+				return expireTime;
+			}else{
+				return nowDate;
+			}
+		},
+		ShowSalaryDetail:function(startTime, expireTime){
+			var endTime = detail.GetEndTime(expireTime);
+	{/literal}
+			var param = 'RoleID='+$('#vipRoleID').val()+'&StartTime='+startTime+'&EndTime='+endTime+'&VipOpenFlag=1';
+			setting.Url = '{au d=Service c=ServiceRole a=showSalaryDetail}';
+	{literal}
+			ajax.RequestUrl(setting.Url, param,'callback.ShowSalaryDetail');
+		},
+		ShowGiftDetail:function(startTime, expireTime){
+			var endTime = detail.GetEndTime(expireTime);
+	{/literal}
+			var param = 'RoleID='+$('#vipRoleID').val()+'&StartTime='+startTime+'&EndTime='+endTime+'&VipOpenFlag=1';
+			setting.Url = '{au d=Service c=ServiceRole a=showMonthGiftPackage}';
+	{literal}
+			ajax.RequestUrl(setting.Url, param,'callback.ShowMonthGiftPackage');
+		}		
+	};
+{/literal}
+</script>

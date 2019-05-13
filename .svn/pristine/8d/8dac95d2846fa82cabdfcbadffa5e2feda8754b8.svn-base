@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        $(function(){
+            {/literal}
+                setting.PageUrl='{au d=Service c=ControlleUser a=getPagerRoom}';
+                {literal}
+                ajax.RequestUrl(setting.PageUrl,'','callback.GetPagerRoom');
+                $('#btnSearch').click(function(){
+                    setting.Params = 'KindID='+$('#KindID').val()+'&RoomName='+encodeURIComponent($('#RoomName').val());
+                    ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerRoom')
+                });
+            });
+        {/literal}
+    </script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:5px">
+    <legend>信息搜索</legend>
+    游戏种类:
+    <select id="KindID">
+        <option value="0">全部</option>
+        {foreach from=$KindList item=kind}
+        <option value="{$kind.KindID}">{$kind.KindID} ({$kind.KindName})</option>
+        {/foreach}
+    </select>
+    房间名称:<input type="text" class="txt" id="RoomName" value="" />
+    <input type="button" class="btn f2" value="搜 索" id="btnSearch" />
+</fieldset>
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="window.location.reload();">
+    <div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<div id="GameRoomList">
+</div>
+</body>
+</html>

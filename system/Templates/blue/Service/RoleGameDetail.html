@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var rgd={
+	GetUserGameDetailPage:function(sFlag){
+		if(!sFlag)sFlag=0;
+{/literal}
+		setting.PageUrl='{au d=Service c=ServiceRole a=getPagerUserGameDetail}';
+		setting.Params = '&RoleID='+$('#RoleID').val()+'&KindID='+$('#KindID').val()+'&StartTime='+$('#EndTime').val()+'&EndTime='+$('#EndTime').val()+'&PlayResult='+$('#PlayResult').val()+'&RoomType='+$('#RoomType').val()+'&KindName='+$('#KindName').val()+'&sFlag='+sFlag+'&Hour='+$('#Hour').val()+'&Minute='+$('#Minute').val();
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerUserGameDetail');
+{literal}			
+	},
+	Search:function(){
+		cookieCommon.c_del('iRecordsCount'+$('#RoleID').val());
+		$('#KindID').val($('#KindList').val());
+		$('#KindName').val($('#KindList option:selected').text());
+		rgd.GetUserGameDetailPage(1);
+	}
+};
+$(function(){
+	$('#StartTime').focus(function(){
+		WdatePicker({{/literal}minDate:'{$p.StartTime}',{literal}maxDate:'#F{$dp.$D(\'EndTime\')}'});
+	});
+	$('#EndTime').focus(function(){
+		WdatePicker({minDate:'#F{$dp.$D(\'StartTime\')}',{/literal}maxDate:'{$p.EndTime}'{literal}});
+	});
+	var strOption = '';
+	var Num = '';
+	for(var i=0;i<=23;i++){
+		if(i<10)
+			Num='0'+i;
+		else
+			Num=i;
+		strOption += '<option value="'+Num+'">'+Num+'</option>';	
+	}
+	$('#Hour').html(strOption);
+	
+	strOption = '';
+	Num = '';
+	for(var i=0;i<=59;i++){
+		if(i<10)
+			Num='0'+i;
+		else
+			Num=i;
+		strOption += '<option value="'+Num+'">'+Num+'</option>';	
+	}
+	$('#Minute').html(strOption);
+});
+{/literal}
+</script>
+</head>
+<body>
+
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>游戏记录查询
+		<div class="tRight f1 right"></div>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+    	<fieldset>
+            <legend>查询</legend>    
+            游戏日期:<input id="StartTime" type="text" value="{$p.StartTime}" size="10" class="hide" /> <input id="EndTime" type="text" value="{$p.EndTime}" size="10" />
+            <select id="Hour">
+            </select>时
+            <select id="Minute">
+            </select>分
+            游戏名称:
+            <select id="KindList" style="margin-right:10px">
+				{foreach from=$KindList item=kind}
+                <option value="{$kind.KindID}" {if $kind.KindID==$p.KindID}selected{/if}>{$kind.KindName}</option>
+				{/foreach}
+            </select>
+           房间类型：
+       	<select name="RoomType" id="RoomType" >
+			{foreach from=$RoomType item =t}
+				<option  value="{$t.TypeID}" {if $t.TypeID eq $p.RoomType} selected ="selected"{/if}>{$t.TypeName}</option>
+			{/foreach}
+		</select>
+            游戏结果:
+            <select id="PlayResult" style="margin-right:10px">
+                <option value="-1" selected="selected">全部</option>
+                <option value="0">赢</option>
+                <option value="1">输</option>
+                <option value="2">和</option>
+				<option value="3">逃</option>
+            </select>
+            <input type="button" class="btn f2" value="搜 索" onClick="rgd.Search()" />
+			<input type="hidden" id="RoleID" value="{$p.RoleID}" />
+			<input type="hidden" id="KindID" value="{$p.KindID}" />
+			<input type="hidden" id="KindName" />
+        </fieldset>
+        <div id="UseGameDetail">
+        </div>
+	</div>
+</body>
+</html>

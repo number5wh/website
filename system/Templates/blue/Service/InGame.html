@@ -1,0 +1,37 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>解除卡房</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>		
+		<tr>
+			<td class='txt_R'>游戏种类：</td>
+			<td class='txt_L pad5'>
+				<select id='KindID' style='width:150px;'>
+					{foreach from=$arrKind item=k}
+					<option value='{$k.KindID}'>{$k.KindName}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>		
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad5 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad5'>
+				<input type='hidden' id='RoleID' value='{$roleID}' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){
+	
+	$('#applyBtn').click(function(){
+		var roleID = $.trim($('#RoleID').val());
+		var KindID = $.trim($('#KindID').val());
+		var params = 'KindID='+KindID+'&roleID='+roleID;
+		ajax.Request('/?d=Service&c=ServiceRole&a=updateInGame', params, 'callback.UpdateInGame');			
+	})
+})
+{/literal}
+</script>

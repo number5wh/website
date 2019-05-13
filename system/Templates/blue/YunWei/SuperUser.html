@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+    <script>
+
+        {literal}
+        function getAddSuperUserPage(){
+            ajax.RequestCallBack('/?d=YunWei&c=SuperUser&a=getAddSuperUserPage','',function(data){
+                main.OpenBox(data);
+            })
+        }
+        function getEditSuperUserPage(that){
+            var param = 'roleID='+$(that).attr('id');
+            ajax.RequestCallBack('/?d=YunWei&c=SuperUser&a=getEditSuperUserPage',param,function(data){
+                main.OpenBox(data);
+            })
+        }
+        function delSuperUser(that){
+            var param = 'roleId='+$(that).attr('RoleID');
+            ajax.RequestUrl('/?d=YunWei&c=SuperUser&a=deleteSuperUser',param,'callback.DelSuperUser')
+        }
+        function searchSuperUser(){
+            {/literal}
+            setting.PageUrl = '{au d=YunWei c=SuperUser a=getPagerSuperUser}';
+            {literal}
+
+            page.GetPagerSuperUser(1,'callback.GetSuperUserList');
+        }
+        {/literal}
+        {literal}
+        $(function(){
+            {/literal}
+            setting.PageUrl = '{au d=YunWei c=SuperUser a=getPagerSuperUser}';
+            {literal}
+            setting.Params = '';
+            page.GetPagerSuperUser(1,'callback.GetSuperUserList');
+        })
+        {/literal}
+    </script>
+</head>
+<body>
+    <input type="button" value="添加商人" class="bnStyle f2" onclick="getAddSuperUserPage()"/>
+    玩家编号:
+    <input name="" id="RoleID" />
+    <input id="RoleSearchBtn" type="button" onclick="searchSuperUser()" class="btn f2" value="搜 索">
+    <div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="page.GetPagerSuperUser(1,'callback.GetSuperUserList');">
+        <div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+    </div>
+    <div id="SuperUserList">
+
+    </div>
+</body>
+</html>

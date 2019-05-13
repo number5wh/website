@@ -1,0 +1,47 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr class="bg_color">
+    <th width="9%">比赛名次</th>
+    <th width="12%">离赛时间</th>
+    <th width="34%">参赛玩家(登录号+昵称+编号)</th>
+	<th width="24%">奖品</th>
+	<th width="12%">奖品发放情况</th>    
+    <th width="9%">操作</th>    
+  </tr>
+  {foreach from=$MatchRankList item=Match}
+  <tr class="bg_color">
+    <td>{$Match.Rank}</td>
+    <td>{$Match.LeaveTime}</td>
+    <td>{$Match.LoginCode} <font class="orange">{$Match.LoginName}({$Match.LoginID})</font></td>
+    <td>{$Match.Remarks}</td>
+	<td>{if $Match.SendStatus==1}发放成功{elseif $Match.SendStatus==2}发放失败{elseif $Match.SendStatus==3}弃赛不发放{/if}</td>	
+    <td>
+      <a href="javascript:void(0)" class='aDetail' id="{$Match.RID}" RoleID="{$Match.RoleID}" title="{$Match.LoginName}">查看</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="6">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  {if $MatchRankList}
+  <tr class="bg_color">
+    <td colspan="6">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var M={
+	/*绑定事件*/
+	BindEvent:function(){
+		$('.aDetail').click(function(){
+{/literal}
+			setting.Url = '{au d=Service c=ServiceRole a=getGameMatchInningsList}';
+			setting.Params = '&MatchUnitID='+$('#MatchUnitID').val()+'&RoleID='+$(this).attr('RoleID')+'&PlayDate='+$('#PlayDate').val();
+			window.parent.main.AddTab($(this).attr('title'),'GameMatchRank'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+		})
+	}
+};
+{/literal}
+</script>

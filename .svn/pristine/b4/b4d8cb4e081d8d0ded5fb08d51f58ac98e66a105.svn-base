@@ -1,0 +1,3 @@
+<div class="position">
+		<div class="innerWrapper"> <!-- <a target="_blank" href="http://crm2.qq.com/page/portalpage/wpa.php?uin=4000878779&amp;aty=0&amp;a=0&amp;curl=&amp;ty=1" class="footerQQ clearfix png" rel="sexylightbox"><ins></ins></a> <a target="_blank" href="http://crm2.qq.com/page/portalpage/wpa.php?uin=4000878779&amp;aty=0&amp;a=0&amp;curl=&amp;ty=1" class="phoneNumber"><ins>779游戏客服QQ</ins><i>4000878779</i></a> --> </div>
+	</div>

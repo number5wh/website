@@ -1,0 +1,126 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置角色等级
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysRoleLevel')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="22%" align="right">角色等级:</td>
+			<td width="78%"><input type="text" class="txt" name="LvlID" id="LvlID" value="{$Lvl.LvlID}"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">成长点:</td>
+			<td><input type="text" class="txt" name="LvlExperience" id="LvlExperience" value="{$Lvl.LvlExperience}"/> <span class="orange">*</span></td>
+		  </tr>		  
+		  <tr>
+			<td align="right">每日最大成长值:</td>
+			<td><input type="text" class="txt" name="MaxScoreDay" id="MaxScoreDay" value="{$Lvl.MaxScoreDay}" /> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">每日首次登陆成长值:</td>
+			<td><input type="text" class="txt" name="LoginScore" id="LoginScore" value="{$Lvl.LoginScore}"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">每日最大在线成长值:</td>
+			<td><input type="text" class="txt" name="MaxScoreOnline" id="MaxScoreOnline" value="{$Lvl.MaxScoreOnline}" /> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">每小时在线成长值:</td>
+			<td><input type="text" class="txt" name="MaxScoreOnlineHour" id="MaxScoreOnlineHour" value="{$Lvl.MaxScoreOnlineHour}"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">游戏最大成长值:</td>
+			<td><input type="text" class="txt" name="MaxScoreGame" id="MaxScoreGame" value="{$Lvl.MaxScoreGame}" /> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">任务最大成长值:</td>
+			<td><input type="text" class="txt" name="MaxScoreTask" id="MaxScoreTask" value="{$Lvl.MaxScoreTask}"/> <span class="orange">*</span></td>
+		  </tr>		  
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysRoleLevel')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddRoleLevel" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var lvl={
+	BindEvent:function(){
+		$('#btnAddRoleLevel').click(function(){
+			var LvlID = $('#LvlID').val();
+			var LvlExperience = $('#LvlExperience').val();
+			var MaxScoreDay = $('#MaxScoreDay').val();
+			var LoginScore = $('#LoginScore').val();
+			var MaxScoreOnline = $('#MaxScoreOnline').val();
+			var MaxScoreOnlineHour = $('#MaxScoreOnlineHour').val();
+			var MaxScoreGame = $('#MaxScoreGame').val();
+			var MaxScoreTask = $('#MaxScoreTask').val();
+			$('#LvlID').next().html('*');
+			$('#LvlExperience').next().html('*');
+			$('#MaxScoreDay').next().html('*');
+			$('#LoginScore').next().html('*');
+			$('#MaxScoreOnline').next().html('*');
+			$('#MaxScoreOnlineHour').next().html('*');
+			$('#MaxScoreGame').next().html('*');
+			$('#MaxScoreTask').next().html('*');
+			if(isNaN(LvlID) || LvlID<=0){
+				$('#LvlID').next().html('*请输入正确的角色等级');
+				$('#LvlID').focus();
+				return false;
+			}
+			if(isNaN(LvlExperience) || LvlExperience<0){
+				$('#LvlExperience').next().html('*请输入正确的成长点数');
+				$('#LvlExperience').focus();
+				return false;
+			}
+			if(isNaN(MaxScoreDay) || MaxScoreDay<0){
+				$('#MaxScoreDay').next().html('*请输入正确的每日最大成长值');
+				$('#MaxScoreDay').focus();
+				return false;
+			}
+			if(isNaN(LoginScore) || LoginScore<0){
+				$('#LoginScore').next().html('*请输入正确的每日首次登陆成长值');
+				$('#LoginScore').focus();
+				return false;
+			}
+			if(isNaN(MaxScoreOnline) || MaxScoreOnline<0){
+				$('#MaxScoreOnline').next().html('*请输入正确的每日最大在线成长值');
+				$('#MaxScoreOnline').focus();
+				return false;
+			}
+			if(isNaN(MaxScoreOnlineHour) || MaxScoreOnlineHour<0){
+				$('#MaxScoreOnlineHour').next().html('*请输入正确的每小时成线成长值');
+				$('#MaxScoreOnlineHour').focus();
+				return false;
+			}
+			if(isNaN(MaxScoreGame) || MaxScoreGame<0){
+				$('#MaxScoreGame').next().html('*请输入正确的每日游戏时间最大成长值');
+				$('#MaxScoreGame').focus();
+				return false;
+			}
+			if(isNaN(MaxScoreTask) || MaxScoreTask<0){
+				$('#MaxScoreTask').next().html('*请输入正确的每日任务最大成长值');
+				$('#MaxScoreTask').focus();
+				return false;
+			}
+{/literal}
+			setting.Url='{au d=YunWei c=SysRoleLevel a=addRoleLevel}';
+{literal}
+			setting.Params='LvlID='+LvlID+'&LvlExperience='+LvlExperience+'&MaxScoreDay='+MaxScoreDay+'&LoginScore='+LoginScore+'&MaxScoreOnline='+MaxScoreOnline+'&MaxScoreOnlineHour='+MaxScoreOnlineHour+'&MaxScoreGame='+MaxScoreGame+'&MaxScoreTask='+MaxScoreTask;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddRoleLevel');
+		});
+	}
+};
+{/literal}
+</script>

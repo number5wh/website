@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+main .container{background:#fff;margin-top:4px;padding:20px 0 40px;}
+.btn-register{width:192px;height:62px;background:#f6f7fb;color:#229fe7;border-radius:4px;font-size:16px;text-align:center;line-height:62px;}
+.form1{width:780px;float:right;}
+.form1 label{margin-top:26px;display:block;font-weight:400;}
+.form1 span{width:140px;height:35px;display:inline-block;text-align:right;line-height:35px;color:#333;font-size:14px;}
+.form1 input{width:220px;height:35px;line-height:35px;border:1px solid #dcdcdc;padding:0 10px;}
+.form1 i{color:#999;}
+.form1 b{color:#fe1f0e;}
+.form1 label a{color:#229fe7;font-size:14px;}
+.form1 label u{width:60px;height:35px;background:#ccc;display:inline-block;line-height:35px;text-align:center;}
+.form1 .btns{width:220px;height:36px;background:#229fe7;border:none;color:#fff;font-size:18px;border-radius:4px;}
+
+/*实体充值卡*/
+.form1 label .a-num{width:98px;height:36px;line-height:36px;border:1px solid #ececec;border-radius:4px;display:inline-block;font-size:14px;color:#333;text-align:center;margin-right:20px;position:relative;cursor:pointer;}
+.form1 label .a-num .select-img{position:absolute;bottom:0;right:0;display:none;}
+.form1 label .active{border:1px solid #229fe7;}
+.form1 label .active .select-img{display:block;}
+
+/* 解绑与找回 */
+.group-btn{width:210px;border-top:1px solid #dcdcdc;border-bottom:none;margin-left:28px;font-size:14px;color:#333;text-align:center;}
+.group-btn-title{height:35px;line-height:35px;background:#e8e8e8;border:1px solid #dcdcdc;border-top:none;}
+.list-btn{height:46px;line-height:46px;background:#f7f7f7;border:1px solid #dcdcdc;border-top:none;cursor:pointer;}
+.list-btn.active{background:#fff;color:#229fe7;border-left:2px solid #229fe7;border-right:none;}
+.list-btn:hover{color:#229fe7;}

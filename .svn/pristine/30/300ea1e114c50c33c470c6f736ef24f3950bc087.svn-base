@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>帮助中心</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+				
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>779游戏登录验证安全介绍</b></div><br>
+							  <div>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block">    为了更好的保护账号安全，玩家可以通过登录游戏验证短信来加强，
+
+操作流程，先登录游戏，然后点击客户端上方的“信息”图标。
+
+弹出窗口中的的用户设置里面的登录绑定操作即可完成。如果需要取消验证也是在这里操作。
+										</span>
+									</div>
+										<!-- </strong> -->
+								</div>
+					        </div>
+						</div>
+						
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

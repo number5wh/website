@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){	
+{/literal}
+	setting.PageUrl='{au d=YunWei c=$ClassName a=getPagerServer}';
+	ajax.RequestUrl(setting.PageUrl,'','callback.GetPagerServer');
+	if('{$ClassName}'=='ServerDB' || '{$ClassName}'=='ServerGame') $('.cols').removeClass('hide');
+{literal}
+
+	//点击删除服务器配置信息
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=delServer}';
+{literal}
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.Url,'ServerID='+$(this).attr('id'),'callback.DelServer');
+		});	
+	});	
+	//点击禁用或启用服务器配置
+	$('.locked').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=setServerLocked}';
+{literal}
+			setting.Params = 'ServerID='+$(this).attr('id');
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.SetServerLocked');
+		});	
+	});	
+	//点击禁用或启用服务器配置
+	$('.file').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=ServerGame a=createFiles}';
+{literal}
+			setting.Params = 'ServerID='+$(this).attr('id');
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.CreateFiles');
+		});	
+	});	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加服务器" />
+<div id="GameServerList">
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnSubmit').click(function(){
+		var ID = $('#ID').val();
+		var NoticeType = $('#NoticeType').val();
+		var Title = $.trim($('#Title').val());		
+		$('#Title').next().html('*');	
+		$('#ResultMsg').html('');	
+		if(Title==''){
+			$('#Title').next().html('*请输入公告标题');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunYing c=Notice a=addNotice}';
+		setting.Params = 'ID='+ID+'&NoticeType='+NoticeType+'&Title='+encodeURIComponent(Title);
+		ajax.RequestUrl(setting.Url,setting.Params,'Notice.CallBackAddNotice');
+{literal}	
+	});
+});
+var Notice={
+	/*道具分类*/
+	CallBackAddNotice:function(data){
+		if(data==0){
+			$('#ResultMsg').html('公告发布成功');
+			if($('#ID').val()==0) $('#Title').val('');
+		}
+		else
+			$('#ResultMsg').html('公告发布失败');
+	}
+}
+{/literal}
+</script>
+</head>
+
+<body>
+<!--<a href="{au d=YunYing c=SpRelease a=index}" style="display:block; line-height:22px">返回列表页</a>-->
+<form method="post">
+<input type="hidden" name="ID" id="ID" value="{$Notice.ID}" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">公告分类:</td>
+    <td width="83%" bgcolor="#FFFFFF">
+      	<select name="NoticeType" id="NoticeType" >
+        	{foreach from=$NoticeTypeList item=N}
+            <option value="{$N.TypeID}" {if $N.TypeID==$Notice.TypeID}selected{/if}>{$N.TypeName}</option>
+            {/foreach}
+        </select>
+      </td>
+  </tr>		  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">公告标题:</td>
+    <td bgcolor="#FFFFFF" id="tdSpNumber"><input type="text" class="txt" id="Title" value="{$Notice.Title}" /><span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="button" class="btn f2" value="发 布" id="btnSubmit" />
+    	<input type="reset" class="btn f2" value="重 置" /> 	<span id="ResultMsg" class="orange"></span>
+    </td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>

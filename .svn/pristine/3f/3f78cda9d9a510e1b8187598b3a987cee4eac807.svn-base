@@ -1,0 +1,75 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var svr={
+	BindEvent:function(){
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c='+$('#ClassName').val()+' a=showAddServerHtml}';
+				setting.Params = 'ServerID='+$(this).attr('id')+'&IP='+$('#IP').val()+'&Port='+$('#Port').val()+'&ServID='+$('#ServID').val();
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddServerHtml');
+			});	
+		});		
+		/*点击删除服务器配置信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c='+$('#ClassName').val()+' a=delServer}';
+				setting.Params = 'ServerID='+$(this).attr('id')+'&ServerType='+$(this).attr('type');
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.Request(setting.Url,setting.Params,'callback.DelServer');
+			});	
+		});			
+        /*点击禁用或启用服务器配置*/
+          $('.locked').each(function(){
+            $(this).click(function(){
+             {/literal}
+              setting.Url='{au d=YunWei c='+$('#ClassName').val()+' a=setServerLocked}';
+            {literal}
+              setting.Params = 'ServerID='+$(this).attr('id')+'&TypeID='+$(this).attr('typeID');
+              ajax.Request(setting.Url,setting.Params,'callback.SetServerLocked');
+            }); 
+          }); 
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">服务器名称</th>
+    <th width="14%" bgcolor="#FFFFFF">网站类型</th>
+    <th width="16%" bgcolor="#FFFFFF">服务器地址</th>
+    <th width="25%" bgcolor="#FFFFFF">线路信息</th>
+    <th width="7%" bgcolor="#FFFFFF">状态</th>
+    <th width="13%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ServerList item=server}
+  <tr id="Row_{$server.ServerID}">
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerType}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerIP}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.Intro}</td>
+    <td align="center" bgcolor="#FFFFFF">正常</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='locked' id="{$server.ServerID}" locked="{$server.Locked}" typeID="{$server.ServerTypeID }">{if $server.Locked==1}<span class="orange">启用服务</span>{else}禁用服务{/if}</a>
+      <a href="javascript:void(0)" class="edit" id="{$server.ServerID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$server.ServerID}" type="{$server.ServerTypeID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $ServerList}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

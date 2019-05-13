@@ -1,0 +1,28 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<table border='0' cellpadding='1' cellspacing='1' class='txt_M' style='background-color:#B5D6E6;'>
+		<tr>
+			<th width='200'>本月礼包</th>
+			<th width='200'>领取时间</th>
+			<th width='400'>礼包明细</th>
+		</tr>
+		<tr class='bg_color'>
+			<td>{$monthGift.GiftDate}</td>
+			<td>{$monthGift.ReceiveTime}</td>
+			<td>
+				{foreach from=$arrResult item=v}
+					{$v.GoodsName}　
+				{/foreach}
+				<span id='Reissue' style='cursor:pointer;' onclick='RMGT.reissueMonthGift({$roleID},{$monthGift.SpID})'>补发</span>
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+var RMGT = {
+	reissueMonthGift:function(rid, spid){
+		ajax.RequestUrl('?d=Service&c=ServiceRole&a=reissueMonthGiftTipsTable', 'roleID='+rid+'&iSpID='+spid, 'callback.GetEditOperationResult');
+	}
+}
+{/literal}
+</script>

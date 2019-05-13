@@ -1,0 +1,22 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="1">			    
+  {foreach from=$GameLevelList item=Level}
+  <tr id="Level_{$Level.ID}">
+	<td width="11%" align="center">{$Level.LevelID}</td>
+	<td width="17%" align="center">{$Level.LevelName}</td>
+	<td width="18%" align="center">{$Level.LBound}</td>
+	<td width="17%" align="center">{$Level.CellAmount}</td>
+	<td width="15%" align="center">{$Level.ClothesImage}</td>
+	<td width="22%" align="center">
+	<a href="javascript:void(0)" class="GameLevelModi" levelid="{$Level.ID}" leveltype='{$Page.LevelType}'>修改</a> 
+	<a href="javascript:void(0)" class="GameLevelDel" levelid="{$Level.ID}" leveltype='{$Page.LevelType}'>删除</a>
+	</td>
+  </tr>
+  {/foreach}
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <tr>
+	<td align="center" colspan="5">
+	{include file="$skin/Inc/Page.inc.html"}
+	</td>
+  </tr>	
+</table>

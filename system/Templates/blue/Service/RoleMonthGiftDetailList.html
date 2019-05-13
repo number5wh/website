@@ -1,0 +1,39 @@
+<div class="sysWin sysWindow">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>月礼包明细
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'ServiceRole')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+    	起止时间:<input id="StartTime" type="text" class="txt" value="{$strStime}" /><img onclick="new Calendar().show(document.getElementById('StartTime'));" class="calendar_img" src="images/common/u896_normal.gif" />-<input type="text" id="EndTime" class="txt" value="{$strEtime}" /><img onclick="new Calendar().show(document.getElementById('EndTime'));" style="position:relative; top:6px; cursor:pointer;" src="images/common/u896_normal.gif" /> <input type="button" class="btn f2" value="查 询" id="btnSearch" />
+		<input type="hidden" id="CurRoleID" value="{$RoleID}" />
+        <div id="MonthGiftDetailList"></div>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnSearch').click(function(){
+		monthGift.GetPagerMonthDetail();
+	});
+});
+var monthGift={
+	GetPagerMonthDetail:function(){
+{/literal}
+		setting.PageUrl='{au d=Service c=ServiceRole a=getPageMonthGiftPackage}';
+		setting.Params = 'RoleID='+$('#CurRoleID').val()+'&StartTime='+$('#StartTime').val()+'&EndTime='+$('#EndTime').val();
+{literal}	
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPageMonthGiftDetail');
+	}
+};
+{/literal}
+</script>

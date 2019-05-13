@@ -1,0 +1,25 @@
+<table width="60%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="27%">物品名称</th>
+    <th width="19%">状态</th>
+    <th width="25%">使用时间</th> 
+    <th width="29%">到期时间</th>    
+  </tr>
+  {foreach from=$SpList item=sp}
+  <tr class="bg_color">
+    <td>{$sp.GoodsName}</td>
+    <td>{$sp.Status}</td>
+    <td>{$sp.UseTime}</td>
+    <td>{$sp.ExpireTime}</td>
+  </tr> 
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="4">很抱歉，没有您要查询的信息~</td>      
+  </tr>
+  {/foreach}
+  {if $SpList}
+  <tr class="bg_color">
+    <td id="RoleSPPages" colspan="4">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

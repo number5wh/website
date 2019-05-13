@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>活动公告</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>779游戏第十七期赠送活动公告</b></div><br>
+							  <div>
+					                <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										<p>779游戏中心为庆祝李逵捕鱼苹果版本，安卓版本上线，推出第十七期赠送欢乐豆活动，新增实物卡领取，任何玩家都可凭手机号到779官网领取体验卡(实物卡)一张。</p>
+										<br>
+										<br>
+										<p align="left">活动时间：2018年1月28日15时</p>
+										<br>
+										<p align="left">PS：一个手机号码限领一次，先到先得（第十六期领取过除外)。本次活动赠送10亿欢乐豆，送完活动自动停止。</p>
+										</span>
+									</div>
+									<div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-01-28</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

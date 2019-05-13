@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>热烈庆祝新摇钱树，欢乐五张安卓手机版上线</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>热烈庆祝新摇钱树，港式五张安卓手机版上线</b></div><br>
+							  <div>
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block"> 
+										 <p>尊敬的玩家，新摇钱树，港式五张安卓手机版已经正式上线，请玩家登陆手机客户端更新或者扫描二维码下载！祝您生活愉快，玩的开心快乐！</p>
+										 <img src="images/Android.png" style="width:150px;margin: 100px 200px">
+										 <br/>
+										 <br/>
+										 <br/>
+										</span>
+									</div>
+									<div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-03-16</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

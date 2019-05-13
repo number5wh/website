@@ -1,0 +1,136 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置广告位
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'Ad')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+	  <tr>
+		<td width="30%" align="right" bgcolor="#FFFFFF">广告位:</td>
+		<td bgcolor="#FFFFFF">
+			<select id="PositionTypeID" onchange="adEdit.getAdPosition()">
+			{section name=n loop=$PositionTypeList}
+        	<option value="{$smarty.section.n.iteration}" {if $smarty.section.n.iteration==$ad.PositionType}selected{/if}>{$PositionTypeList[$smarty.section.n.iteration]}</option>
+        	{/section}
+			</select>
+			<select id="PositionID">
+				{foreach from=$PositionList item=pos}
+				<option value="{$pos.PositionID}" {if $pos.PositionID==$ad.PositionID}selected{/if}>{$pos.PositionName}</option>
+				{/foreach}
+			</select><span class="orange"></span>
+		</td>
+	  </tr>
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">广告名称:</td>
+		<td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="AdName" id="AdName" value="{$ad.AdName}"></td>
+	  </tr>
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">广告图片:</td>
+		<td width="83%" bgcolor="#FFFFFF">
+		<input type="text" class="txt left" name="ImgPath" id="ImgPath_FileUpload" value="{$ad.FileURL}" size="30">
+    	<div class="left"><input id="FileUpload" name="file_upload" type="file" multiple="false" class="file_upload" /></div>
+         <span class="orange left" id="ImgMsg">*</span>
+        <div id="queue_FileUpload" class="left"></div>
+        <br class="clear" />
+		</td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">链接地址:</td>
+		<td bgcolor="#FFFFFF"><input type="text" class="txt" name="LinkURL" id="LinkURL" value="{$ad.LinkURL}"></td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">开始时间:</td>
+		<td bgcolor="#FFFFFF">
+		<input id="StartTime" class="Wdate" type="text" value="{$ad.StartTime}" onclick="WdatePicker({literal}{dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d',maxDate:'#F{$dp.$D(\\'EndTime\\')}'}{/literal})" /></td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">结束时间:</td>
+		<td bgcolor="#FFFFFF">
+		<input id="EndTime" class="Wdate" type="text" value="{$ad.EndTime}" onclick="WdatePicker({literal}{dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\\'StartTime\\')||\\'%y-%M-%d\\'}'}{/literal})" /></td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">排序号:</td>
+		<td bgcolor="#FFFFFF"><input type="text" class="txt" name="SortID" id="SortID" value="{$ad.SortID}"> <span class="orange">*请输入大于0的正整数</span></td>
+	  </tr>		
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">服务器描述:</td>
+		<td bgcolor="#FFFFFF"><textarea name="Intro" id="Intro" cols="30" rows="5" class="textarea">{$ad.Intro}</textarea></td>
+	  </tr>		 
+	</table>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" name="AdID" id="AdID" value="{$ad.AdID}" />
+		<input type="hidden" name="ServerID" id="ServerID" value="{$ad.ServerID}" />
+		<input type="hidden" name="ServerIP" id="ServerIP" value="{$ad.ServerIP}" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'Ad')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	main.InitUploadControl('FileUpload','AdThumb','http://'+$("#ServerIP").val()+'/GameFiveUpFile.php');
+});
+var adEdit={
+	BindEvent:function(){
+		$('#btnAddAd').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=Ad a=addAd}';
+{literal}			
+			$('#ResultMsg').next().html('');
+			$('#PositionID').next().html('');
+			$('#ImgMsg').html('*');
+			$('#SortID').next().html('*请输入大于0的正整数');
+			var AdID = $('#AdID').val();
+			var PositionID = $('#PositionID').val();
+			var AdName = $('#AdName').val();
+			var FileURL = $('#ImgPath_FileUpload').val();
+			var LinkURL = $('#LinkURL').val();
+			var StartTime = $('#StartTime').val();
+			var EndTime = $('#EndTime').val();
+			var SortID = $('#SortID').val();
+			var Intro = $('#Intro').val();
+			var ServerID = $('#ServerID').val();
+			var ServerIP = $('#ServerIP').val();
+			if(isNaN(AdID) || AdID=='' || isNaN(ServerID) || ServerID==''){
+				$('#ResultMsg').html('*参数异常');
+				return false;
+			}
+			if(isNaN(PositionID) || PositionID<=0){
+				$('#PositionID').next().html('*请选择正确的广告位');
+				$('#PositionID').focus();
+				return false;
+			}
+			if(FileURL==''){
+				$('#ImgMsg').html('*请上传广告图片');
+				$('#ImgPath_FileUpload').focus();
+				return false;
+			}
+			if(isNaN(SortID) || SortID<=0){
+				$('#SortID').next().html('*请输入正确的排序号');
+				$('#SortID').focus();
+				return false;
+			}
+			setting.Params = 'AdID='+AdID+'&AdName='+encodeURIComponent(AdName)+'&PositionID='+PositionID+'&FileURL='+FileURL+'&LinkURL='+LinkURL+'&StartTime='+encodeURIComponent(StartTime)+'&EndTime='+encodeURIComponent(EndTime)+'&SortID='+SortID+'&Intro='+encodeURIComponent(Intro)+'&ServerID='+ServerID+'&ServerIP='+ServerIP;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddAd');
+		});
+	},
+	/*取广告位*/
+	getAdPosition:function(){
+		var PositionTypeID = $('#PositionTypeID').val();
+{/literal}
+		setting.Url='{au d=YunWei c=Ad a=getAdPosition}';
+		setting.Params='PositionTypeID='+PositionTypeID;
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetAdPosition');
+{literal}	
+	}
+};
+{/literal}
+</script>

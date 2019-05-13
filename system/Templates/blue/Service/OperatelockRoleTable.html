@@ -1,0 +1,77 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>锁定角色</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<!--tr>
+			<td class='txt_R'>案件编号：</td>
+			<td class='txt_L pad5'><input type='text' id='caseSerial' name='caseSerial' class='txt_inp' /> <span id='Msg'></span></td>
+		</tr-->
+		<tr>
+			<td class='txt_R'>锁定期限：</td>
+			<td class='txt_L pad5'>
+				<select id='number' name='number'>
+					<option value='1095'>3年</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class='txt_R'>锁定原因(50字内)：</td>
+			<td class='txt_L pad5'><textarea id='remarks' name='remarks' style='width:200px; height:75px;'></textarea></td>
+		</tr>
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad5 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad5'>
+				<input id='RoleID' type='hidden' name='roleID' value='{$roleID}' />
+				<input id='iLoginID' type='hidden' value='{$loginID}' />
+				<input type='hidden' id='chkFlag' value='1' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){
+	$('#caseSerial').blur(function(){
+		var caseSerial = $.trim($(this).val());
+		if(caseSerial){
+			$.post('/?d=Service&c=ServiceRole&a=checkCaseSerial', {iCaseSerial:caseSerial}, function(data){
+				if(data == 1){
+					var src='images/common/check.gif';
+					$('#Msg').html('<img src='+src+' />');
+					$('#chkFlag').val(1);
+				}else{
+					$('#Msg').html('');
+					$('#errorMsg').html('案件编号匹配失败');		
+					$('#chkFlag').val(0);
+					return false;
+				}
+			})
+		}else{
+			$('#chkFlag').val(1);
+		}
+	});
+	$('#applyBtn').click(function(){
+		var caseSerial = $.trim($('#caseSerial').val());
+		var number = $.trim($('#number').val());
+		var remarks = $.trim($('#remarks').val());
+		var roleID = $.trim($('#RoleID').val());
+		var loginID = $.trim($('#iLoginID').val());
+		var flag = $('#chkFlag').val();
+		
+		if(remarks == ''){
+			$('#errorMsg').html('锁定原因不能为空！');
+			$('#remarks').focus();
+			return false;
+		}
+		var params = 'caseSerial='+caseSerial+'&number='+number+'&Remarks='+remarks+'&roleID='+roleID+'&loginID='+loginID;
+		if(flag==0){
+			$('#errorMsg').html('案件编号匹配失败');
+			return false;
+		}		
+		ajax.Request('/?d=Service&c=ServiceRole&a=lockRoleTable', params, 'callback.GetEditOperationResult'); 				
+	});
+})
+{/literal}
+</script>

@@ -1,0 +1,71 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>新增子菜单
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysMenu')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right">顶级菜单目录:</td>
+                <td width="83%">
+                    <select name="group" id="group">
+                        {foreach from=$Info.top item=v key=k}
+                        <option value="{$k}">{$v}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">菜单目录名称:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt"  name="name" id="name" value=""></td>
+            </tr>
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >排序:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="order" id="order" value="1"></td>
+            </tr>
+        </table>
+        <div class="bot f2">
+
+            <div class="botLeft f1 left"></div>
+
+            <div class="botRight f1 right"></div>
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysMenu')"/>
+            <input type="button" class="btn f2 right" value="确 定" id="btnAddAd" />
+
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysMenu a=doAdd2}';
+                        {literal}
+                        $('#ResultMsg').next().html('');
+                        var group = $('#group').val();
+                        var name = $('#name').val();
+                        var order = $('#order').val();
+
+
+
+                        if(group==''||name==''||order==''){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+
+                        setting.Params = 'group='+group+'&name='+name+'&order='+order;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.AddSysMenuRool');
+                    });
+            }
+        }
+        {/literal}
+
+    </script>

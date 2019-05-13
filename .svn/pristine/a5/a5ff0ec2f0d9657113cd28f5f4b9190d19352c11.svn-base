@@ -1,0 +1,25 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="25%" bgcolor="#FFFFFF">玩家昵称</th>
+    <th width="25%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="25%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Search('totalMoney asc')">金币↓</a></th>
+	<th width="25%" bgcolor="#FFFFFF">操作时间</th>
+  </tr>
+  {foreach from=$UserBankRateList item=List}
+  <tr>
+	<td align="center" bgcolor="#FFFFFF">{$List.RoleName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.totalMoney}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.addtime}</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $UserBankRateList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

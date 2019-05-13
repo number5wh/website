@@ -1,0 +1,40 @@
+<table width="70%" border="0" cellpadding="0" cellspacing="1" id="EditOperateLockDetailInfo" class="tbList txt_M">
+	<tr class="bg_color">
+		<th width="25%">操作时间</th>
+		<th width="25%">操作类型</th>
+		<th width="25%">申请备注</th>		
+		<th width="25%">操作人</th>
+	</tr>
+{foreach from="$FreezeInfoList" item=v}
+	<tr class="bg_color">
+		<td>{$v.AddTime}</td>
+		<td>{if $v.OperationType eq 5}申请银行功能解冻{else}申请背包功能解冻{/if}</td>
+		<td id="tdRemarks_{$v.FID}"><textarea id="Remarks_{$v.FID}">{$v.Remarks}</textarea><input type="button" onclick="editOperate.updateRemarks({$v.FID}, '{$v.Remarks}',{if $v.OperationType eq 5}19{else}15{/if});" value="保存" /></td>
+		<td>{$v.SysUserName}</td>
+	</tr>
+{foreachelse}
+	<tr class="bg_color">
+		<td colspan="4">很抱歉，没有您要查询的信息~</td>
+	</tr>
+{/foreach}
+{if $FreezeInfoList}	
+	<tr class="bg_color">
+		<td id="EditOperatePages" colspan="4">{include file="$skin/Inc/Page.inc.html"}</td>
+	</tr>
+{/if}
+</table>
+<input type="hidden" id="EditOperateRoleID" value="{$RoleID}" />
+<script type="text/javascript">
+{literal}
+var editOperate={
+		updateRemarks:function(fid, remarks, opType){
+			var newRemark = $.trim($("#Remarks_"+fid).val());
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(newRemark !='' && newRemark != remarks){
+				var Param = "fid="+fid+"&Reason="+newRemark+"&roleID="+roleID+"&opType="+opType;;
+				ajax.Request('/?d=Service&c=ServiceRole&a=updateCaseOperateUserRemarks', Param,'callback.GetUpdateEditOperateResult');
+			}
+		},
+}
+{/literal}
+</script>

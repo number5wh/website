@@ -1,0 +1,98 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>添加玩家编号
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysLoginID');setting.IsOver=true;"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="22%" align="right">开始范围:</td>
+			<td width="78%"><input type="text" class="txt" name="StartLoginID" id="StartLoginID" value="80000000"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td align="right">结束范围:</td>
+			<td><input type="text" class="txt" name="EndLoginID" id="EndLoginID" value="88888888"/> <span class="orange">*</span></td>
+		  </tr>		  	  
+	  </table>
+	  
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysLoginID');setting.IsOver=true;"/>
+		<input type="button" class="btn f2 right" value="开始导入" id="btnAddLoginID" />
+        <div class="right hide" id="ResultMsg">
+			总共:<span id="TotalNumber" class="red"></span>个 
+			已导:<span id="InputNumber" class="red">0</span>个 
+			成功:<span id="SuccessNumber" class="red">0</span>个 
+			失败:<span id="FailNumber" class="red">0</span>个 
+			<span id="Result"></span>
+		</div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var slEdit={
+	BindEvent:function(){
+		$('#btnAddLoginID').click(function(){
+			var StartLoginID = $('#StartLoginID').val();
+			var EndLoginID = $('#EndLoginID').val();
+			
+			$('#StartLoginID').next().html('*');
+			$('#EndLoginID').next().html('*');
+			
+			if(isNaN(StartLoginID) || StartLoginID<=0){
+				$('#StartLoginID').next().html('*请输入正确的玩家编号');
+				$('#StartLoginID').focus();
+				return false;
+			}
+			if(isNaN(EndLoginID) || EndLoginID<0){
+				$('#EndLoginID').next().html('*请输入正确的玩家编号');
+				$('#EndLoginID').focus();
+				return false;
+			}
+			if(StartLoginID>EndLoginID){
+				$('#EndLoginID').next().html('*结束编号必须大于开始编号');
+				$('#EndLoginID').focus();
+				return false;
+			}
+			$(this).attr('disabled','disabled');
+			setting.IsOver = false;
+			$('#ResultMsg').show();
+			slEdit.Submit(StartLoginID,EndLoginID);
+			$('#TotalNumber').html(EndLoginID-StartLoginID+1);
+			$('#InputNumber').html(0);
+			$('#SuccessNumber').html(0);
+			$('#FailNumber').html(0);
+		});
+	},
+	Submit:function(StartLoginID,EndLoginID){
+{/literal}
+			setting.Url='{au d=YunWei c=SysLoginID a=addLoginID}';
+{literal}
+			setting.Params='StartLoginID='+StartLoginID+'&EndLoginID='+EndLoginID;
+			ajax.Request(setting.Url,setting.Params,'slEdit.CallBackAddLoginID');
+	},
+	CallBackAddLoginID:function(data){
+		data=$.evalJSON(data);/*字符串格式转为json对象,extend.js*/	
+		var InputNumber = $('#InputNumber').html();
+		var SuccessNumber = $('#SuccessNumber').html();
+		var FailNumber = $('#FailNumber').html();
+		$('#InputNumber').html(parseInt(InputNumber)+parseInt(data.iCount));
+		$('#SuccessNumber').html(parseInt(SuccessNumber)+parseInt(data.iSuccess));
+		$('#FailNumber').html(parseInt(FailNumber)+parseInt(data.iFail));
+		if(data.IsOver || setting.IsOver){
+			$('#Result').html('导入完成');
+			$('#btnAddLoginID').removeAttr('disabled');
+		}
+		else
+			slEdit.Submit(data.StartLoginID,data.EndLoginID);
+	}
+};
+{/literal}
+</script>

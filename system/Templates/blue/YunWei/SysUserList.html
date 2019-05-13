@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysAdminList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysAdminList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysAdminList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetSysUser:function(data){
+		if(data==0){
+			$('#ImgResult').addClass('yes');
+			$('#RealName').val('');
+			$('#JobNumber').val('');
+			$('#UserName').val('');
+			$('#UserPwd').val('');
+		}
+		else
+			$('#ImgResult').addClass('no');
+	},
+	ShowSetRole:function(data) {
+		main.MsgBox(data);
+		window.parent.ctrlEdit.BindEvent();
+	},
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=SysUser a=getPagerSysAdminList}';
+{literal}
+	pl.SetProperty();
+	/*绑定搜索事件*/
+	$('#btnSearch').click(function(){
+		var DeptID = $.trim($('#DeptID').val());
+		var SearchType = $.trim($('#SearchType').val());
+		var Key = $.trim($('#Key').val());
+		setting.Params = '&DeptID='+DeptID+'&SearchType='+SearchType+'&Key='+encodeURIComponent(Key);
+		page.GetPage(1,"callback.GetPagerSysAdminList");
+	});	
+	/*添加管理员*/
+	$('#btnAddSysUser').click(function(){
+		var DeptID = $.trim($('#DepartmentID').val());
+		var RealName = $.trim($('#RealName').val());
+		var JobNumber = $.trim($('#JobNumber').val());
+		var UserName = $.trim($('#UserName').val());
+		var UserPwd = $.trim($('#UserPwd').val());
+		var bindmobile = $.trim($('#bindmobile').val());
+		$('#DepartmentID').css('border','1px solid #4C9DC5');
+		$('#RealName').css('border','1px solid #4C9DC5');
+		$('#JobNumber').css('border','1px solid #4C9DC5');
+		$('#UserName').css('border','1px solid #4C9DC5');
+		$('#UserPwd').css('border','1px solid #4C9DC5');
+		$('#ImgResult').removeClass('yes');
+		$('#ImgResult').removeClass('no');
+		if(isNaN(DeptID) || DeptID==''){
+			$('#DepartmentID').focus();
+			$('#DepartmentID').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(RealName==''){
+			$('#RealName').focus();
+			$('#RealName').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(JobNumber==''){
+			$('#JobNumber').focus();
+			$('#JobNumber').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(UserName==''){
+			$('#UserName').focus();
+			$('#UserName').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(UserPwd==''){
+			$('#UserPwd').focus();
+			$('#UserPwd').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(bindmobile==''){
+			$('#bindmobile').focus();
+			$('#bindmobile').css('border','1px solid #ff0000');
+			return false;
+		}
+{/literal}
+		setting.Url = '{au d=YunWei c=SysUser a=setSysUser}';
+		setting.Params = 'DeptID='+DeptID+'&RealName='+encodeURIComponent(RealName)+'&JobNumber='+JobNumber+'&UserName='+UserName+'&UserPwd='+UserPwd+'&bindaccout='+bindmobile;
+		ajax.RequestCallBack(setting.Url,setting.Params,callback.SetSysUser);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;width:400px" class="left">
+	<legend>搜索</legend>
+	<div style="margin-bottom:3px">
+	部门：
+	<select id="DeptID">
+		<option value="0">全部</option>
+		{foreach from=$DeptList item=Dept}
+		<option value="{$Dept.DeptID}">{$Dept.DeptName}</option>
+		{/foreach}
+	</select>
+	<select id="SearchType">
+		<option value="UserName">用户名</option>
+		<option value="JobNumber">工号</option>
+	</select>
+	<input type="text" class="txt" id="Key" />
+	<input type="button" id="btnSearch" class="btn f2" value="搜 索" />
+	</div>
+</fieldset>
+<fieldset style="margin-bottom:3px;width:730px" class="left">
+	<legend>添加</legend>
+	<div style="margin-bottom:3px" class="left">
+		部门：
+		<select id="DepartmentID">
+			{foreach from=$DeptList item=Dept}
+			<option value="{$Dept.DeptID}">{$Dept.DeptName}</option>
+			{/foreach}
+		</select>
+		姓名:<input type="text" class="txt" id="RealName" size="10" />	
+		工号:<input type="text" class="txt" id="JobNumber" size="10" />
+		用户名:<input type="text" class="txt" id="UserName" size="10" />
+		密码:<input type="password" class="txt" id="UserPwd" size="10" /><br/>
+		绑定手机或邮箱:<input type="bindmobile" class="txt" id="bindmobile" size="30" />
+		<input type="button" id="btnAddSysUser" class="btn f2" value="添 加" />	
+	</div>
+	<div class="left" id="ImgResult" style="width:12px;height:10px;margin-bottom:3px;margin-top:8px"></div>
+	<div class="left" style="cursor:pointer;margin:4px 0px 3px 4px" onclick="page.GetPage(1,'callback.GetPagerSysAdminList');">
+		<div class="refresh icon left"></div><span class="left">刷新</span>
+	</div>
+</fieldset>
+<br class="clearfix" />
+<div id="PageList">
+	{include file="$skin/YunWei/SysUserListPage.html"}
+</div>
+
+</body>
+</html>

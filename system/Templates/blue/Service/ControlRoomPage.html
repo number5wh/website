@@ -1,0 +1,89 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="5%">房间ID</th>
+        <th width="20%">游戏标识</th>
+        <th width="20%">房间名称</th>
+        <th width="15%">房间类型</th>
+        <th width="10%">桌子数</th>
+        <th width="15%">最大人数</th>
+        <th width="15%">房间概率</th>
+        <th width="15%">初始库存</th>
+        <th width="15%">当前库存</th>
+        <th width="15%"></th>
+    </tr>
+    {foreach from=$GameRoomList item=GameRoom}
+    <tr class="bg_color">
+        <td>{$GameRoom.RoomID}</td>
+        <td>{$GameRoom.GameKindIDName}</td>
+        <td>{$GameRoom.RoomName}</td>
+        <td>{$GameRoom.RoomTypeName}</td>
+        <td>{$GameRoom.MaxTableCount}</td>
+        <td>{$GameRoom.MaxPlayerCount}</td>
+        <td>
+            <input type="text" class="edit"  value="{$GameRoom.CtrlRatio}" id="ration_{$GameRoom.RoomID}"
+                  maxlength="5" name="txtRatio" style="width: 80px;">
+            </td>
+        <td>
+            <input type="text" class="edit"  value="{$GameRoom.nInitStorage}" id="Storage_{$GameRoom.RoomID}" maxlength="5"
+                   name="txtStorage" style="width: 80px;">
+            </td>
+        <td>
+            <input type="text" class="edit"  value=" {$GameRoom.nCurrentStorage}" id="CurrentStorage_{$GameRoom.RoomID}"
+                   maxlength="5" name="txtcurrStorage" style="width: 80px;">
+
+        </td>
+        <td>
+            <span id="setfinish_{$GameRoom.RoomID}" style="color: red"></span>
+            <a href="javascript:void(0)" onclick="changeCtrl('{$GameRoom.RoomID}');" class="edit" id="setctrl">设置概率</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="10">暂无房间记录</td>
+    </tr>
+    {/foreach}
+    {if $GameRoomList}
+    <tr class="bg_color">
+        <td colspan="10">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript" language="javascript">
+
+    {literal}
+    function changeCtrl(RoomId){
+        {/literal}
+        setting.Url='{au d=Service c=ControlleUser a=sendctrl}';
+        {literal}
+
+        var Ratio = $.trim($("#ration_"+RoomId).val());
+        var Storage = $.trim($("#Storage_"+RoomId).val());
+        var CurrentStorage = $.trim($("#CurrentStorage_"+RoomId).val());
+        var params ='RoomId='+RoomId+'&Storage='+Storage+'&CurrentStorage='+CurrentStorage+"&Ratio="+Ratio;
+
+        if(isNaN(RoomId) || RoomId=='' ){
+               alert('*参数异常');
+                return false;
+        }
+        if(parseInt(Ratio)>200){
+                alert('*输赢概率不能大于200');
+                return false;
+        }
+            $.ajax({
+                type : 'get',
+                url : setting.Url,
+                data : params,
+                beforeSend:function(){
+
+                },
+                success : function(result) {
+
+                },
+                complete : function() {
+                 $("#setfinish_"+RoomId).html("设置成功");
+                }
+            });
+    }
+
+    {/literal}
+</script>

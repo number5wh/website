@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*绑定搜索*/
+	$('#btnSearch1').click(function(){
+{/literal}
+		setting.Url = '{au d=YunYing c=MatchSearch a=searchGameMatchUnit}';
+		setting.Params = 'MatchUnitID='+$('#MatchUnitID').val();
+		ajax.RequestCallBack(setting.Url,setting.Params,s.CallBackSearchResult1);
+{literal}
+	});	
+	/*绑定搜索*/
+	$('#btnSearch2').click(function(){
+		$('#ResultMsg').html('');
+		var LoginID = $('#LoginID').val();
+		var StartTime = $('#StartTime').val();
+		var EndTime = $('#EndTime').val();
+		var MatchTypeID = '';
+		var RoomID = '';
+		$('.Match').each(function(){
+			if($(this).attr('checked'))
+				MatchTypeID += $(this).val() + ',';
+		});
+		$('.Room').each(function(){
+			if($(this).attr('checked'))
+				RoomID += $(this).val() + ',';
+		});
+		if(MatchTypeID!='') MatchTypeID = MatchTypeID.substring(0,MatchTypeID.length-1);
+		if(RoomID!='')
+			RoomID = RoomID.substring(0,RoomID.length-1);
+		else{
+			$('#ResultMsg').html('请选择比赛场地');
+			return false;
+		}
+{/literal}	
+		setting.PageUrl = '{au d=YunYing c=MatchSearch a=searchGameMatchRole}';
+		setting.Params = '&LoginID='+LoginID+'&StartTime='+StartTime+'&EndTime='+EndTime+'&MatchTypeID='+MatchTypeID+'&RoomID='+RoomID;
+		page.GetPage(1,"s.CallBackSearchResult2");
+		/*ajax.RequestCallBack(setting.Url,setting.Params,s.CallBackSearchResult2);*/
+{literal}
+	});	
+	/*导出*/
+	$('#btnOutput').click(function(){
+		var dateTime=new Date();		
+		var Year=dateTime.getFullYear();
+		var Month=dateTime.getMonth()+1;  //因为1月这个方法返回为0，所以加1
+		var Day=dateTime.getDate();	
+		var Hour=dateTime.getHours();
+		var Minute=dateTime.getMinutes();
+		var Second=dateTime.getSeconds();
+		setting.FileName = Year.toString()+Month.toString()+Day.toString()+Hour.toString()+Minute.toString()+Second.toString();
+		s.Search(1);
+		$('#btnSearch1').attr('disabled','disabled');
+		$('#btnSearch2').attr('disabled','disabled');
+	});
+	/*切换比赛名称*/
+	$('.Match').click(function(){
+{/literal}
+		setting.Url = '{au d=YunYing c=MatchSearch a=getMatchRoomList}';
+		setting.Params = 'MatchTypeID='+$(this).val();
+		ajax.RequestCallBack(setting.Url,setting.Params,s.CallBackGetMatchRoomList);
+{literal}
+	});
+	/*比赛房间全选*/
+	$('#AllRoom').click(function(){
+		var checked='';
+		if($(this).attr('checked'))
+			checked = 'checked';
+		$('.Room').each(function(){
+			$(this).attr('checked',checked);
+		});
+	});
+	/*初始化日历控件*/
+	  $('#StartTime').focus(function(){
+		  WdatePicker({startDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true,readOnly:true});
+	  });
+	  $('#EndTime').focus(function(){
+		  WdatePicker({startDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true,readOnly:true});
+	  });
+});
+var s={
+	CallBackSearchResult1:function(data){
+		$('#SearchResult').html(data);	
+		Search1.BindEvent();
+	},
+	CallBackSearchResult2:function(data){
+		$('#SearchResult').html(data);	
+		Search1.BindEvent();
+		Search1.SetMatchPlace();
+		Search1.SetProperty();
+	},
+	/*导出*/
+	CallBackSearchResult:function(data){
+		data=$.evalJSON(data);//字符串格式转为json对象,extend.js		
+		if(data.CurPage>0){
+			$('#ResultMsg').html('导出进度:'+data.CurPage+'/'+data.TotalPage);
+			s.Search(data.CurPage);
+		}
+		else{
+			var html = $('#ResultMsg').html();
+			$('#ResultMsg').html(html+' 导出完成,<a href="download.php?FilePath='+data.FilePath+'" class="blue">点击下载</a>');
+			$('#btnSearch1').removeAttr('disabled');
+			$('#btnSearch2').removeAttr('disabled');
+		}
+	},
+	/*比赛房间列表*/
+	CallBackGetMatchRoomList:function(data){
+		$('#RoomList').html(data);
+		if(data==''){
+			$('#AllRoom').hide();
+			$('#AllRoom').next().hide();
+		}
+		else{
+			$('#AllRoom').show();
+			$('#AllRoom').next().show();
+		}
+	},
+	Search:function(CurPage){
+		//$('#ResultMsg').html('');
+		var LoginID = $('#LoginID').val();
+		var StartTime = $('#StartTime').val();
+		var EndTime = $('#EndTime').val();
+		var MatchTypeID = '';
+		var RoomID = '';
+		$('.Match').each(function(){
+			if($(this).attr('checked'))
+				MatchTypeID += $(this).val() + ',';
+		});
+		$('.Room').each(function(){
+			if($(this).attr('checked'))
+				RoomID += $(this).val() + ',';
+		});
+		if(MatchTypeID!='') MatchTypeID = MatchTypeID.substring(0,MatchTypeID.length-1);
+		if(RoomID!='')
+			RoomID = RoomID.substring(0,RoomID.length-1);
+		else{
+			$('#ResultMsg').html('请选择比赛场地');
+			return false;
+		}
+{/literal}	
+		setting.PageUrl = '{au d=YunYing c=MatchSearch a=OutputToFile}';
+		setting.Params = 'curPage='+CurPage+'&LoginID='+LoginID+'&StartTime='+StartTime+'&EndTime='+EndTime+'&MatchTypeID='+MatchTypeID+'&RoomID='+RoomID+'&FileName='+setting.FileName;		
+		ajax.Request(setting.PageUrl,setting.Params,"s.CallBackSearchResult");
+		//page.GetPage(CurPage,"s.CallBackSearchResult");
+{literal}
+	}
+};
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset>
+    <legend class="orange">搜索一</legend>
+    比赛ID:<input type="text" id="MatchUnitID" />
+    <input type="button" id="btnSearch1" class="btn f2" value="搜索"/>
+</fieldset>
+<fieldset>
+    <legend class="orange">搜索二</legend>   
+    <div style="line-height:23px">
+    	玩家编号:<input type="text" id="LoginID" /><br />
+    	比赛时间:
+        <input type="text" id="StartTime" size="10" /> - 
+        <input type="text" id="EndTime" size="10" /><br />
+        比赛名称:
+        {foreach from=$GameMatchList item=Match}
+        <input type="radio" class="Match" name="Match" value="{$Match.MatchTypeID}" {if $Match.MatchTypeID==$MatchTypeID}checked{/if} /> {$Match.MatchName}
+        {/foreach}<br />
+        比赛场地:
+        <span id="RoomList">
+        {foreach from=$GameRoomList item=Room}
+        <input type="checkbox" class="Room" value="{$Room.RoomID}" /> <span id="Room_{$Room.RoomID}">{$Room.RoomName}</span> 
+        {/foreach}        
+        </span>
+        {if $GameRoomList}<input type="checkbox" id="AllRoom" value="0" /> <span class="orange">不限</span>{/if}
+        <br />
+        <input type="button" id="btnSearch2" class="btn f2" value="搜索"/>
+        <input type="button" id="btnOutput" class="btn f2" value="导出"/><span class="orange" id="ResultMsg"></span>
+    </div>    
+</fieldset>
+<div id="SearchResult">
+</div>
+
+</body>
+</html>

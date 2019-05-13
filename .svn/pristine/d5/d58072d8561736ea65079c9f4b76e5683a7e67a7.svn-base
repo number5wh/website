@@ -1,0 +1,44 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="12%" bgcolor="#FFFFFF">玩家昵称</th>
+	<th width="12%" bgcolor="#FFFFFF"><a href="javascript:void(0)" onclick="Sys.Sort(this)" id="SummaryMoney" data-order-field="SummaryMoney">金币数量↓</a></th>
+    <th width="12%" bgcolor="#FFFFFF">赢</th>
+    <th width="12%" bgcolor="#FFFFFF">输</th>
+    <th width="12%" bgcolor="#FFFFFF">逃</th>
+    <th width="12%" bgcolor="#FFFFFF"><id="WinRate" data-order-field="WinRate">胜率(%)</a></th>
+  </tr>
+  {foreach from=$UserList item=List}
+  <tr id="Row_{$List.RoleID}{$List.KindID}{$List.RoomType}">
+    <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" class="RoleName" title="{$List.RoleName}({$List.RoleID})" id="{$List.RoleID}">{$List.RoleName}</a></td>
+	<td align="center" bgcolor="#FFFFFF">{$List.Money}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.WinCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.LostCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.FleeCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.WinRate}</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr> 
+  {/foreach}
+  {if $UserList}
+  <tr>
+    <td colspan="7" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$('.RoleName').click(function(){
+	{/literal}
+				setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+				var Params = setting.Params;
+				setting.Params='&loginID='+$(this).attr('id');
+				window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('id'),setting.Url+setting.Params);
+				setting.Params = Params;
+	{literal}
+			});
+{/literal}
+</script>

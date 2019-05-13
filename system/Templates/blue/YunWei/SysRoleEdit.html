@@ -1,0 +1,62 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>角色设置
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysRole')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">角色ID:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" readonly name="roleid" id="roleid" value="{$Info.roleid}"></td>
+            </tr>
+
+            <tr>
+                <td  width="17%" align="right" bgcolor="#FFFFFF">角色名:</td>
+                <td  width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="rolename" id="rolename" value="{$Info.rolename}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">描述:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt"  name="descript" id="descript" value="{$Info.descript}"></td>
+            </tr>
+
+        </table>
+        <div class="bot f2">
+            <div class="botLeft f1 left"></div>
+            <div class="botRight f1 right"></div>
+
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysRole')"/>
+            <input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+                    {/literal}
+                        setting.Url='{au d=Yunwei c=SysRole a=editRole}';
+                        {literal}
+                        $('#ResultMsg').next().html('');
+                        var roleid = $('#roleid').val();
+                        var rolename = $('#rolename').val();
+                        var descript = $('#descript').val();
+
+                        if(isNaN(roleid) || roleid=='' || roleid<0  ||rolename =='' || descript == ''){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+
+
+                        setting.Params = 'roleid='+roleid+'&rolename='+rolename+'&descript='+descript;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.EditRole');
+                    });
+            }
+        }
+        {/literal}
+    </script>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();//初始化鼠标移到表格行显示背景
+	$('.aDetail').click(function(){
+{/literal}
+		setting.Url = '{au d=Service c=ServiceRole a=getGameMatchDeskPlayerList}';
+		setting.Params = '&SerialNumber='+$(this).attr('SerialNumber')+'&RoleID='+$(this).attr('RoleID')+'&PlayDate='+$(this).attr('PlayDate');
+		window.parent.main.AddTab($(this).attr('title'),'GameMatchDesk'+$(this).attr('SerialNumber'),setting.Url+setting.Params);
+{literal}
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<span class="orange bold">当前单元赛流水号:{$MatchUnitID}</span>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr class="bg_color">
+    <th width="15%">单局开始时间</th>
+    <th width="10%">当前局数</th>
+    <th width="6%">比赛桌号</th>
+	<th width="6%">本局结果</th>
+	<th width="7%">上局积分</th>
+    <th width="7%">本局成绩</th>
+	<th width="7%">当前积分</th>	
+	<th width="7%">淘汰线</th>
+	<th width="15%">本局流水</th>	
+  </tr>
+
+  {foreach from=$MatchInningsList item=Match}
+  <tr class="bg_color">
+    <td>{$Match.StartTime}</td>
+    <td>{$Match.MatchStatus} 第{$Match.iTimes}局</td>
+    <td>{$Match.TableNumber}</td>
+    <td>{$Match.PlayStatus}</td>
+	<td>{$Match.LastScore}</td>
+	<td>{$Match.Score}</td>
+	<td>{$Match.CurScore}</td>
+    <td>{$Match.OutScore}</td>
+	<td><a href="javascript:void(0)" class="aDetail blue" RoleID="{$RoleID}" title="{$Match.SerialNumber}({$RoleID})" PlayDate="{$PlayDate}" SerialNumber="{$Match.SerialNumber}">{$Match.SerialNumber}</a></td>	
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="9">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}  
+</table>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<div class="sysWin sysWindow" style="width:700px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏版本
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy" >
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="9%"  align="right">游戏名称:</td>
+			<td width="20%" align="left" id="KinaName">{$KindName}</td>
+			<td width="17%" align="right">下载服务器:</td>
+			<td width="28%" align="left">
+			<select name="ServerID" id="ServerID" style="width:145px;">
+				<option value="">选择服务器</option>
+				{foreach from=$ServerList item=server}
+				<option value="{$server.ServerID}">{$server.ServerIP}</option>
+				{/foreach}
+			</select>
+			</td>
+			<td width="12%" align="right">安装类型:</td>
+			<td width="14%" align="left">
+			<select name="FileCategory" id="FileCategory">
+				<option value="1">解压</option>
+				<option value="2">覆盖</option>
+				<option value="3">运行</option>
+			</select>
+			</td>
+		  </tr>	
+		  <tr>
+			<td align="right">文件名称:</td>
+			<td align="left"><input type="text" class="txt" size="15" id="FileName" value="" /></td>
+			<td align="right">下载路径:</td>
+			<td align="left"><input type="text" class="txt" size="20" id="FileURL" value="/Games/" /></td>
+			<td align="right">版 本 号:</td>
+			<td align="left"><input type="text" class="txt" size="10" id="GameVersion" value="" style="margin-right:25px;" /></td>
+		  </tr>	
+	  </table>	
+
+		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+			<tr>
+				<th width="20%">文件名称</th>
+				<th width="15%">安装类型</th>
+				<th width="25%">下载服务器</th>
+				<th width="15%">下载目录</th>
+				<th width="12%">版本号</th>
+				<th width="13%">操作</th>
+			</tr>
+			{foreach from=$VersionList item=Ver}
+			<tr id="Row_{$Ver.VerID}">
+				<td align="center" class="orange">{$Ver.FileName}</td>
+				<td align="center" id="{$Ver.FileCategory}">{if $Ver.FileCategory==1}解压{elseif $Ver.FileCategory==2}覆盖{else}运行{/if}</td>
+				<td align="center" class="ServerID" id="{$Ver.ServerID}"></td>
+				<td align="center">{$Ver.FileURL}</td>
+				<td align="center">{$Ver.Version}</td>
+				<td align="center">
+					<a href="javascript:void(0)" class="modi" id="{$Ver.VerID}">更新</a>
+					<a href="javascript:void(0)" class="del" id="{$Ver.VerID}">删除</a>
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="KindID" value="{$KindID}" />	
+		<input type="hidden" id="VerID" value="0" />
+		<input type="hidden" id="LocalPath" value="" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(false,'')" style="margin-right:30px;"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameVersion" />		
+		<div class="orange left" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*点击提交*/
+	$('#btnAddGameVersion').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameKind a=addGameVersion}';
+		sys.AddGameVersion();
+{literal}
+	});
+	/*点击删除*/
+	$('a.del').each(function(){
+		$(this).click(function(){	
+{/literal}		
+			setting.Url='{au d=YunWei c=GameKind a=delGameVersion}';
+{literal}
+			setting.Params = 'VerID='+$(this).attr('id');
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.Request(setting.Url,setting.Params,'callback.DelGameVersion');
+		});
+	});
+	/*点击修改*/
+	$('a.modi').each(function(){
+		$(this).click(function(){	
+			var FileName = $('#Row_'+$(this).attr('id')+' td:eq(0)').html();
+			var FileCategory = $('#Row_'+$(this).attr('id')+' td:eq(1)').attr('id');
+			var ServerID = $('#Row_'+$(this).attr('id')+' td:eq(2)').attr('id');
+			var FileURL = $('#Row_'+$(this).attr('id')+' td:eq(3)').html();
+			var Version = $('#Row_'+$(this).attr('id')+' td:eq(4)').html();
+			$('#FileName').val(FileName);
+			$('#FileCategory').val(FileCategory);
+			$('#ServerID').val(ServerID);
+			$('#FileURL').val(FileURL);
+			$('#GameVersion').val(Version);
+		});
+	});
+	/*从下载框中选择下载服务器地址*/
+	$('.ServerID').each(function(){
+		$('#ServerID').val($(this).attr('id'));
+		var txt = $('#ServerID').find("option:selected").text();
+		txt=txt.replace(/,/g,'<br>');
+		$(this).html(txt);
+		$('#ServerID').val('');
+	});
+})
+{/literal}
+</script>

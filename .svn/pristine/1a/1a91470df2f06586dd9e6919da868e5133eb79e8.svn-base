@@ -1,0 +1,33 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="13%">操作时间</th>
+	<th width="6%">操作渠道</th>
+    <th width="8%">操作类型</th>
+    <th width="10%">IP</th>
+    <th width="18%">机器码</th>  
+    <th width="6%">操作结果</th>  
+    <th width="31%">备注说明</th>  
+	<th width="8%">操作客服</th>  
+  </tr>
+  {foreach from=$OpLogsList item=Logs}
+  <tr class="bg_color">
+    <td>{$Logs.AddTime}</td>
+    <td>{$Logs.OpPlace}</td>
+	<td>{$Logs.OpType}</td>
+    <td>{$Logs.ClientIP}</td>
+    <td style="table-layout:fixed;word-break:break-all;;border-collapse:collapse">{$Logs.MachineSerial}</td>
+    <td>{$Logs.OpResult}</td>
+    <td>{$Logs.OpContent}</td>
+	<td>{$Logs.SysUserName}</td>
+  </tr>    
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="8">很抱歉，没有您要查询的信息~</td>   
+  </tr> 
+  {/foreach}
+  {if $OpLogsList}
+  <tr class="bg_color">
+    <td colspan="8" id="RPLD">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

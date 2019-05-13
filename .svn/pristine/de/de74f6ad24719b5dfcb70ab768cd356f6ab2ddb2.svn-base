@@ -1,0 +1,125 @@
+在线人数：{$onlinenum}
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="8%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="7%" bgcolor="#FFFFFF">登录设备</th>
+    <th width="10%" bgcolor="#FFFFFF">银行余额</th>
+    <th width="10%" bgcolor="#FFFFFF">携带余额</th>
+    <th width="10%" bgcolor="#FFFFFF">所在房间</th>
+    <th width="10%" bgcolor="#FFFFFF">控制概率</th>
+    <th width="10%" bgcolor="#FFFFFF">控制时长(秒)</th>
+    <th width="10%" bgcolor="#FFFFFF">控制间隔(秒)</th>
+    <th width="8%" bgcolor="#FFFFFF">充值总额(60天)</th>
+    <th width="8%" bgcolor="#FFFFFF">转出总额(60天)</th>
+    <th width="8%" bgcolor="#FFFFFF">充值总额(30天)</th>
+    <th width="8%" bgcolor="#FFFFFF">转出总额(30天)</th>
+    <th width="15%" bgcolor="#FFFFFF">用户备注</th>
+    <th width="20%" bgcolor="#FFFFFF">置顶</th>
+  </tr>
+  {foreach from=$OnlineList item=v}
+  <tr {if $v.itop==1}style="color:blue"{elseif $v.icolor==1}style="color:red"{/if}>
+	<td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" class="ctroll" id="{$v.iUserID}" data-id="{$v.nRatio}|{$v.nControlTimeLong}|{$v.nControlTimeInterval}">{$v.iUserID}({$v.szUsername})</a> </td>
+    <td align="center" bgcolor="#FFFFFF">{$v.device}</td>
+    <td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.bankmoney}</td>
+    <td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.gamemoney}</td>
+	<td align="center" bgcolor="#FFFFFF" >{$v.kindname}</td>
+    <td align="center" bgcolor="#FFFFFF" >{$v.nRatio}</td>
+    <td align="center" bgcolor="#FFFFFF" >{$v.nControlTimeLong}</td>
+    <td align="center" bgcolor="#FFFFFF" >{$v.nControlTimeInterval}</td>
+	<td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.threemonthin}</td>
+    <td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.threemonthout}</td>
+    <td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.monthin}</td>
+	<td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.monthout}</td>
+    <td align="center" bgcolor="#FFFFFF" style="color: red;">{$v.descript}</td>
+    <td align="center" bgcolor="#FFFFFF">&nbsp;
+      <a href="#" title="{$v.iUserID}" Date="30" class="aLink" id='{$v.iUserID}'>充退记录</a> <br/>
+      <a href="javascript:void(0)" class="sticky" id='{$v.iUserID}' data-color='{$v.icolor}' data-top='{$v.itop}'>{$v.topname}</a>|<a href="javascript:void(0)" class="color" id='{$v.iUserID}' data-color='{$v.icolor}' data-top='{$v.itop}'>{$v.colorname}</a><br/>
+      <a href="#" title="用户备注" Date="30" class="des" id='{$v.iUserID}'>用户备注</a>
+
+    </td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="15" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $OnlineList}
+  <tr>
+    <td colspan="15" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script>
+    {literal}
+    $(function(){
+        $('.aLink').click(function(){
+
+            setting.Url='/?d=Service&c=ServiceTransfer&a=getBankInfoDetail';
+            var Params='&RoleID='+$(this).attr('id');
+            window.parent.main.AddTab('查看充退明细('+$(this).attr('id')+')','GameRate'+$(this).attr('id'),setting.Url+Params);
+        })
+    });
+
+    $(".sticky").click(function(){
+        var url = '/?d=YunYing&c=Online&a=settop';
+        var userid = $(this).attr('id');
+        var top = $(this).attr("data-top");
+        var color = $(this).attr("data-color");
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {roleid:userid, top:top,color:color},
+            dataType: "json",
+            success: function(data){
+                if(data==1){
+                    location.reload();
+                }
+            }
+        });
+    });
+
+    $(".color").click(function(){
+        var url = '/?d=YunYing&c=Online&a=setcolor';
+        var userid = $(this).attr('id');
+        var top = $(this).attr("data-top");
+        var color = $(this).attr("data-color");
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {roleid:userid, top:top,color:color},
+            dataType: "json",
+            success: function(data){
+                if(data==1){
+                    location.reload();
+                }
+            }
+        });
+    });
+
+    $('.des').each(function(){
+        $(this).click(function(){
+            {/literal}
+                setting.Url='{au d=YunYing c=Online a=showAddDesHtml}';
+                {literal}
+                ajax.RequestUrl(setting.Url,'RoleId='+$(this).attr('id'),'ShowAddOnlineDesHtml');
+            });
+    });
+
+
+    $('.ctroll').each(function(){
+        $(this).click(function(){
+            {/literal}
+                setting.Url='{au d=YunYing c=Online a=showRoomCtrl}';
+                {literal}
+                ajax.RequestUrl(setting.Url,'RoomId='+$(this).attr('id')+"&info="+$(this).attr("data-id"),'ShowAddOnlineDesHtml');
+            });
+    });
+
+    function ShowAddOnlineDesHtml(data){
+      main.MsgBox(data);
+      window.parent.onlineEdit.BindEvent();
+    }
+
+
+    {/literal}
+</script>

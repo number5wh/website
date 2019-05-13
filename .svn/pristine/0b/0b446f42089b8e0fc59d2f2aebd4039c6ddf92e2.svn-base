@@ -1,0 +1,73 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+require ROOT_PATH . 'Class/BLL/PayLogsBLL.class.php';
+
+class IndexAction extends PageBase
+{	
+	private $objMasterBLL = null;
+	public function __construct()
+	{
+		$this->arrConfig=unserialize(SYS_CONFIG);
+		Utility::chkUserLogin($this->arrConfig);
+	}
+	public function index()
+	{
+		$objSessioinLogin = new Session($this->arrConfig['Session']['SessionLoginName']);
+		$UserName = $objSessioinLogin->get($this->arrConfig['SessionInfo']['UserName']);
+        $DeptID = $objSessioinLogin->get($this->arrConfig['SessionInfo']['DeptID']);
+
+        $objmsterBll = new MasterBLL();
+        $reviewnum = $objmsterBll->getReviewNum();
+        //print_r($reviewnum);
+
+		$arrTags = array('UserName'=>$UserName,'DeptID'=>$DeptID,'AutoLogoutCheckTime'=>$this->arrConfig['AutoLogoutCheckTime'],"Review"=>$reviewnum[0]['total']);
+		Utility::assign($this->smarty,$arrTags);
+		$this->smarty->display($this->arrConfig['skin'].'/index.html');
+	}
+	public function main()
+	{
+        $objDataChangeBLL = new MasterBLL();
+        $ret = $objDataChangeBLL->getHomedata();
+
+        $arrTags = array('skin' => $this->arrConfig['skin'], 'data' => $ret[0]);
+        Utility::assign($this->smarty, $arrTags);
+		$this->smarty->display($this->arrConfig['skin'].'/main.html');
+	}
+
+
+	public function getReview(){
+        $objmsterBll = new MasterBLL();
+        $reviewnum = $objmsterBll->getReviewNum();
+        echo $reviewnum[0]['total'];
+    }
+
+    //注册数据折线图
+    public function regData()
+    {
+        $objDataChangeBLL = new MasterBLL();
+        $ret = $objDataChangeBLL->getRegData();
+        $dates = $numbers = [];
+        foreach ($ret as $v) {
+            $dates[] = $v['regdate'];
+            $numbers[] = $v['number'];
+        }
+        echo json_encode(['code' => 0, 'numbers' => $numbers, 'dates' => $dates]);
+    }
+
+    //订单数据折线图
+    public function orderData()
+    {
+        $objPayLogsBLL = new PayLogsBLL(0);
+        $list = $objPayLogsBLL->orderData();
+        $dates = $numbers = [];
+        foreach ($list as $v) {
+            $dates[] = $v['date'];
+            $numbers[] = $v['totalfee'];
+        }
+        echo json_encode(['code' => 0, 'numbers' => $numbers, 'dates' => $dates]);
+    }
+	
+}
+?>

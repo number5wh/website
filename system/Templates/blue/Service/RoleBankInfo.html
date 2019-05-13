@@ -1,0 +1,124 @@
+
+
+<table width="90%" border="0" cellpadding="1" cellspacing="1" class="txt_M">
+   	<tr>
+   		<th>开户时间</th>
+   		<th>状态</th>
+   		<!--<th>永凡币余额</th>-->
+   		<th>银行金币余额</th>
+   		<!--<th>背包金币余额</th>-->
+   		<th>游戏金币余额</th>
+   		<th>金币总额</th>
+   		<th>金币被冻结数量</th>
+   		<th>能量瓶数量</th>
+   		<th>能量瓶余额</th>
+   		<th>领取过的能量瓶总数</th>
+   	</tr>
+   	<tr class="bg_color">
+   		<td>{$userBankInfo.AddTime}</td>
+   		<td>{if !$userBankInfo.Freeze}正常{else}冻结{/if}</td>
+   		<!--<td>{$M.fwBank}</td>-->
+   		<td>{$M.bank/1000}</td>
+   		<!--<td>{$M.knapsack}</td>-->
+   		<td>{if $M.game}{$M.game/1000}{else}0{/if}</td>
+   		<td>{$M.bank/1000+$M.knapsack/1000+$M.game/1000}</td>
+   		<td>{$userBankInfo.TotalLockMoney/1000}</td>
+   		<td>{$userBankInfo.BankDealBackCanGetCount/1000}</td>
+   		<td>{$userBankInfo.BankDealBackMoney/1000}</td>
+   		<td>{$userBankInfo.BankTotalGetBackMoney/1000}</td>
+   	</tr>
+   </table>
+   
+   <fieldset>
+	    <legend>转账记录</legend>
+	    <div style="float:left;">    
+		    起始时间:<input id="registertimeFrom1" type="text" value="{$FromDate}" size="10" class="" style="display:none"/>
+		    <input id="registertimeTo1" type="text" value="{$ToDate}" size="10" />
+            
+            
+		    借贷标志:
+		    <select id="DCFlag" style="margin-right:10px">
+		        <option value="-1">全部</option>
+		        <option value="1">存入</option>
+		        <option value="2">支出</option>
+		    </select>
+	    </div>
+	    <div style="float:left; margin-right:10px; position:relative; top:5px;">
+		     交易类型:
+		     <select id="TransType_1" style="float:right; display:none;">
+		        <option value="-1">全部</option>
+		        <option value="1">充值</option>
+		        <option value="6">财富补偿</option>
+		        <option value="3">消费</option>
+		    </select>
+		    <select id="TransType_2" style="float:right;">
+		        <option value="-1">全部</option>
+                {foreach key=key item=item from=$ChangeType}
+                    <option value="{$item.value}">{$item.name}</option>
+                {/foreach}
+                <!--<option value="1">取款</option>
+		        <option value="2">赠送</option>
+		        <option value="3">冻结</option>
+		        <option value="4">存款</option>
+				<option value="5">收款</option>
+				<option value="6">解冻</option>
+				<option value="7">充值</option>
+				<option value="8">工资</option>
+				<option value="9">转账返还</option>
+				<option value="10">系统存款</option>
+				<option value="11">系统赠送</option>
+                <option value="12">转账扣税</option>-->
+		    </select>
+		    <div style="clear:both;"></div>
+	    </div>
+	      查询类型:
+	    <select id="SearchType" style="margin-right:10px">	        
+	        <option value="2">金币</option>
+	        <!--<option value="1">永凡币</option>-->
+	    </select>
+	    <span class="orange" id="ErrBankMsg"></span>
+	    <input type="button" id="BankSearchBtn" class="bnStyle f2" value="查 询" />
+	    <!--<input type="button" onclick="re.ChooseDownload(1);" class="bnStyle f2" value="下 载" />-->
+	</fieldset>
+	<div id="TransferRecords"></div>
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+	$('#registertimeFrom1').focus(function(){
+		WdatePicker({{/literal}minDate:'{$FromDate}',{literal}maxDate:"#F{$dp.$D('registertimeTo1')}"});
+	});
+	$('#registertimeTo1').focus(function(){
+		WdatePicker({minDate:"#F{$dp.$D('registertimeFrom1')}",{/literal}maxDate:'{$ToDate}'{literal}});
+	});
+	$("#SearchType").change(function(){
+		var searchVal = $(this).val();
+		if(searchVal == 2){
+			$("#TransType_1").css({display:'none'});
+			$("#TransType_2").css({display:'block'});
+		}else{
+			$("#TransType_1").css({display:'block'});
+			$("#TransType_2").css({display:'none'});
+		}
+	});
+	$("#BankSearchBtn").click(function(){
+		var stime = $.trim($("#registertimeFrom1").val());
+		var etime = $.trim($("#registertimeTo1").val());
+		var dcFlag = $.trim($("#DCFlag").val());
+		var searchType = $.trim($("#SearchType").val());
+		var transType = (searchType == 2?$.trim($("#TransType_2").val()):$.trim($("#TransType_1").val()));
+		if(stime == '' || etime == ''){
+			$("#ErrBankMsg").html("请选择正确的查询时间！");
+			return false;
+		}
+		cookieCommon.c_del(RoleID+'iUserBankRecordsCount'+searchType);
+	{/literal}
+		var param = 'RoleID='+RoleID+"&Stime="+stime+"&Etime="+etime+"&DCFlag="+dcFlag+"&SearchType="+searchType+"&TransType="+transType+'&sFlag=1';
+		setting.Url = '{au d=Service c=ServiceRole a=getPageUserTransferRecords}';
+	{literal}
+		ajax.RequestUrl(setting.Url, param,'callback.GetPageUserTransferRecords');
+	})
+})
+{/literal}
+</script>

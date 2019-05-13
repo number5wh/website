@@ -1,0 +1,76 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>添加备注
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <input type="hidden" name="RoleId" id="RoleId" value="{$User.RoleId}" />
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">输赢概率:</td>
+                <td>
+                    <input name="nRatio" id="nRatio" value="{$User.nRatio}" />
+                </td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >控制时长(秒):</td>
+                <td>
+                    <input name="nControlTimeLong" id="nControlTimeLong" value="{$User.nControlTimeLong}" />
+                </td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">控制间隔(秒):</td>
+                <td>
+                    <input name="nControlTimeInterval" id="nControlTimeInterval" value="{$User.nControlTimeInterval}" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <div class="botRight f1 left"></div>
+        <input type="button" class="btn f2 right btnCancel" value="取 消" />
+        <input type="button" class="btn f2 right" value="提 交" id="btnAddDes" />
+        <div class="orange right" id="AddOnlineDesMsg"></div>
+        <br class="clear" />
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var onlineEdit={
+        BindEvent:function(){
+            /*提交*/
+            $('#btnAddDes').click(function(){
+                {/literal}
+                    setting.Url='{au d=YunYing c=Online a=SendUserCtrl}';
+                    {literal}
+                    var RoleId = $('#RoleId').val();
+                    var nRatio = $('#nRatio').val();
+                    var nControlTimeLong = $('#nControlTimeLong').val();
+                    var nControlTimeInterval = $('#nControlTimeInterval').val();
+                    if(parseInt(nRatio)>200){
+                        $('#AddOnlineDesMsg').html('*输赢概率不能大于200');
+                        return false;
+                    }
+                    if(RoleId.replace(/^\s+|\s+$/g,"")!=''){
+                        setting.Params='RoleId='+RoleId+'&nRatio='+nRatio+"&nControlTimeLong="+nControlTimeLong+"&nControlTimeInterval="+nControlTimeInterval;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.AddOnlineDes');
+                    }
+                    else
+                    {
+                        $('#AddOnlineDesMsg').html('*参数错误');
+                        return false;
+                    }
+                });
+            /*关闭弹出层*/
+            $('.btnCancel').click(function(){
+                main.CloseMsgBox(true,'Online')
+            });
+        }
+    }
+    {/literal}
+</script>

@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+    <script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+    <script type="text/javascript" language="javascript">
+        var RoleID = {$RoleID};
+        var DivID="{$DivID}";
+        var openTime="{$result.VipOpeningTime}";
+        var LogsType = 'Operation';
+        {literal}
+        var re={
+            GetRoleBaseInfo:function(){
+                var param = 'RoleID='+RoleID;
+                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getRoleBaseInfo', param,'callback.GetRoleBaseInfo');
+            },
+            ShowVipDetail:function(){
+                {/literal}
+                    var stime = $.trim($('#VIPLogsStartTime').val());
+                    var etime = $.trim($('#VIPLogsEndTime').val());
+                    var param = 'RoleID='+RoleID+'&Stime='+stime+'&Etime='+etime;
+                    setting.Url = '{au d=Service c=ServiceRole a=showVipDetail}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url, param,'callback.ShowVipDetail');
+                },
+                ShowSalaryDetail:function(){
+                    {/literal}
+                        var param = 'RoleID='+RoleID+'&VipOpenTime='+encodeURIComponent(openTime);
+                        setting.Url = '{au d=Service c=ServiceRole a=showSalaryDetail}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url, param,'callback.ShowSalaryDetail');
+                    },
+                    ShowGiftDetail:function(){
+                        {/literal}
+                            var param = 'RoleID='+RoleID;
+                            setting.Url = '{au d=Service c=ServiceRole a=showMonthGiftPackage}';
+                            {literal}
+                            ajax.RequestUrl(setting.Url, param,'callback.ShowMonthGiftPackage');
+                        },
+                        GetUserGameData:function(Room){
+                            {/literal}
+                                setting.PageUrl = '{au d=Service c=ServiceRole a=getUserGameData}';
+                                {literal}
+                                setting.Params = 'Room='+Room+'&RoleID='+RoleID;
+                                ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetUserGameData');
+                            },
+                            GetBankInfoDetail:function(){
+                                setting.Params = 'RoleID='+RoleID;
+                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getBankInfoDetail',setting.Params,'callback.GetBankInfoDetail');
+                            },
+                            GetModifyDetail:function(){
+                                setting.Params = 'RoleID='+RoleID;
+                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getModifyDetail',setting.Params,'callback.GetModefyDetail');
+                            },
+                            /*银行转账记录导出EXECL*/
+                            DownloadUserBankRecordsExecl:function(CurPage){
+                                $('#ErrBankMsg').html('');
+                                var stime = $.trim($("#registertimeFrom1").val());
+                                var etime = $.trim($("#registertimeTo1").val());
+                                var dcFlag = $.trim($("#DCFlag").val());
+                                var searchType = $.trim($("#SearchType").val());
+                                var transType = (searchType == 2?$.trim($("#TransType_2").val()):$.trim($("#TransType_1").val()));
+                                if(stime=='' || etime==''){
+                                    $('#ErrBankMsg').html('请选择正确的日期范围');
+                                    return false;
+                                }
+                                {/literal}
+                                    setting.PageUrl = '{au d=Service c=ServiceRole a=downloadUserBankRecordsExecl}';
+                                    setting.Params = 'RoleID='+RoleID+"&Stime="+stime+"&Etime="+etime+"&DCFlag="+dcFlag+"&SearchType="+searchType+"&TransType="+transType;
+                                    ajax.Request(setting.PageUrl,setting.Params,'callback.DownloadUserRechargeRecordsExecl');
+                                    {literal}
+                                },
+                                /*充值记录导出EXECL*/
+                                DownloadUserRechargeRecordsExecl:function(CurPage){
+                                    $('#ErrMsg').html('');
+                                    var RechargeStartTime=$('#RechargeStartTime').val();
+                                    var RechargeEndTime=$('#RechargeEndTime').val();
+                                    if(RechargeStartTime=='' || RechargeEndTime==''){
+                                        $('#ErrMsg').html('请选择正确的日期范围');
+                                        return false;
+                                    }
+                                    {/literal}
+                                        setting.PageUrl = '{au d=Service c=ServiceRole a=downloadUserRechargeRecordsExecl}';
+                                        setting.Params = 'RoleID='+RoleID+'&RechargeStartTime='+RechargeStartTime+'&RechargeEndTime='+RechargeEndTime+'&RechargeType='+$('#RechargeType').val()+'&RechargeStatus='+$('#RechargeStatus').val()+'&OrderSerial='+$('#OrderSerial').val()+'&curPage='+CurPage+'&FileName='+$('#ExeclFileName').val();
+                                        ajax.Request(setting.PageUrl,setting.Params,'callback.DownloadUserBankRecordsExecl');
+                                        {literal}
+                                    },
+                                    /*选择下载*/
+                                    ChooseDownload:function(flag){
+                                        var html='<div class="sysWin">';
+                                        html+='<h2 class="f2 white">';
+                                        html+='<div class="tLeft f1 left"></div>提示信息	';
+                                        html+='<div class="tRight f1 right"></div>';
+                                        html+='<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,\'\')"/></a>';
+                                        html+='<br class="clear" />';
+                                        html+='</h2>';
+                                        html+='<div class="bdy">';
+                                        html+='<div style="width:100%;height:70px;background-color:#ffffff;text-align:center;padding:30px 0px 0px 0px">';
+                                        html+='<div style="border:1px solid #ccc;width:200px;height:10px;margin:10px auto" id="ProgressBar"><div style="width:0px;height:10px;background-color:#0000ff"></div></div>'
+                                        html+='<div id="ProgressBarMsg">文件生成中,请稍后...</div>';
+                                        html+='</div>';
+                                        html+='</div>';
+                                        html+='<div class="bot f2">';
+                                        html+='<div class="botLeft f1 left"></div>';
+                                        html+='<div class="botRight f1 right"></div>';
+                                        html+='<input type="button" class="btn f2 right" value="关闭" onclick="main.CloseMsgBox(false,\'\')"/>';
+                                        html+='<input type="button" class="btn f2 right" value="重新下载" id="btnDownload"/>';
+                                        html+='<br class="clear" />';
+                                        html+='</div>';
+                                        html+='</div>';
+                                        main.MsgBox(html);
+                                        if(flag == 1){
+                                            re.DownloadUserBankRecordsExecl(1);
+                                        }else{
+                                            re.DownloadUserRechargeRecordsExecl(1);
+                                        }
+                                    },
+                                    /*道具资料->背包数据*/
+                                    GetPackageSpList:function(){
+                                        {/literal}
+                                            $('#PackageLogsSearch').hide();
+                                            setting.PageUrl = '{au d=Service c=ServiceRole a=getMyKnapsackInfo}';
+                                            setting.Params = 'RoleID='+RoleID;
+                                            ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetMySpInfo');
+                                            {literal}
+                                        },
+                                        /*登陆解绑*/
+                                        MobileUnlock:function(passport){
+                                            if(confirm('确定解除用户的登陆绑定吗？')){
+                                                {/literal}
+                                                    setting.Url = '{au d=Service c=ServiceRole a=MobileUnlockTable}';
+                                                    ajax.RequestUrl(setting.Url,'passport='+passport+'&roleID='+RoleID, 'callback.GetEditOperationResult');
+                                                    {literal}
+                                                }
+                                            }
+                                        };
+                                        $(function(){
+                                            init.SetTableRows();
+                                            //加载用户基本信息
+                                            re.GetUserGameData('generic');
+                                            //加载道具资料的背包信息
+                                            // re.GetPackageSpList();
+                                            //加载银行资料内容
+                                            re.GetBankInfoDetail();
+                                            /*顶部按钮事件*/
+                                            var arrInput=Array();
+                                            $('.btn').each(function(){
+                                                arrInput.push($(this).attr('id'));
+                                                if(DivID){
+                                                    for(var i=0;i<arrInput.length;i++){
+                                                        $('#'+arrInput[i]).removeClass('btnChk');
+                                                        $('.'+arrInput[i]).hide();
+                                                    }
+                                                    $('#'+DivID).addClass('btnChk');
+                                                    $('.'+DivID).show();
+                                                }
+                                                $(this).click(function(){
+                                                    for(var i=0;i<arrInput.length;i++){
+                                                        $('#'+arrInput[i]).removeClass('btnChk');
+                                                        $('.'+arrInput[i]).hide();
+                                                    }
+                                                    $('#'+$(this).attr('id')).addClass('btnChk');
+                                                    $('.'+$(this).attr('id')).show();
+                                                    calendar.hide();
+                                                    /*基本资料加载*/
+                                                    if($(this).attr('id')=='BaseInfo'){
+                                                        re.GetRoleBaseInfo();
+                                                    }
+                                                    /*如果是游戏资料,加载普通房间游戏数据*/
+                                                    if($(this).attr('id')=='GameInfo'){
+                                                        re.GetUserGameData('generic');
+                                                    }
+                                                    /*如果是银行资料,加载银行数据*/
+                                                    if($(this).attr('id')=='BankInfo'){
+                                                        re.GetBankInfoDetail();
+                                                    }
+                                                    /*如果是道具资料,加载背包道具数据*/
+                                                    else if($(this).attr('id')=='SpInfo'){
+                                                        re.GetPackageSpList();
+                                                    }
+                                                    /*如果是编辑操作,加载解锁数据*/
+                                                    else if($(this).attr('id')=='EditOperate'){
+                                                        ajax.RequestUrl('/?d=Service&c=ServiceRole&a=showEditLockInfo','roleID='+RoleID,'callback.GetLockDetail');
+                                                    }
+                                                    else if($(this).attr('id')=='Modify'){
+                                                        re.GetModifyDetail();
+                                                    }
+                                                });
+                                            });
+                                            /*绑定选项卡事件(当前页面)*/
+                                            $('.tab ul li').each(function(){
+                                                $(this).click(function(){
+                                                    $(this).parents('.tab').children('table').hide();
+                                                    $(this).siblings('li').removeClass('curTab');
+                                                    $(this).addClass('curTab');
+                                                    re.GetUserGameData($(this).attr('id'));
+                                                });
+                                            });
+                                            /*开通明细*/
+                                            $('#VipDetail').click(function(){
+                                                re.ShowVipDetail();
+                                            });
+                                            $('#btnVIPLogsSearch').click(function(){
+                                                re.ShowVipDetail();
+                                            });
+                                            /*日工资明细*/
+                                            $('#SalaryDetail').click(function(){
+                                                re.ShowSalaryDetail();
+                                            });
+                                            /*月礼包明细*/
+                                            $('#GiftDetail').click(function(){
+                                                re.ShowGiftDetail();
+                                            });
+                                            $("body").click(function(){
+                                                $(".downMenu").hide();
+                                            });
+                                            /*查询充值记录*/
+                                            $('#btnSearchRecharge').click(function(){
+                                                $('#ErrMsg').html('');
+                                                var RechargeStartTime=$('#RechargeStartTime').val();
+                                                var RechargeEndTime=$('#RechargeEndTime').val();
+                                                if(RechargeStartTime=='' || RechargeEndTime=='' || RechargeStartTime>RechargeEndTime){
+                                                    $('#ErrMsg').html('请选择正确的日期范围');
+                                                    return false;
+                                                }
+                                                {/literal}
+                                                    setting.PageUrl = '{au d=Service c=ServiceRole a=getPagerUserRechargeRecords}';
+                                                    setting.Params = 'RoleID='+RoleID+'&RechargeStartTime='+RechargeEndTime+'&RechargeEndTime='+RechargeEndTime+'&RechargeType='+$('#RechargeType').val()+'&RechargeStatus='+$('#RechargeStatus').val()+'&OrderSerial='+$('#OrderSerial').val();
+                                                    ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerUserRechargeRecords');
+                                                    {literal}
+                                                });
+
+                                            /*财富冻结日志*/
+                                            $('#btnTreasureLocked').click(function(){
+                                                $(".btnRoleLogs").each(function(){
+                                                    $(".btnRoleLogs").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PlayerLogsDetail').html('');
+                                                    $('#LogsMsg').html('');
+                                                    $('#OpLogs').hide();
+                                                    $('#LockedAccountLogs').hide();
+                                                    $('#LockedMoneyLogs').show();
+                                                    $('#CaseSerialLogs').show();
+                                                    $('#SetOpLogs').hide();
+                                                    LogsType = 'LockedMoney';
+                                                    {literal}
+                                                });
+                                            /*锁号/封号日志*/
+                                            $('#btnAccountLocked').click(function(){
+                                                $(".btnRoleLogs").each(function(){
+                                                    $(".btnRoleLogs").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PlayerLogsDetail').html('');
+                                                    $('#LogsMsg').html('');
+                                                    $('#OpLogs').hide();
+                                                    $('#LockedAccountLogs').show();
+                                                    $('#LockedMoneyLogs').hide();
+                                                    $('#CaseSerialLogs').show();
+                                                    $('#SetOpLogs').hide();
+                                                    LogsType = 'LockedAccount';
+                                                    {literal}
+                                                });
+                                            /*操作日志*/
+                                            $('#btnOperation').click(function(){
+                                                $(".btnRoleLogs").each(function(){
+                                                    $(".btnRoleLogs").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PlayerLogsDetail').html('');
+                                                    $('#LogsMsg').html('');
+                                                    $('#OpLogs').show();
+                                                    $('#LockedAccountLogs').hide();
+                                                    $('#LockedMoneyLogs').hide();
+                                                    $('#CaseSerialLogs').hide();
+                                                    $('#SetOpLogs').hide();
+                                                    LogsType = 'Operation';
+                                                    {literal}
+                                                });
+                                            /*设置操作日志*/
+                                            $('#btnSetOperation').click(function(){
+                                                $(".btnRoleLogs").each(function(){
+                                                    $(".btnRoleLogs").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PlayerLogsDetail').html('');
+                                                    $('#LogsMsg').html('');
+                                                    $('#SetOpLogs').show();
+                                                    $('#OpLogs').hide();
+                                                    $('#LockedAccountLogs').hide();
+                                                    $('#LockedMoneyLogs').hide();
+                                                    $('#CaseSerialLogs').hide();
+                                                    LogsType = 'SetOperation';
+                                                    {literal}
+                                                });
+                                            /*日志查询*/
+                                            $('#btnLogsSearch').click(function(){
+                                                $('#LogsMsg').html('');
+                                                var LogsStartTime = $('#LogsEndTime').val();
+                                                var LogsEndTime = $('#LogsEndTime').val();
+                                                if(LogsStartTime=='' || LogsEndTime=='' || LogsStartTime>LogsEndTime){
+                                                    $('#LogsMsg').html('请选择正确的日期范围');
+                                                    return false;
+                                                }
+                                                cookieCommon.c_del('iRecordsCount'+RoleID+'Login');
+                                                if(LogsType=='LockedAccount'){
+                                                    {/literal}
+                                                        setting.Params = 'OpResult='+$('#OpResult').val()+'&CaseSerial='+$('#txtCaseSerial').val();
+                                                        setting.PageUrl = '{au d=Service c=ServiceRole a=getLockAccountLogs}';
+                                                        setting.FunName = 'callback.GetLockAccountLogs';
+                                                        {literal}
+                                                    }else if(LogsType=='LockedMoney'){
+                                                        {/literal}
+                                                            setting.Params = 'OpStep='+$('#OpStep').val()+'&CaseSerial='+$('#txtCaseSerial').val();
+                                                            setting.PageUrl = '{au d=Service c=ServiceRole a=getTreasureFreezeLogs}';
+                                                            setting.FunName = 'callback.GetTreasureFreezeLogs';
+                                                            {literal}
+                                                        }else if(LogsType=='Operation'){
+                                                            {/literal}
+                                                                setting.Params = 'OpTypeID='+$('#OpTypeID').val()+'&sFlag=1';
+                                                                setting.PageUrl = '{au d=Service c=ServiceRole a=getPlayerLogsDetail}';
+                                                                setting.FunName = 'callback.GetPlayerLogsDetail';
+                                                                {literal}
+                                                            }else{
+                                                                {/literal}
+                                                                    setting.Params = 'SetSevice='+$('#SetSevice').val()+'&OperateType='+$('#OperateType').val()+'&DateType='+$('#DateType').val()+'&sFlag=1';
+                                                                    setting.PageUrl = '{au d=Service c=ServiceRole a=getPlayerSetLogsDetail}';
+                                                                    setting.FunName = 'callback.GetPlayerLogsDetail';
+                                                                    {literal}
+                                                                }
+                                                                setting.Params += '&RoleID='+RoleID+'&LogsStartTime='+LogsEndTime+'&LogsEndTime='+LogsEndTime;
+                                                                ajax.RequestUrl(setting.PageUrl,setting.Params,setting.FunName);
+                                                            });
+                                            /*道具资料->背包*/
+                                            $('#btnPackage').click(function(){
+                                                re.GetPackageSpList();
+                                                $(".btnSpInfo").each(function(){
+                                                    $(".btnSpInfo").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                            });
+                                            /*道具资料->衣柜*/
+                                            $('#btnWardrobe').click(function(){
+                                                $(".btnSpInfo").each(function(){
+                                                    $(".btnSpInfo").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PackageLogsSearch').hide();
+                                                    setting.PageUrl = '{au d=Service c=ServiceRole a=getMyWardrobeInfo}';
+                                                    setting.Params = 'RoleID='+RoleID;
+                                                    ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetMySpInfo');
+                                                    {literal}
+                                                });
+                                            /*道具资料->使用中的道具*/
+                                            $('#btnUseSp').click(function(){
+                                                $(".btnSpInfo").each(function(){
+                                                    $(".btnSpInfo").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                {/literal}
+                                                    $('#PackageLogsSearch').hide();
+                                                    setting.PageUrl = '{au d=Service c=ServiceRole a=getMyUsingSpInfo}';
+                                                    setting.Params = 'RoleID='+RoleID;
+                                                    ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetMySpInfo');
+                                                    {literal}
+                                                });
+                                            /*道具资料->背包日志*/
+                                            $('#btnPackageLogs').click(function(){
+                                                $(".btnSpInfo").each(function(){
+                                                    $(".btnSpInfo").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                $('#PackageLogsSearch').show();
+                                                $('#SpInfoDetail').html('');
+                                            });
+                                            /*道具资料->背包日志*/
+                                            $('#btnPackageLogsSearch').click(function(){
+                                                $('#LogMsg').html('');
+                                                var LogStartTime = $('#LogStartTime').val();
+                                                var LogEndTime = $('#LogEndTime').val();
+                                                if(LogStartTime=='' || LogEndTime=='' || LogStartTime>LogEndTime){
+                                                    $('#LogMsg').html('请选择正确的日期范围');
+                                                    return false;
+                                                }
+                                                {/literal}
+                                                    cookieCommon.c_del('iRecordsCount'+RoleID+'MyKnapsackLogs');
+                                                    setting.PageUrl = '{au d=Service c=ServiceRole a=getMyKnapsackLogs}';
+                                                    setting.Params = 'RoleID='+RoleID+'&LogsStartTime='+LogStartTime+'&LogsEndTime='+LogEndTime+'&sFlag=1';
+                                                    ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetMyKnapsackLogs');
+                                                    {literal}
+                                                });
+                                            /*编辑操作->解锁记录*/
+                                            $("#btnLockInfo").click(function(){
+                                                $(".btnEditOperate").each(function(){
+                                                    $(".btnEditOperate").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=showEditLockInfo','roleID='+RoleID,'callback.GetLockDetail');
+                                            });
+                                            /*编辑操作->解封记录*/
+                                            $("#btnBlockInfo").click(function(){
+                                                $(".btnEditOperate").each(function(){
+                                                    $(".btnEditOperate").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=showEditBlockInfo','roleID='+RoleID,'callback.GetBlockDetail');
+                                            });
+                                            /*编辑操作->冻结财富记录*/
+                                            $("#btnTreasureInfo").click(function(){
+                                                $(".btnEditOperate").each(function(){
+                                                    $(".btnEditOperate").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=FreezeTreasureInfo','roleID='+RoleID,'callback.GetFreezeTrasureDetailInfo');
+                                            });
+                                            /*编辑操作->银行、背包申请解冻记录*/
+                                            $("#btnBankKnapsacks").click(function(){
+                                                $(".btnEditOperate").each(function(){
+                                                    $(".btnEditOperate").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=showBankKnapsackUnFreezeInfo','roleID='+RoleID,'callback.GetBankKnapsackUnFreezeDetailInfo');
+                                            });
+                                            /*编辑操作->其他操作*/
+                                            $("#btnOtherOperateInfo").click(function(){
+                                                $(".btnEditOperate").each(function(){
+                                                    $(".btnEditOperate").removeClass("btnChk2");
+                                                });
+                                                $(this).addClass("btnChk2");
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=showOtherEditOperateInfo','roleID='+RoleID,'callback.GetOtherEditOperateDetailInfo');
+                                            });
+                                            //比赛查询
+                                            $(".MatchModeName").click(function(){
+                                                setting.Params = 'RoleID='+RoleID+'&typeID='+$(this).attr('TypeID')+'&MatchModeName='+$(this).val();
+                                                ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getGameSearchMode',setting.Params,'callback.GetGameSearchMode');
+                                            });
+                                            $('#RechargeStartTime').focus(function(){
+                                                WdatePicker({{/literal}minDate:'{$FromDate1}',{literal}maxDate:"#F{$dp.$D('RechargeEndTime')}"});
+                                                });
+                                                $('#RechargeEndTime').focus(function(){
+                                                    WdatePicker({minDate:"#F{$dp.$D('RechargeStartTime')}",{/literal}maxDate:'{$nowDate}'{literal}});
+                                                    });
+                                                    $('#LogsStartTime').focus(function(){
+                                                        WdatePicker({{/literal}minDate:'{$FromDate7}',{literal}maxDate:"#F{$dp.$D('LogsEndTime')}"});
+                                                        });
+                                                        $('#LogsEndTime').focus(function(){
+                                                            WdatePicker({minDate:"#F{$dp.$D('LogsStartTime')}",{/literal}maxDate:'{$nowDate}'{literal}});
+                                                            });
+                                                            $('#VIPLogsStartTime').focus(function(){
+                                                                WdatePicker({{/literal}minDate:'{$FromDate7}',maxDate:'{$nowDate}'{literal}});
+                                                                });
+                                                            });
+                                                            function hostUnlock(){
+                                                                if(confirm('确定解除用户的主机绑定吗？')){
+                                                                    {/literal}
+                                                                        setting.Url = '{au d=Service c=ServiceRole a=hostUnlockTable}';
+                                                                        ajax.RequestUrl(setting.Url,'roleID='+RoleID+'&loginID={$result.LoginID}', 'callback.GetEditOperationResult');
+                                                                        {literal}
+                                                                    }
+                                                                }
+                                                                function wechatUnlock(){
+                                                                    if(confirm('确认解除用户的微信绑定？')){
+                                                                        {/literal}
+                                                                            setting.Url = '{au d=Service c=ServiceRole a=wechatUnlockTable}';
+                                                                            ajax.RequestUrl(setting.Url,'roleID='+RoleID+'&loginID={$result.LoginID}','callback.GetEditOperationResult');
+                                                                            {literal}
+                                                                        }
+                                                                    }
+                                                                    {/literal}
+    </script>
+</head>
+
+<body>
+<!--<input type="button" class="btn btnChk f2" value="基本资料" id="BaseInfo"/>-->
+<input type="button" class="btn btnChk f2" value="游戏资料" id="GameInfo"/>
+<!--<input type="button" class="btn f2" value="银行资料" id="BankInfo"/>-->
+<input type="button" class="btn f2" value="充值记录" id="RechargeInfo"/>
+
+<!--&lt;!&ndash;基本资料&ndash;&gt;-->
+<!--<div id="BaseInfoDetail" class="BaseInfo {if $DivID}hide{/if}">-->
+
+<!--</div>-->
+
+
+<!--游戏资料-->
+<div class="tab borderGrayColor {if $DivID}hide{/if} GameInfo">
+    <ul>
+        <li class="curTab" id="generic">普通房间</li>
+        <!--<li id="sp">寻宝乐园</li>-->
+        <br class="clear" />
+    </ul>
+    <div id="UserGameData"></div>
+</div>
+
+<!--银行资料-->
+<div id="BankInfoDetail" class="tab borderGrayColor BankInfo {if $DivID neq 'BankInfo'}hide{/if}">
+
+</div>
+
+<!-- 充值记录 -->
+<div class="tab borderGrayColor hide RechargeInfo">
+    <table width="60%" border="0" cellpadding="1" cellspacing="1" class="txt_M">
+        <tr>
+            <th>首次充值时间</th>
+            <th>总充值次数</th>
+            <th>累计充值额</th>
+        </tr>
+        <tr class="bg_color">
+            <td>{$userBankInfo.FirstRechargeTime}</td>
+            <td>{$userBankInfo.ChargeCount}</td>
+            <td>{$userBankInfo.TotalChargeMoney}</td>
+        </tr>
+    </table>
+
+    <fieldset>
+        <legend>充值明细</legend>
+        起始时间:<input id="RechargeStartTime" type="text" value="{$FromDate1}" size="10" class="hide" /> <input id="RechargeEndTime" type="text" value="{$nowDate}" size="10" />
+
+        充值方式:
+        <select id="RechargeType" style="margin-right:10px">
+            <option value="0" selected="selected">全部</option>
+            {section name=n loop=$RechargeTypeList}
+            <option value="{$smarty.section.n.iteration}">{$RechargeTypeList[$smarty.section.n.iteration]}</option>
+            {/section}
+        </select>
+        充值状态:
+        <select id="RechargeStatus" style="margin-right:10px">
+            <option value="All" selected="selected">全部</option>
+            <option value="Success">成功</option>
+            <option value="Fail">失败</option>
+        </select>
+        充值订单号：<input type="text" id="OrderSerial" />
+        <input type="button" class="bnStyle f2" id="btnSearchRecharge" value="查 询" />
+        <input type="button" class="bnStyle f2" id="btnExeclRecharge" onclick="re.ChooseDownload(2);" value="下 载" /><span class="orange" id="ErrMsg"></span>
+    </fieldset>
+    <div id="RechargeRecordsPage"></div>
+</div>
+
+
+
+</body>
+</html>

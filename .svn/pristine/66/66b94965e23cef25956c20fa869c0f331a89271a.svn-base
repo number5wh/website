@@ -1,0 +1,161 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" id="EditOperateUnLockDetailInfo" class="tbList txt_M">
+	<tr class="bg_color">
+		<th>操作时间</th>
+		<th>解锁/锁号原因</th>
+		<th>案件编号</th>
+		<th>操作类型</th>
+		<th>操作人</th>
+		<th>授权人</th>
+		<th>授权意见</th>
+		<th>授权状态</th>
+		<th>授权/锁定解除时间</th>
+	</tr>
+{foreach from="$InfoList" item=v}
+	<tr class="bg_color">
+		<td>{$v.AddTime}</td>
+		<td id="tdRemarks_{$v.PID}">{if $v.Status}{$v.Remarks}{elseif !$v.PID}{else}<textarea id="Remarks_{$v.PID}">{$v.Remarks}</textarea><input type="button" onclick="editOperate.updateAPRemarks({$v.PID}, '{$v.Remarks}');" value="保存" />{/if}</td>
+		<td id="tdCaseSerial_{$v.FID}" rowspan="2">
+			{$v.CaseSerial} {if !$v.Status}<input type="button" onclick="editOperate.addCaseSerial({$v.FID});" value="添加" />
+			<div id="addCaseserialDiv_{$v.FID}" class="addCaseserialDiv"></div>{/if}
+		</td>
+		<td>{if $v.PID}解除锁定{else}{/if}</td>
+		<td>{$v.SysUserName}</td>
+		<td>{$v.Checker}</td>
+		<td>{$v.CheckRemarks}</td>
+		<td>{if $v.PID}{if $v.Status eq 1}同意{elseif $v.Status eq 2}拒绝{else}<font color="red">待授权</font>{/if}{else}{/if}</td>
+		<td>{$v.CheckTime}</td>
+	</tr>
+	<tr class="bg_color">
+		<td>{$v.AAddTime}</td>
+		<td id="tdReason_{$v.FID}">{if $v.Status}{$v.ARemarks}{else}<textarea id="Reason_{$v.FID}">{$v.ARemarks}</textarea><input type="button" onclick="editOperate.updateRemarks({$v.FID}, '{$v.ARemarks}')" value="保存" />{/if}</td>
+		<td>锁定账号<br/>( {$v.iNumber} 天 )</td>
+		<td>{$v.ASysUserName}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>{$v.lockEndTime}</td>
+	</tr>
+{foreachelse}
+	<tr class="bg_color">
+		<td colspan="9">很抱歉，没有您要查询的信息~</td>
+	</tr>
+{/foreach}
+{if $InfoList}	
+	<tr class="bg_color">
+		<td id="EditOperatePages" colspan="9">{include file="$skin/Inc/Page.inc.html"}</td>
+	</tr>
+{/if}
+</table>
+<input type="hidden" id="EditOperateRoleID" value="{$RoleID}" />
+<script type="text/javascript">
+{literal}
+var editOperate={
+		getCaseDetailPage:function(id,flag) {
+			var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+			var title = '案件'+id;
+			var iNum = 'CaseInfo'+id;
+			var param = '&id='+id;
+			if(flag){
+				param = param +'&flag=1';
+			}
+			window.parent.main.AddTab(title,iNum,url+param);
+		},
+		updateAPRemarks:function(pid, remarks){
+			var newRemark = $.trim($("#Remarks_"+pid).val());
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(newRemark !='' && newRemark != remarks){
+				var Param = "pid="+pid+"&Remarks="+newRemark+"&roleID="+roleID+"&opType=1";
+				ajax.Request('/?d=Service&c=ServiceRole&a=updateAuthProcessRemarks', Param,'callback.GetUpdateEditOperateResult');
+			}
+		},
+		getCaseDetailPage:function(id,flag) {
+			var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+			var title = '案件'+id;
+			var iNum = 'CaseInfo'+id;
+			var param = '&id='+id;
+			if(flag){
+				param = param +'&flag=1';
+			}
+			window.parent.main.AddTab(title,iNum,url+param);
+		},
+		showImg:function(fid,caseSerial){
+			$("#Img_"+fid+"_"+caseSerial).css({visibility:'visible'});
+		},
+		hidImg:function(fid,caseSerial){
+			$("#Img_"+fid+"_"+caseSerial).css({visibility:'hidden'});
+		},
+		updateRemarks:function(fid, remarks){
+			var newRemark = $.trim($("#Reason_"+fid).val());
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(newRemark !='' && newRemark != remarks){
+				var Param = "fid="+fid+"&Reason="+newRemark+"&roleID="+roleID+"&opType=0";
+				ajax.Request('/?d=Service&c=ServiceRole&a=updateCaseOperateUserRemarks', Param,'callback.GetUpdateEditOperateResult');
+			}
+		},
+		addCaseSerial:function(fid){
+			var sHtml = $("#tdCaseSerial_"+fid).html();
+			$(".addCaseserialDiv").each(function(){
+				$(this).empty();
+			});
+			var addShtml = '<input type="text" class="txt" id="iCaseSerial" value="请输入案件编号" onfocus="editOperate.HideDefaultTips(this);" onblur="editOperate.ShowDefaultTips(this)" />';
+			addShtml += '<span id="Msg" class="orange"></span>';
+			addShtml += '<input type="hidden" id="fid" value="'+fid+'" />';
+			addShtml += '<input type="hidden" id="chkResult" value="0" /><br/><br/>';
+			addShtml += '<input type="button" class="bnStyle f2" onclick="editOperate.ApplyInfo();" id="applyCaseserialBtn" value="提交" /> <input type="button" class="bnStyle f2" onclick="editOperate.hidCaseSerial(this);" value="取消" />';
+			$("#addCaseserialDiv_"+fid).html(addShtml);
+		},
+		hidCaseSerial:function(obj){
+			$(obj).parent().empty();
+		},
+		delCaseSerial:function(fid,caseSerial){
+			if(confirm("确定删除案件编号"+caseSerial+"?")){
+				$.post('/?d=Service&c=ServiceRole&a=delCaseSerial', 'fid='+fid+"&iCaseSerial="+caseSerial,function(data){
+					if(data == 1){
+						$("#caseDiv_"+fid+"_"+caseSerial).css({display:'none'});
+					}
+				});
+			}
+		},
+		HideDefaultTips:function(obj){
+			var val = $.trim($(obj).val());			
+			if(val=='请输入案件编号')
+				$(obj).val('');			
+		},
+		ShowDefaultTips:function(obj){
+			var caseSerial = $.trim($(obj).val());
+			var tips='请输入案件编号';
+			if(caseSerial == ''){
+				$(obj).val(tips);
+				return false;
+			}
+			if(caseSerial){
+				$.post("/?d=Service&c=ServiceRole&a=checkCaseSerial", {iCaseSerial:caseSerial}, function(data){
+					if(data == 1){
+						$("#Msg").html('<img src="images/common/check.gif" />');
+						$("#chkResult").val(1);
+					}else{
+						$("#Msg").html("案件编号匹配失败");
+						$("#chkResult").val(0);
+					}
+				})
+			}
+		},
+		ApplyInfo:function(){
+			var chkVal = $.trim($("#chkResult").val());
+			var fid = $.trim($("#fid").val());
+			var caseSerial = $.trim($("#iCaseSerial").val()); 
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(chkVal == 1 && fid && caseSerial){
+				$.post("/?d=Service&c=ServiceRole&a=insertCaseSerial", {fid:fid, iCaseSerial:caseSerial, roleID:roleID, opType:0}, function(data){
+					if(data == 1){
+						$("#tdCaseSerial_"+fid).prepend('<div id="caseDiv_'+fid+'_'+caseSerial+'" onmouseout="editOperate.hidImg('+fid+','+caseSerial+');" onmouseover="editOperate.showImg('+fid+','+caseSerial+');" style="width:110px;"><a class="hand blue" href="javascript:editOperate.getCaseDetailPage('+caseSerial+',1);">'+caseSerial+'</a><img id="Img_'+fid+'_'+caseSerial+'" class="close_btn" onclick="editOperate.delCaseSerial('+fid+','+caseSerial+');" src="/images/common/del.gif"></div>');
+						editOperate.hidCaseSerial("#applyCaseserialBtn");
+					}else{
+						$("#Msg").html("案件编号插入失败");					
+					}
+				})
+			}
+		}
+}
+{/literal}
+</script>

@@ -1,0 +1,33 @@
+
+/*声明页*样式*/
+.shengming_1{width:895px; height:55px;margin:10px auto;text-align:left;background:#dbdbdb;line-height:55px; padding-left:20px; border-top:3px solid #e50102;}
+.shengming_2{width:902px;text-align:left;line-height:28px; padding:20px; border:1px solid #ededef; background:#f7f7f7;}
+.shengming_3{width:895px; height:55px;margin:10px auto;text-align:left;background:#dbdbdb;line-height:55px; padding-left:20px; border-top:3px solid #4c5467;}
+.shengming_4{width:935px; margin:0px 0px 0px 0px;text-align:left;line-height:28px;}
+.shengming_5{width:94%;text-align:left;line-height:28px; padding:20px; border:1px solid #ededef; background:#f7f7f7;}
+.textarea_sm{ margin:0 auto; padding:10px;line-height:21px;font-size:13px;border:1px #ccc solid; color:#666;}
+
+
+
+
+/*元素类CSS代码开始 */
+/* 字体颜色*/	/*此处基本给出切图上展示的有关字体方面信息，如有不明，可及时进行沟通交流，页面缺省字体大小为12px,颜色为#333，需要强调加粗的可用font-family:bold*/	 
+.f_12{font-size:12px;font-family:宋体;}     /* 位置导航右侧*/ /* 表格字体*/
+.f_14{font-size:14px;font-family:宋体;}     /* 表单*/
+.f_16{font-size:16px;font-family:微软雅黑;}  /*注册导航 */
+.f_19{font-size:19px;font-family:微软雅黑;}  /*弹出框注册成功信息 */
+.f_24{font-size:24px;font-family:微软雅黑;}  /* 位置导航左侧*/
+.f_e1{color:#006aae;}     /* 左侧纵向导航点击时*//* 分也时选中*/
+.f_e2{color:#399cd8;}     /* 延期处理事项*/
+.f_r{color:#e60002;}	 	 /* 紧急处理的事项*/
+.f_b{color:#444;}        /* 处理事项周围连接信息*/
+.f_g1{color:#989898;}       /* 注册导航数字*/
+.f_g2{color:#666;}	    /* 位置导航右侧*/ /*注册导航 */ /* 表单*/
+.f_g3{color:#999;}      /* 注册表单提示信息，此处的提示是写死的，不是指通过验证之后的*/
+.f_g4{color:#a3alal;}   /* 弹出框提示几秒自动登录系统信息*/
+.f_g5{color:#8f8fa4;}  /* 登录后显示当前时间*/
+.f_g6{color:#b8b7b7;}  /* 表格里面有关时间的项*/		 
+.f_gr{color:#1d9900;}   /* 暂缓处理事项*/
+.f_g0{color:#FFF;}
+.f_w{ font-weight:bold;}
+.f_bl{color:#458fce;}

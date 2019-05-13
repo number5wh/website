@@ -1,0 +1,13 @@
+<div class="sysWin" style="width:300px;">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>操作结果
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+    </h2>
+    <div id="div_main" class="bdy" style="padding:10px 10px 0 10px;">
+        <div style="padding:10px; text-align:center;"><p style="padding:20px; font-size:14px">{if $iResult eq 0}操作成功！{else}操作失败！{/if}</p></div>
+    </div>
+    <div id="div_bottom" class="bot f2">
+        <div class="botLeft f1 left"></div><input type="button" class="bnStyle f2" style="margin-left:40px;" onclick="main.CloseMsgBox(false,'');refresh();" value="确&nbsp;定" /><div class="botRight f1 right"></div><div class="clear"></div>
+    </div>
+</div>

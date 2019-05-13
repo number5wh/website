@@ -1,0 +1,52 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="5%">类别ID</th>
+        <th width="20%">支付名称</th>
+        <th width="20%">银行卡</th>
+        <th width="20%">卡号</th>
+        <th width="15%">收款人姓名</th>
+        <th width="40%">备注</th>
+        <th width="15%">操作</th>
+    </tr>
+    {foreach from=$ClassList item=GameClass}
+    <tr class="bg_color">
+        <td>{$GameClass.ClassId}</td>
+        <td>{$GameClass.ClassName}</td>
+        <td>{$GameClass.Bank}</td>
+        <td>{$GameClass.CardNo}</td>
+        <td>{$GameClass.CardName}</td>
+        <td>{$GameClass.Descript}</td>
+        <td>
+            <a href="javascript:void(0)" class="edit" classname="{$GameClass.ClassName}" descript="{$GameClass.Descript}" cardname="{$GameClass.CardName}" cardno="{$GameClass.CardNo}" bank="{$GameClass.Bank}" id="{$GameClass.ClassId}">修改</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="7">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $ClassList}
+    <tr class="bg_color">
+        <td colspan="7">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var rm={
+        /*点击显示设置游戏种类界面*/
+        BindEvent:function(){
+            /*修改类别*/
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GamePayClass a=showEdit}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'classid='+$(this).attr('id')+'&classname='+$(this).attr('classname')+'&bank='+$(this).attr('bank')+'&cardno='+$(this).attr('cardno')+'&cardname='+$(this).attr('cardname')+'&descript='+$(this).attr('descript'),'callback.ShowEditClass');
+                    });
+            });
+        }
+    }
+    rm.BindEvent();
+    {/literal}
+</script>

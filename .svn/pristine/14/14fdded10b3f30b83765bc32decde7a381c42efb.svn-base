@@ -1,0 +1,39 @@
+
+@charset "utf-8";
+
+/**
+FileName:        style.css
+Version:         1.0.0(2010.09.01)
+Website:         PS
+Author:          Infinity arts vison,184586775@qq.com
+Page Width:      1000px;
+**/
+
+/* CSS Document */
+
+
+*{margin:0; padding:0;}
+body{font-family:Arial, Helvetica, sans-serif; font-size:12px; width:100%; margin:0 auto; background:url(../bg/img2.jpg) no-repeat center 113px;}
+html{ overflow-x:hidden;}
+li,ol{list-style:none;}
+a{text-decoration:none; cursor:pointer;}
+a img{border:0;}
+.clear{clear:both;}
+h1, h2, h3, h4, h5, h6, p, span{font-weight:normal;}
+i{font-style:normal;} 
+
+
+.position{width:100%; height:56px;  position:fixed; left:0px; bottom:3px; z-index:1001; background-color: black; border-top:3px solid #fff;}
+
+.innerWrapper{ display:block; margin:0 auto; width:1000px; height:60px;position:relative;}
+
+a.footerQQ{	background: url(../images/qq1.png) no-repeat left top;	display: block;	height: 75px; width: 331px;	position: absolute;	left: 10px;	top: -16px;	cursor:pointer;}
+
+a.phoneNumber{ display: block; color:#ff0000; width: 290px; position: absolute; top: 0px;	right: 20px; font-weight:bold; font-size:30px; font-family:"Myriad Pro";}
+
+a.phoneNumber ins{ text-decoration:none; display:block; height:28px; line-height:28px;}
+
+a.phoneNumber i{ display:block; height:28px; line-height:28px;  text-align:right;}
+
+* html .position /* IE6 �ײ����� */{position:absolute;bottom:0px;top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));}
+

@@ -1,0 +1,94 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="25%" bgcolor="#FFFFFF">玩家编号</th>
+        <th width="25%" bgcolor="#FFFFFF">玩家昵称</th>
+<!--        <th width="22%" bgcolor="#FFFFFF">金币(用户银行)</th>-->
+<!--        <th width="22%" bgcolor="#FFFFFF">金币(游戏银行)</th>-->
+        <th width="30%" bgcolor="#FFFFFF">总和</th>
+        <th width="20%" bgcolor="#FFFFFF">操作</th>
+        <!--<th width="20%" bgcolor="#FFFFFF">最近登陆IP</th>-->
+    </tr>
+    {foreach from=$UserList item=List}
+    <tr>
+        <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.RoleName}</td>
+<!--        <td align="center" bgcolor="#FFFFFF">{$List.BankMoney}</td>-->
+<!--        <td align="center" bgcolor="#FFFFFF">{$List.GameMoney}</td>-->
+        <td align="center" bgcolor="#FFFFFF">{$List.TotalMoney}</td>
+        <td align="center" bgcolor="#FFFFFF">
+<!--            <span id="txt_{$List.RoleID}"  >{$List.statustxt}</span>-->
+            {if $List.ClassId == 1}
+            <a href="javascript:void(0)" class="edit" thisid="{$List.RoleID}" nickname="{$List.RoleName}" totalmoney="{$List.TotalMoney}">修改</a>
+            <a href="javascript:void(0)" class="delete" thisid="{$List.RoleID}" nickname="{$List.RoleName}">删除</a>
+            {/if}
+
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $UserList}
+    <tr>
+        <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+
+</table>
+<script type="text/javascript">
+    {literal}
+
+        $('.edit').each(function(){
+            $(this).click(function(){
+                {/literal}
+                    setting.Url='{au d=Service c=HappyBeanlist a=showEdit}';
+                {literal}
+                    ajax.RequestUrl(setting.Url,'roleid='+$(this).attr('thisid')+'&nickname='+$(this).attr('nickname')+'&totalmoney='+$(this).attr('totalmoney'),'callback.ShowHappyBeanEdit');
+                });
+        });
+        $('.delete').each(function(){
+            $(this).click(function(){
+                {/literal}
+                    setting.Url='{au d=Service c=HappyBeanlist a=deleteInfo}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url,'roleid='+$(this).attr('thisid'),'callback.DeleteBankMoney');
+                });
+        });
+
+        $('#add').click(function(){
+            {/literal}
+                setting.Url='{au d=Service c=HappyBeanlist a=showAdd}';
+                {literal}
+                ajax.RequestUrl(setting.Url,'roleid='+$(this).attr('id')+'&nickname='+$(this).attr('nickname'),'callback.ShowHappyBeanEdit');
+            });
+        {/literal}
+</script>
+
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function(){
+            /*点击显示修改广告界面*/
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=HappyBeanlist a=ShowAddMsgHtml}';
+                        setting.Params = 'roleid='+$(this).attr('data-id');
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowRankEditHtml');
+                        {literal}
+                    });
+            });
+            /*点击禁用或启用广告*/
+            $('.locked').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=HappyBeanlist a=setStatus}';
+                        {literal}
+                        setting.Params = 'msgID='+$(this).attr('id');
+                        ajax.Request(setting.Url,setting.Params,'callback.SetRankStatus');
+                    });
+            });
+        }
+    }
+    {/literal}
+</script>

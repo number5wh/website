@@ -1,0 +1,130 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var robotUser={
+	/*点击显示修改服务器配置界面*/
+	BindEvent:function(){
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=RobotUser a=showAddRobotUserHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'UserID='+$(this).attr('id'),'callback.ShowAddRobotUserHtml');
+			});	
+		});
+          $('.editAll').each(function(){
+        	$(this).unbind();
+            $(this).click(function(){
+      {/literal}
+              setting.Url='{au d=YunWei c=RobotUser a=showEditRobotUserHtml}';
+      {literal}
+              ajax.RequestUrl(setting.Url,'','callback.ShowEditRobotUserHtml');
+            }); 
+          });
+		/*点击删除机器人配置信息*/
+			$('.del').each(function(){
+				$(this).click(function(){
+		{/literal}
+					setting.Url='{au d=YunWei c=RobotUser a=delRobotUser}';
+		{literal}
+					if(confirm('删除后将无法恢复,确定删除?'))
+						ajax.RequestUrl(setting.Url,'UserID='+$(this).attr('id'),'callback.DelRobotUser');
+				});	
+			});	
+          $('.delAll').each(function(){
+        	$(this).unbind();
+            $(this).click(function(){
+          {/literal}
+                  setting.Url='{au d=YunWei c=RobotUser a=showDelRobotUserHtml}';
+          {literal}
+                  ajax.RequestUrl(setting.Url,'','callback.ShowDelRobotUserHtml');
+                }); 
+          }); 
+			
+		/*点击禁用或启用服务器配置*/
+		$('.file').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=robotGame a=createFiles}';
+{literal}
+				setting.Params = 'ServID='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.CreateFiles');
+			});	
+		});	
+	}
+};
+{/literal}
+</script>
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="8%" bgcolor="#FFFFFF">机器人ID</th>
+    <th width="65%" bgcolor="#FFFFFF">服务时间</th>
+    <th width="25%" bgcolor="#FFFFFF">服务类型</th>
+<!--     <th width="15%" bgcolor="#FFFFFF">游戏房间名称</th>
+    <th width="10%" bgcolor="#FFFFFF">最小带入分数</th>
+    <th width="10%" bgcolor="#FFFFFF">最大带入分数</th>
+    <th width="10%" bgcolor="#FFFFFF">最小游戏局数</th>
+    <th width="10%" bgcolor="#FFFFFF">最大游戏局数</th>
+    <th width="10%" bgcolor="#FFFFFF">最小游戏时间</th>
+    <th width="10%" bgcolor="#FFFFFF">最大游戏时间</th> -->
+    <th width="12%" bgcolor="#FFFFFF">操作</th> 
+  </tr>
+  {foreach from=$RobotList item=robot}
+  <tr id="Row_{$robot.UserID}">
+  	<td align ="center" bgcolor='#FFFFFF'>{$robot.UserID}</td>
+    <td align ="center" bgcolor='#FFFFFF'>
+      {if $robot.ServiceTime & 1}0{/if} 
+      {if $robot.ServiceTime & 2}1{/if}
+      {if $robot.ServiceTime & 4}2{/if}
+      {if $robot.ServiceTime & 8}3{/if}
+      {if $robot.ServiceTime & 16}4{/if}
+      {if $robot.ServiceTime & 32}5{/if}
+      {if $robot.ServiceTime & 64}6{/if}
+      {if $robot.ServiceTime & 128}7{/if}
+      {if $robot.ServiceTime & 256}8{/if}
+      {if $robot.ServiceTime & 512}9{/if}
+      {if $robot.ServiceTime & 1024}10{/if}
+      {if $robot.ServiceTime & 2048}11{/if}
+      {if $robot.ServiceTime & 4096}12{/if}
+      {if $robot.ServiceTime & 8192}13{/if}
+      {if $robot.ServiceTime & 16384}14{/if}
+      {if $robot.ServiceTime & 32768}15{/if}
+      {if $robot.ServiceTime & 65536}16{/if}
+      {if $robot.ServiceTime & 131072}17{/if}
+      {if $robot.ServiceTime & 262144}18{/if}
+      {if $robot.ServiceTime & 524288}19{/if}
+      {if $robot.ServiceTime & 1048576}20{/if}
+      {if $robot.ServiceTime & 2097152}21{/if}
+      {if $robot.ServiceTime & 4194304}22{/if}
+      {if $robot.ServiceTime & 8388608}23{/if}
+    </td>
+    <td align ="center" bgcolor='#FFFFFF'>
+      {if $robot.ServiceGender & 1} 相互模拟 {/if}
+      {if $robot.ServiceGender & 2} 被动陪打 {/if}
+      {if $robot.ServiceGender & 4} 主动陪玩 {/if}
+    </td>
+ <!--    <td align="center" bgcolor="#FFFFFF">{$robot.RoomName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MinTakeScore}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MaxTakeScore}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MinPlayDraw}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MaxPlayDraw}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MinReposeTime}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.MaxReposeTime}</td> -->
+    <td align="center" bgcolor="#FFFFFF">
+   	  <a href="javascript:void(0)" class="edit" id="{$robot.UserID}">修改</a>
+   	   <a href="javascript:void(0)" class="del" id="{$robot.UserID}">删除</a>
+	</td>
+  </tr> 
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $RobotList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

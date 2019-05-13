@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="10%" bgcolor="#FFFFFF">RoleId</th>
+        <th width="10%" bgcolor="#FFFFFF">交易时间</th>
+        <th width="10%" bgcolor="#FFFFFF">变化金额</th>
+        <th width="10%" bgcolor="#FFFFFF">余额</th>
+        <th width="10%" bgcolor="#FFFFFF">交易类型</th>
+        <th width="10%" bgcolor="#FFFFFF">交易账户</th>
+        <th width="10%" bgcolor="#FFFFFF">IP</th>
+        <th width="10%" bgcolor="#FFFFFF">MAC</th>
+        <th width="10%" bgcolor="#FFFFFF">目标玩家</th>
+        <th width="30%" bgcolor="#FFFFFF">描述</th>
+    </tr>
+    {foreach from=$UserBankRateList item=List}
+    <tr>
+        <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.ChangeMoney}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.Balance}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.ChangeType}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.PayName}({$List.PayID})</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.ClientIP}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.MachineSerial}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.TargetID}({$List.TargetName})</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.Description}</td>
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="12" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $UserBankRateList}
+    <tr>
+        <td colspan="12" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

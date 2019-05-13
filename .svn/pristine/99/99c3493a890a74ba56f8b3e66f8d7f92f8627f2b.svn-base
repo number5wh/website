@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>779游戏第十五期微信活动来临公告</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>779游戏第十五期微信活动来临公告</b></div><br>
+							  <div>
+					                <!-- <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p> -->
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block">
+											<p>亲爱的游戏玩家：
+										</p>
+									</br>
+										<p>为庆祝苹果手机版本上线，779游戏推出第十五期微信绑定赠送欢乐豆活动，凡活动期间绑定微信的账号均可获赠体验欢乐豆(之前已绑定过的账号除外)，本次活动时间于16年1月12日18时开始，本次赠送10亿欢乐豆，送完本次活动自动结束</p>
+										</span>
+									</div>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									 <div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-01-12</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

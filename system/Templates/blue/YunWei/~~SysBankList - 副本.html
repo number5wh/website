@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	$('#btnSubmit').click(function(){
+		$('#ResultMsg').html('');		
+		$('#MaxRooms').next().html('');
+		var FromAccType = $('#FromAccType').val();
+		var WealthType = $('#WealthType').val();
+		var Money = $('#Money').val();
+		var ToAccType = $('#ToAccType').val();		
+		if(isNaN(FromAccType) || FromAccType<=0){
+			$('#ResultMsg').html('请选择正确的转出账户');
+			$('#FromAccType').focus();
+			return false;
+		}	
+		if(isNaN(WealthType) || WealthType<=0){
+			$('#ResultMsg').html('请选择正确的财富类型');
+			$('#WealthType').focus();
+			return false;
+		}	
+		if(isNaN(Money) || Money<=0){
+			$('#ResultMsg').html('请输入正确的转出金额');
+			$('#Money').focus();
+			return false;
+		}	
+		if(isNaN(ToAccType) || ToAccType<=0){
+			$('#ResultMsg').html('请选择正确的转入账户');
+			$('#ToAccType').focus();
+			return false;
+		}		
+		if(ToAccType==FromAccType){
+			$('#ResultMsg').html('转出账户跟转入账户不能一致');
+			$('#ToAccType').focus();
+			return false;
+		}		
+{/literal}
+		setting.Url = '{au d=YunWei c=SysBank a=transSysBankMoney}';
+		setting.Params = 'FromAccType='+FromAccType+'&WealthType='+WealthType+'&Money='+Money+'&ToAccType='+ToAccType;
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.TransSysBankMoney');
+{literal}	
+	});
+	//点击显示设置银行账户界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=SysBank a=showAddBankAccHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'AccType='+$(this).attr('id'),'callback.ShowAddBankAccHtml');
+		});	
+	});
+});
+
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" class="edit btn f2" value="添加银行账户" id="0" />
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+  <tr>
+  	<th width="17%" align="center" bgcolor="#FFFFFF">账户类型</th>
+    <th width="19%" align="center" bgcolor="#FFFFFF">账户号</th>
+    <th width="15%" align="center" bgcolor="#FFFFFF">金币余额</th>
+    <th width="17%" align="center" bgcolor="#FFFFFF">金币上期结余</th>
+    <th width="16%" align="center" bgcolor="#FFFFFF">永凡币余额</th>
+    <th width="10%" align="center" bgcolor="#FFFFFF">永凡币上期结余</th>
+    <th width="6%" align="center" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$BankList item=bank}
+  <tr id="Row_{$bank.AccType}">
+    <td align="center" bgcolor="#FFFFFF">{$bank.AccTypeName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.AccNo}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.Balance}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.LastBalance}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.FwMoney}</td>
+    <td align="center" bgcolor="#FFFFFF">{$bank.FwLastBalance}</td>
+    <td align="center" bgcolor="#FFFFFF"><a href="javascript:void(0)" id='{$bank.AccType}' class="edit">修改</a></td>
+  </tr>  
+  {foreachelse}
+  <tr><td colspan="7" align="center" bgcolor="#FFFFFF">请先创建银行账户</td></tr>
+  {/foreach}
+</table>
+{if $BankList}
+<fieldset style="margin-top:5px">
+	<legend>银行转账</legend>
+    从
+    <select name="FromAccType" id="FromAccType">
+        {section name=n loop=$AccTypeList}
+        <option value="{$smarty.section.n.iteration}">{$AccTypeList[$smarty.section.n.iteration]}</option>
+        {/section}
+    </select>
+    转出
+    <select id="WealthType">
+        <option value="1" selected="selected">永凡币</option>
+        <option value="2">金币</option>    
+    </select>
+    <input type="text" class="txt" name="Money" id="Money" value="0" size="14">
+    到
+    <select name="ToAccType" id="ToAccType">
+        {section name=n loop=$AccTypeList}
+        <option value="{$smarty.section.n.iteration}">{$AccTypeList[$smarty.section.n.iteration]}</option>
+        {/section}
+    </select>
+    <input type="button" class="btn f2" value="提 交" id="btnSubmit" /> <span class="orange" id="ResultMsg"></span>
+</fieldset>
+{/if}
+</body>
+</html>

@@ -1,0 +1,43 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>   
+    <th width="25%" bgcolor="#FFFFFF">用户ID</th>
+ 	<th width="25%" bgcolor="#FFFFFF">用户名称</th>
+ 	<th width="25%" bgcolor="#FFFFFF">系统返还金额</th>
+ 	<th width="25%" bgcolor="#FFFFFF">银行总金币</th>  
+	<th width="25%" bgcolor="#FFFFFF">游戏总金币</th>
+	<th width="25%" bgcolor="#FFFFFF">消耗总金币</th>	
+  </tr>
+  {foreach from=$UserBankRateList item=List}
+  <tr>
+   <td align="center" bgcolor="#FFFFFF">{$List.LoginID}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>   
+	<td align="center" bgcolor="#FFFFFF">{$List.DealMonery}</td>   
+	<td align="center" bgcolor="#FFFFFF">{$List.BankMonery}</td>      
+	<td align="center" bgcolor="#FFFFFF">{$List.gameMoney}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.DealMonery-$List.BankMonery-$List.gameMoney}</td>	
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $UserBankRateList}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+
+<script>
+{literal}
+$(function(){
+	$('.aLink').click(function(){
+
+		setting.Url='/?d=YunYing&c=UserBankRate&a=getBankRatepage';
+		var Params='&RoleID='+$(this).attr('id')+'&KindID='+$(this).attr('KindID')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+		window.parent.main.AddTab('查看转出明细','GameRate'+$(this).attr('id')+$(this).attr('KindID'),setting.Url+Params);
+
+	})
+});
+{/literal}
+</script>

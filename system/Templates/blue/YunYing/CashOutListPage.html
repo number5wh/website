@@ -1,0 +1,52 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <!--<th width="10%" bgcolor="#FFFFFF">角色名</th>-->
+        <th width="8%" bgcolor="#FFFFFF">玩家编号</th>
+        <th width="15%" bgcolor="#FFFFFF">订单编号</th>
+        <th width="7%" bgcolor="#FFFFFF">提现金额</th>
+        <th width="7%" bgcolor="#FFFFFF">支付方式</th>
+        <th width="10%" bgcolor="#FFFFFF">账号</th>
+        <th width="10%" bgcolor="#FFFFFF">姓名</th>
+        <th width="7%" bgcolor="#FFFFFF">开户行</th>
+        <th width="15%" bgcolor="#FFFFFF">操作时间</th>
+        <th width="7%" bgcolor="#FFFFFF">付款状态</th>
+        <th width="7%" bgcolor="#FFFFFF">订单状态</th>
+        <th width="15%" bgcolor="#FFFFFF">操作</th>
+    </tr>
+    {foreach from=$CashOutList item=List}
+    <tr>
+        <td align="center" bgcolor="#FFFFFF">{$List.AccountID}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.OrderNo}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.iMoney}</td>
+        <td align="center" bgcolor="#FFFFFF">{if $List.PayWay==1}支付宝{else}银行{/if}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.CardNo}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.sRealName}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.sBankName}</td>
+        <td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>
+        <td align="center" bgcolor="#FFFFFF">{if $List.IsDrawback==0}未付款{else}已付款{/if}</td>
+        <td align="center" bgcolor="#FFFFFF">{if $List.status==0}审核通过{else}审核失败{/if}</td>
+        <td align="center" bgcolor="#FFFFFF">
+            {if $List.status==0}
+                <a href="#">审核通过</a>
+                <a href="#">审核驳回</a>
+            {elseif $List.status==0}
+                <a href="#">设为付款</a>
+            {/if}
+
+        </td>
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="11" align="center" bgcolor="#FFFFFF">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $CashOutList}
+    <tr>
+        <td colspan="11" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript">
+
+
+</script>

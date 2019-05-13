@@ -1,0 +1,33 @@
+<fieldset>
+    <legend>查询</legend>    
+    游戏日期:<input id="StartTime" type="text" class="txt" value="{$p.StartTime}" /><img onclick="new Calendar().show(document.getElementById('StartTime'));" class="calendar_img" src="images/common/u896_normal.gif" /> <input type="text" id="EndTime" class="txt hide" value="{$p.EndTime}" /><img onclick="new Calendar().show(document.getElementById('EndTime'));" class="calendar_img hide" src="images/common/u896_normal.gif" />
+    游戏名称:
+    <select id="KindList" style="margin-right:10px">
+		<option value="0" selected>全部</option>
+		{foreach from=$KindList item=kind}
+        <option value="{$kind.KindID}" {if $kind.KindID==$p.KindID}selected{/if}>{$kind.KindName}</option>
+		{/foreach}
+    </select>
+    <input type="button" class="btn f2" value="搜 索" onclick="rgds.Search()" />
+	<input type="hidden" id="RoleID" value="{$p.RoleID}" />
+</fieldset>
+<div id="GameDataSpPage">
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var rgds={
+	GetPagerUserGameDataSp:function(sFlag){
+		if(!sFlag)sFlag=0;
+{/literal}
+		setting.PageUrl='{au d=Service c=ServiceRole a=getPagerUserGameDataSp}';
+		setting.Params = 'RoleID='+$('#RoleID').val()+'&KindID='+$('#KindList').val()+'&StartTime='+$('#StartTime').val()+'&EndTime='+$('#StartTime').val()+'&sFlag='+sFlag;
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerUserGameDataSp');
+{literal}			
+	},
+	Search:function(){
+		cookieCommon.c_del('iRecordsCount'+$('#RoleID').val());
+		rgds.GetPagerUserGameDataSp(1);
+	}
+};
+{/literal}
+</script>

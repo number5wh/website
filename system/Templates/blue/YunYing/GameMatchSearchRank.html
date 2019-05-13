@@ -1,0 +1,76 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="13%" bgcolor="#FFFFFF">比赛ID</th>
+    <th width="7%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="8%" bgcolor="#FFFFFF">比赛时间</th>
+	<th width="10%" bgcolor="#FFFFFF">比赛场地</th>
+    <th width="6%" bgcolor="#FFFFFF">比赛单元</th> 
+    <th width="7%" bgcolor="#FFFFFF">报名时间</th>  
+    <th width="9%" bgcolor="#FFFFFF">开赛时间</th>  
+    <th width="9%" bgcolor="#FFFFFF">离赛时间</th>  
+    <th width="9%" bgcolor="#FFFFFF">比赛成绩</th>  
+    <th width="8%" bgcolor="#FFFFFF">获得奖励</th>  
+    <th width="8%" bgcolor="#FFFFFF">奖励发放状态</th>  
+    <th width="6%" bgcolor="#FFFFFF">操作</th>  
+  </tr>
+  {foreach from=$MatchRankList item=Match}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchUnitID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.PlayDate}</td>
+    <td align="center" bgcolor="#FFFFFF" class="td">{$Match.RoomID}</td>
+	<td align="center" bgcolor="#FFFFFF">{$Match.iTimes}</td>	
+    <td align="center" bgcolor="#FFFFFF">{$Match.SignUpTime}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchStartTime}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.MatchEndTime}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $Match.Rank<30000}第{$Match.Rank}名{else}淘汰{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Match.Remarks}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $Match.SendStatus==1}发放成功{elseif $Match.SendStatus==2}发放失败{elseif $Match.SendStatus==3}弃赛不发放{elseif $Match.SendStatus==4}淘汰不发放{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='aDetail' id="{$Match.RID}" RoleID="{$Match.RoleID}" title="{$Match.LoginName}" PlayDate="{$Match.PlayDate}" MatchUnitID="{$Match.MatchUnitID}">查看</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="12" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $MatchRankList}
+  <tr>
+    <td colspan="12" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var Search1={
+	/*绑定事件*/
+	BindEvent:function(){
+		$('.aDetail').click(function(){
+{/literal}
+			setting.Url = '{au d=YunYing c=Match a=getGameMatchInningsList}';
+			var Params = '&MatchUnitID='+$(this).attr('MatchUnitID')+'&RoleID='+$(this).attr('RoleID')+'&PlayDate='+$(this).attr('PlayDate');
+			window.parent.main.AddTab($(this).attr('title'),'GameMatchRank'+$(this).attr('id'),setting.Url+Params);
+{literal}
+		});		
+	},
+	/*设置比赛场地*/
+	SetMatchPlace:function(){
+		$('.td').each(function(){		
+			var RoomID =$(this).html();
+			var RoomName = $('#Room_'+RoomID).html();
+			$(this).html(RoomName);
+		})	
+	},
+	SetProperty:function(){
+{/literal}
+		init.SetTableRows();/*初始化鼠标移到表格行显示背景*/
+		/*绑定分页*/	
+		var Param = '$(this).attr("pg"),"s.CallBackSearchResult2"';
+		var Param1 = '$(this).val(),"s.CallBackSearchResult2"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+{literal}
+	}
+};
+{/literal}
+</script>

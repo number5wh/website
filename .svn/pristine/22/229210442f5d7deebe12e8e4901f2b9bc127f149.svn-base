@@ -1,0 +1,51 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置游戏配置
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		    <tr>
+			<td width="32%" align="right">{$RateInfo.CardName}充值折扣（万分比）</td>
+			<td width="68%"><input type="text" class="txt" name="ChargeRate" id="ChargeRate" value="{$RateInfo.ChargeRate}"/> <span class="orange">*</span></td>
+		  </tr>	
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="CardID" value="{$RateInfo.CardID}">
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'SysTypeLevel')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddTypeLevel" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var cfg={
+	BindEvent:function(){
+		$('#btnAddTypeLevel').click(function(){
+			var CardID =$('#CardID').val();
+			var ChargeRate = $('#ChargeRate').val();
+			$('#ChargeRate').next().html('*');
+			if(isNaN(ChargeRate) || ChargeRate==''){
+				$('#ResultMsg').html('请填写正确的充值折扣');
+				$('#ChargeRate').focus();
+				return false;
+			}
+{/literal}
+			setting.Url='{au d=YunWei c=CardChargeRate a=addCardChargeRate}';
+{literal}
+			setting.Params='CardID='+CardID+'&ChargeRate='+ChargeRate;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddCardChargeRate');
+		});
+	}
+};
+{/literal}
+</script>

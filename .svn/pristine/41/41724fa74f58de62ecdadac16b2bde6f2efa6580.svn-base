@@ -1,0 +1,44 @@
+@charset "utf-8";
+
+body{background:#f6f7fb;overflow-x:hidden;}
+.container{width:1000px;padding:0;}
+a:hover{text-decoration: none;}
+/* 头部 */
+header{background:#fff;box-shadow: 0 2px 2px #dcdcdc;}
+.navbar-header{height:86px;line-height:86px;}
+.navbar-nav>li{height:86px;}
+.navbar-nav>li>a{height:86px;line-height:56px;color:#333;padding:15px 10px;width:92px;font-size:18px;text-align:center;}
+.navbar-nav>.active>a{color:#229fe7;border-bottom:3px solid #229fe7;
+	background: -moz-linear-gradient(top, #fff 0%, #def1fb 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(100%,#def1fb));
+    background: -webkit-linear-gradient(top, #fff 0%,#def1fb 100%);
+    background: -o-linear-gradient(top, #fff 0%,#def1fb 100%);
+    background: -ms-linear-gradient(top, #fff 0%,#def1fb 100%);
+	background: linear-gradient(to bottom, #fff 0%,#def1fb 100%);
+}
+.navbar-nav>li>a:hover{color:#229fe7;border-bottom:3px solid #229fe7;
+	background: -moz-linear-gradient(top, #fff 0%, #def1fb 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(100%,#def1fb));
+    background: -webkit-linear-gradient(top, #fff 0%,#def1fb 100%);
+    background: -o-linear-gradient(top, #fff 0%,#def1fb 100%);
+    background: -ms-linear-gradient(top, #fff 0%,#def1fb 100%);
+	background: linear-gradient(to bottom, #fff 0%,#def1fb 100%);
+}
+
+/* 底部 */
+footer{border-top:4px solid #239fe7;text-align:center;font-size:12px;padding-bottom:26px;}
+footer .footer-nav{margin:36px 0 18px;}
+footer a{color:#333;}
+footer span{color:#333;margin:0 5px;}
+footer p{margin:0;color:#747474;}
+
+/* 左侧 固定侧栏 */
+.fixed-fl{position:fixed;top:20%;left:0;}
+.fixed-box1{width:176px;height:396px;background:#229fe7;border-radius:4px;text-align:center;position:relative;top:0;left:0;z-index:10;}
+.fixed-box1 h3{font-size:18px;color:#fff;margin:0 0 14px;padding-top:20px;}
+.fixed-box2{width:170px;height:340px;background:#fff;margin:3px;padding:10px;}
+.fixed-box2 a{width:150px;height:30px;border:1px solid #229fe7;line-height:30px;color:#333;font-size:16px;display:block;margin-top:10px;border-radius:4px;}
+.fixed-box2 div{padding:10px;border-top:1px solid #d5d5d5;font-size:16px;margin-top:10px;}
+.fixed-box2 p{margin:0 0 6px 0;color:#fe7c08;font-size:16px;}
+.fixed-box3{width:54px;height:140px;background:red;position:absolute;left:172px;top:125px;border:1px solid #229fe7;border-left:none;background:#fff;z-index: 9;border-radius:4px;cursor:pointer;padding-left:10px;font-size:16px;padding-right:10px;text-align:center;padding-top:10px;line-height:18px;}
+.toggle-icon{width:12px;margin-top:4px;}

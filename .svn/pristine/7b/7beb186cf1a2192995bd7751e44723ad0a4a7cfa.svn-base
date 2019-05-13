@@ -1,0 +1,68 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="12%">交易时间</th>
+    <th width="8%">变化金额</th>
+    <th width="8%">借贷方式</th>
+    <th width="8%">余额</th>  
+    <th width="8%">交易类型</th>
+    <th width="8%">交易账户</th>  
+    <th width="8%">IP</th>  
+    <th width="14%">MAC</th>
+	<th width="8%">转账玩家</th>
+    <th width="8%">描述</th>
+  </tr>
+  {if $BankDetailList}
+  {foreach from=$BankDetailList item=v}
+  <tr class="bg_color">
+    <td>{$v.AddTime}</td>
+    <td>{if $v.DcFlag eq 1}+{else}<span class="red">-</span>{/if}{$v.ChangeMoney}</td>
+    <td>{$v.DcFlagTips}</td>
+    <td>{$v.Balance}</td>
+    <td>{$v.ChangeTypeTips}</td>
+    <td>{if $v.DcFlag eq 1}{$v.PayName}({$v.PayID}){else}{$v.TargetName}({$v.TargetID}){/if}</td>
+    <td data-ip="{$v.ClientIP}" class="ip-info">{$v.ClientIP}</td>
+    <td>{$v.MachineSerial}</td>    
+	<td>{$v.TargetName}</td>
+    <td>{$v.Description}</td>
+  </tr> 
+  {/foreach}
+  <tr class="bg_color">
+    <td>合计</td>
+    <td>{$tt}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td ></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  {else}
+  <tr class="bg_color">
+  	<td colspan="10">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/if}   
+  {if $BankDetailList}  
+  <tr class="bg_color">
+    <td colspan="10" id="RTRP">
+    	<input type="hidden" id="RoleID" value="{$roleID}" />
+    	{include file="$skin/Inc/simplePage.inc.html"}
+    </td>
+  </tr>
+  {/if}
+</table>
+<script language="javascript" type="text/javascript" src="/js/taobao_ip_info.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+	$('.roleTrans').click(function(){
+{/literal}
+		setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+		setting.Params='&roleID='+$(this).attr('id');
+		window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+	});
+})
+{/literal}
+</script>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript" language="javascript">
+
+    {literal}
+    function getAddMulRobotHtml(){
+        ajax.RequestCallBack('/?d=YunWei&c=RobotCreator&a=showRobotCreatorHtml','',function(data){
+            main.OpenBox(data);
+        });
+    }
+
+    {/literal}
+</script>
+</head>
+
+<body>
+    <input type="button" id="0" class="btn f2 edit" value="添加机器人账号" onclick="getAddMulRobotHtml()" />
+
+</body>
+</html>

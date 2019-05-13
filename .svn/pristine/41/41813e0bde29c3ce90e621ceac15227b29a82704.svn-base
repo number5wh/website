@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>帮助中心</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+				
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>每日签到 再翻倍公告</b></div><br>
+							  <p style="text-align: left;"><span style="font-size: medium;">尊敬的玩家：</span></p>
+							  <p style="text-align: left;"><span style="color: rgb(255, 0, 0);"><span style="font-size: medium;">&nbsp; &nbsp; 每日签到奖励升级为：</span></span></p>
+							  <p style="text-align: left;"><span style="font-size: medium;">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="color: rgb(255, 0, 0);">前三级奖励保持不变；</span></span></p>
+							  <p style="text-align: left;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="color: rgb(255, 0, 0);"><span style="font-size: medium;">连续签到4天及以上为4级：奖励40W捕鱼欢乐豆</span></span><span style="color: rgb(255, 0, 0);"><span style="font-size: medium;">；</span></span></p>
+							  <p style="text-align: left;"><span style="color: rgb(255, 0, 0);">&nbsp; &nbsp;</span><span style="color: rgb(255, 0, 0);">&nbsp;</span><span style="font-family: 宋体; font-size: medium; line-height: 24px; text-indent: 50px;">连签标准：</span></p>
+							  <p style="text-align: left;"><span style="margin: 0px; padding: 0px; font-size: medium;"><span style="margin: 0px; padding: 0px; font-family: 宋体;">&nbsp; &nbsp; &nbsp; &nbsp; 1，签到前一天签到成功。</span></span></p>
+							  <p style="text-align: left;"><span style="margin: 0px; padding: 0px; font-size: medium;"><span style="margin: 0px; padding: 0px; font-family: 宋体;">&nbsp; &nbsp; &nbsp; &nbsp; 2，签到前一天在金蟾捕鱼中的游戏时间（非在线时间）满1小时。</span></span></p>
+							  <p style="text-align: left;"><span style="margin: 0px; padding: 0px; font-size: medium;"><span style="margin: 0px; padding: 0px; font-family: 宋体;">&nbsp; &nbsp; &nbsp; &nbsp; 感谢您对游戏的支持，祝您生活愉快！</span></span></p>
+							  <p style="text-align: right;"><span style="font-size: medium;">779游戏中心</span></p>
+							  <p style="text-align: right;"><span style="font-size: medium;">2015-9-16</span></p>
+					        </div>
+						</div>
+						
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

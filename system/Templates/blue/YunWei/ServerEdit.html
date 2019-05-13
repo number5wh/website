@@ -1,0 +1,114 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置{$ServerTypeName}服务器		
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<input type="hidden" name="ServerID" id="ServerID" value="{$server.ServerID}" />
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="17%" align="right">服务器名称:</td>
+			<td width="83%"><input type="text" class="txt" name="ServerName" id="ServerName" value="{$server.ServerName}"></td>
+		  </tr>
+		  <tr>
+			<td align="right">服务器外网地址:</td>
+			<td>
+			<textarea name="ServerIP" id="ServerIP" cols="30" rows="5" class="textarea">{$server.ServerIP}</textarea>
+			 <span class="orange">*格式如127.0.0.1:80,多个请换行</span>
+			</td>
+		  </tr>
+		  <tr id="wwwPort" class="hide">
+			<td align="right">服务器外网端口:</td>
+			<td><input type="text" class="txt" name="ServPort" id="ServPort" value="{$server.ServPort}"> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">服务器内网地址:</td>
+			<td><input type="text" class="txt" name="LANServerIP" id="LANServerIP" value="{$server.LANServerIP}"><span class="orange">*提示:格式如127.0.0.1</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">服务器内网端口:</td>
+			<td>
+				{if $portList}
+            	<select name="ServerPort" id="ServerPort" style="width:50px">
+                	{foreach from=$portList item=port}
+                    <option value="{$port.Port}" {if $server.ServerPort==$port.Port}selected{/if}>{$port.Port}</option>
+                    {/foreach}
+                </select>
+				{else}
+				<input type="text" class="txt" name="ServerPort" id="ServerPort" value="{$server.ServerPort}" size="10">
+				{/if}
+				<span class="orange">*</span>
+            </td>
+		  </tr>		  
+		  <tr>
+			<td align="right">线路信息:</td>
+			<td><textarea name="Intro" id="Intro" cols="30" rows="5" class="textarea">{$server.Intro}</textarea></td>
+		  </tr>		  
+		  <tr>
+			<td align="right">{$ServerTypeName1}登陆名:</td>
+			<td><input type="text" class="txt" name="LoginName" id="LoginName" value="{$server.Login}"> <span class="orange">{$MustWriteTags}</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">{$ServerTypeName1}登陆密码:</td>
+			<td><input type="text" class="txt" name="LoginPwd" id="LoginPwd" value="{$server.Pass}"> <span class="orange">{$MustWriteTags}</span></td>
+		  </tr>
+		  <tr>
+			<td align="right">{$ServerTypeName}名称:</td>
+			<td><input type="text" class="txt" name="AppName" id="AppName" value="{$server.AppName}"> <span class="orange">{$MustWriteTags}</span></td>
+		  </tr>
+		  {if $ClassName eq "ServerRoom"}
+		  <tr>
+		    <td align="right">游戏盾名称</td>
+		    <td><select name="GameDunList" id="GameDunList">
+				{foreach from=$GameDunList item=M}
+					<option value="{$M.ID}"  {if $server.ServID eq $M.ID} selected="selected"{/if}>{$M.GroupName}</option>
+				{/foreach}
+				</select>
+			</td>
+		  </tr>
+		  {/if}
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right btnCancel" value="取 消" />
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddServer" />
+        <div class="orange right" id="AddServerMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var svrEdit={
+	BindEvent:function(TabTag,ServID){
+		/*提交*/
+		$('#btnAddServer').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=addServer}';	
+			sys.AddServer('{$ClassName}',ServID);	
+{literal}		
+		});	
+		/*关闭弹出层*/
+		$('.btnCancel').click(function(){
+			main.CloseMsgBox(false,TabTag);
+		});
+	}
+};
+{/literal}
+var ClassName='{$ClassName}';
+{literal}
+if(ClassName=='ServerGame'){
+	$('#wwwPort').removeClass('hide');
+	$('#LANServerIP').attr('disabled','disabled');
+}
+if(ClassName=="ServerRoom"){
+	$('#wwwPort').removeClass('hide');
+}
+{/literal}
+</script>

@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript" src="/js/highcharts.js"></script>
+<script type="text/javascript" language="javascript" src="/js/exporting.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Sys={
+		SetProperty:function(){
+			init.SetTableRows();//初始化鼠标移到表格行显示背景
+			//绑定分页
+			var Param = '$(this).attr("pg"),"Sys.CallBackGetOnlineUser"';
+			var Param1 = '$(this).val(),"Sys.CallBackGetOnlineUser"';
+			evt.BindPageClick('','page.GetPage',Param,Param1);
+		},
+		/*分页回调*/
+		CallBackGetOnlineUser:function(data){
+			$('#PageList').html(data);
+			Sys.SetProperty();
+		}
+	};
+$(function(){
+	$('#btnSearch').click(function(){
+		var StartTime = $('#StartTime').val();
+		var EndTime = $('#EndTime').val();		
+{/literal}
+		setting.Url = '{au d=Service c=OnlineUser a=getPagerOnlineUser}';
+		setting.Params = 'StartTime='+StartTime+'&EndTime='+EndTime;
+		ajax.RequestUrl(setting.Url,setting.Params,'Sys.CallBackGetOnlineUser');
+{literal}	
+	});
+
+	var min = $('#StartTime').val();
+	$('#StartTime').focus(function(){
+		WdatePicker({minDate:'%y-%M-{%d-90}',{/literal}maxDate:'{$EndTime}'{literal}});
+		min = $('#StartTime').val();
+	});		
+	$('#EndTime').focus(function(){
+		WdatePicker({minDate:min,{/literal}maxDate:'{$EndTime}'{literal}});
+	});		
+});
+
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset>
+	<legend>查询</legend>	
+	时间范围:
+	<input id="StartTime" class="txt left" type="text" value="{$EndTime}" size="12" />
+	<input id="EndTime" class="txt left" type="text" value="{$EndTime}" size="12" />
+	<input type="button" id="btnSearch" class="btn f2" value="查询" />
+</fieldset>
+
+<div id="PageList">
+{include file="$skin/Service/OnlineUserListPage.html"}
+</div>
+</body>
+</html>

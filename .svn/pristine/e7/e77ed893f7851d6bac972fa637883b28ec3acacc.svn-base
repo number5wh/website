@@ -1,0 +1,39 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>补发月礼包</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<td class='txt_R'>备注：<br/><br/>(250字内)</td>
+			<td class='txt_L pad5'><textarea id='Remarks' style='width:200px; height:75px;'></textarea></td>
+		</tr>
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad5 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad5'>
+				<input type='hidden' id='roleID' value='{$roleID}' />
+				<input type='hidden' id='MonthGiftSpid' value='{$iSpID}' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+setting.Url = '{au d=Service c=ServiceRole a=reissueMonthGiftTipsTable}';
+{literal}
+$(function(){
+	$('#applyBtn').click(function(){
+		var remarks = $.trim($('#Remarks').val());
+		var RoleID = $.trim($('#roleID').val());
+		var spid = $.trim($('#MonthGiftSpid').val());
+		
+		if(remarks == ''){
+			$('#errorMsg').html('补发月礼包备注不能为空！');
+			$('#Remarks').focus();
+			return false;
+		}
+		var UrlParams = 'roleID='+RoleID+'&Remarks='+remarks+'&iSpID='+spid;
+		ajax.RequestUrl(setting.Url, UrlParams, 'callback.GetEditOperationResult');
+	})
+})
+{/literal}
+</script>

@@ -1,0 +1,58 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="34%" bgcolor="#FFFFFF">IP/机器码/手机号/身份证</th>
+    <th width="33%" bgcolor="#FFFFFF">类型</th>
+	<th width="33%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SysWarnList item=Sys}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Sys.WarnStr}</td>
+    <td align="center" bgcolor="#FFFFFF">
+    	 {if $Sys.TypeID == 1}IP
+    	 {elseif $Sys.TypeID == 2}机器码
+    	 {elseif $Sys.TypeID == 3}手机号
+    	 {elseif $Sys.TypeID == 4}身份证
+    	 {/if}
+    <td align="center" bgcolor="#FFFFFF">		
+		<a href="javascript:void(0)" class="DeleteSysWarn" id="{$Sys.WarnStr}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SysWarnList}
+  <tr>
+    <td colspan="3" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){	
+	/*删除*/
+	$('.DeleteSysWarn').click(function(){
+		if(confirm('确定要删除此记录吗?删除后将无法恢复')){
+{/literal}		
+			setting.Url = '{au d=YunWei c=SysWarn a=deleteSysWarn}';
+			setting.Params = 'WarnStr='+$(this).attr('id');
+			ajax.RequestJsonCallBack(setting.Url,setting.Params,SysBlack.CallBackDeleteSysWarn);
+{literal}
+		}
+	});
+});
+var SysBlack={
+	/*删除用户后的回调函数*/
+	CallBackDeleteSysWarn:function(data){
+		if(data.iResult==0){
+			var Key = $.trim($('#Key').val());
+			setting.Params = '&Key='+encodeURIComponent(Key);
+			page.GetPage($('.txtPage').val(),"callback.GetPagerSysWarnList");
+		}
+		else
+			alert('删除失败');
+	}
+};
+{/literal}
+</script>

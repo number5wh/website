@@ -1,0 +1,123 @@
+<div class="sysWin" style="width:350px;">
+  <h2 class="f2 white">
+    <div class="tLeft f1 left"></div>申请财富返回
+    <div class="tRight f1 right"></div>
+    <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+  </h2>
+  <div id="div_main" class="bdy" style="padding:10px 10px 0 10px;">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="bg_color">
+		<tr>
+			<td width="120px" class="txt_R">返还给玩家(编号)：</td>
+			<td class="txt_L pad5"><input type="text" id="loginId" class="txt_inp" maxlength="8" value="{$loginId}" readonly/>
+			<input type="hidden" id="fId" value="{$fid}" /><input type="hidden" id="from_loginId" value="{$loginId}" />
+			<input type="hidden" id="from_loginName" value="{$loginName}" /></td>
+		</tr>
+		<tr>
+			<td class="txt_R">返还给玩家昵称：</td>
+			<td class="txt_L pad5"><span id="loginName">{$loginName}</span><input type="hidden" id="roleId" value="{$loginId}" /></td>
+		</tr>
+		<tr>
+			<td class="txt_R">返还金额sdf：</td>
+			<td class="txt_L pad5"><input type="text" id="number" value="{$iNumber}" class="txt_inp" maxlength="10" readonly/></td>
+		</tr>
+		<tr>
+			<td class="txt_R">案件编号：</td>
+			<td class="txt_L pad5"><input type="text" id="caseSerial" class="txt_inp" maxlength="15" /></td>
+		</tr>
+		<tr>
+			<td class="txt_R">备注(50字内)：</td>
+			<td class="txt_L pad5"><textarea id="remark" style="width:200px; height:75px;"></textarea></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+		</tr>
+	</table>
+</div>
+  <div id="div_bottom" class="bot f2">
+    <div class="botLeft f1 left"></div>
+    <input id="btn_submit" type="button" class="bnStyle f2" style="margin-left:150px;" value="确&nbsp;定" />
+    <div class="botRight f1 right"></div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var num = {$iNumber};
+{literal}
+$('#loginId').change(function(){
+	$('#errorMsg').html('');
+	$('#loginName').html('');
+	var loginId = $.trim($(this).val());
+	if(loginId == "" || isNaN(loginId)){
+		$('#errorMsg').html('请填写正确的玩家编号');
+		return false;
+	}
+	ajax.Request('/?d=Service&c=ServiceCase&a=getLoginName','loginId='+loginId,'getLoginNameCallback');	
+});
+
+//获取玩家昵称回调
+function getLoginNameCallback(data){
+	data=$.evalJSON(data);//字符串格式转为json对象
+	if(data.iResult == 1){
+		$('#loginName').html(data.msg);
+		$('#roleId').val(data.roleId);
+	}else{
+		alert(data.msg);
+	}
+}
+
+$("#btn_submit").click(function(){
+	var fid= $('#fId').val();
+	var roleId = $('#roleId').val();
+	var loginId = $('#loginId').val();
+	var loginName = $('#loginName').html();
+	var number = $('#number').val();
+	var caseSerial = $('#caseSerial').val();
+	var payment = $('#from_loginName').val()+"("+$('#from_loginId').val()+")";
+	var remark = $('#remark').val();
+
+	var param = '&fid='+fid+'&payment='+payment;
+	if(loginName != '' && roleId > 0){
+		param += '&loginId='+loginId+'&loginName='+encodeURIComponent(loginName)+'&roleId='+roleId;
+	}else{
+		$('#errorMsg').html('请填写正确的玩家编号');
+		return false;
+	}
+	if(number != '' && !isNaN(number) && number > 0 && number <= num){
+		param += '&number='+number;
+	}else{
+		$('#errorMsg').html('请填写正确的返回金额');
+		return false;
+	}
+	if(caseSerial != ''){
+		param += '&caseSerial='+caseSerial
+	}
+	if(remark != '' && remark.length <= 50){
+		param += '&remark='+encodeURIComponent(remark);
+	}else{
+		$('#errorMsg').html('请填写正确的备注不超过50字');
+		return false;
+	}
+	
+	ajax.RequestCallBack('/?d=Service&c=ServiceWealth&a=applyWealthBack', param,function(result) {
+		if(result==1){					
+			doSuccess();					
+		}else if(result == -1){
+			$('#errorMsg').html('请填正确案件编号');
+		}else{
+			$('#errorMsg').html('申请返还失败');
+		}
+	});
+});
+
+function doSuccess(){		
+	$('#div_main').html('<div style="padding:10px; text-align:center;"><p style="padding:20px; font-size:14px">返还财富申请成功，待授权后方可生效！</p></div>');
+	$('#div_bottom').html('<div class="botLeft f1 left"></div><input type="button" class="bnStyle f2" style="margin-left:120px;" onclick="main.CloseMsgBox(false,\'\');searchTreasureLocked();" value="确&nbsp;定" /><div class="botRight f1 right"></div><div class="clear"></div>');
+}
+
+function refresh(){
+	var v_Obj = document.getElementById("iframe_ServiceCase");	
+	v_Obj.contentWindow.searchTreasureLocked();	
+}
+{/literal}
+</script>

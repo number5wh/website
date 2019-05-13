@@ -1,0 +1,151 @@
+<div class="sysWin" style="width:1100px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置分库
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'MapDB')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	<input type="hidden" class="txt" name="AutoID" id="AutoID" value="{$Map.AutoID}">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td align="right">Map类型名称:</td>
+			<td><input type="text" class="txt" name="Name" id="Name" value="{$Map.Name}"></td>			
+			<td align="right">分库数量:</td>
+			<td><input type="text" class="txt" name="Hashlimit" id="Hashlimit" value="{$Map.Hashlimit}" onblur="main.AddRows()"></td>
+			<td align="right">数据库类型:</td>
+			<td>
+				<select name="MapID" id="MapID">
+					{foreach from=$MapList item=M}
+					<option value="{$M.MapID}" {if $M.MapID==$Map.MapID}selected{/if}>{$M.Name}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr>
+
+		  <tr id="R_0">
+			<td width="11%" align="right">数据库名称:</td>
+			<td width="8%"><input type="text" class="txt" name="AppName" id="AppName" value="{$Map.AppName}"></td>
+			<td width="10%" align="right">服务器名称:</td>
+			<td width="8%"><input type="text" class="txt" name="ServerName" id="ServerName" value="{$Map.ServerName}"></td>
+			<td width="10%" align="right">IP地址:</td>
+			<td width="8%"><input type="text" class="txt" name="LANServerIP" id="LANServerIP" value="{$Map.LANServerIP}" size="15"></td>
+			<td width="5%" align="right">数据库端口:</td>
+			<td width="8%"><input type="text" class="txt" name="ServerPort" id="ServerPort" value="{$Map.ServerPort}" size="8"></td>
+			<td width="8%" align="right">登陆名:</td>
+			<td width="8%"><input type="text" class="txt" name="Login" id="Login" value="{$Map.Login}" size="10"></td>
+			<td width="6%" align="right">密码:</td>
+			<td width="10%"><input type="password" class="txt" name="Pass" id="Pass" value="{$Map.Pass}" size="10"></td>
+		  </tr>		  
+	  </table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'MapDB')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddMap" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnAddMap').click(function(){
+		var AppName = '';
+		var ServerName = '';
+		var LANServerIP = '';
+		var ServerPort = '';
+		var Login = '';
+		var Pass = '';
+		for(var i=0;i<$('#Hashlimit').val();i++){
+			if($.trim($('#R_'+i+' #AppName').val())==''){
+				$('#R_'+i+' #AppName').focus();
+				$('#ResultMsg').html('请输入数据库名称');
+				return false;
+			}
+			if($.trim($('#R_'+i+' #LANServerIP').val())==''){
+				$('#R_'+i+' #LANServerIP').focus();
+				$('#ResultMsg').html('请输入服务器IP地址');
+				return false;
+			}
+			if($.trim($('#R_'+i+' #ServerPort').val())==''){
+				$('#R_'+i+' #ServerPort').focus();
+				$('#ResultMsg').html('请输入数据库端口');
+				return false;
+			}
+			if($.trim($('#R_'+i+' #Login').val())==''){
+				$('#R_'+i+' #Login').focus();
+				$('#ResultMsg').html('请输入数据库登陆名');
+				return false;
+			}
+			if($.trim($('#R_'+i+' #Pass').val())==''){
+				$('#R_'+i+' #Pass').focus();
+				$('#ResultMsg').html('请输入数据库登陆密码');
+				return false;
+			}
+			AppName += $('#R_'+i+' #AppName').val()+',';	
+			ServerName += $('#R_'+i+' #ServerName').val()+',';
+			LANServerIP += $('#R_'+i+' #LANServerIP').val()+',';
+			ServerPort += $('#R_'+i+' #ServerPort').val()+',';
+			Login += $('#R_'+i+' #Login').val()+',';
+			Pass += $('#R_'+i+' #Pass').val()+',';
+		}
+		if(AppName!='') AppName=AppName.substring(0,AppName.length-1);
+		if(ServerName!='') ServerName=ServerName.substring(0,ServerName.length-1);
+		if(LANServerIP!='') LANServerIP=LANServerIP.substring(0,LANServerIP.length-1);
+		if(ServerPort!='') ServerPort=ServerPort.substring(0,ServerPort.length-1);
+		if(Login!='') Login=Login.substring(0,Login.length-1);
+		if(Pass!='') Pass=Pass.substring(0,Pass.length-1);
+{/literal}
+		setting.Url='{au d=YunWei c=MapDB a=addMap}';
+{literal}		
+		var Name = $('#Name').val();
+		var Hashlimit = $('#Hashlimit').val();
+		var MapID = $('#MapID').val();
+		var AutoID = $('#AutoID').val();
+		if(isNaN(MapID) || MapID==''){
+			$('#ResultMsg').html('请选择正确的服务器类型');
+			return false;
+		}
+		if(isNaN(AutoID) || AutoID==''){
+			$('#ResultMsg').html('参数错误');
+			return false;
+		}
+		setting.Params='Name='+encodeURIComponent(Name)+'&Hashlimit='+Hashlimit+'&MapID='+MapID+'&AppName='+encodeURIComponent(AppName)+'&ServerName='+encodeURIComponent(ServerName)+'&LANServerIP='+LANServerIP+'&ServerPort='+ServerPort+'&Login='+Login+'&Pass='+Pass+'&AutoID='+AutoID;
+		ajax.Request(setting.Url,setting.Params,'callback.AddMap');
+	
+	});		
+});
+var map={
+	GetServerList:function(RowID,CurServerID){
+	RowID = RowID || 'R_0';
+	CurServerID = CurServerID || 0;
+{/literal}
+		setting.Url='{au d=YunWei c=MapDB a=getServerList}';
+{literal}
+		setting.Params = 'ServerTypeID='+$('#'+RowID+' #ServerType').val()+'&RowID='+RowID+'&CurServerID='+CurServerID;
+		ajax.Request(setting.Url,setting.Params,'callback.GetServerList');
+	}
+};
+map.GetServerList();
+{/literal}
+var iNum = 0;
+{foreach from=$Map item=m}
+	$('#AutoID').val('{$m.AutoID}');
+	$('#Name').val('{$m.Name}');
+	$('#Hashlimit').val('{$m.Hashlimit}');
+	$('#MapID').val('{$m.MapID}');
+	if(iNum==0) main.AddRows();
+	$('#R_'+iNum+' #AppName').val('{$m.AppName}');
+	$('#R_'+iNum+' #ServerName').val('{$m.ServerName}');
+	$('#R_'+iNum+' #LANServerIP').val('{$m.LANServerIP}');
+	$('#R_'+iNum+' #ServerPort').val('{$m.ServerPort}');
+	$('#R_'+iNum+' #Login').val('{$m.Login}');
+	$('#R_'+iNum+' #Pass').val('{$m.Pass}');
+	map.GetServerList('R_'+iNum,'{$m.Path}');
+	iNum++;
+{/foreach}
+</script>

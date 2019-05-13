@@ -1,0 +1,41 @@
+<div class="sysWin" style="width:800px;">
+  <h2 class="f2 white">
+    <div class="tLeft f1 left"></div>申返记录
+    <div class="tRight f1 right"></div>
+    <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+  </h2>
+  <div style="border-left:1px solid #1e83b6;border-right:1px solid #1e83b6;border-bottom:1px solid #1e83b6;">
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbList txt_M">
+      <tr align="center" style="background-color:#FFF">
+        <td width="10%">申请时间</td>
+        <td width="8%">状态</td>
+        <td width="8%">申返数量</td>
+        <td width="12%">受返玩家</td>
+        <td width="12%">申返原因(案件编号)</td>
+        <td width="12%">备注</td>
+        <td width="8%">申返客服</td>
+        <td width="8%">审核人</td>
+        <td width="10%">审核时间</td>
+        <td width="12%">审核意见</td>
+      </tr>
+      {foreach from=$ApplyWealthBackList item=list}
+      <tr class="bg_color txt_M">        
+        <td>{$list.AddTime}</td>
+        <td>{if $list.Status==0}审核中{elseif $list.Status==1}已批准{else}已拒绝{/if}</td>
+        <td>{$list.iNumber}</td>
+        <td>{$list.LoginName}({$list.LoginID})</td>
+        <td>{if $list.Reason!=''}<a class='blue' href='javascript:getCaseDetailPage({$list.Reason})'>{$list.Reason}</a>{else}{$list.Reason}{/if}</td>
+        <td>{$list.Remarks}</td>
+        <td>{$list.SysUserName}</td>
+        <td>{$list.Checker}</td>
+        <td>{$list.CheckTime}</td>
+        <td>{$list.CheckRemarks}</td>
+      </tr>
+      {foreachelse}
+      <tr class="bg_color">
+        <td colspan="10">很抱歉，没有您要查询的信息~</td>
+      </tr>
+      {/foreach}
+    </table>
+  </div>  
+</div>

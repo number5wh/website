@@ -1,0 +1,55 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="10%" bgcolor="#FFFFFF">角色昵称</th>
+    <th width="10%" bgcolor="#FFFFFF">玩家性质</th>
+	<th width="20%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$PlayerSList item=U}
+  <tr id="Row_{$U.RID}">
+    <td align="center" bgcolor="#FFFFFF">{$U.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.LoginName}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $U.MasterRight==1}钻石玩家{elseif $U.MasterRight==32}管理员{/if}</td>   
+    <td align="center" bgcolor="#FFFFFF">
+		<a href="javascript:void(0)" class="ResetUser" id="{$U.RID}" Passport="{$U.Passport}" MasterRight="{$U.MasterRight}" title="{$U.LoginName}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $PlayerSList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*重置密码*/
+	$('.ResetUser').click(function(){
+		if(window.confirm('确定删除?')){
+{/literal}
+		setting.Url = '{au d=YunWei c=PlayerS a=deletePlayerS}';
+		setting.Params = '&ID='+$(this).attr('id')+'&Passport='+$(this).attr('Passport')+'&LoginName='+encodeURIComponent($(this).attr('title'));
+		/*window.parent.main.AddTab($(this).attr('title'),'UserP'+$(this).attr('id'),setting.Url+setting.Params);*/
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackDelPlayerS);
+{literal}
+		}
+	});	
+});
+var SysUser={
+	/*删除用户后的回调函数*/
+	CallBackDelPlayerS:function(data){
+		if(data.iResult==0){
+			$('#Row_'+data.ID).remove();
+			alert('删除成功');
+		}
+		else
+			alert('删除失败');
+	}
+};
+{/literal}
+</script>

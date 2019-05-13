@@ -1,0 +1,94 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置事件
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'Event')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+	<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">事件分类:</td>
+		<td bgcolor="#FFFFFF">
+			<select id="ClassID" onchange="e.GetSubClass()">
+				{foreach from=$ClassList item=C}
+				<option value="{$C.ClassID}" {if $C.ClassID==$Evt.BigClassID}selected{/if}>{$C.CateName}</option>
+				{foreachelse}
+				<option value="0">暂无分类</option>
+				{/foreach}
+			</select>			
+			<select id="SubClassID" class="{if !$SubClassList}hide{/if}" style="width:100px">
+				{foreach from=$SubClassList item=C}
+				<option value="{$C.ClassID}" {if $C.ClassID==$Evt.SubClassID}selected{/if}>{$C.CateName}</option>
+				{foreachelse}
+				<option value="0">暂无分类</option>
+				{/foreach}
+			</select>
+		</td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">事件编号:</td>
+		<td bgcolor="#FFFFFF"><input type="text" class="txt" name="EvtID" id="EvtID" value="{$Evt.EvtID}"><span class="orange">*</span></td>
+	  </tr>
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">事件标题:</td>
+		<td width="83%" bgcolor="#FFFFFF">
+			<input type="text" class="txt" name="EvtTitle" id="EvtTitle" value="{$Evt.EvtTitle}" size="30">
+			<span class="orange">*</span>
+		</td>
+	  </tr>	 
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">事件规则描述:</td>
+		<td bgcolor="#FFFFFF"><input type="text" class="txt" name="EvtRule" id="EvtRule" value="{$Evt.EvtRule}" maxlength="128" size="50"></td>
+	  </tr>		 
+	</table>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'Event')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAdd" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var e={
+	BindEvent:function(){
+		$('#btnAdd').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=Event a=addEvent}';
+{literal}			
+			$('#ResultMsg').html('');
+			$('#EvtID').next().html('*');
+			$('#EvtTitle').next().html('*');
+			var EvtID = $('#EvtID').val();
+			var EvtTitle = $('#EvtTitle').val();
+			var EvtRule = $('#EvtRule').val();
+			var ClassID = $('#ClassID').val();
+			var SubClassID = $('#SubClassID').val();
+			if(isNaN(EvtID) || EvtID=='' || EvtID<=0){
+				$('#EvtID').next().html('*请输入事件编号');
+				return false;
+			}
+			if(EvtTitle==''){
+				$('#EvtTitle').next().html('*请输入事件名称');
+				$('#EvtTitle').focus();
+				return false;
+			}
+			setting.Params = 'EvtID='+EvtID+'&EvtTitle='+encodeURIComponent(EvtTitle)+'&EvtRule='+encodeURIComponent(EvtRule)+'&ClassID='+ClassID+'&SubClassID='+SubClassID;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddEvent');
+		});
+	},
+	/*读取子类*/
+	GetSubClass:function(){
+{/literal}
+		setting.Url='{au d=YunWei c=Event a=getSubClass}';
+		setting.Params = 'BigClassID='+$('#ClassID').val();
+		ajax.Request(setting.Url,setting.Params,'callback.GetSubClass');
+{literal}	
+	}
+};
+{/literal}
+</script>

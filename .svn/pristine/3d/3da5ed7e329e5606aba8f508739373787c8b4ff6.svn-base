@@ -1,0 +1,93 @@
+﻿<div class="sysWin" style="width: 300px;">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right"
+			href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+	</h2>
+	<div id="div_main" class="bdy" style="padding: 10px 10px 0 10px;">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="bg_color">
+			<tr>
+				<td width="70px;" class="txt_R">锁定原因(50字内)：</td>
+				<td class="txt_L pad5">
+				<input id="LoginID" type="hidden" value="{$LoginID}" />
+				<input id="SafePhone" type="hidden" value="{$SafePhone}" />
+				<input id="LoginCode" type="hidden" value="{$LoginCode}" />
+				<input id="CardNumber" type="hidden" value="{$CardNumber}" />
+				<input id="LoginName" type="hidden"  value="{$LoginName}" />
+				<input id="LastLoginIP" type="hidden"	value="{$LastLoginIP}" />
+				<input id="QQ" type="hidden" value="{$QQ}" />
+				<input id="MachineSerial" type="hidden" value="{$MachineSerial}" />
+				<input id="WechatSerial" type="hidden" value="{$WechatSerial}" />
+				<input id="strReason" type="hidden" value="{$strReason}" /> 
+				<input id="curPage" type="hidden" value="{$curPage}" /> 
+				<input id="totalPage" type="hidden" value="{$totalPage}" />
+				<textarea id="txt_remark"style="width: 200px; height: 75px;"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="txt_M pad8"><span id="errorMsg"
+					class="orange"></span></td>
+			</tr>
+		</table>
+	</div>
+	<div id="div_bottom" class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<input type="button" class="bnStyle f2 virtualClass"
+			style="margin-left: 80px;" value="提&nbsp;交"
+			onclick="doOperateVerify();" />
+		<div class="botRight f1 right"></div>
+		<div class="clear"></div>
+	</div>
+</div>
+<script type="text/javascript">
+{literal}
+	function doOperateVerify(){	
+		var LoginID = $('#LoginID').val();
+		var SafePhone = $('#SafePhone').val();
+		var LoginCode = $('#LoginCode').val();
+		var CardNumber = $('#CardNumber').val();
+		var LoginName = $('#LoginName').val();
+		var LastLoginIP = $('#LastLoginIP').val();
+		var QQ = $('#QQ').val();
+		var MachineSerial = $('#MachineSerial').val();
+		var WechatSerial = $('#WechatSerial').val();
+		var curPage = $('#curPage').val();
+		var totalPage =$('#totalPage').val();
+		var strReason = textFun.Trim($('#txt_remark').val())
+{/literal}
+	setting.Url = "{au d=Service c=ServiceRole a=lockPagerRole}";	
+{literal}
+		if(strReason=='' || strReason.length>50){
+			$('#errorMsg').html('请填正确内容,不要超过50个字');
+			return false;
+		}else{
+			$('#errorMsg').html('');
+			main.OpenBox('﻿﻿﻿﻿﻿﻿﻿﻿﻿<div class="sysWin"><h2 class="f2 white"><div class="tLeft f1 left"></div>提示信息<div class="tRight f1 right"></div><a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'+"''"+')"></a><br class="clear">	</h2><div class="bdy"> <div  id="msg" style="width:100%;height:100px;background-color:#ffffff;text-align:center;line-height:50px">	操作中，请稍候！<br/>当前进度<span id="curPager">1</span>/'+totalPage+' ,预计剩余时间<span id="resTime":>'+ totalPage*3+'</span>秒 </div></div></div>');
+			var interval = setInterval(request,3000);
+			function request()
+			{
+			var param='LoginID='+LoginID+'&SafePhone='+SafePhone+'&LoginCode='+LoginCode
+			+'&CardNumber='+CardNumber+'&LoginName='+LoginName+'&LastLoginIP='+LastLoginIP
+			+'&QQ='+QQ+'&MachineSerial='+MachineSerial+'&WeChatSerial='+WechatSerial
+			+'&strReason='+strReason+'&curPage='+curPage;
+			ajax.RequestCallBack(setting.Url, param,function(result) {
+				if(curPage == totalPage){
+					$('#msg').html('操作成功！');
+					clearInterval(interval);
+				}else{
+					curPage++;
+					$('#curPage').val(curPage);
+					$('#resTime').html((totalPage-curPage)*3);
+					$('#curPager').html(curPage);
+				}				
+			});
+			}
+		}
+	}
+
+
+
+{/literal}
+</script>

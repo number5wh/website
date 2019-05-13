@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+
+</head>
+
+<body>
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList" style="margin-top:5px">
+    <tr>
+        <th width="16%" align="center" bgcolor="#FFFFFF">账户类型</th>
+        <th width="32%" align="center" bgcolor="#FFFFFF">账户号</th>
+        <th width="33%" align="center" bgcolor="#FFFFFF">金币余额</th>
+    </tr>
+    {if $FishingBankAccount.AccNo==''}
+    <tr id="Row_{$FishingBankAccount.AccType}" class="bold">
+        <td align="center" bgcolor="#F0F0F0">{$FishingBankAccount.AccTypeName}</td>
+        <td align="center" bgcolor="#F0F0F0">{$FishingBankAccount.AccNo}</td>
+        <td align="center" bgcolor="#F0F0F0">{if $WealthType==1}{$FishingBankAccount.FwMoney}{else}{$FishingBankAccount.Balance}{/if}</td>
+    </tr>
+    {else}
+    <tr id="Row_{$FishingBankAccount.AccType}">
+        <td align="center" bgcolor="#FFFFFF">{$FishingBankAccount.AccTypeName}</td>
+        <td align="center" bgcolor="#FFFFFF">{$FishingBankAccount.AccNo}</td>
+        <td align="center" bgcolor="#FFFFFF">{if $WealthType==1}{$FishingBankAccount.FwMoney}{else}{$FishingBankAccount.Balance}{/if}</td>
+    </tr>
+    {/if}
+        {if $DntgBankAccount.AccNo==''}
+    <tr id="Row_{$DntgBankAccount.AccType}" class="bold">
+        <td align="center" bgcolor="#F0F0F0">{$DntgBankAccount.AccTypeName}</td>
+        <td align="center" bgcolor="#F0F0F0">{$DntgBankAccount.AccNo}</td>
+        <td align="center" bgcolor="#F0F0F0">{if $WealthType==1}{$DntgBankAccount.FwMoney}{else}{$DntgBankAccount.Balance}{/if}</td>
+    </tr>
+    {else}
+    <tr id="Row_{$DntgBankAccount.AccType}">
+        <td align="center" bgcolor="#FFFFFF">{$DntgBankAccount.AccTypeName}</td>
+        <td align="center" bgcolor="#FFFFFF">{$DntgBankAccount.AccNo}</td>
+        <td align="center" bgcolor="#FFFFFF">{if $WealthType==1}{$DntgBankAccount.FwMoney}{else}{$DntgBankAccount.Balance}{/if}</td>
+    </tr>
+    {/if}
+</table>
+
+</body>
+</html>

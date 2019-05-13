@@ -1,0 +1,108 @@
+<div style='padding:10px;'>
+	<table border='0' cellpadding='1' cellspacing='1' class='txt_M' style='background-color:#B5D6E6;'>
+		<tr>
+			<th width='100'>来源</th>
+			<th width='100'>金币数量</th>
+			<th width='200'>存款数量</th>
+		</tr>
+		{foreach from=$arrResult item=v}
+		<tr class='bg_color'>
+			<td class='txt_L'><input type='checkbox' class='kindID' kindID='{$v.KindID}' /> {$v.KindName}</td>
+			<td id='happyBean_{$v.KindID}'>{$v.Money} <input type='checkbox' class='choseMoney' title='选择全部' kindID='{$v.KindID}' value='{$v.Money}' /> </td>
+			<td><input type='text' class='transHappyBean' id='transHappyBean_{$v.KindID}' onBlur='chkValue(this, 'happyBean_{$v.KindID}')' /></td>
+		</tr>
+		{foreachelse}
+		 <tr class='bg_color'>
+		    <td colspan='3'>很抱歉，找不到相关信息！</td>
+		 </tr>	
+		{/foreach}	
+		<tr class='bg_color pad5'>
+			<td colspan='3'>
+				<p id='ErrorMsg' class='txt_M pad8 orange'></p>
+				<input type='hidden' id='roleID' value='{$roleID}' />
+				<input type='checkbox' class='chkALLCheckBox' />全选 &nbsp;&nbsp;
+				<input id='applyBtn' type='button' {if !$arrResult}disabled='disabled'{/if} class='bnStyle f2' value='存　款' />
+			</td>
+		</tr>
+		
+	</table>
+</div>
+<script type='text/javascript'>
+setting.Url='{au d=Service c=ServiceRole a=handleTreasureTable}';
+{literal}
+function chkValue(obj, targetID){
+	var inpVal = parseInt($(obj).val());
+	var comVal = parseInt($('#'+targetID).html());
+	if(inpVal > comVal){
+		$(obj).val('').focus();
+		$('#ErrorMsg').html('存款数量不得超多金币数量！');		
+	}
+}
+
+$(function(){
+	$('.choseMoney').click(function(){
+		var kid=$(this).attr('kindID');
+		var money=$(this).val();
+		if($(this).attr('checked')){
+			$('#transHappyBean_'+kid).val(money);
+		}else{
+			$('#transHappyBean_'+kid).val('');
+		}		
+	});
+	$('.chkALLCheckBox').click(function(){
+		if($(this).attr('checked')){
+			$('.kindID').each(function(){
+				$(this).attr('checked', true);
+			});
+			$('.choseMoney').each(function(){
+				var kid=$(this).attr('kindID');
+				var money=$(this).val();
+				$(this).attr('checked', true);
+				$('#transHappyBean_'+kid).val(money);					
+			})				
+		}else{
+			$('.kindID').each(function(){
+				$(this).attr('checked', false);
+			});
+			$('.choseMoney').each(function(){
+				var kid=$(this).attr('kindID');
+				$(this).attr('checked', false);
+				$('#transHappyBean_'+kid).val('');
+			})
+		}
+	});
+	$('#applyBtn').click(function(){
+		var RoleID=$('#roleID').val();
+		var j=0, kids='', transMoney='', Status=true;
+		$('.kindID').each(function(){
+			if($(this).attr('checked') == true){
+				j++;
+			}
+		});
+		if(!j){
+			$('#ErrorMsg').html('请至少选择一个来源,并填写相应的存款数量！');
+			return false;
+		}
+		$('.kindID').each(function(){
+			var kindID = $(this).attr('kindID');
+			var transHappyBeanVal = $('#transHappyBean_'+kindID).val();
+			if(($(this).attr('checked') == true && transHappyBeanVal == '') || ($(this).attr('checked') == false && transHappyBeanVal)){
+				$('#ErrorMsg').html('请将来源和相应的存款数量填写完整！');
+				Status = false;
+				return false;
+			}
+			if($(this).attr('checked') == true && transHappyBeanVal){
+				kids += kindID+',';
+				transMoney += transHappyBeanVal+',';
+			}
+		});
+		if(Status && kids && transMoney){
+			kids = kids.substr(0,kids.length-1);
+			transMoney = transMoney.substr(0,transMoney.length-1);
+			var UrlParams = 'roleID='+RoleID+'&kindIDs='+kids+'&money='+transMoney;
+			ajax.RequestUrl(setting.Url, UrlParams, 'callback.GetEditOperationResult');
+		}
+	})
+})
+{/literal}
+</script>

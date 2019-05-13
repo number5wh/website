@@ -1,0 +1,56 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置桌子类型
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'GameTable')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="40%" class="txt_R">桌子规格ID:</td>
+			<td width="60%"><input type="text" class="txt" name="TableSchemeID" id="TableSchemeID" value="{$GameTable.TableSchemeID}"/> <span class="orange">*</span></td>
+		  </tr>	
+		  <tr>
+			<td class="txt_R">桌子名称:</td>
+			<td><input type="text" class="txt" name="SchemeName" id="SchemeName" value="{$GameTable.SchemeName}"/> <span class="orange">*</span></td>
+		  </tr>		  
+		  <tr>
+			<td class="txt_R">桌子ID:</td>
+			<td><input type="text" class="txt" name="TableID" id="TableID" value="{$GameTable.TableID}" /> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td class="txt_R">桌子锁定图片ID:</td>
+			<td><input type="text" class="txt" name="LockBkID" id="LockBkID" value="{$GameTable.LockBkID}"/> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td class="txt_R">玩家手势ID:</td>
+			<td><input type="text" class="txt" name="GestureID" id="GestureID" value="{$GameTable.GestureID}"/> <span class="orange">*</span></td>
+		  </tr>		  
+		  <tr>
+			<td class="txt_R">启动按钮ID:</td>
+			<td><input type="text" class="txt" name="RunButtonID" id="RunButtonID" value="{$GameTable.RunButtonID}"/> <span class="orange">*</span></td>
+		  </tr>
+          <tr>
+			<td class="txt_R">桌子数据文件ID:</td>
+			<td><input type="text" class="txt" name="TableDataID" id="TableDataID" value="{$GameTable.TableDataID}"/> <span class="orange">*</span></td>
+		  </tr>
+		  <tr>
+			<td class="txt_R">椅子ID:</td>
+			<td><input type="text" class="txt" name="ChairID" id="ChairID" value="{$GameTable.ChairID}"/> <span class="orange">*</span></td>
+		  </tr>
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="hidden" id="TableSchemeID" value="{$GameTable.TableSchemeID}" />
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'GameTable')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameTable" onclick="sys.AddGameTable('{au d=YunWei c=GameTable a=updateGameTableInfo}');" />
+        <div class="orange right" id="AddGameTableMsg"></div>
+		<br class="clear" />
+	</div>
+</div>

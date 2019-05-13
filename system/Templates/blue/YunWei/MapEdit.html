@@ -1,0 +1,121 @@
+<div class="sysWin" style="width:800px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置分库
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'MapDB')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td width="11%" align="right">Map类型名称:</td>
+			<td width="23%"><input type="text" class="txt" name="Name" id="Name" value=""></td>
+			<td width="9%" align="right">分库数量:</td>
+			<td width="23%"><input type="text" class="txt" name="Hashlimit" id="Hashlimit" value="" onblur="main.AddRows('blur')" curNum=""></td>
+			<td width="11%" align="right">数据库类型:</td>
+			<td width="23%">
+				<select name="MapID" id="MapID">
+					{foreach from=$MapList item=M}
+					<option value="{$M.MapID}">{$M.Name}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr>
+
+		  <tr id="R_0">
+			<td align="right">子库名称:</td>
+			<td>
+			<input type="text" class="txt" name="TypeName" id="TypeName" value="{$Map.TypeName}">
+			</td>
+			<td align="right">服务器地址:</td>
+			<td colspan="3">
+			<select name="ServerID" id="ServerID" style="width:140px">
+				{foreach from=$ServerList item=server}
+				<option value="{$server.ServerID}">{$server.ServerName} [{$server.AppName}]</option>
+				{/foreach}
+			</select>
+			</td>
+		  </tr>
+		  
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'MapDB')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddMap" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnAddMap').click(function(){
+		var TypeName = '';
+		var ServerID = '';
+		for(var i=0;i<$('#Hashlimit').val();i++){
+			if($.trim($('#R_'+i+' #TypeName').val())==''){
+				$('#R_'+i+' #TypeName').focus();
+				$('#ResultMsg').html('请输入子库名称');
+				return false;
+			}
+			if($.trim($('#R_'+i+' #ServerID').val())==''){
+				$('#R_'+i+' #ServerID').focus();
+				$('#ResultMsg').html('请选择服务器');
+				return false;
+			}
+			TypeName += $('#R_'+i+' #TypeName').val()+',';	
+			ServerID += $('#R_'+i+' #ServerID').val()+',';	
+		}
+		if(TypeName!='') TypeName=TypeName.substring(0,TypeName.length-1);
+		if(ServerID!='') ServerID=ServerID.substring(0,ServerID.length-1);
+{/literal}
+		setting.Url='{au d=YunWei c=MapDB a=addMap}';
+{literal}	
+		var Name = $('#Name').val();
+		var Hashlimit = $('#Hashlimit').val();
+		var AutoID = $('#AutoID').val();
+		var MapID = $('#MapID').val();
+		if(isNaN(MapID) || MapID==''){
+			$('#ResultMsg').html('请选择正确的服务器类型');
+			return false;
+		}
+		if(isNaN(Hashlimit) || Hashlimit<=0){
+			$('#ResultMsg').html('请输入正确的分库数量');
+			$('#Hashlimit').focus();
+			return false;
+		}
+		setting.Params='Name='+encodeURIComponent(Name)+'&Hashlimit='+Hashlimit+'&TypeName='+encodeURIComponent(TypeName)+'&ServerID='+ServerID+'&MapID='+MapID;
+		ajax.Request(setting.Url,setting.Params,'callback.AddMap');
+	});		
+});
+/*var map={
+	GetServerList:function(RowID,CurServerID){
+	RowID = RowID || 'R_0';
+	CurServerID = CurServerID || 0;
+{/literal}
+		setting.Url='{au d=YunWei c=MapDB a=getServerList}';
+{literal}
+		setting.Params = 'ServerTypeID='+$('#'+RowID+' #ServerType').val()+'&RowID='+RowID+'&CurServerID='+CurServerID;
+		ajax.Request(setting.Url,setting.Params,'callback.GetServerList');
+	}
+};
+map.GetServerList();*/
+{/literal}
+var iNum = 0;
+{foreach from=$Map item=m}
+	$('#Name').val('{$m.Name}');
+	$('#MapID').val('{$m.ID}');
+	$('#Hashlimit').val('{$m.Hashlimit}');
+	$('#Hashlimit').attr('curNum','{$m.Hashlimit}');
+	if(iNum==0) main.AddRows('');
+	$('#R_'+iNum+' #TypeName').val('{$m.TypeName}');
+	$('#R_'+iNum+' #ServerID').val('{$m.Path}');
+	/*map.GetServerList('R_'+iNum,'{$m.Path}');*/
+	iNum++;
+{/foreach}
+</script>

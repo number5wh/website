@@ -1,0 +1,127 @@
+/* CSS Document */
+html{
+  filter: expression(document.execCommand("BackgroundImageCache", false, true));
+}
+
+body,div,span,h1,h2,h3,h4,ul,li,img,p,b,textarea,input,select,form,a,table,tr,td,th
+{margin:0;padding:0;font-family:verdana,Arial, Helvetica, sans-serif,;list-style-type:none;font-size:12px;color:inherit;z-index:inherit}
+table { 
+table-layout: fixed;
+word-wrap:break-word; overflow:hidden;
+}
+img{border:0;border-collapse:collapse;}
+iframe{margin:2px 0px 0px 5px}
+td{height:25px;}
+th{height:22px;}
+th{background-position:0px -144px; background-repeat:repeat-x}
+.gPage{background-color:#FFF;min-width:680px;background-position:-1109px 0;background-repeat:repeat-y!important;overflow:hidden}
+.clear{overflow:auto;zoom:1;}
+.clearfix:after {content:"\200B"; display:block; height:0; clear:both; }
+.clearfix { *zoom:1; }
+.white{color:#FFF;}
+.orange{color:#E36C0A}
+.red{color:#001e43}
+.gray{color:#cccccc}
+.blue{color:#0000FF;TEXT-DECORATION:underline}
+.left{float:left}
+.right{float:right}
+.page{height:22px;line-height:22px;}
+.page .curPage{color:#E36C0A}
+.btn,.bnStyle{padding-left:10px; padding-right:10px; height:22px; line-height:22px; border:1px solid #4c9dc5;background-position:0 -399px; background-repeat:repeat-x; margin:1px; cursor:pointer;}
+.btnChk{background-position:0 -190px;}
+.btnChk2{background-position:0 -30px;}
+.hide{display:none}
+.tbList a{display:inline; margin-left:10px;}
+fieldset span{margin-right:20px;line-height:20px;}
+fieldset {border:#cccccc solid 1px;}
+.bold{font-weight:bold}
+.pagesize{color:#fd6d01;}
+.hand{cursor:pointer;}
+/*顶部*/
+.gTop{
+	background-repeat:repeat-x;
+	height:70px;
+	background-position:0 9px;
+	position:relative; 
+	background-color:#FFF;
+}
+.gLogo{width:190px;height:68px;}
+.gTopRight{height:68px;}
+.gTopInfo{height:41px;}
+/*滑动门*/
+.gTab{height:26px;}
+.gTab ul{ height:26px;}
+.gTab li{float:left; background-position:0 0; padding:0 0 0 12px; cursor:pointer;}
+
+
+.gMain{width:1440px;}
+/*左边*/
+.gFpage{width:189px;overflow-x:hidden;overflow-y:auto}
+.gfTit{height:30px;position:relative;background-position:0 -1668px;width:100%}
+
+/*链接*/
+a{text-decoration:none}
+a:hover{color:#001e43}
+a.clsFd{display:block;width:16px;height:16px;background-position:-224px -102px;background-repeat:no-repeat}
+a.clsFd:hover{background-position:-224px -122px;}
+a.gfName{position:absolute;top:5px;left:20px;font-weight:bold;}
+/*嵌套页选项卡*/
+.tab{padding-bottom:10px;}
+.tab ul{height:25px;}
+.tab li{float:left; cursor:pointer; line-height:25px; text-align:center; width:100px; height:25px;}
+.tab li.curTab{background-color:#fff}
+.tab table td{height:30px;}
+.tab table{margin-top:10px;}
+/*弹出窗口*/
+.sysWin {width:600px}
+.sysWin h2{background-position:0px -494px;height:29px; font-weight:normal; line-height:25px;}
+.sysWin .tLeft{background-position:-1072px -54px; width:6px; height:29px;}
+.sysWin .tRight{background-position:-1092px -54px; width:6px; height:29px;}
+.sysWin .bdy{border-left:1px solid #1e83b6;border-right:1px solid #1e83b6;background-color:#FFF}
+.sysWin .bdy table{background-color:#FFF}
+.sysWindow .bdy table{background-color:#B5D6E6;}
+.sysWindow .bdy table td{background-color:#fff}
+.sysWin .bot{background-position:0px -551px; background-repeat:repeat-x; height:51px; line-height:51px}
+.sysWin .bot input{margin-top:15px; margin-right:5px;}
+.sysWin .bot .orange{margin-right:20px;}
+.sysWin .botLeft{background-position:-1072px -82px; background-repeat:no-repeat; width:4px; height:51px;}
+.sysWin .botRight{background-position:-1094px -82px; background-repeat:no-repeat; width:4px; height:51px;}
+.sysWin .btnCls{width:15px; height:15px; display:block; margin-top:7px; background-position:-156px -98px; background-repeat:no-repeat}
+/*游戏节点*/
+#GameNode span{cursor:pointer}
+/*搜索*/
+.search{margin-bottom:3px;}
+a.yes{display:block; width:12px; height:10px; margin:auto; }
+a.no{display:block; width:12px; height:10px; margin:auto; }
+.yes{background:url(/images/blue/icon.png) 0px 0px no-repeat}
+.no{background:url(/images/blue/icon.png) -14px 0px no-repeat}
+/*刷新*/
+.refresh{width:16px;height:16px; background-position:-29px 0px;background-repeat:no-repeat; cursor:pointer}
+/********************客服中心*********************/
+.txt_L{ text-align:left; }
+.txt_M{ text-align:center; }
+.txt_R{ text-align:right; }
+.clearFloat{ clear:both; }
+.bg_color{ background-color:#fff;}
+.bg_color2{ background-color:#F0F0F0; }
+.calendar_img{ position:relative; top:6px; cursor:pointer; }
+.borderGrayColor{border:1px solid #ccc;}
+.txt_inp{ height:20px; }
+.pad5{ padding:5px 0;}
+.pad8{ padding:8px 0;}
+
+.searchNavBar{ border-bottom:1px solid #797979; padding:8px 0 8px 30px; margin-bottom:20px; }
+
+/*下拉菜单*/
+.downMenu{position:absolute;left:520px;background-color:#FFF;width:70px;border:1px solid #ccc;border-bottom:none;z-index:10;}
+.downMenu li{line-height:20px; cursor:pointer;border-bottom:1px solid #cccccc;padding-left:10px}
+/*运营,添加礼包*/
+#SpList div{padding:0px 5px 0px 5px; margin-right:5px; background-color:#D9D8D2; cursor:pointer}
+#GiftSp div{margin-right:5px;cursor:pointer}
+/*道具分类*/
+.SpClassYes{width:8px;height:11px;background-position:-566px -21px;cursor:pointer}
+.SpClassYesTop{width:8px;height:11px;background-position:-535px -19px;cursor:pointer}
+.SpClassNo{width:8px;height:11px;background-position:-566px -3px;}
+.SpSubClass{width:4px;height:8px;background-position:-553px -179px;}
+/*删除按钮*/
+.close_btn {position:relative; top:4px; right:-6px; visibility:hidden; }

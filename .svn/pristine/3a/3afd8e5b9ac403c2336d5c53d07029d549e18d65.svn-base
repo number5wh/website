@@ -1,0 +1,7 @@
+共<label id="lab_curpage" class="orange">{$Page.RecordsCount}</label>条记录&nbsp;&nbsp;第<label id="lab_curpage" class="orange">{$Page.CurPage}</label>页 / 共<label class="orange" id="TotalPage">{$Page.TotalPage}</label>页 
+
+<a href="javascript:void(0)" id="LinkFirst" pg='1'>首页</a> 
+<a href="javascript:void(0)" id="LinkPrev" pg='{$Page.PrevPage}'>上一页</a> 
+<a href="javascript:void(0)" id="LinkNext" pg='{$Page.NextPage}'>下一页</a> 
+<a href="javascript:void(0)" id="LinkLast" pg='{$Page.TotalPage}'>尾页</a> 
+跳转到<input type="text" class="txtPage" value='{$Page.CurPage}'/>页

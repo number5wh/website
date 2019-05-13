@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+</head>
+<body>
+<fieldset style="margin-bottom:3px" class="left">
+    <legend>操作</legend>
+    <div style="margin-bottom:3px">
+        <input type="button"  class="btn f2" value="销毁未领取" onclick="Destory(0)">
+        <input type="button"  class="btn f2" value="销毁已领取" onclick="Destory(1)">
+    </div>
+</fieldset>
+<div>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th width="50%" >未领取数量</th>
+        <th width="50%" >已领取数量</th>
+    </tr>
+        <tr>
+        <td width="50%" bgcolor="#FFFFFF" align="center">{$UntokenCard}</td>
+        <td width="50%" bgcolor="#FFFFFF" align="center">{$TokenCard}</td>
+    </tr>
+</table>
+</div>
+
+<script>
+    {literal}
+            function Destory(state){
+                {/literal}
+                var url = '{au d=YunWei c=RealCardGetForm a=destroy}';
+                var params = "state="+state;
+                {literal}
+                ajax.RequestJsonCallBack(url,params,RealCard.destroyCallback);
+            }
+
+    var RealCard= {
+        destroyCallback:function(data){
+            if(data == 0){
+                alert("销毁成功");
+            }else{
+               alert("销毁失败");
+            }
+        }
+    }
+    {/literal}
+</script>
+</body>
+</html>

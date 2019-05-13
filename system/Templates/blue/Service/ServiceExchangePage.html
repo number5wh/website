@@ -1,0 +1,92 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="10%">操作</th>
+        <th width="10%">申请人</th>
+        <th width="10%">审核状态</th>
+        <th width="10%">提现金额</th>
+        <th width="10%">税收</th>
+        <th width="10%">结算金额</th>
+        <th width="8%">支付类型</th>
+        <th width="8%">姓名</th>
+        <th width="8%">开户行</th>
+        <th width="8%">银行/支付宝账号</th>
+        <th width="15%">审核时间</th>
+        <th width="8%">审核人</th>
+        <th width="15%">申请时间</th>
+        <th width="15%">备注</th>
+        <th width="15%">操作</th>
+    </tr>
+    {foreach from=$ExchangeList item=list}
+    <tr class="bg_color txt_M">
+        <td>{if $list.status==0}<a class="blue" href="javascript:getOperatePage('{$list.OrderNo}','{$list.LoginID}',10,'');">审核/拒绝</a>{/if}</td>
+        <td><a class="blue" href="javascript:showUserInfo({$list.LoginID},'{$list.LoginName}({$list.LoginID})');">{$list.LoginName}({$list.LoginID})</a></td>
+        <td>{if $list.status==0}待审核{elseif $list.status==1}批&nbsp;准{elseif $list.status==2}拒&nbsp;绝{elseif $list.status==3}已结算{/if}</td>
+        <td>{$list.iMoney}</td>
+        <td>{$list.tax}</td>
+        <td>{$list.checkamount}</td>
+        <td>{$list.payway}</td>
+        <td>{$list.RealName}</td>
+        <td>{$list.BankName}</td>
+        <td>{$list.CardNo}</td>
+        <td>{$list.checktime}</td>
+        <td>{$list.checkuser}</td>
+        <td>{$list.AddTime}</td>
+        <td>{$list.descript}</td>
+        <td>
+
+            <a class="blue" id="{$list.LoginID}" href="javascript:showUserGameInfo('{$list.LoginID}','游戏资料');">游戏资料</a>
+            <a class="blue" href="javascript:showChargeAndExchangeInfo('{$list.LoginID}','充退流水');">充退流水</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="15">很抱歉，没有您要查询的信息~</td>
+    </tr>
+    {/foreach}
+
+    {if $OperateVerifyList}
+    <tr class="bg_color txt_M">
+        <td id="operatePageBar" colspan="15">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript">
+    {literal}
+    function getOperatePage(id,roleId){
+        {/literal}
+                setting.Url = "{au d=Service c=ServiceExchange a=getOperateVerifyPage}";
+                {literal}
+                var param = "id="+id+"&roleId="+roleId;
+                ajax.RequestCallBack(setting.Url, param,function(data) {
+                    if(data == -1){
+                        alert('参数异常');
+                    }else{
+                        main.OpenBox(data);
+                    }
+                });
+        }
+
+        function showUserInfo(id,name){
+            {/literal}
+                var url='{au d=Service c=ServiceRole a=getRoleInfo}';
+                {literal}
+                setting.Params='&roleID='+id;
+                window.parent.main.AddTab(name,'ServiceRole'+id,url+setting.Params);
+            }
+            {/literal}
+</script>
+<script type="text/javascript">
+    {literal}
+    function showUserGameInfo(loginid,title){
+        setting.Url='/?d=Service&c=ServiceMinRole&a=getRoleInfo';
+        var Params='&loginID='+loginid;
+        window.parent.main.AddTab(title+'('+loginid+')','UserGameInfo'+loginid+title,setting.Url+Params);
+    }
+
+    function showChargeAndExchangeInfo(loginid,title){
+        setting.Url='/?d=Service&c=ServiceMinRole&a=getRoleInfo';
+        var Params='&loginID='+loginid;
+        window.parent.main.AddTab(title+'('+loginid+')','UserGameInfo'+loginid+title,setting.Url+Params);
+    }
+    {/literal}
+</script>

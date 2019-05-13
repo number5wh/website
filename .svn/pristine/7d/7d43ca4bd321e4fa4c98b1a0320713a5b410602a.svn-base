@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/jquery.treeview.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.treeview.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.contextmenu.r2.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	//$('#GameNode').treeview();
+{/literal}
+	setting.NodeUrl = '{au d=YunWei c=GameNode a=getGameType}';
+	setting.CopyUrl ='{au d=YunWei c=GameNode a=showCopyGameType}';
+	setting.Url = '{au d=YunWei c=GameNode a=showAddGameType}';
+	setting.DelUrl = '{au d=YunWei c=GameNode a=delGameType}';
+{literal}
+	evt.BindNodeClick('.spanNode_0');
+	evt.BindNodeRightButton('#GameNode span.folder','myMenuSubFolder');
+	
+});
+{/literal}
+</script>
+    <style>
+        {literal}
+        .locked > span{
+            color: slategray;
+        }
+        {/literal}
+    </style>
+</head>
+
+<body>
+<ul id="GameNode" class="filetree">
+	<li class="closed"><span class="folder" id="0">根节点</span>
+		<ul>
+			{foreach from=$GameNodeList item=node}
+			<li class="closed {if $node.Locked == 1 }locked{/if}"><span class="folder spanNode_0" id="{$node.TypeID}">{$node.NodeName}</span></li>
+			{/foreach}
+		</ul>
+	</li>
+    <!--
+    <li><span class="folder">服务器配置</span>
+    	<ul>
+			<li><span class="folder">Subfolder 2.1</span>
+                <ul>
+                    <li><span class="file"><a href="javascript:void(0)" name="ServerDB">数据库服务器</a></span></li>
+                    <li><span class="file"><a href="javascript:void(0)" name="ServerGame">游戏服务器</a></span></li>
+                    <li><span class="file"><a href="javascript:void(0)" name="ServerLogin">登录服务器</a></span></li>
+                    <li><span class="file"><a href="javascript:void(0)" name="ServerDownload">下载服务器</a></span></li>
+                    <li><span class="file"><a href="javascript:void(0)" name="ServerHall">大厅服务器</a></span></li>
+                </ul>
+        	</li>
+        </ul>
+    </li>
+    <li class="closed"><span class="folder">游戏配置</span>
+        <ul>
+            <li><span class="file"><a href="javascript:void(0)" name="GameKind">游戏种类设置</a></span></li>
+            <li><span class="file"><a href="javascript:void(0)" name="GameRoom">游戏房间设置</a></span></li>
+            <li><span class="file"><a href="javascript:void(0)" name="GameNode">游戏节点设置</a></span></li>
+            <li><span class="file"><a href="javascript:void(0)" name="GameHallVersion">大厅版本管理</a></span></li>
+        </ul>
+    </li>	
+    <li><span class="file">File 4</span></li>-->
+</ul>
+        
+        
+        
+<!--右键菜单的源-->
+<div class="contextMenu" id="myMenuSubFolder">
+    <ul>
+        <li id="addSubNode">添加子节点</li>
+        <li id="copy">复制</li>
+        <li id="modi">修改</li>
+        <li id="del">删除</li>
+    </ul>
+</div>
+</body>
+</html>

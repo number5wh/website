@@ -1,0 +1,65 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+  	<th width="14%">记录时间</th>
+      <th width="14%">玩家ID</th>
+      <th width="14%">玩家名称</th>
+    <th width="8%">游戏ID</th> 
+    <th width="12%">游戏流水</th>
+    <th width="6%">游戏结果</th>  
+    <th width="10%">上次金币</th>  
+    <th width="10%">本局金币输赢</th>   
+    <th width="10%">当前金币</th>
+
+    <th width="10%">本局积分输赢</th>   
+
+  </tr>
+  {foreach from=$GameDetailList item=detail}
+  <tr class="bg_color">
+  	<td>{$detail.AddTime}</td>
+      <td>{$detail.RoleID}</td>
+      <td>{$detail.RoleName}</td>
+    <td>{$detail.KindID}({$detail.KindName})</td>
+    <td><a href="javascript:void(0);" serialNumber="{$detail.SerialNumber}" dataNum="{ $TableNum}" serverID="{$detail.ServerID}" LogTime="{$detail.AddTime}"class="SerialNumber blue">{$detail.SerialNumber}</a></td>
+    <td>
+	{if $detail.ChangeType eq 0}
+	赢
+	{elseif $detail.ChangeType eq 1}
+	<font class="red">输</font>
+	{elseif $detail.ChangeType eq 2}
+	<font class="orange">和</font>
+	{else}
+	<font class="blue">逃</font>
+	{/if}
+	</td>
+    <td>{$detail.HappyBean}</td>
+    <td>{$detail.Money}</td>
+    <td>{$detail.LastMoney}</td>  
+
+    <td>{$detail.Score}</td>
+
+  </tr>    
+  {/foreach}
+  {if $GameDetailList}
+  <tr class="bg_color">
+    <td colspan="10" id="RGDP">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<input type="hidden" id="UserGameRoleID" value="{$RoleID}" />
+<input type="hidden" id="UserGameKindName" value="{$KindName}" />
+<script type="text/javascript">
+{literal}
+$(function(){
+	$(".SerialNumber").click(function(){
+		var roleID = $("#UserGameRoleID").val();
+		var kindName = $("#UserGameKindName").val();
+		var serialNum = $(this).attr("serialNumber");
+		var dataNum = $(this).attr("dataNum");
+        var serverID = $(this).attr('serverID');
+        var LogTime = $(this).attr('LogTime');
+		setting.Params = 'RoleID='+roleID+'&serialNum='+serialNum+'&dataNum='+dataNum+'&KindName='+kindName+'&ServerID='+serverID+'&LogTime='+encodeURIComponent(LogTime);
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getUserGameAllPeopleInfo',setting.Params,'callback.GetUserGameAllPeopleInfo');
+	})
+})
+{/literal}
+</script>

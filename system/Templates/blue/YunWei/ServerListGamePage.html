@@ -1,0 +1,67 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var svrGame={
+	/*点击显示修改服务器配置界面*/
+	BindEvent:function(){
+		$('.setServ').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=ServerGame a=showServerList}';
+				setting.Params='&ServID='+$(this).attr('id');
+{literal}
+				window.parent.main.AddTab($(this).html()+'('+$(this).attr('ip')+')',$(this).attr('id'),setting.Url+setting.Params);			
+				/*window.location.href=setting.Url+setting.Params;*/
+			});	
+		});
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=ServerGame a=showAddGameServerHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'ServID='+$(this).attr('id'),'callback.ShowAddGameServerHtml');
+			});	
+		});
+		/*点击禁用或启用服务器配置*/
+		$('.file').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=ServerGame a=createFiles}';
+{literal}
+				setting.Params = 'LANServerIP='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.CreateFiles');
+			});	
+		});	
+	}
+};
+{/literal}
+</script>
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="16%" bgcolor="#FFFFFF">服务器地址</th>
+    <th width="25%" bgcolor="#FFFFFF">服务器端口</th>
+    <th width="23%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ServerList item=server}
+  <tr id="Row_{$server.ServID}">
+    <td align="center" bgcolor="#FFFFFF">{$server.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.LANServerIP}</td>
+    <td align="center" bgcolor="#FFFFFF">{$server.ServerPort}</td>
+    <td align="center" bgcolor="#FFFFFF">
+	  <a href="javascript:void(0)" class="file" id="{$server.LANServerIP}">生成配置文件</a>	
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $ServerList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

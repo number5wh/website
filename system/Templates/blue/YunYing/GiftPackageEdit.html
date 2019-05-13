@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*双击标签关闭页面，再重新打开页面，无法再次关闭，因为页面加载的flash中 ExternalInterface引起的bug，加上以下代码可屏蔽此问题*/
+	window.onerror = function() {return true;}; 
+	/*初始化上传控件*/
+	$('.file_upload').each(function(){
+{/literal}
+		main.InitUploadControl($(this).attr('id'),'SpOther','http://{$Domain}/GameFiveUpFile.php');
+{literal}
+	});
+	
+	//年月
+	var Now = new Date();
+	for($y=Now.getFullYear();$y>2011;$y--)
+		$('#Year').append('<option value="'+$y+'">'+$y+'</option>');
+	for($m=1;$m<=12;$m++)
+		$('#Month').append('<option value="'+$m+'">'+$m+'</option>');
+{/literal}
+	var StartDate = '{$SpPublic.StartDate}';
+{literal}
+	if(StartDate!=''){
+		var arrDate = new Array();
+		arrDate = StartDate.split('-');
+		if(arrDate.length>2){
+			$('#Year').val(arrDate[0]);
+			if(arrDate[1].substring(0,1)==0) arrDate[1]=arrDate[1].replace(0,'');
+			$('#Month').val(arrDate[1]);
+		}
+	}
+	//提交
+	$('#btnAddGiftPackage').click(function(){
+		var SpIDList = '';
+		var SpProb = '';
+		var TypeID = '';
+		var CountProb = 0;
+		$('#GiftSp div').each(function(){
+			var arrID=Array();
+			arrID = $(this).attr('id').split('_');
+			if(arrID.length==3){
+				TypeID += arrID[1] + ',';
+				SpIDList += arrID[2] + ',';				
+			}
+			var Prob = $('#Prob_'+$(this).attr('id').replace('Sp_','')).val();
+			if(isNaN(Prob) || Prob=='')
+				Prob = 0;
+			CountProb += parseFloat(Prob);
+			SpProb += Prob + ',';
+		});
+		var GoodsName = $('#GoodsName').val();
+		var SpNumber = $('#SpNumber').val();
+		var ResourceID = $('#ResourceID').val();
+		var ClassID = $('#ClassID').val();
+		var Sex = $('#Sex').val();		
+		var Intro = $('#Intro').val();
+		var SpID = $('#SpID').val();
+		var ImgPath = $('#ImgPath_FileUpload').val();
+		var Year = $('#Year').val();
+		var Month = $('#Month').val();
+		var ServerID = $('#ServerID').val();
+		var GiftProb = $('#GiftProb').val();
+		var Place = 0;
+		$('input[name="Place"]:checked').each(function(){ 
+			Place += parseInt($(this).val()); 
+		}); 
+		$('#GoodsName').next().html('*');
+		$('#SpNumber').next().html('*');
+		$('#ResourceID').next().html('*');
+		$('#ClassID').next().html('*');
+		$('#ImgMsg').html('*');
+		$('#SpIDList').html('*');		
+		$('#PlaceMsg').html('*');
+		if(GoodsName==''){
+			$('#GoodsName').next().html('*请输入礼包名称');
+			$('#GoodsName').focus();
+			return false;
+		}
+		if(SpNumber==''){
+			$('#SpNumber').next().html('*请输入礼包编号');
+			$('#SpNumber').focus();
+			return false;
+		}
+		if(isNaN(ClassID) || ResourceID==0){
+			$('#ResourceID').next().html('*请输入礼包资源编号');
+			$('#ResourceID').focus();
+			return false;
+		}
+		if(isNaN(ClassID) || ClassID==0){
+			$('#ClassID').next().html('*请选择正确的礼包分类');
+			$('#ClassID').focus();
+			return false;
+		}
+		if(ImgPath==''){
+			$('#ImgMsg').html('*请上传礼包缩略图');
+			$('#ImgPath_FileUpload').focus();
+			return false;
+		}		
+		if(isNaN(Place) || Place==0){
+			$('#PlaceMsg').html('*请选择使用场景');
+			return false;
+		}	
+		if(SpIDList==''){
+			$('#ResultMsg').html('*请选择道具');
+			return false;
+		}
+		else
+			SpIDList = SpIDList.substring(0,SpIDList.length-1);
+		if(CountProb>1){
+			$('#ResultMsg').html('*道具概率累计不超过百分百');
+			return false;
+		}
+		if(SpProb!='') SpProb = SpProb.substring(0,SpProb.length-1);
+		if(TypeID!='') TypeID = TypeID.substring(0,TypeID.length-1);		
+			
+		if(SpIDList.length>200){
+			$('#ResultMsg').html('*您选择的道具过多');
+			return false;
+		}	
+{/literal}
+		setting.Url = '{au d=YunYing c=GiftPackage a=addGiftPackage}';
+		setting.Params = 'GoodsName='+encodeURIComponent(GoodsName)+'&SpNumber='+SpNumber+'&ResourceID='+ResourceID+'&ClassID='+ClassID+'&Sex='+Sex+'&Intro='+encodeURIComponent(Intro)+'&Place='+Place+'&SpID='+SpID+'&ImgPath='+ImgPath+'&Year='+Year+'&Month='+Month+'&SpIDList='+SpIDList+'&SpProb='+SpProb+'&TypeID='+TypeID+'&ServerID='+ServerID+'&GiftProb='+GiftProb;
+		ajax.Request(setting.Url,setting.Params,'callback.AddGiftPackage');
+{literal}	
+	});
+	gift.GetSpClass();
+	gift.ShowControl();
+});
+var gift={
+	/*移除道具*/
+	DelDropSp:function(GpID,SpID){
+		if(confirm('删除后将无法恢复,确定删除?')){
+{/literal}
+			setting.Url='{au d=YunYing c=GiftPackage a=delGiftPackageSpEvt}';
+{literal}
+			ajax.Request(setting.Url,'GpID='+GpID+'&SpID='+SpID,'callback.DelPresentRoomSp');
+		}		
+	},
+	/*读取第三级类别*/
+	GetThirdClass:function(){
+{/literal}
+		setting.Url = '{au d=YunYing c=GiftPackage a=getClassList}';		
+		setting.Params = 'ClassID='+$('#SubClassID').val();
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetThirdClass');
+{literal}	
+	},
+	/*道具分类*/
+	GetSpClass:function(){
+{/literal}
+		setting.Url = '{au d=YunYing c=GiftPackage a=getStagePropertyClass}';		
+		setting.Params = 'TypeID='+$('#TypeID').val();
+		ajax.Request(setting.Url,setting.Params,'callback.GetStagePropertyClass');
+{literal}			
+	},
+	/*读取道具或事件*/
+	GetSpPublicList:function(){
+{/literal}
+		var ClassID = 0;
+		setting.Url = '{au d=YunYing c=GiftPackage a=getSpPublicList}';
+		if(typeof($('#ThirdClassID').val())!='undefined')
+			ClassID = $('#ThirdClassID').val();
+		else
+			ClassID = $('#SubClassID').val();
+		setting.Params = 'TypeID='+$('#TypeID').val()+'&ClassID='+ClassID;
+		ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpPublicList');
+{literal}			
+	},
+	/*选择道具*/
+	GetCurSp:function(TypeID,SpID,SpName){
+		if($('#GiftSp #Sp_'+TypeID+'_'+SpID).html()!=null) return;
+		$('#GiftSp').append('<div id="Sp_'+TypeID+'_'+SpID+'" class="left" style="line-height:22px; margin-right:15px;margin-bottom:3px"><span class="left">'+SpName+'</span><input type="text" id="Prob_'+TypeID+'_'+SpID+'" class="txt left TmpProb" size="5" /><a href="javascript:void(0)" title="点击移除" class="no icon left" style="margin-top:5px" id="RemoveSp_'+TypeID+'_'+SpID+'"></a></div>');
+		$('#RemoveSp_'+TypeID+'_'+SpID).click(function(){
+			$('#GiftSp #Sp_'+TypeID+'_'+SpID).remove();
+		});
+		this.ShowControl();
+	},
+	ShowControl:function(){
+		var ClassID = $('#ClassID').val();
+		if($('#KeyID_'+ClassID).val()==3002)
+			$('.TmpProb').show();
+		else
+			$('.TmpProb').hide();
+	}
+}
+{/literal}
+</script>
+</head>
+
+<body>
+<!--<a href="{au d=YunYing c=GiftPackage a=index}" style="display:block; line-height:22px">返回列表页</a>-->
+<form method="post">
+<input type="hidden" name="SpID" id="SpID" value="{$SpPublic.SpID}" />
+<input type="hidden" name="ServerID" id="ServerID" value="{$SpPublic.ServerID}" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <td width="17%" align="right" bgcolor="#FFFFFF">礼包名称:</td>
+    <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="GoodsName" id="GoodsName" value="{$SpPublic.GoodsName}" /> <span class="orange">*</span></td>
+  </tr>		  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">礼包编号:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="SpNumber" id="SpNumber" value="{$SpPublic.SpNumber}" /> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">资源编号:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="ResourceID" id="ResourceID" value="{$SpPublic.ResourceID}" /> <span class="orange">*</span></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">礼包分类:</td>
+    <td bgcolor="#FFFFFF">
+	   {foreach from=$SpClass item=c}
+       <input type="hidden" id="KeyID_{$c.ClassID}" value="{$c.KeyID}">
+       {/foreach}
+       <select name="ClassID" id="ClassID" onchange="gift.ShowControl()" style="width:90px">
+	   		{foreach from=$SpClass item=c}
+            <option value="{$c.ClassID}" {if $c.ClassID==$SpPublic.ClassID}selected{/if}>{$c.CateName}</option>
+            {/foreach}
+       </select> <span class="orange">*</span>	</td>
+  </tr>	
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">缩略图:</td>
+    <td bgcolor="#FFFFFF">
+		<input type="text" class="txt left" name="ImgPath" id="ImgPath_FileUpload" value="{$SpPublic.ImgPath}" size="30">
+    	<div class="left"><input id="FileUpload" name="file_upload" type="file" multiple="false" class="file_upload" /></div>
+         <span class="orange left" id="ImgMsg">*</span>
+        <div id="queue_FileUpload" class="left"></div>
+        <br class="clear" />	</td>
+  </tr> 
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">使用场景:</td>
+    <td bgcolor="#FFFFFF">
+        {foreach from=$PlaceList item=P}
+        <input type="checkbox" name="Place" id="Place_{$P.TypeID}" value="{$P.TypeID}" {if $SpPublic.Place & $P.TypeID}checked{/if}> {$P.TypeName} 
+        {/foreach}
+         <span class="orange" id="PlaceMsg">*</span>    </td>
+  </tr>   
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">礼包简介:</td>
+    <td bgcolor="#FFFFFF"><input type="text" class="txt" name="Intro" id="Intro" value="{$SpPublic.Intro}" size="50" maxlength="250"></td>
+  </tr>  
+  <tr class="TmpProb">
+    <td align="right" bgcolor="#FFFFFF">礼包概率:</td>
+    <td bgcolor="#FFFFFF">
+	<input type="text" class="txt" name="GiftProb" id="GiftProb" value="{$SpPublic.GiftProb}" size="5" maxlength="5">
+	<span class="orange">*请输入0到1之间的小数</span>
+	</td>
+  </tr>  
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">性别限制:</td>
+    <td bgcolor="#FFFFFF">			
+       <select name="Sex" id="Sex">
+            <option value="-1" selected="selected">不限</option>
+            <option value="0" {if 0==$SpPublic.Sex}selected{/if}>男</option>
+            <option value="1" {if 1==$SpPublic.Sex}selected{/if}>女</option>
+       </select>    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">生效日期:</td>
+    <td bgcolor="#FFFFFF">			
+       <select name="Year" id="Year">         
+       </select>
+	   <select name="Month" id="Month">         
+       </select>    </td>
+  </tr>
+  <tr>
+    <td rowspan="2" align="right" bgcolor="#FFFFFF">选择道具:</td>
+    <td bgcolor="#FFFFFF" id="Col_Class">	
+       <select name="TypeID" id="TypeID" onchange="gift.GetSpClass();">
+            {foreach from=$SpTypeList item=Sp}
+            <option value="{$Sp.TypeID}">{$Sp.TypeName}</option>
+            {/foreach}
+       </select>
+       <select name="SubClassID" id="SubClassID" onchange="gift.GetSpPublicList();" style="width:90px">
+       </select>    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFFFFF" id="SpList">    </td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">礼包道具:</td>
+    <td bgcolor="#FFFFFF" id="GiftSp">
+		{foreach from=$GiftSpList item=sp}
+		<div id="Sp_{$sp.TypeID}_{$sp.SpID}" GpID="{$sp.GpID}" class="left" style="line-height:22px; margin-right:15px;margin-bottom:3px">
+			<span class="left">{$sp.GoodsName}</span>
+			<input type="text" id="Prob_{$sp.TypeID}_{$sp.SpID}" class="txt left TmpProb" size="5" value="{$sp.Probability}" />
+			<a href="javascript:void(0)" title="点击移除" class="no icon left" style="margin-top:5px" id="RemoveSp_{$sp.TypeID}_{$sp.SpID}" onclick="gift.DelDropSp({$sp.GpID},'{$sp.TypeID}_{$sp.SpID}')"></a>
+		</div>
+		{/foreach}
+	</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF">&nbsp;</td>
+    <td bgcolor="#FFFFFF">
+    	<input type="button" class="btn f2" value="发 布" id="btnAddGiftPackage" />
+    	<input type="reset" class="btn f2" value="重 置" /> 	<span id="ResultMsg" class="orange"></span>    </td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>

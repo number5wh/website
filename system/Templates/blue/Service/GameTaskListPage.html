@@ -1,0 +1,60 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function() {
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=GameTask a=showEdit}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'roomid='+$(this).attr('roomid')+'&reqround='+$(this).attr('reqround')+'&award='+$(this).attr('award')+'&taskname='+$(this).attr('taskname')+'&roomname='+$(this).attr('roomname'),'callback.ShowEditTask');
+                    });
+            });
+            $('.status').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                    setting.Url='{au d=Service c=GameTask a=setStatus}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url,'roomid='+$(this).attr('roomid')+'&status='+$(this).attr('status'),'callback.SetTaskStatus');
+                });
+            });
+        }
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="10%">房间ID</th>
+        <th width="20%">房间名称</th>
+        <th width="10%">游戏局数</th>
+        <th width="10%">游戏奖励</th>
+        <th width="20%">任务名称</th>
+        <th width="10%">状态</th>
+
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$TaskList item=Task}
+    <tr class="bg_color">
+        <td>{$Task.RoomId}</td>
+        <td>{$Task.RoomName}</td>
+        <td>{$Task.TaskReqRound}</td>
+        <td>{$Task.TaskAward}</td>
+        <td>{$Task.TaskName}</td>
+        <td>{if $Task.Status==1}上架{else}下架{/if}</td>
+
+        <td>
+            <a href="javascript:void(0)" class="edit" roomname="{$Task.RoomName}" roomid="{$Task.RoomId}" reqround="{$Task.TaskReqRound}" award="{$Task.TaskAward}"  taskname="{$Task.TaskName}">修改</a>
+            <a href="javascript:void(0)" class="status" status="{if $Task.Status==1}0{else}1{/if}" roomid="{$Task.RoomId}">{if $Task.Status==1}下架{else}上架{/if}</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="7">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $TaskList}
+    <tr class="bg_color">
+        <td colspan="7">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

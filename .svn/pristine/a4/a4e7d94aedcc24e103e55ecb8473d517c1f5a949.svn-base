@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+</head>
+<body>
+<div id="UserOnlineList" data-roomid="{$RoomID}">
+
+</div>
+</body>
+<script type="text/javascript" src="/js/taobao_ip_info.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+
+$(function(){
+    {/literal}
+        setting.PageUrl = '{au d=YunYing c=RoomOnline a=getRoomOnlineList}';
+        page.GetRoomUserOnline(1,'callback.GetRoomUserOnline');
+    {literal}
+})
+{/literal}
+</script>
+</html>

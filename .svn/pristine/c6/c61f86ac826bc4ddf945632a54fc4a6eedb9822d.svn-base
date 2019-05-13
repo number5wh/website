@@ -1,0 +1,69 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    $(function(){
+        $("#totalCheck").click(function(){
+            $("input[name*='selected']").attr('checked', this.checked);
+        })
+    });
+    var vxuser={
+        /*点击显示设置游戏种类界面*/
+        BindEvent:function(){
+            /*点击显示修改服务器配置界面*/
+            $('.edit').each(function(){
+                $(this).unbind();
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=WechatUser a=ShowAddWeChatUserHtml}';
+                        setting.Params = 'tid='+$(this).attr('id');
+                        {literal}
+                        ajax.Request(setting.Url,setting.Params,'callback.ShowAddWeChatUserHtml');
+                    });
+            });
+            /*点击删除服务器配置信息*/
+            $('.del').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='{au d=Service c=WechatUser a=DelUser}';
+                        {literal}
+                        if(confirm('删除后将无法恢复,确定删除?'))
+                            ajax.Request(setting.Url,'pid='+$(this).attr('id'),'callback.DelWeChatUser');
+                    });
+            });
+        }
+    }
+    {/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+    <tr>
+        <th style="width:10px;" class="text-center"><input type="checkbox" id="totalCheck"></th>
+        <th width="10%" bgcolor="#FFFFFF">序号</th>
+        <th width="20%" bgcolor="#FFFFFF">客服类型</th>
+        <th width="25%" bgcolor="#FFFFFF">微信号</th>
+        <th width="25%" bgcolor="#FFFFFF">备注</th>
+        <th width="20%" bgcolor="#FFFFFF">操作</th>
+    </tr>
+    {foreach from=$WechatList item=vo}
+    <tr id="Row_{$vo.id}">
+        <td align ="center" bgcolor='#FFFFFF'>
+            <input type="checkbox" name="selected[]" value="{$vo.id}">
+        </td>
+        <td align="center" bgcolor="#FFFFFF">{$vo.id}</td>
+        <td align="center" bgcolor="#FFFFFF">{$vo.typename}</td>
+        <td align="center" bgcolor="#FFFFFF">{$vo.weixinname}</td>
+        <td align="center" bgcolor="#FFFFFF">{$vo.noticetip}</td>
+        <td align="center" bgcolor="#FFFFFF">
+            <a href="javascript:void(0)" class="edit" id="{$vo.id}">修改</a>
+            <a href="javascript:void(0)" class="del" id="{$vo.id}">删除</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr>
+        <td colspan="8" align="center" bgcolor="#FFFFFF" class="abc">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $WechatList}
+    <tr>
+        <td colspan="8" align="center" bgcolor="#FFFFFF" class="abc">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>

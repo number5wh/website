@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript">
+setting.PageUrl='{au d=Service c=ServiceRole a=getPagerRole}';
+{literal}
+$(function(){
+	$("#RoleSearchBtn").click(function(){ 
+		var loginID = $.trim($("#LoginID").val());
+		var safePhone = $.trim($("#SafePhone").val());
+		var loginCode = $.trim($("#LoginCode").val());
+		var cardNumber = $.trim($("#CardNumber").val());
+		var LoginName = $.trim($("#LoginName").val());
+		
+		var LastLoginIP = $.trim($("#LastLoginIP").val());
+		var QQ = $.trim($("#QQ").val());
+		var MachineSerial = $.trim($("#MachineSerial").val());
+		var WeChatSerial = $.trim($("#WeChatSerial").val());
+		var Param, i=0;
+		if(loginID)
+			Param = "LoginID="+loginID;
+		
+		if(safePhone.length == 11 && safePhone.match(/\d+/g))
+			Param = "SafePhone="+safePhone;
+		
+		if(loginCode)
+			Param = "LoginCode="+encodeURIComponent(loginCode);
+		
+		if((cardNumber.match(/^\d{15}$/)) || (cardNumber.match( /^\d{17}(\d|x|X)$/)))
+			Param = "CardNumber="+cardNumber;
+		
+		if(LoginName)
+			Param = "LoginName="+encodeURIComponent(LoginName);
+			
+		if(LastLoginIP)
+			Param = "LastLoginIP="+encodeURIComponent(LastLoginIP);
+			
+		if(QQ)
+			Param = "QQ="+encodeURIComponent(QQ);
+			
+		if(MachineSerial)
+			Param = "MachineSerial="+encodeURIComponent(MachineSerial);
+		if(WeChatSerial){
+            Param = "WeChatSerial="+encodeURIComponent(WeChatSerial);
+        }
+		$(".SearchCondition").each(function(){
+			if($(this).val())
+				i++;
+		})
+		if(i==1){
+			$("#searchMsg").html("");
+			ajax.RequestUrl(setting.PageUrl, Param,'callback.GetPagerRole');
+		}else{
+			$("#searchMsg").html("只需输入一个搜索条件！");
+		}
+			
+	})	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<div class="search" style="margin:10px 0;">
+    <div>
+玩家编号: <input type="text" id="LoginID" class="txt SearchCondition" name="LoginID" maxlength="8" />
+
+安全手机: <input type="text" id="SafePhone" class="txt SearchCondition" name="SafePhone" maxlength="11" />
+
+
+角色昵称：<input type="text" id="LoginName" class="txt SearchCondition" name="LoginName" />
+登陆IP：<input type="text" id="LastLoginIP" class="txt SearchCondition" name="LastLoginIP" />
+        <input id="RoleSearchBtn" type="button" class="btn f2" value="搜 索" /><span id="searchMsg" class="orange"></span>
+    </div>
+
+</div>
+
+<div id="RoleList"></div>
+</body>
+</html>

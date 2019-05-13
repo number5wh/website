@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+    <script type="text/javascript">
+        {literal}
+        function selectDay(id, n){
+            var date = new Date();
+            var mydate = new Date(Date.parse(date) - (86400000  * n));
+            var startDate = mydate.getFullYear()+'-'+getMonth((parseInt(mydate.getMonth())+1))+'-'+ getMonth(mydate.getDate());
+            var endDate = date.getFullYear()+'-'+getMonth((parseInt(date.getMonth())+1))+'-'+ getMonth(date.getDate());
+            $('#dtBegin'+id).val(startDate);
+            $('#dtEnd'+id).val(endDate);
+        }
+
+        function getMonth(month){
+            return  month < 10 ? '0' + month : '' + month;
+        }
+
+        function searchOperateVerify(){
+            var startDate = $.trim($("#dtBegin1").val());
+            var endDate = $.trim($("#dtEnd1").val());
+            var status = $("#sel_OperateStatus").val();
+            var arrType = new Array();
+            $("input[name='OperateVerifyType']:checkbox").each(function(){
+                if($(this).attr('checked')){
+                    arrType.push($(this).val());
+                }
+            });
+            var keyword = $("#sel_keyword").val();
+            var keyvalue = $.trim($("#txt_keywords").val());
+            var Param = '';
+            if(startDate){
+                Param += "startTime="+startDate;
+            }
+            if(endDate){
+                Param += "&endTime="+endDate;
+            }
+            if(status){
+                Param += "&status="+status;
+            }
+            if(arrType.length>0){
+                Param += "&arrType="+arrType;
+            }else{
+                alert("请选择操作类型");
+                return false;
+            }
+            if(keyvalue){
+                Param += "&"+keyword+"="+keyvalue;
+            }
+            ajax.RequestUrl('/?d=Service&c=ServicePayMent&a=ExchangeList', Param,'getOperateVerifyList');
+        }
+
+        function getOperateVerifyList(data){
+            $('#ExchangeList').html(data);
+            init.SetTableRows();//初始化鼠标移到表格行显示背景
+
+            //绑定分页
+            var Param = '$(this).attr("pg"),"getOperateVerifyList"';
+            var Param1 = '$(this).val(),"getOperateVerifyList"';
+            evt.BindPageClick('#operatePageBar ','getPagerOperateVerify',Param,Param1);
+        }
+
+        function getPagerOperateVerify(curPage,Callback){
+            var maxPage = parseInt($('#LinkLast').attr('pg'),10);
+            var iPage = parseInt($('#lab_curpage').html(),10);
+            if(curPage != iPage && curPage > 0 && curPage <= maxPage){
+                setting.Params='curPage='+curPage;
+                ajax.RequestUrl('/?d=Service&c=ServicePayMent&a=ExchangeList', setting.Params,Callback);
+            }
+        }
+        $(function(){
+            searchOperateVerify();
+        });
+        {/literal}
+    </script>
+</head>
+<body>
+
+<div id="OperateVerifyDetail">
+    <fieldset style="padding:5px;margin-bottom:5px">
+        <legend>查询</legend>
+        <table  border="0" cellpadding="0" cellspacing="0" class="bg_color" style="margin-bottom:3px">
+            <tr>
+                <td >申请时间：</td>
+                <td >
+                    <input id="dtBegin1" type="text" value="{$strStatrTime}" />
+                    <img onClick="new Calendar().show(document.getElementById('dtBegin1'));" class="calendar_img" src="images/common/u896_normal.gif" /> 至
+                    <input id="dtEnd1" type="text" value="{$strEndTime}" />
+                    <img onClick="new Calendar().show(document.getElementById('dtEnd1'));" class="calendar_img" src="images/common/u896_normal.gif" />
+                    <a class="blue" href="javascript:selectDay(1,0)">今&nbsp;天</a>
+                    <a class="blue" href="javascript:selectDay(1,7)">7&nbsp;天</a>
+                    <a class="blue" href="javascript:selectDay(1,30)">1个月</a>
+                    <a class="blue" href="javascript:selectDay(1,90)">3个月</a></td>
+            </tr>
+            <tr>
+                <td class="txt_R">申请状态：</td>
+                <td class="txt_L"><select id="sel_OperateStatus" style="width:100px;">
+                    <option value="1">待转账</option>
+                    <option value="">全&nbsp;部</option>
+                    <option value="3">结&nbsp;单</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td class="txt_R">操作类型：</td>
+                <td class="txt_L"> {foreach from=$OperateVerifyType item=type key=index}
+                    <label>
+                        <input type='checkbox' name="OperateVerifyType" value="{$index}" checked="checked" />
+                        {$type}</label>
+                    &nbsp;&nbsp;
+                    {/foreach} </td>
+            </tr>
+            <tr>
+                <td class="txt_R">关&nbsp;键&nbsp;词：</td>
+                <td class="txt_L"><select id="sel_keyword" style="width:100px;">
+                    <option value="loginId">玩家编号</option>
+                    <option value="loginName">玩家昵称</option>
+                </select>
+                    <input id="txt_keywords" type="text" maxlength="20" />
+                    <input type="button" value="查询" class="bnStyle f2" onClick="searchOperateVerify()" /></td>
+            </tr>
+        </table>
+    </fieldset>
+    <div id="ExchangeList"></div>
+</div>
+</body>
+</html>

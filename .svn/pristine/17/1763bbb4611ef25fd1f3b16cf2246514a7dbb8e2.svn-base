@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>运维后台</title>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/blue.css" />
+    <link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+    <script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/init.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/common.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/event.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+    <script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var Sys={
+            SetProperty:function(){
+                //setting.Params = '';
+                init.SetTableRows();//初始化鼠标移到表格行显示背景
+                //绑定分页
+                var Param = '$(this).attr("pg"),"Sys.CallBackGetPagerRecharge"';
+                var Param1 = '$(this).val(),"Sys.CallBackGetPagerRecharge"';
+                evt.BindPageClick('','page.GetPage',Param,Param1);
+            },
+            /*分页回调*/
+            CallBackGetPagerRecharge:function(data){
+                $('#PageList').html(data);
+                Sys.SetProperty();
+            },
+            CallBackDelRecharge:function(data){
+                if(data==0){
+                    //setting.Params = '';
+                    page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerRecharge');
+                }
+                else
+                    main.OpenBox(data);
+            }
+        };
+
+        $(function(){
+            {/literal}
+                setting.PageUrl = '{au d=Service c=UserDataCount a=getPagerUserDataCountList}';
+                {literal}
+                Sys.SetProperty();
+                /*点击搜索*/
+                $('#btnSearch').click(function(){
+                        $('#Msg').html('');
+                        var StartTime = $('#StartTime').val();
+                        var EndTime = $('#EndTime').val();
+                        var LoginID = $('#LoginID').val();
+                            {/literal}
+                            setting.Params = '&StartTime='+StartTime+'&EndTime='+EndTime+'&LoginID='+LoginID;
+                            ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerRecharge');
+                            {literal}
+                 });
+                $('#StartTime').focus(function(){
+                    WdatePicker({{/literal}minDate:'{$StartTime}',{literal}maxDate:"#F{$dp.$D('EndTime')}"});
+                    });
+                    $('#EndTime').focus(function(){
+                        WdatePicker({minDate:"#F{$dp.$D('StartTime')}",{/literal}maxDate:'{$EndTime}'{literal}});
+                        });
+
+                    });
+                    {/literal}
+    </script>
+</head>
+
+<body>
+<fieldset class="left">
+    <legend>查询</legend>
+    <!--<span class="left" style="margin:0">充值方式：</span>
+    <select id="RechargeType" class="left">
+        { section name=n loop=$RechargeType}
+        <option value="{$smarty.section.n.index}">{$RechargeType[n]}</option>
+        { /section}
+    </select>-->
+    <span class="left" style="margin:0">时间范围：</span>
+    <input id="StartTime" class="txt left " type="text" value="{$EndTime}" size="10" />
+    <input id="EndTime" class="txt left " type="text" value="{$EndTime}" size="10" />
+    <span class="left" style="margin:0">玩家编号：</span>
+    <input type="text" class="txt left" name="LoginID" id="LoginID" value="" size="8" maxlength="12"/>
+    <input type="button" id="btnSearch" class="btn f2 left" value="查询" /><span id="Msg" class="red"></span>
+    <br class="clear" />
+</fieldset>
+
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerRecharge');">
+    <div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<br class="clear" />
+<div id="PageList">
+    {include file="$skin/Service/UserDataCountListPage.html"}
+</div>
+
+</body>
+</html>

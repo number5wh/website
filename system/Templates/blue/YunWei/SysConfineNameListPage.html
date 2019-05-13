@@ -1,0 +1,57 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var confine={
+	BindEvent:function(){
+		/*点击显示敏感词配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=SysConfine a=showAddSysConfineNameHtml}';
+				setting.Params = 'ID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddSysConfineNameHtml');
+			});	
+		});	
+		/*点击删除敏感词*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=SysConfine a=delSysConfineName}';
+				setting.Params = 'ID='+$(this).attr('id');
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.Request(setting.Url,setting.Params,'callback.DelSysConfineName');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="10%" bgcolor="#FFFFFF">序号</th>
+    <th width="40%" bgcolor="#FFFFFF">敏感词</th>
+    <th width="26%" bgcolor="#FFFFFF">添加时间</th>
+    <th width="24%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$SysConfineList item=sys}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$sys.iCount}</td>
+    <td align="center" bgcolor="#FFFFFF">{$sys.LoginName}</td>   
+    <td align="center" bgcolor="#FFFFFF">{$sys.CreatedDate}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$sys.ID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$sys.ID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $SysConfineList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

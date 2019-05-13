@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>帮助中心</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>《779游戏》10月26日盛大开启</b></div><br>
+							  <div>
+					                <!-- <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p> -->
+									<!--StartFragment -->
+									<div>
+										<!-- <span style="font-size:18px;"> 
+											近期我们779游戏中心收到部分玩家举报有假冒我们779游戏官网的站点，
+											特此779游戏在此提醒广大玩家注意认准我们779游戏唯一官网<a href="https://www.game779.com"><font color="#ff0000">http://www.<font size="5px;">Game779</font>.com</font></a><br><br>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假冒网站公布在此，请玩家注意：<br>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;www.779game.com !!!<br><br>
+											</span> -->
+										<span style="font-size:18px;">
+											《779游戏》作为一款休闲娱乐的棋牌游戏，自内测以来广受玩家好评。2015年10月26日，《779游戏》正式开启盛大开启
+										</span>
+									</div>
+									<!-- <div align="right"><strong> <p align="right">779游戏运营团队</p> -->
+										<!-- <p align="right">2015-01-30</p> -->
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

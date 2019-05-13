@@ -1,0 +1,34 @@
+
+    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+        <tr>
+            <th width="19%" bgcolor="#FFFFFF">房间名称</th>
+            <th width="14%" bgcolor="#FFFFFF">机器人数量</th>
+            <th width="14%" bgcolor="#FFFFFF">最大机器人数</th>
+            <th width="16%" bgcolor="#FFFFFF">需要赢钱数量</th>
+            <th width="16%" bgcolor="#FFFFFF">输赢数量</th>
+            <th width="15%" bgcolor="#FFFFFF">更新时间</th>
+            <th width="13%" bgcolor="#FFFFFF">操作</th>
+        </tr>
+        {foreach from=$RoomList item=Ver}
+        <tr>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.RoomName}</td>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.RobotCount}</td>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.MaxCount}</td>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.RobotNeedWinMoney}</td>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.RobotWinMoney/1000}</td>
+            <td align="center" bgcolor="#FFFFFF">{$Ver.UpdateTime}</td>
+            <td align="center" bgcolor="#FFFFFF">
+                <a href="javascript:void(0)" class="edit" id="{$Ver.VerID}" onclick="ajax.RequestUrl('{au d=YunWei c=RoomRobotBehavior a=activeRoomRobot}','RoomID={$Ver.RoomID}','callback.ActiveRoomRobot')">激活</a>
+            </td>
+        </tr>
+        {foreachelse}
+        <tr>
+            <td colspan="7" align="center" bgcolor="#FFFFFF">暂无记录</td>
+        </tr>
+        {/foreach}
+        {if $RoomList}
+        <tr>
+            <td colspan="7" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+        </tr>
+        {/if}
+    </table>

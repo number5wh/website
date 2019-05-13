@@ -1,0 +1,31 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th>比赛名称</th>
+    <th>游戏名称(ID)</th>
+    <th>总局数</th>
+    <th>逃跑数</th>  
+    <th>冠军次数</th>  
+    <th>最佳名次</th>  
+    <th>更新时间</th>    
+  </tr>
+  {foreach from=$result item=v}
+  <tr class="bg_color">
+    <td>{$v.MatchName}</td>
+    <td>{$v.KindName}({$v.KindID})</td>
+    <td>{$v.PlayCount}</td>
+    <td>{$v.FleeCount}</td>
+    <td>{$v.GoldMedalistCount}</td>
+    <td>{$v.BestRank}</td>
+    <td>{$v.UpdateTime}</td>
+  </tr> 
+  {foreachelse} 
+  <tr class="bg_color">
+    <td colspan="11">很抱歉，没有您要查询的信息~</td>    
+  </tr>  
+  {/foreach} 
+  {if $result}
+  <tr class="bg_color">
+    <td id="GameSummaryPage" colspan="7">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

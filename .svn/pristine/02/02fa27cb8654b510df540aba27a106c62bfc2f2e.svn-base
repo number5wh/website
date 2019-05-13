@@ -1,0 +1,18 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>积分检查</span>
+	<div style='color:#ff0000;margin-top:20px; margin-bottom:20px;line-height:22px'>确定要为此玩家增加{$HappyBean}金币吗?点击'确认'将直接执行</div>
+				<input id='RoleID' type='hidden' name='RoleID' value='{$RoleID}' />
+				<input id='btnAddHappyBean' type='button' class='bnStyle f2' value='确　认' />
+			
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){	
+	$('#btnAddHappyBean').click(function(){
+		var RoleID = $.trim($('#RoleID').val());
+		var params = 'RoleID='+RoleID;				
+		ajax.Request('/?d=Service&c=ServiceRole&a=AddHappyBean', params, 'callback.GetAddHappyBean'); 				
+	});
+})
+{/literal}
+</script>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+
+var Match={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"Match.CallBackGetPagerMatch"';
+		var Param1 = '$(this).val(),"Match.CallBackGetPagerMatch"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	},
+	/*分页回调*/
+	CallBackGetPagerMatch:function(data){
+		$('#PageList').html(data);
+		Match.SetProperty();
+	}
+};
+
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=GameMatch a=getPagerMatchList}';
+	Match.SetProperty();
+{literal}
+	$('.edit').click(function(){		
+{/literal}
+		setting.Url='{au d=YunWei c=GameMatch a=showAddGameMatchHtml}';
+{literal}
+		ajax.RequestCallBack(setting.Url,'MatchTypeID='+$(this).attr('id'),function(data) {
+			main.OpenBox(data);
+		});		
+	});	
+{/literal}
+});
+</script>
+</head>
+
+<body>
+<input type="button" class="edit btn f2" value="添加赛事" id="0" />
+
+
+<div id="PageList">
+{include file="$skin/YunWei/GameMatchListPage.html"}
+</div>
+</body>
+</html>

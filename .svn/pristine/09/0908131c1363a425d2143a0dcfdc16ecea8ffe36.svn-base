@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>新摇钱树超级大彩金来袭</title>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/fun.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details h">
+                {include file="public/leftMenu.tpl"}
+				<div class="detailsRight">
+					<div class="commonProblem new-two">
+						<div id="main">
+							<div align="center" style="color:white; font-size:30px;"><b>新摇钱树超级大彩金来袭</b></div><br>
+							  <div>
+					                <!-- <p align="left"><span style="font-size:18px;">亲爱的游戏玩家： </span></p> -->
+									<!--StartFragment -->
+									<div>
+										<span style="font-size:18px;text-indent:2em;display: block">
+											<p>尊敬的各位玩家：
+										</p>
+									</br>
+										<p>超级大彩金来袭，新摇钱树优先开启了超级大彩金功能，初级房彩金池一旦达到5亿，就有几率爆发出大彩金，最低1亿，最高可达彩金池上限。中级房彩金达到2亿就有几率爆出，爆出最低5000万，最高彩金池上限。高级房彩金达到1亿就有几率爆出，最低3000万，最高彩金池上限。请各位关注好彩金池哦，说不定幸运之神降临到您身上。彩金池在房间右上角查看。</p>
+										</span>
+									</div>
+									</br>
+									</br>
+									 <div align="right"><strong> <p align="right">779游戏运营团队</p>
+										<p align="right">2018-03-03</p>
+										<br>
+										</strong>
+									</div>
+					            </div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+</body>
+</html>

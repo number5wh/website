@@ -1,0 +1,159 @@
+@charset "utf-8";
+/* CSS Document */
+*{ margin:0; padding:0;}
+div,img,p,h1,h2,h3,h4,h5,h6{	
+    	margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align:middle; }
+ol, ul {list-style: none; }
+.clear{ clear:both;}
+a, a:visited { color: #333; text-decoration: none; outline: 0; }
+a:hover, a:focus { color: #f60; }
+.height10px{ height:10px}
+
+#wrapper,#main,#footer{ width:980px; margin:0 auto;}
+
+/*header
+=============================*/
+.header { width:980px; height:auto; text-align:left;}
+.top{ width:980px; height:104px; background:url(../images/top.jpg) no-repeat;}
+.top li{ float:right;}
+.login{ 
+		background:url(../images/icon.gif) no-repeat left 4px;
+		margin-top:10px;
+		padding:0px 16px;}
+.mfzc{  
+		background:url(../images/icon.gif) no-repeat left -14px;
+		margin-top:10px;
+		padding:0 16px;}
+.help{  
+		background:url(../images/icon.gif) no-repeat left -30px;
+		margin-top:10px;
+		padding:0 10px 0 18px;}
+.nav{ background:url(../images/nav.jpg) no-repeat; height:36px;}
+.nav li { float:left; font-size:14px; font-weight:bold; }
+.nav li a{ 
+		width:76px; 
+		text-align:center; 
+		display:block; 
+		color:#fff; 
+		line-height:29px; 
+		margin:7px 15px 0;}
+.nav li a:hover, #current{ 
+		background:url(../images/nav_hover.gif) no-repeat; 
+		color:#00A1D8;
+		text-align:center;}
+.nav em{ 
+		display:block;
+		color:#fff;
+		font-style:normal; 
+		float:right; 
+		line-height:36px; 
+		margin-right:15px;}
+
+/* main
+==============================*/
+#main{ margin-top:30px;}
+.left{ width:190px; float:left; }
+.right{ width:790px;overflow:hidden; margin:0 auto }
+.r_fl{float:right;}
+.imiddle{ width:488px; float:left; margin-left:20px; }
+.iright{ width:260px; float:right;}
+
+/*left*/
+.left_title{
+		background:url(../images/left_title.jpg) no-repeat;	
+		margin-top:10px;}
+.zzfw{ 
+		background:url(../images/icon.gif) no-repeat left -200px;
+		line-height:36px;
+		font-size:14px;
+		color:#00386F; 
+		font-weight:bold;
+		padding-left:34px;}
+.zxkf{ 
+		background:url(../images/icon.gif) no-repeat left -244px;
+		line-height:36px;
+		font-size:14px;
+		color:#00386F; 
+		font-weight:bold;
+		padding-left:34px;}
+
+.textborder{ border:1px solid #B3B3B3; border-top:none;}
+.textborder li a{ font-size:12px;}
+.textborder li a:hover{ text-decoration:underline;}
+.left_zc,.left_cz,.left_mima,.left_reset{
+		line-height:26px;
+		font-size:14px;
+		padding-left:25px;}
+.left_zc{background:url(../images/icon.gif) no-repeat left -64px;}
+.left_cz{background:url(../images/icon.gif) no-repeat left -88px;}
+.left_mima{background:url(../images/icon.gif) no-repeat left -118px}
+.left_reset{background:url(../images/icon.gif) no-repeat left -147px}
+
+.qqzx{ font-weight:bold; margin:10px 14px;}
+.left_img { margin-top:10px;}
+.left_img img{ margin:10px 0 0 4px;}
+
+/*middle*/
+.banner{ height:184px;}
+.middle_con{ text-align:left; margin-top:10px;}
+.middle_title{ 
+		background:url(../images/middle_title.jpg) no-repeat;
+		height:31px;
+		line-height:31px;
+		font-size:14px;
+		font-weight:bold;
+		color:#fff;
+		padding-left:15px;}
+.middle_title span,.zxhd span, .cjwt span { 
+		display:block; 
+		float:right;
+		font-weight:normal;
+		font-size:12px; 
+		margin-right:10px;
+		overflow:hidden}
+.news_con li { padding:4px 10px; overflow:hidden;border-bottom:1px dashed #ccc; height:31px; line-height:31px;}
+.news_con li a{
+		background:url(../images/icon.gif) no-repeat left -368px;
+		height:22px;
+		padding-left:12px; 
+		display:block;
+		 overflow:hidden}
+.news_con li a:hover{
+		background:url(../images/icon.gif) no-repeat left -368px;
+		height:22px;
+		padding-left:12px; 
+		display:block;
+		}
+.news_con span{display:inline-block; float:right; font-size:12px;}
+.pro_con ul{ height:205px;} 
+.pro_con li a{ width:66px; height:90px; display:block; float:left; margin:10px 14px 0 14px;}
+.pro_con span{ display:block; text-align:center;}
+.pro_con img { padding:1px; border:1px solid #ccc;}
+
+/*right*/
+.right_title{
+		background:url(../images/right_title.jpg) no-repeat}
+.zxhd{ 
+		background:url(../images/icon.gif) no-repeat left -284px;
+		line-height:36px;
+		font-size:14px;
+		color:#00386F; 
+		font-weight:bold;
+		padding-left:34px;}
+.cjwt{ 
+		background:url(../images/icon.gif) no-repeat left -324px;
+		line-height:36px;
+		font-size:14px;
+		color:#00386F; 
+		font-weight:bold;
+		padding-left:34px;}
+		
+/*footer
+=========================*/
+#footer{ border-top:1px dashed #ccc; margin-top:20px; text-align:center;}
+#footer p{ text-align:center;  line-height:26px;}

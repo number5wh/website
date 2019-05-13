@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysAdminList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysAdminList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	},
+	SetPlayer:function(LoginCode,StartNum,EndNum){
+{/literal}
+		setting.Url = '{au d=YunWei c=Player a=SetPlayer}';
+		setting.Params = 'LoginCode='+LoginCode+'&StartNum='+StartNum+'&EndNum='+EndNum;
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.SetPlayer);
+{literal}
+	},
+	DelPlayer:function(LoginCode,StartNum,EndNum){
+{/literal}
+		setting.Url = '{au d=YunWei c=Player a=DelPlayer}';
+		setting.Params = 'LoginCode='+LoginCode+'&StartNum='+StartNum+'&EndNum='+EndNum;
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.DelPlayer);
+{literal}
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysAdminList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetPlayer:function(data){
+		if(data.iResult==0){
+			if(data.StartNum<data.EndNum){
+				var StartNum = parseInt(data.StartNum)+1;
+				pl.SetPlayer(data.LoginCode,StartNum,data.EndNum);
+			}
+			else{
+				$('.red').html('√');
+				$('#StartNum').val(0);
+				$('#EndNum').val(0);
+				$('#LoginCode').val('');
+			}
+		}
+		else
+			$('.red').html('×');
+	},
+	DelPlayer:function(data){
+		if(data.iResult==0){
+			if(data.StartNum<data.EndNum){
+				var StartNum = parseInt(data.StartNum)+1;
+				pl.DelPlayer(data.LoginCode,StartNum,data.EndNum);
+			}
+			else{
+				$('.red').html('√');
+				$('#StartNum').val(0);
+				$('#EndNum').val(0);
+				$('#LoginCode').val('');
+			}
+		}
+		else
+			$('.red').html('×');
+	}
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=Player a=getPagerPlayerList}';
+{literal}
+	$('#btnAdd').click(function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=Player a=showAddPlayer}';
+		setting.Params = '';
+		window.parent.main.AddTab('添加系统玩家','UserP0',setting.Url+setting.Params);
+{literal}
+	});
+	pl.SetProperty();
+	/*批量添加*/
+	$('#btnSubmit').click(function(){
+		var LoginCode = $.trim($('#LoginCode').val());
+		var StartNum = $.trim($('#StartNum').val());
+		var EndNum = $.trim($('#EndNum').val());
+		$('.red').html('提交中');
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(StartNum) || StartNum==''){
+			$('#StartNum').focus();
+			$('#StartNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(EndNum) || EndNum==''){
+			$('#EndNum').focus();
+			$('#EndNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		pl.SetPlayer(LoginCode,StartNum,EndNum);
+	});
+	/*批量删除*/
+	$('#btnDel').click(function(){
+		var LoginCode = $.trim($('#LoginCode').val());
+		var StartNum = $.trim($('#StartNum').val());
+		var EndNum = $.trim($('#EndNum').val());
+		$('.red').html('提交中');
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(StartNum) || StartNum==''){
+			$('#StartNum').focus();
+			$('#StartNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(EndNum) || EndNum==''){
+			$('#EndNum').focus();
+			$('#EndNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		pl.DelPlayer(LoginCode,StartNum,EndNum);
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" class="btn f2" id="btnAdd" value="添加系统玩家" />
+
+
+<div id="PageList">
+	{include file="$skin/YunWei/PlayerListPage.html"}
+</div>
+
+</body>
+</html>

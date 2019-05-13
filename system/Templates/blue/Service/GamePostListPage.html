@@ -1,0 +1,36 @@
+<script type="text/javascript" language="javascript">
+    {literal}
+    var msg={
+        BindEvent:function(){
+            $('#btnAddAd').click(function(){
+                {/literal}
+                    setting.Url='{au d=Service c=GamePost a=addMsg}';
+                    {literal}
+
+                    var MsgID = $('#MsgID').val();
+                    var MsgContent = $('#MsgContent').val();
+                    if(isNaN(MsgID) || MsgID=='' ){
+                        $('#ResultMsg').html('*参数异常');
+                        return false;
+                    }
+
+                    setting.Params = 'MsgID='+MsgID+'&MsgContent='+encodeURIComponent(MsgContent);
+                    ajax.RequestUrl(setting.Url,setting.Params,'callback.AddMsg2');
+                });
+        }
+    }
+    {/literal}
+</script>
+<div class="bdy">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList left">
+    <tr>
+        <td bgcolor="#FFFFFF"><textarea name="MsgContent" id="MsgContent" cols="30" rows="5" class="textarea left">{$MsgList[0].MsgContent}</textarea></td>
+    </tr>
+</table>
+</div>
+<div class="bot">
+    <input type="hidden" name="MsgID" id="MsgID" value="{$MsgList[0].MsgID}" />
+    <input type="button" class="btn f2" value="保 存" id="btnAddAd" />
+    <div class="orange" id="ResultMsg"></div>
+    <br class="clear" />
+</div>

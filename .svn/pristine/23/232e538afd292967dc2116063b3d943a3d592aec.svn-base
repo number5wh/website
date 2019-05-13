@@ -1,0 +1,70 @@
+<div class="sysWin" style="width:300px;">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>操作审核
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+    </h2>
+    <div id="div_main" class="bdy" style="padding:10px 10px 0 10px;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="bg_color">
+            <tr>
+                <td width="70px;" class="txt_R">备注(200字内)：</td><td class="txt_L pad5">
+                <input id="pId" type="hidden" value="{$id}" />
+                <input id="roleId" type="hidden" value="{$roleId}" />
+                <textarea id="txt_remark" style="width:200px; height:75px;"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="txt_M pad8">
+                    <span id="errorMsg" class="orange"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="div_bottom" class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <input type="button" class="bnStyle f2 virtualClass" style="margin-left:80px;" value="同&nbsp;意" onclick="doOperateVerify(1);" />
+        <input type="button" class="bnStyle f2 virtualClass" value="拒&nbsp;绝" onclick="doOperateVerify(2);" />
+        <div class="botRight f1 right"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    {literal}
+    function doOperateVerify(v){
+        {/literal}
+            setting.Url = "{au d=Service c=ServiceExchange a=doOperateVerify}";
+            {literal}
+            var id = $('#pId').val();
+            var content = textFun.Trim($('#txt_remark').val());
+            var roleId = $('#roleId').val();
+            if(content=='' || content.length>200){
+                $('#errorMsg').html('请填正确内容,不要超过200个字');
+                return false;
+            }else{
+                $('#errorMsg').html('');
+                var param = 'id='+id+'&status='+v+'&content='+encodeURIComponent(content)+'&roleId='+roleId;
+                ajax.RequestCallBack(setting.Url, param,function(result) {
+                    if(result==1){
+                        doSuccess();
+                    }else if(result == -1) {
+                        $('#errorMsg').html('请填正确内容,不要超过200个字');
+                    }
+                    else if(result == 1001){
+                            $('#errorMsg').html('参数错误');
+                    }else{
+                        $('#errorMsg').html('操作审核失败');
+                    }
+                });
+            }
+        }
+
+        function doSuccess(){
+            $('#div_main').html('<div style="padding:10px; text-align:center;"><p style="padding:20px; font-size:14px">操作成功！</p></div>');
+            $('#div_bottom').html('<div class="botLeft f1 left"></div><input type="button" class="bnStyle f2" style="margin-left:40px;" onclick="main.CloseMsgBox(false,\'\');refresh();" value="确&nbsp;定" /><div class="botRight f1 right"></div><div class="clear"></div>');
+        }
+
+        function refresh(){
+            searchOperateVerify();
+        }
+        {/literal}
+</script>

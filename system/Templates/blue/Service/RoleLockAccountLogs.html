@@ -1,0 +1,35 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="14%">操作时间</th>
+    <th width="19%">锁定/封号原因</th> 
+    <th width="6%">处理结果</th> 
+    <th width="8%">锁定/封号期限</th> 
+    <th width="8%">解锁/解封要求</th> 
+    <th width="8%">操作客服</th> 
+	<th width="8%">案件编号</th>
+	<th width="10%">IP地址</th>
+    <th width="19%">备注</th>   
+  </tr>
+  {foreach from=$LockAccountList item=Lock}
+  <tr class="bg_color">
+  	<td>{$Lock.AddTime}</td>
+    <td>{$Lock.Reason}</td>
+    <td>{$Lock.Result}</td>
+    <td>{$Lock.LockExpireTime}</td>
+    <td>{$Lock.Requirement}</td>
+    <td>{$Lock.SysUserName}</td>
+	<td>{$Lock.CaseSerial}</td>
+	<td>{$Lock.ClientIP}</td>
+    <td>{$Lock.Remarks}</td>
+  </tr> 
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="9">很抱歉，没有您要查询的信息~</td>   
+  </tr> 
+  {/foreach}
+  {if $LockAccountList}
+  <tr class="bg_color">
+    <td id="RoleLogsPages" colspan="9">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

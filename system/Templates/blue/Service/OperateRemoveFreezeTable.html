@@ -1,0 +1,46 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>解除冻结</span>
+	<table border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<td class='txt_M'>
+				冻结类型：<input type='checkbox' id='bankFreeze' {if !$bmStatus.iBankStatus}title='银行未冻结' disabled='disabled'{/if} />解除银行冻结  <input type='checkbox' id='kanpsackFreeze' {if !$bmStatus.Status}title='背包未冻结' disabled='disabled'{/if} />解除背包冻结
+			</td>
+		</tr>
+		<tr>
+			<td class='txt_M pad5'>
+				<p id='ErrorMsg' class='txt_M pad8 orange'></p>
+				<input type='hidden' id='roleID' value='{$roleID}' />
+				<input id='iLoginID' type='hidden' value='{$loginID}' />
+				<input type='button' id='applyBtn'  class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+setting.Url = '{au d=Service c=ServiceRole a=removeFreezeTable}';
+{literal}
+$(function(){
+	$('#applyBtn').click(function(){
+		var roleID = $.trim($('#roleID').val());
+		var loginID = $.trim($('#iLoginID').val());
+		var bankChk = $('#bankFreeze').attr('checked');
+		var knapChk = $('#kanpsackFreeze').attr('checked');
+		var freezeChked = 0;
+		if(!bankChk && !knapChk){
+			$('#ErrorMsg').html('请选择解除冻结类型！');
+			return false;
+		}
+		
+		if(bankChk && knapChk){
+			freezeChked = 3;
+		}else if(!bankChk && knapChk){
+			freezeChked = 2;
+		}else if(bankChk && !knapChk){
+			freezeChked = 1;
+		}
+		var params = 'freezeChked='+freezeChked+'&roleID='+roleID+'&loginID='+loginID;
+		ajax.RequestUrl(setting.Url, params, 'callback.GetEditOperationResult');
+	})
+})
+{/literal}
+</script>

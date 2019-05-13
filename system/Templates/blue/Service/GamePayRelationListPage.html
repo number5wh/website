@@ -1,0 +1,73 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="20%">ID</th>
+        <th width="20%">支付类别</th>
+        <th width="20%">支付金额</th>
+        <th width="20%">支付通道</th>
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$RelationList item=GameClass}
+    <tr class="bg_color">
+        <td>{$GameClass.Id}</td>
+        <td>{$GameClass.ClassName}</td>
+        <td>{$GameClass.Amount}</td>
+        <td>{$GameClass.ChannelName}</td>
+        <td>
+            <a href="javascript:void(0)" class="edit" classid="{$GameClass.ClassId}" channelid="{$GameClass.ChannelId}" amountid="{$GameClass.AmountId}"  classname="{$GameClass.ClassName}" amount="{$GameClass.Amount}" channelname="{$GameClass.ChannelName}" tid="{$GameClass.Id}">修改</a>
+            <a href="javascript:void(0)" class="delete" classid="{$GameClass.ClassId}" channelid="{$GameClass.ChannelId}" amountid="{$GameClass.AmountId}"  tid="{$GameClass.Id}">删除</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="5">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $RelationList}
+    <tr class="bg_color">
+        <td colspan="5">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var rm={
+        /*点击显示设置游戏种类界面*/
+        BindEvent:function(){
+            /*修改类别*/
+            $('.edit').each(function(){
+                $(this).click(function(){
+                     {/literal}
+                        setting.Url='{au d=Service c=GamePayRelation a=showEdit}';
+                         {literal}
+                        ajax.RequestUrl(setting.Url,'id='+$(this).attr('tid')+'&amountid='+$(this).attr('amountid')+'&classid='+$(this).attr('classid')+'&channelid='+$(this).attr('channelid'),'callback.ShowEditRelation');
+                    });
+            });
+            $('.delete').each(function(){
+                $(this).click(function(){
+
+                    if(window.confirm('确定删除?')){
+                        {/literal}
+                            setting.Url='{au d=Service c=GamePayRelation a=delete}';
+                            {literal}
+                            ajax.RequestUrl(setting.Url,'id='+$(this).attr('tid'),'Sysback.del');
+                        }
+                    });
+            });
+            $('#addRelation').click(function(){
+                 {/literal}
+                    setting.Url='{au d=Service c=GamePayRelation a=showAdd}';
+                     {literal}
+                    ajax.RequestUrl(setting.Url,'','callback.ShowAddRelation');
+                });
+        }
+    }
+    rm.BindEvent();
+    var Sysback = {
+        del:function(data) {
+            if(data == 0){alert('删除成功');window.location.reload();
+            } else {alert('删除失败');
+            }
+        }
+    }
+    {/literal}
+</script>

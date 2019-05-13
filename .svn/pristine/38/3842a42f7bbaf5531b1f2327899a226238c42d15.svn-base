@@ -1,0 +1,67 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>设置微信客服号
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'AdPos')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="right" bgcolor="#FFFFFF">微信客服位置:</td>
+                <td bgcolor="#FFFFFF">
+                    <select id="TypeID">
+                        <option value="1" {if $ConfigInfo.TypeId==1}selected{/if}>推广员</option>
+                        <option value="2" {if $ConfigInfo.TypeId==2}selected{/if}>充值客服</option>
+                        <option value="3" {if $ConfigInfo.TypeId==3}selected{/if}>APP在线客服</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF">客服微信号:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="weixinname" id="weixinname" value="{$ConfigInfo.WeiXinName}"></td>
+            </tr>
+            <tr>
+                <td align="right" bgcolor="#FFFFFF">客服描述:</td>
+                <td bgcolor="#FFFFFF"><textarea name="noticetip" id="noticetip" cols="30" rows="5" class="textarea">{$ConfigInfo.noticetip}</textarea></td>
+            </tr>
+        </table>
+        <input type="hidden" name="id" id="id" value="{$ConfigInfo.ID}" />
+    </div>
+
+    <div class="bot f2">
+        <div class="botLeft f1 left"></div>
+        <div class="botRight f1 right"></div>
+        <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'AdPos')"/>
+        <input type="button" class="btn f2 right" value="提 交" id="btnAddAdPos" />
+        <div class="orange right" id="ResultMsg"></div>
+
+        <br class="clear" />
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var vxuser={
+        BindEvent:function(){
+            /*提交*/
+            $('#btnAddAdPos').click(function(){
+                var id = $('#id').val();
+                var TypeID = $('#TypeID').val();
+                var weixinname = $('#weixinname').val();
+                var noticetip = $('#noticetip').val();
+                if(weixinname=='' ){
+                    $('#ResultMsg').html('*微信号要填写');
+                    $('#weixinname').focus();
+                    return false;
+                }
+                setting.Params ='&id='+ id+ '&TypeID='+TypeID+'&weixinname='+encodeURIComponent(weixinname)+'&noticetip='+encodeURIComponent(noticetip);
+                {/literal}
+                    setting.Url='{au d=Service c=WechatUser a=addWechatUser}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url,setting.Params,'callback.AddWeChatUser');
+                });
+        }
+    };
+    {/literal}
+</script>

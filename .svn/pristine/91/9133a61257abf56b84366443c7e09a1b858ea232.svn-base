@@ -1,0 +1,95 @@
+<script type="text/javascript" language="javascript">
+{literal}
+    $(function(){
+        $("#totalCheck").click(function(){
+            $("input[name*='selected']").attr('checked', this.checked);
+        })
+    });
+var svr={
+	/*点击显示设置游戏种类界面*/
+	BindEvent:function(){
+		/*点击显示修改服务器配置界面*/
+		$('.edit').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=GameDun a=showAddGameDunHtml}';
+				setting.Params = 'ID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddGameDunHtml');
+			});	
+		});
+		$('.editAll').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+
+				setting.Url='{au d=YunWei c='+$('#ClassName').val()+' a=showEditServerHtml}';
+               	setting.Params = $("input").serialize();
+{literal}
+				if(setting.Params==''){
+					alert('请选择房间服务器');
+					return false;
+				}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddServerHtml');
+			});	
+		});		
+		/*点击批量修改服务器线路信息*/
+		$('.editAllLine').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}		
+			    
+				setting.Url='{au d=YunWei c='+$('#ClassName').val()+' a=showEditServerLineHtml}';
+                setting.Params='';
+{literal}
+				
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddServerHtml');
+			});
+		});
+		/*点击删除服务器配置信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=GameDun a=delGameDun}';
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.Request(setting.Url,'ID='+$(this).attr('id'),'callback.DelGameDun');
+			});	
+		});	
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">ID</th>
+    <th width="12%" bgcolor="#FFFFFF">分组名</th>
+    <th width="16%" bgcolor="#FFFFFF">分组URL</th>
+	<th width="10%" bgcolor="#FFFFFF">类型</th>
+    <th width="25%" bgcolor="#FFFFFF">参数类型</th>
+    <th width="10%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$arrGameDunList item=GameDun}
+  <tr id="Row">
+    <td align="center" bgcolor="#FFFFFF">{$GameDun.ID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$GameDun.GroupName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$GameDun.GroupURL}</td>
+	<td align="center" bgcolor="#FFFFFF">{$GameDun.Type}</td>
+    <td align="center" bgcolor="#FFFFFF">{$GameDun.ParameterType}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$GameDun.ID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$GameDun.ID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF" class="abc">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $arrGameDunList}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF" class="abc">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+/* 轮播 */
+.slideBox{position:relative;left:50%;margin-left:-960px;height:420px;}
+.slideBox .hd{position:absolute;z-index:557;left:900px;top:378px;}
+.slideBox .hd li{float:left;background:#1c5896;border-radius:50%;width:10px;height:10px;margin:0 6px;}
+.slideBox .hd .on{background:#fff;}
+.slideBox .w1100{position:relative;margin:0 auto;width:1100px;z-index:556}
+/* 下载部分 */
+.download{width:280px;height:320px;position:absolute;top:40px;left:1050px;text-align:center;color:#fff;}
+.download h3{font-size:44px;}
+.download h4{font-size:26px;}
+.download-icon>.icon{width:80px;height:100px;margin:0 6px 10px;padding-top:10px;cursor:pointer;}
+.download-icon>.icon a{color:#fff;}
+.btn-dow{width:280px;height:56px;border-radius:6px;background:rgba(0,0,0,0.4);display:block;font-size:26px;line-height:56px;color:#fff;}
+.btn-dow:hover{color:#fff;background:rgba(0,0,0,0.46);}
+.code-dow:hover .qr-code{display:block;}
+.qr-code{position: absolute;display:none;top: -20px;left: 150px;width: 160px;padding: 20px 0;text-align: center;background: #fff; cursor: initial;
+    box-shadow: 0 -1px 2px 0 rgba(0,0,0,.21);font-size: 14px;color:#333;}
+.qr-code p{padding-top:10px;margin:0;}
+
+main .container{background:#fff;padding:20px 40px;}
+.game-title{margin:20px 0 10px;color:#333;font-size:20px;}
+.game-picScroll{width:920px;}
+.game-picScroll .bd{width:920px;height:134px;padding-top:10px;}
+.game-picScroll .gameList li{width:140px;height:140px;margin:0 20px;float:left;}
+.gameList a{font-size:16px;color:#666;display:block;transition-duration:0.2s;-webkit-transition-duration:0.2s;}
+.game-picScroll .gameList li:hover a{color:#0a82c8;margin-top:-4px;}
+.game-picScroll .gameList img{border-radius:12px;width:96px;height:96px;margin:20px 20px 10px;}
+.gameList .title{text-align:center;}
+.game-introduction{margin-top:20px;}
+.game-introduction h3{font-size:20px;color:#333;padding:4px;border-left:5px solid #229fe7;}
+.game-introduction p{font-size:14px;color:#666;}

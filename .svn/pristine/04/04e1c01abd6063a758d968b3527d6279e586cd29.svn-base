@@ -1,0 +1,51 @@
+<div class="sysWin sysWindow" style="width:900px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>同一桌游戏各玩家输赢信息
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'ServiceRole')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+		  <tr>
+		  	<th>本局游戏玩家</th>
+            <th>玩家编号</th>
+		  	<th>游戏类型</th>
+		  	<th>记录时间</th>
+		  	<th>游戏结果</th>
+		  	<!--<th>原积分</th>-->
+		  	<!--<th>本局输赢</th>-->
+		  	<!--<th>当前积分</th>-->
+		  	<th>原金币</th>
+		  	<th>本局输赢</th>
+		  	<th>当前金币</th>
+		  </tr>
+		  {foreach from="$GameInfoList" item=v}
+		  <tr class="bg_color">
+		  	<td>{$v.RoleName}</td>
+            <td>{$v.LoginID}</td>
+		  	<td>{$KindName}</td>
+		  	<td>{$v.AddTime}</td>
+		  	<td>{$v.ChangeTypeTip}</td>
+		  	<!--&lt;!&ndash;td>{$v.LastScore-$v.Score}</td&ndash;&gt;-->
+		  	<!--<td>{$v.Score}</td>-->
+		  	<!--<td>{$v.LastScore}</td>-->
+		  	<td>{$v.LastMoney-$v.Money}</td>
+		  	<td>{$v.Money}</td>
+		  	<td>{$v.LastMoney}</td>
+		  </tr>
+		  {foreachelse}
+		  <tr class="bg_color">
+		  	<td colspan="11">对不起，暂时查询不到您想要的信息！</td>
+		  </tr>
+		  {/foreach}
+		</table>
+	</div>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>

@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript">
+var matchTypeID = {$matchTypeID};
+{literal}
+$(function(){
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameMatch a=showAddMatchPrizeHtml}';
+{literal}
+			ajax.RequestCallBack(setting.Url, 'MatchTypeID='+matchTypeID+'&Level='+$(this).attr('id')+'&flag='+$(this).attr('fg'),function(data) {
+				main.OpenBox(data);
+			});		
+		});	
+	});	
+});
+
+	function deleteMatchPrize(level,name){
+		if(confirm("您确定要删除该比赛的"+name+"所有奖品吗？")){
+{/literal}
+			setting.Url='{au d=YunWei c=GameMatch a=deleteMatchPrize}';
+{literal}
+			ajax.RequestCallBack(setting.Url, 'MatchTypeID='+matchTypeID+'&Level='+level,function(result) {
+				if(result==0){
+					window.location.reload();
+				}else{
+					alert("删除比赛奖品失败，请重试");
+				}
+			});
+		}
+	}
+{/literal}
+</script>
+</head>
+<body>
+<input type="button" class="edit btn f2" value="新增奖品等级" id="{$nextLevel}" fg="0" />
+<table width="100%" border="0" cellspacing="1" cellpadding="1" style="margin:0px" class="tbList txt_M">
+  <tr>
+	<th>奖品等级</th>
+    <th>奖品发放名次</th>
+    <th>奖品</th>
+    <th>积分发放名次</th>
+    <th>积分数量</th>
+    <th>实物奖品</th>
+    <th>实物奖品发放类型</th>
+    <th>操作</th>
+  </tr>	
+  {foreach name=foo from=$matchPrizeList item=list}
+  <tr>
+	<td width="10%" bgcolor="#FFFFFF">{$list.LevelName}</td>
+	<td width="10%" bgcolor="#FFFFFF">{$list.Rank}</td>
+	<td width="30%" bgcolor="#FFFFFF">{$list.Prize}</td>
+	<td width="10%" bgcolor="#FFFFFF">{$list.ScoreRank}</td>
+	<td width="10%" bgcolor="#FFFFFF">{$list.ScoreNumber}</td>
+	<td width="10%" bgcolor="#FFFFFF">{$list.PrizeName}</td>
+	<td width="10%" bgcolor="#FFFFFF">{$list.PrizeType}</td>
+	<td width="10%" bgcolor="#FFFFFF"><a id="{$list.Level}" fg="1" class="edit" href="javascript:void(0);">修改</a>
+	{if $smarty.foreach.foo.last == "1"}<a href="javascript:deleteMatchPrize({$list.Level},'{$list.LevelName}');">删除</a>{/if}</td>
+  </tr>
+  {/foreach}	  
+</table>		
+</body>
+</html>

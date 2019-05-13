@@ -1,0 +1,120 @@
+<table width="300" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M left">
+		<tr>
+			<th>状态</th><th>操作类型</th>
+		</tr>
+		{if $DeptID!=1}
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="ModiAgent" value="修改代理商" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showAgentInfo}','roleID={$RoleID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		{/if}
+
+		{if $DeptID!=1}
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="ModiAliPay" value="修改支付宝" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showAliPayInfo}','roleID={$RoleID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		{/if}
+
+		{if $DeptID!=1}
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="ModiBak" value="修改用户备注" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showBakInfo}','roleID={$RoleID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		{/if}
+
+		<tr class="bg_color">
+			<td id="LockRoleStatus">{if $lFlag}锁定{else}正常{/if}</td>
+			<td><input type="button" id="LockRole" value="锁定角色" {if $lFlag}disabled="disadled"{/if} onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=lockRoleTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="UnLockRole" value="解除锁定" {if !$lFlag}disabled="disabled"{/if} onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=unlockTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<!--<tr class="bg_color">-->
+			<!--<td>{if $result.MoorMachine}已绑定{else}未绑定{/if}</td>-->
+			<!--<td><input type="button" value="主机解绑" {if $result.MoorMachine}onclick="hostUnlock();"{else}disabled="disabled"{/if} /></td>-->
+		<!--</tr>-->
+        <!--<tr class="bg_color">-->
+            <!--<td>{if $result.WeChat}已绑定{else}未绑定{/if}</td>-->
+            <!--<td><input type="button" value="微信解绑" onclick="wechatUnlock();" /></td>-->
+        <!--</tr>-->
+        <!--<tr class="bg_color">-->
+			<!--<td>{if $BindMobile}已绑定{else}未绑定{/if}</td>-->
+			<!--<td><input type="button" value="登陆解绑" {if $BindMobile}onclick="re.MobileUnlock({$result.Passport});"{else}disabled="disabled"{/if} /></td>-->
+		<!--</tr>-->
+        {if $DeptID!=1}
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" value="重置密码" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=resetPasswordTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+        {/if}
+		<tr class="bg_color">
+			<td>{if !$BMStatus.Status && !$BMStatus.iBankStatus}未冻结{/if}</td>
+			<td><input type="button" value="解除冻结" {if !$BMStatus.Status && !$BMStatus.iBankStatus}disabled="disabled"{else}onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=removeFreezeTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');"{/if} /></td>
+		</tr>
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" value="处理财富" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=handleTreasureTable}','roleID={$RoleID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" value="冻结财富" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=freezeTreasureTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<tr class="bg_color">
+			<td id="BlockRoleStatus">{if $pFlag}已封号{else}正常{/if}</td>
+			<td><input type="button" id="PunishRole" value="处罚角色" {if $pFlag}disabled="disabled"{/if} onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=punishRoleTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="UnPunishRole" value="解除处罚" {if !$pFlag}disabled="disabled"{/if} onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=unpunishRoleTable}','roleID={$RoleID}&loginID={$result.LoginID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+		<tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="UnInGame" value="解除卡房" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=updateInGame}','roleID={$RoleID}','callback.UpdateInGame');" {if $InGame <=0}disabled{/if} /></td>
+		</tr>
+        {if $DeptID!=1}
+        <tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="ModiMobile" value="修改注册手机" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showPassportInfo}','Passport={$result.Passport}&roleID={$RoleID}','callback.GetEditOperationResult');" /></td>
+		</tr>
+        {/if}
+        <tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="LimitIP" value="{if $result.TitleID==1}取消{else}设置{/if}IP段控制" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=setIpLocked}','roleID={$RoleID}&TitleID={if $result.TitleID==1}0{else}1{/if}','callback.GetSetIpLocked');"  /></td>
+		</tr>
+        {if $DeptID==3 && $Show}
+        <tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="DelPlayer" value="账号检查" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showDelPlayer}','roleID={$RoleID}&Passport={$result.Passport}','callback.GetShowDelPlayer');" /></td>
+		</tr>
+        <tr class="bg_color">
+			<td></td>
+			<td><input type="button" id="AddHappyBean" value="积分检查" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=showAddHappyBean}','roleID={$RoleID}','callback.GetShowAddHappyBean');" /></td>
+		</tr>
+        {/if}
+          <!--<tr class="bg_color">-->
+     		 <!--<td >{if $result.iBankBindWeChat eq 0}未绑定{elseif $result.iBankBindWeChat eq 1}绑定{else}未知 {/if}</td>-->
+			<!--<td><input type="button" value="设置转账微信绑定" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=SetBankWeChatCheck}','roleID={$RoleID}&value=1','callback.SetBankWeChatCheck');" /></td>-->
+		<!--</tr>-->
+		 <!--<tr class="bg_color">-->
+     		 <!--<td >{if $result.iBankBindWeChat eq 0}未绑定{elseif $result.iBankBindWeChat eq 1}绑定{else}未知 {/if}</td>-->
+			<!--<td><input type="button" value="解除转账微信绑定" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=SetBankWeChatCheck}','roleID={$RoleID}&value=0','callback.SetBankWeChatCheck');" /></td>-->
+		<!--</tr>-->
+		 <tr class="bg_color">
+			<td>{if !$BMStatus.iFreeze}正常</font>{else}冻结{/if}</td>
+			<td><input type="button" value="解锁玩家银行" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=UnLockUserBank}','roleID={$RoleID}&value=0','callback.UnLockUserBank');" /></td>
+		</tr>
+		 <tr class="bg_color">
+      		<td >{if $result.iLoginBindWeChat eq 0}未绑定{elseif $result.iLoginBindWeChat eq 1}绑定{else}未知 {/if}</td>
+			<td><input type="button" value="解除登录时绑定" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=SetPassType}','roleID={$RoleID}&value=0','callback.UnLockUserBank');" /></td>
+		</tr>
+		{if $DeptID eq 3 and $RightTime}
+		<tr class="bg_color">
+      		<td ></td>
+			<td><input type="button" value="清除角色日志" onclick="ajax.RequestUrl('{au d=Service c=ServiceRole a=ClearRoleData}','roleID={$RoleID}&value=0','callback.UnLockUserBank');" /></td>
+		</tr>
+		{/if}
+	</table>
+	<div id="ModifyDetail" class="left" style="margin:10px 400px 0 30px; width:400px;"></div>
+	<div class="clearFloat"></div>

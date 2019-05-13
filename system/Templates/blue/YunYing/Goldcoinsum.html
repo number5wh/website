@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+
+</head>
+<body>
+<div style="font-size:15px;line-height:28px;margin-left:20px;margin-top:20px;" >
+	<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="location.reload();">
+		<div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+	</div>
+平台总览：<br/>
+======================================================<br/>
+在线人数：{$onlineUser}<br/>
+游戏总金币： {$retdata.usercointotal}(元)<br/>
+银行总金币： {$retdata.banktotal}(元)<br/>
+平台总金币：{$totalcoin}(元)<br/>
+======================================================<br/>
+
+用户总览：<br/>
+======================================================<br/>
+普通玩家游戏总金币：  {$retdata.usercointotal}(元)<br/>
+普通玩家银行总金币： {$retdata.userbank}(元)<br/>
+普通玩家总金币： {$retdata.usercointotal+$retdata.userbank}(元)<br/>
+======================================================<br/>
+商人游戏总金币： {$retdata.uservipcointotal}(元)<br/>
+商人银行总金币： {$retdata.vipuserbank}(元)<br/>
+商人总金币： {$ivipusertotal}(元)<br/>
+======================================================<br/>
+
+	玩家总提现金额：{$totalcashout}(元) <br/>
+
+	玩家总税收：{$totaltax}(元)<br/>
+
+
+
+======================================================<br/>
+在线情况统计：<br/>
+======================================================<br/>
+
+安卓在线： {$AndroidTotalCount}(
+{foreach from=$RoomOnlineList item=List}
+	{$List.RoomName}{$List.iAndroidCount}
+{/foreach})
+<br/>
+IOS在线： {$IOSTotalCount}(
+{foreach from=$RoomOnlineList item=List}
+{$List.RoomName}{$List.iIOSCount}
+{/foreach})<br/>
+
+注册登录统计：<br/>
+======================================================<br/>
+当日注册用户数： {$retdata.todayreg}<br/>
+昨日注册用户数： {$retdata.lastreg}<br/>
+总注册用户数： {$retdata.allreg}<br/>
+
+======================================================<br/>
+今日登录： {$retdata.todaylogin}次<br/>
+昨日登录： {$retdata.lastlogin}次<br/>
+
+
+</div>
+</body>
+</html>

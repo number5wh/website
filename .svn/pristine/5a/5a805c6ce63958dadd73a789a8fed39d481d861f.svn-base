@@ -1,0 +1,78 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+      <tr>
+        <th width="10%">角色昵称</th>
+        <th width="10%">玩家编号</th>
+        <th width="10%">游戏金币</th>
+        <th width="10%">成绩汇总</th>
+        <!--<th width="10%">当前成绩</th> -->
+        <!--<th width="10%">总成绩</th> -->
+        <!--<th width="10%">银行金币</th> -->
+        <th width="10%">注册IP</th>
+        <th width="10%">手机号</th>
+        <th width="10%">身份证号</th>
+        <th width="10%">机器码</th>
+        <th width="10%">登录IP</th>
+        <!--<th width="10%">玩家账号</th>-->
+        <!--<th width="10%">主机绑定</th>-->
+        <!--<th width="10%">交易密码</th>-->
+        <!--<th width="10%">背包密码</th>-->
+        <!--<th width="10%">会员等级</th>-->
+        <!--<th width="10%">账号状态</th>-->
+        <!--<th width="10%">金币总额</th>-->
+        <!--<th width="10%">注册时间</th>-->
+      </tr>
+
+      {foreach from=$RoleList item=R}
+      <tr class="bg_color">
+        <td><a href="javascript:void(0);" class="roleName" id="{$R.LoginID}" title="{$R.LoginName}({$R.LoginID})">{if $R.LoginName!=""}{$R.LoginName}{else}(未设置){/if}</a><!--{$RoleList.PlayerType}--></td>
+        <td>{$R.LoginID}</td>
+        <td>{$R.CurGold}</td>
+        <td>{$R.TotalGold}</td>
+        <!--<td>{$R.CurScore}</td>-->
+        <!--<td>{$R.TotalScore}</td>-->
+        <!--<td>{$R.BankGold}</td>-->
+        <td class="ip-info" data-ip="{$R.szRegIP}">{$R.szRegIP}</td>
+        <td class="tel-info" data-tel="{$R.szMobile}">{$R.szMobile}</td>
+        <td class="idcard-info" data-idcard="{$R.szIdCard}">{$R.szIdCard}</td>
+        <td>{$R.MachineSerial}</td>
+        <td class="ip-info" data-ip="{$R.IP}">{$R.IP}</td>
+
+        <!--<td>{if $DeptID!=1}{$R.LoginCode}{/if}</td>
+        <td>{if $R.MoorMachine eq 1}<a class="yes"></a>{else}<a class="no"></a>{/if}</td>
+        <td><a href="javascript:void(0);" rid="{$R.LoginID}" class="goToBankInfoDetail {if $R.TransPass}no{else}yes{/if}" title="{$R.LoginName}"></a></td>-->
+        <!--<td><a href="javascript:void(0);" rid="{$R.LoginID}" class="goToMyKnapsackDetailInfo {if $R.Pwd}no{else}yes{/if}" title="{$R.LoginName}"></a></td>-->
+        <!--<td>{if $R.VipExpireTime gt $nowTime}<a href="javascript:void(0);" rid="{$R.LoginID}" class="goToVipInfoDetail" title="{$R.LoginName}">{$R.VipID}</a>{else}未开通{/if}</td>
+        <td>{if $R.Locked && ($R.LockEndTime gt $nowTime || !$R.LockStatus)}<span class="red">封号/锁定</span>{else}{if $R.Locked}<span class="red">封号</span>{elseif $R.LockEndTime gt $nowTime }<span class="orange">锁定</span>{else}正常{/if}{/if}</td>
+        <td>{$R.HappyBeanMoney}</td>
+        <td>{$R.AddTime}</td>-->
+      </tr>
+      {foreachelse}
+      <tr class="bg_color">
+        <td colspan="9">很抱歉，没有您要查询的信息~</td>
+      </tr>
+      {/foreach}
+      {if $RoleList && $Page!=null}
+      <tr class="bg_color">
+        <td colspan="9">{include file="$skin/Inc/Page.inc.html"}</td>
+      </tr>
+      {/if}
+</table>
+<script type="text/javascript" src="/js/taobao_ip_info.js"></script>
+<!--<script type="text/javascript" src="/js/tel_segment.js"></script>-->
+<script type="text/javascript" src="/js/idcard.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Role={
+	BindEvent:function(){
+		$('.roleName').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+			setting.Params='&loginID='+$(this).attr('id');
+			window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+		});
+	}
+};
+Role.BindEvent();
+{/literal}
+</script>

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+	var param = "RoleID="+$("#spRole1").val()+"&KindName="+$("#spKindName1").val()+"&KindID="+$("#spKindID1").val()+"&dTime="+$("#spDtime1").val();
+	ajax.RequestUrl('/?d=Service&c=ServiceRole&a=getUserGameDataSpDetailPage',param,'callback.GetUserGameDataSpDetailPage');
+})
+{/literal}
+</script>
+</head>
+<body>
+<div id="SpRoleGameDetailInfo"></div>
+<input type="hidden" id="spRole1" value="{$RoleID}" />
+<input type="hidden" id="spKindName1" value="{$KindName}" />
+<input type="hidden" id="spKindID1" value="{$KindID}" />
+<input type="hidden" id="spDtime1" value="{$Dtime}" />
+</body>
+</html>

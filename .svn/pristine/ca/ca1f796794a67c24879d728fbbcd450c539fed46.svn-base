@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	init.SetTableRows();
+	//点击显示修改服务器配置界面
+	$('.edit').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=MapDB a=showAddMapHtml}';
+{literal}
+			ajax.RequestUrl(setting.Url,'ID='+$(this).attr('id'),'callback.ShowAddMapHtml');
+		});	
+	});
+	//点击删除服务器配置信息
+	$('.del').each(function(){
+		$(this).click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=$ClassName a=delServer}';
+{literal}
+			if(confirm('删除后将无法恢复,确定删除?'))
+				ajax.RequestUrl(setting.Url,'ServerID='+$(this).attr('id'),'callback.DelServer');
+		});	
+	});		
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<input type="button" id="0" class="btn f2 edit" value="添加MAP类型" />
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="3%" bgcolor="#FFFFFF">序号</th>
+    <th width="12%" bgcolor="#FFFFFF">类型名称</th>
+    <th width="14%" bgcolor="#FFFFFF">分库数量</th>
+    <th width="16%" bgcolor="#FFFFFF">子库名称</th>
+    <th width="30%" bgcolor="#FFFFFF">服务器名称</th>
+    <th width="18%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$MapList item=map}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$map.ID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$map.Name}</td>
+    <td align="center" bgcolor="#FFFFFF">{$map.Hashlimit}</td>
+    <td align="center" bgcolor="#FFFFFF">{$map.TypeName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$map.ServerName}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$map.ID}">修改</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+</table>
+
+</body>
+</html>

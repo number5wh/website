@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/Calendar.js"></script>
+<script type="text/javascript">
+setting.PageUrl='{au d=Service c=ServiceWealth a=treasureLockedList}';
+{literal}
+function selectDay(n){
+	var date = new Date();
+	var mydate = new Date(Date.parse(date) - (86400000  * n));
+	var startDate = mydate.getFullYear()+'-'+(parseInt(mydate.getMonth())+1)+'-'+mydate.getDate();
+	var endDate = date.getFullYear()+'-'+(parseInt(date.getMonth())+1)+'-'+date.getDate();
+	$('#dtBegin').val(startDate);
+	$('#dtEnd').val(endDate);
+}
+
+function searchTreasureLocked(){
+	var startDate = $.trim($("#dtBegin").val());
+	var endDate = $.trim($("#dtEnd").val());	
+	var keyword = $("#sel_keyword").val();
+	var keyvalue = $.trim($("#txt_keywords").val());
+	var Param = '';
+	if(startDate){
+		Param += "startTime="+startDate;
+	}
+	if(endDate){
+		Param += "&endTime="+endDate;
+	}	
+	if(keyvalue){
+		if(keyword=='caseSerial')
+			Param = keyword+"="+keyvalue;
+		else
+			Param += "&"+keyword+"="+keyvalue;
+	}
+	
+	ajax.RequestUrl('/?d=Service&c=ServiceWealth&a=treasureLockedList', Param,'getTreasureLockedList');
+}
+
+function getTreasureLockedList(data){
+	$('#TreasureLockedList').html(data);
+	init.SetTableRows();//初始化鼠标移到表格行显示背景
+	
+	//绑定分页
+	var Param = '$(this).attr("pg"),"getTreasureLockedList"';
+	var Param1 = '$(this).val(),"getTreasureLockedList"';
+	evt.BindPageClick('#wealthLockedPageBar ','getPagerTreasureLocked',Param,Param1);	
+}
+
+function getPagerTreasureLocked(curPage,Callback){
+	curPage = parseInt(curPage,10);
+	var maxPage = parseInt($('#LinkLast').attr('pg'),10);
+	var iPage = parseInt($('#lab_curpage').html(),10);
+	if(curPage != iPage && curPage > 0 && curPage <= maxPage){
+		setting.Params='curPage='+curPage;
+		ajax.RequestUrl(setting.PageUrl, setting.Params,Callback);
+	}
+}
+{/literal}
+</script>
+</head>
+<body>
+
+<div id="TreasureLockedDetail">	
+	<fieldset style="padding:5px;margin-bottom:5px">
+	<legend>查询</legend>
+	    <table  border="0" cellpadding="0" cellspacing="0" class="bg_color" style="margin-bottom:3px">
+	      <tr>
+	        <td >起止时间：</td>
+	        <td >
+	        	<input id="dtBegin" type="text" value="{$strStatrTime}" />
+	          <img onClick="new Calendar().show(document.getElementById('dtBegin'));" class="calendar_img" src="images/common/u896_normal.gif" /> 至
+	          <input id="dtEnd" type="text" value="{$strEndTime}" />
+	          <img onClick="new Calendar().show(document.getElementById('dtEnd'));" class="calendar_img" src="images/common/u896_normal.gif" />
+		       <a class="blue" href="javascript:selectDay(0)">今&nbsp;天</a>
+		       <a class="blue" href="javascript:selectDay(7)">7&nbsp;天</a>
+		       <a class="blue" href="javascript:selectDay(30)">1个月</a>
+		       <a class="blue" href="javascript:selectDay(90)">3个月</a>
+		     </td>
+	      </tr>	      
+	      <tr>
+	        <td >关键词：</td>
+	        <td >
+	        	<select id="sel_keyword" style="width:100px;">
+	            <option value="loginId">玩家编号</option>
+	            <option value="caseSerial">案件编号</option>
+	          </select>
+	          <input id="txt_keywords" type="text" maxlength="20" />
+	          <input type="button" value="查&nbsp;&nbsp;询" class="bnStyle f2" onClick="searchTreasureLocked()" /></td>
+	      </tr>
+	    </table>
+</fieldset>
+	<div id="TreasureLockedList"></div>
+</div>
+</body>
+</html>

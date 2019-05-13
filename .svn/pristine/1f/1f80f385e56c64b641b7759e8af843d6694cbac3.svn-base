@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+<HEAD 
+id=Head1>
+<TITLE>593游戏-注册成功</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<META name=Keywords 
+content=993,593游戏,593游戏官网,休闲游戏,棋牌游戏,双扣,牛牛,麻将,斗地主,Game918>
+<META name=description 
+content=593游戏平台是中国最专业的网络棋牌游戏中心之一，拥有各类棋牌游戏累计达数十种，包括人们熟知的牛牛、双扣、斗地主、麻将、四国军棋、连连看等>
+<LINK 
+rel=stylesheet type=text/css href="/css/reg.css">
+<LINK rel=stylesheet 
+type=text/css href="/css/base.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<LINK rel=icon type=image/x-icon 
+href="/favicon.ico">
+<LINK rel="shortcut icon" type=image/x-icon 
+href="/favicon.ico">
+<META name=GENERATOR content="MSHTML 8.00.7601.17514">
+</HEAD>
+<BODY class=back>
+<DIV>
+  <INPUT id=__VIEWSTATE 
+value=/wEPDwUJNzIxMzc0OTU1ZGQUhe+fKR9ekJPoYxBjiYA0ufjC1g== type=hidden 
+name=__VIEWSTATE>
+</DIV>
+<DIV class=logo><A href="#"><!-- <IMG alt="" 
+src="/images/reg_logo.jpg"> --></A></DIV>
+<DIV class=title>
+  <DIV class="title_1 left"></DIV>
+  <DIV class="title_2 left"><IMG hspace=10 alt="" src="/images/pen.gif">
+    <DIV></DIV>
+  </DIV>
+  <DIV class="title_3 left"></DIV>
+  <BR class=clear>
+</DIV>
+<DIV class=regInfo>
+  <DIV class=success>注册成功!</DIV>
+  <DIV class=regMsg>
+    登 录 名：{$PassInfo.szLoginName}<BR>
+    注册时间：{$PassInfo.iAddTime}<BR>
+    安全手机：{$PassInfo.szMobilePhone}<BR>
+	注册QQ：{$PassInfo.szQQ}
+  </DIV>
+  <DIV class=line></DIV>
+  <DIV class=login1><A href="?n=index">返回首页</A> </DIV>
+  <DIV class=regInfo_bg></DIV>
+</DIV>
+<DIV class=regInfo_bottom></DIV>
+<!--底部-->
+<DIV class=bottom>
+  <DIV class=bg>
+    <DIV style="MARGIN: 30px auto 0px; WIDTH: 832px">
+      <DIV class="k1 left"></DIV>
+      <DIV class="k2 left">抵制不良游戏，拒绝盗版游戏，注意自我保护，谨防受骗上当，适度游戏益脑，沉迷游戏伤身，合理安排时间，健康享受生活-<A 
+href="#">《健康游戏忠告》</A></DIV>
+      <DIV class="k3 left"></DIV>
+      <BR class=clear>
+      <DIV class=copyright style="margin-top:10px">
+        
+        浙江通易网络科技有限公司  
+        版权所有 </DIV>
+      <SCRIPT type=text/javascript>
+			    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+			    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa9b4407a24bb47344412f49bc3d63631' type='text/javascript'%3E%3C/script%3E"));
+            </SCRIPT>
+    </DIV>
+  </DIV>
+</DIV>
+<SCRIPT language=javascript type=text/javascript 
+src="/images/common.js"></SCRIPT>
+<SCRIPT language=javascript type=text/javascript 
+src="/images/jquery-1.4.1.min.js"></SCRIPT>
+</BODY>
+</HTML>

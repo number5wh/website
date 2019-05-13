@@ -1,0 +1,165 @@
+
+{if  $DeptID==3 || $DeptID == 2}
+  <div style="float: right">
+        <input id="RoleLockAllBtn" type="button" class="btn f2" value="锁定全部" />
+        <input id="RoleLockBtn" type="button" class="btn f2" value="锁定整页" />
+  </div>
+  {/if}
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr>
+    <th width="10%">角色名</th>
+    <th width="10%">玩家编号</th>
+    <th width="10%">玩家账号</th>
+    <th width="10%">主机绑定</th>
+	<th width="10%">交易密码</th>
+	<!--<th width="10%">背包密码</th>-->
+	<th width="10%">会员等级</th>
+	<th width="10%">账号状态</th>
+    <th width="10%">金币总额</th>
+	<th width="10%">注册时间</th>
+      <th width="10%">三日转出</th>
+      <th width="10%">月转出</th>
+      <th width="10%">三日转入</th>
+      <th width="10%">月转入</th>
+      <th width="10%">总转入</th>
+      <th width="10%">总转出</th>
+
+  </tr>
+  
+  {foreach from=$RoleList item=R}
+  <tr class="bg_color">
+    <td><a href="javascript:void(0);" class="roleName" id="{$R.LoginID}" title="{$R.LoginName}({$R.LoginID})">{if $R.LoginName!=""}{$R.LoginName}{else}(未设置){/if}</a><!--{$RoleList.PlayerType}--></td>
+    <td>{$R.LoginID}</td>
+    <td>{if $DeptID!=1}{$R.LoginCode}{/if}</td>
+    <td>{if $R.MoorMachine eq 1}<a class="yes"></a>{else}<a class="no"></a>{/if}</td>
+	<td><a href="javascript:void(0);" rid="{$R.LoginID}" class="goToBankInfoDetail {if $R.TransPass}no{else}yes{/if}" title="{$R.LoginName}"></a></td>
+	<!--<td><a href="javascript:void(0);" rid="{$R.LoginID}" class="goToMyKnapsackDetailInfo {if $R.Pwd}no{else}yes{/if}" title="{$R.LoginName}"></a></td>-->
+    <td>{if $R.VipExpireTime gt $nowTime}<a href="javascript:void(0);" rid="{$R.LoginID}" class="goToVipInfoDetail" title="{$R.LoginName}">{$R.VipID}</a>{else}未开通{/if}</td>
+	<td>{if $R.Locked && ($R.LockEndTime gt $nowTime || !$R.LockStatus)}<span class="red">封号/锁定</span>{else}{if $R.Locked}<span class="red">封号</span>{elseif $R.LockEndTime gt $nowTime }<span class="orange">锁定</span>{else}正常{/if}{/if}</td>
+    <td>{$R.HappyBeanMoney}</td>
+	<td>{$R.AddTime}</td>
+	<td><a href="#" class="cLink" id='{$R.LoginID}'>{$R.threeDayout}</a></td>
+	<td><a href="#" class="dLink" id='{$R.LoginID}'>{$R.monthDayout}</a></td>
+    <td><a href="#" class="aLink" id='{$R.LoginID}'>{$R.threeDayin}</a></a></td>
+    <td><a href="#" class="bLink" id='{$R.LoginID}'>{$R.monthDayin}</a></a></td>
+    <td><a href="#" class="eLink" id='{$R.LoginID}'>{$R.allin}</a></td>
+    <td><a href="#" class="fLink" id='{$R.LoginID}'>{$R.allout}</a></td>
+  </tr>
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="15">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  {if $RoleList && $Page!=null}
+  <tr class="bg_color">
+    <td colspan="15">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script>
+{literal}
+$(function(){
+	$('.aLink').click(function(){
+		setting.Url='/?d=YunYing&c=UserBankIn&a=index';
+		var Params='&RoleID='+$(this).attr('id')+'&days=30&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+		window.parent.main.AddTab('查看3天转入明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+
+	});
+	$('.bLink').click(function(){
+
+		setting.Url='/?d=YunYing&c=UserBankIn&a=index';
+		var Params='&RoleID='+$(this).attr('id')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+		window.parent.main.AddTab('查看月转入明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+	});
+
+    $('.cLink').click(function(){
+
+        setting.Url='/?d=YunYing&c=UserBankOut&a=index';
+        var Params='&RoleID='+$(this).attr('id')+'&days=30&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+        window.parent.main.AddTab('查看3天转出明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+
+    });
+    $('.dLink').click(function(){
+
+        setting.Url='/?d=YunYing&c=UserBankOut&a=index';
+        var Params='&RoleID='+$(this).attr('id')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+        window.parent.main.AddTab('查看月转出明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+
+    });
+
+
+    $('.eLink').click(function(){
+
+        setting.Url='/?d=YunYing&c=UserBankIn&a=index';
+        var Params='&RoleID='+$(this).attr('id')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+        window.parent.main.AddTab('查看月转入明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+    });
+
+    $('.fLink').click(function(){
+
+        setting.Url='/?d=YunYing&c=UserBankOut&a=index';
+        var Params='&RoleID='+$(this).attr('id')+'&LoginID='+$(this).attr('title')+'&Date='+$(this).attr('Date');
+        window.parent.main.AddTab('查看月总转出明细','GameRate'+$(this).attr('id'),setting.Url+Params);
+    });
+
+
+
+});
+{/literal}
+</script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Role={
+	BindEvent:function(){
+		$("#RoleLockBtn").click(function(){ 
+			{/literal}
+				url = '{au d=Service c=ServiceRole a=lockPagerRolePre}';
+				param="{$searchParam}";
+			{literal}
+				ajax.RequestCallBack(url, param,function(data) {
+					main.OpenBox(data);
+				});
+		});
+		$("#RoleLockAllBtn").click(function(){ 
+					var totalPage = $('#TotalPage').html();
+			        var curPage = 1;
+					{/literal}
+					setting.url = '{au d=Service c=ServiceRole a=lockPagerRolePre}';
+					param="{$searchParam}"+"&reqPage="+curPage+"&totalPage="+totalPage;
+					{literal}
+					ajax.RequestCallBack(setting.url,param,function(data) {
+						main.OpenBox(data);
+					});
+			});
+		$('.roleName').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+			setting.Params='&loginID='+$(this).attr('id');
+			window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+		});
+		$('.goToBankInfoDetail').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+			setting.Params='&loginID='+$(this).attr('rid')+'&DivID=BankInfo';
+			window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('rid'),setting.Url+setting.Params);
+{literal}
+		});
+		$('.goToMyKnapsackDetailInfo').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+			setting.Params='&loginID='+$(this).attr('rid')+'&DivID=SpInfo';
+			window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('rid'),setting.Url+setting.Params);
+{literal}
+		});
+		$('.goToVipInfoDetail').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getRoleInfo}';
+			setting.Params='&loginID='+$(this).attr('rid')+'&DivID=VipInfo';
+			window.parent.main.AddTab($(this).attr('title'),'ServiceRole'+$(this).attr('rid'),setting.Url+setting.Params);
+{literal}
+		})
+	}
+};
+{/literal}
+</script>

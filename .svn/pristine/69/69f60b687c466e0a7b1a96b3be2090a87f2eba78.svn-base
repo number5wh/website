@@ -1,0 +1,30 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="13%">登陆时间</th>
+	<th width="10%">登陆渠道</th>
+    <th width="20%">IP</th>
+    <!--<th width="18%">机器码</th>  -->
+    <th width="14%">登陆结果</th>  
+    <th width="35%">备注说明</th>  
+  </tr>
+  {foreach from=$LoginLogsList item=Logs}
+  <tr class="bg_color">
+    <td>{$Logs.AddTime}</td>
+    <td>客户端</td>
+    <td data-ip="{$Logs.ClientIP}" class="ip-info">{$Logs.ClientIP}</td>
+    <!--<td style="table-layout:fixed;word-break:break-all;;border-collapse:collapse">{$Logs.MachineSerial}</td>-->
+    <td>成功</td>
+    <td>{$Logs.Remark}</td>
+  </tr>    
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="6">很抱歉，没有您要查询的信息~</td>   
+  </tr> 
+  {/foreach}
+  {if $LoginLogsList}
+  <tr class="bg_color">
+    <td colspan="6" id="RPLD">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script language="javascript" type="text/javascript" src="/js/taobao_ip_info.js"></script>

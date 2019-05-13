@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>593游戏-游戏充值</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<META name=Keywords content=918,593游戏,593游戏官网,593,993,918棋牌,休闲游戏,棋牌游戏,双扣,牛牛,麻将,斗地主,GameFive>
+<META name=description content=593游戏平台是中国最专业的网络棋牌游戏中心之一，拥有各类棋牌游戏累计达数十种，包括人们熟知的牛牛、双扣、斗地主、麻将、四国军棋、连连看等>
+<META name=GENERATOR content="MSHTML 8.00.7601.18094">
+
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="/js/fun.js"></script>
+<script language="javascript" type="text/javascript" src="/js/common.js"></script>
+</HEAD>
+<BODY>
+
+    {include file="public/header.tpl"}
+	<div id="main">
+		<div class="content">
+			<div class="details">
+				<div class="recharge">
+					<div class="form">
+						<!-- <form action="" method="post"> -->
+							<div class="way">
+								<div class="pay">
+									<span>充值方式 : </span>
+    								      <!-- <INPUT id="b780" value="b780" type="radio"  class="yxdk"  name="payMode" onclick="R.Counter()" checked>
+									<label class="label1 check" for="tx" checked>北网支付</label> 
+ -->								<div id="zfbwx">
+									<p>支付宝/微信</p>
+									<input type="radio" name="rtype"   id="ali" class="yxdk" value="1" onclick="R.Counter()" checked="checked" >
+									<label name="ali" class="label1 check" for="ali" ><img src="/images/alipay.png"></label>
+									<input type="radio" name="rtype"  id="wx"  class="yxdk" value="2" onclick="R.Counter()">
+									<label name="wx" class="label1" for="wx" ><img src="/images/wxpay.png"></label>
+									</div>
+									<div id="yxdk">
+									 <p>游戏点卡支付</p>
+									<input type="radio" name="rtype"   id="tx" class="yxdk" value="1001" onclick="R.Counter()"  >
+									<label name="tx" class="label1 " for="tx">腾讯Q币卡</label>
+									<input type="radio" name="rtype"  id="jw"  class="yxdk" value="2001" onclick="R.Counter()">
+									<label name="jw" class="label1" for="jw">骏网一卡通</label>
+									<input type="radio" id="sd"  name="rtype" class="yxdk" value="2002" onclick="R.Counter()">
+									<label name="sd" class="label1" for="sd">盛大游戏卡</label>
+									<input type="radio" id="jr"  name="rtype" class="yxdk" value="2003" onclick="R.Counter()">
+									<label name="jr" class="label1" for="jr">巨人/征途卡</label><!-- 
+									<input type="radio"  id="5173" name="rtype" class="yxdk" value="2004" onclick="R.Counter()">
+									<label name="5173" class="label1" for="5173">5173充值卡</label> -->
+									<input type="radio"  id="wm"  name="rtype" class="yxdk" value="2006" onclick="R.Counter()">
+									<label name="wm" class="label1" for="wm">完美一卡通</label>
+									<input type="radio"  id="wy"  name="rtype" class="yxdk" value="2007" onclick="R.Counter()">
+									<label name="wy" class="label1" for="wy">网易一卡通</label>
+									<input type="radio" id="sh"  name="rtype" class="yxdk" value="2008" onclick="R.Counter()">
+									<label name="sh" class="label1" for="sh">搜狐一卡通</label>
+									<input type="radio"   id="jy" name="rtype" class="yxdk" value="2009" onclick="R.Counter()">
+									<label name="jy" class="label1" for="jy">久游一卡通</label> 
+									</div>
+									<div id="czk">
+									<p>充值卡支付</p>
+									<input type="radio"  id="sz" name="rtype"  class="czk"  value="5001" onclick="R.Counter()">
+									<label name="sz" class="label1" for="sz">神州卡充值</label>
+									<input type="radio"  id="lt"  name="rtype" class="czk"  value="5002" onclick="R.Counter()">
+									<label name="lt" class="label1" for="lt">联通卡充值</label>
+									<input type="radio"  id="dx" name="rtype" class="czk" value="5003" onclick="R.Counter()">
+									<label name="dx" class="label1" for="dx">电信卡充值</label>
+									</div>
+									<div id="wx">
+									 <p>网银支付</p>
+									<input type="radio" id="zs" name="rtype" class="wyzf"  value="3001_1001" onclick="R.Counter()">
+									<label name="zs" class="label1" for="zs">招商银行</label>
+									<input type="radio" id="zggs" name="rtype" class="wyzf" value="3001_1002" onclick="R.Counter()">
+									<label name="zggs" class="label1" for="zggs">中国工商银行</label>
+									<input type="radio" id="zgjs" name="rtype" class="wyzf" value="3001_1003" onclick="R.Counter()">
+									<label name="zgjs" class="label1" for="zgjs">中国建设银行</label>
+									<input type="radio" id="shpdfz" name="rtype" class="wyzf"  value="3001_1004" onclick="R.Counter()">
+									<label name="shpdfz" class="label1" for="shpdfz">上海浦东发展银行</label>
+									<input type="radio" id="zgny" name="rtype" class="wyzf"  value="3001_1005" onclick="R.Counter()">
+									<label name="zgny" class="label1" for="zgny">中国农业银行</label>
+									<input type="radio" id="zgms" name="rtype" class="wyzf"  value="3001_1006" onclick="R.Counter()">
+									<label name="zgms" class="label1" for="zgms">中国民生银行</label>
+									<input type="radio" id="szfz" name="rtype" class="wyzf"  value="3001_1008" onclick="R.Counter()">
+									<label name="szfz" class="label1" for="szfz">深圳发展银行</label>
+									<input type="radio" id="xy" name="rtype" class="wyzf"  value="3001_1009" onclick="R.Counter()">
+									<label name="xy" class="label1" for="xy">兴业银行</label>
+									<input type="radio" id="zgjt" name="rtype" class="wyzf" value="3001_1020" onclick="R.Counter()">
+									<label name="zgjt" class="label1" for="zgjt">中国交通银行</label>
+									<input type="radio" id="zggd" name="rtype" class="wyzf"  value="3001_1022" onclick="R.Counter()">
+									<label name="zggd" class="label1" for="zggd">中国光大银行</label>
+									<input type="radio" id="gzyl" name="rtype" class="wyzf" value="3001_1030" onclick="R.Counter()">
+									<label name="gzyl" class="label1" for="gzyl">广州银联</label>
+									<input type="radio" id="nj" name="rtype" class="wyzf" value="3001_1041" onclick="R.Counter()">
+									<label name="nj" class="label1" for="nj">南京银行</label>
+									<input type="radio" id="zx" name="rtype" class="wyzf" value="3001_1042" onclick="R.Counter()">
+									<label name="zx" class="label1" for="zx">中信银行</label>
+									<input type="radio" id="zg" name="rtype" class="wyzf" value="3001_1043" onclick="R.Counter()">
+									<label name="zg" class="label1" for="zg">中国银行</label>
+									<input type="radio" id="zgyz" name="rtype" class="wyzf" value="3001_1044" onclick="R.Counter()">
+									<label name="zgyz" class="label1" for="zgyz">中国邮政</label>
+									<input type="radio" id="dy" name="rtype" class="wyzf"  value="3001_1046" onclick="R.Counter()">
+									<label name="dy" class="label1" for="dy">东亚银行</label>
+									<input type="radio" id="bh" name="rtype" class="wyzf"  value="3001_1047" onclick="R.Counter()">
+									<label name="bh" class="label1" for="bh">渤海银行</label>
+									<input type="radio" id="pa" name="rtype" class="wyzf"  value="3001_1048" onclick="R.Counter()">
+									<label name="pa" class="label1" for="pa">平安银行</label>
+									</div>
+								</div>
+							</div>
+							<div class="specific">
+								<table>
+        								  <SPAN style="LINE-HEIGHT: 25px; COLOR: #ff0000" id="Msg"></SPAN> 							
+									<tr>
+										<td class="sone">账号类型 :</td>
+										<td>
+											<div class="dselect">
+												<select class="select" id="LoginType" name="LoginType" onchange="ChangeLoginType()">
+													<option value="1">登陆账号</option>
+													<option value="2">用户编号</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+									<tr  class="LoginCode">
+										<td class="sone">充值账号 :</td>
+										<td class="stwo"><input maxlength="16" id="LoginCode" class="input_text" type="text" value="{$LoginCode}" name="LoginCode"></td>
+										<td></td>
+									</tr>
+									<tr class="LoginCode">
+										<td class="sone">确认账号 :</td>
+										<td class="stwo"><input  maxlength="16"  id="ConfirmCode" class="input_text" type="text" value="{$LoginCode}"  name="ConfirmCode"></td>
+										<td></td>
+									</tr>
+									<tr  class="LoginID" style="display:none">
+										<td class="sone">用户编号 :</td>
+										<td class="stwo"><input maxlength="8" id="LoginID" class="input_text" type="text" value="{$LoginID}" name="LoginCode"></td>
+										<td></td>
+									</tr>
+									<tr class="LoginID" style="display:none">
+										<td class="sone">确认编号 :</td>
+										<td class="stwo"><input  maxlength="8"  id="ConfirmID" class="input_text" type="text" value="{$LoginID}"  name="ConfirmCode"></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="sone">充值类型 :</td>
+										<td class="stwo">
+											<input type="radio"  value="1" id="zmb" name="payType" checked="checked" class="type">
+											<label name="zmb" id="option_011" class="label4 check short" for="zmb">通易币</label>
+											<input type="radio"  value="2"  id="lzhy" name="payType" class="type">
+											<label name="lzhy" id="option_022" class="label4 long" for="lzhy">黄钻会员(有效期一个月)</label></td>
+										<td></td>
+									</tr>
+									<tr id="option_01">
+										<td class="sone">充值金额 :</td>
+										<td>
+											<div class="dselect">
+												<select class="select" id="Price" onchange="R.Counter()">
+													<option value="10">10RMB</option>
+													<option value="20">20RMB</option>
+													<option value="30">30RMB</option>
+													<option value="50">50RMB</option>
+													<option value="100">100RMB</option>
+													<option value="200">200RMB</option>
+													<option value="300">300RMB</option>
+													<option value="500">500RMB</option>
+													<option value="1000">1000RMB</option>
+													<option value="2000">2000RMB</option>
+												</select>
+											</div>
+											<span class="span" id="PayMoney"></span>
+										</td>
+										<td class="sthree"></td>
+									</tr>
+									<tr id="option_02">
+										<td class="sone">充值金额 :</td>
+										<td>
+											<div class="dselect">
+												<select class="select" id="Price" onchange="R.Counter()">
+													<option value="30">30RMB</option>
+												</select>
+											</div>
+											<span class="span" id="PayMoney"></span>
+										</td>
+										<td class="sthree"></td>
+									</tr>
+									<tr>
+										<td class="sone">验证码 :</td>
+										<td class="stwo"><input  maxlength="4"  type="text" name="Code" id="Code"><div class="captchas"> <img id="vCode" src="Common/ChkCode.class.php" / style="width:60px;height:30px"></div><a class="blue_ul captchasword"  style="cursor:pointer" id="ResetCode">看不清，换一张</a></td>
+									<td></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td class="stwo"><input type="checkbox" name="ragree" id="ragree" class="ragree" checked="checked" value="agree"><span name="ragree" class="span1 check">已阅读并同意《关于充值的特别提示和约定》</span></td>
+										<td></td>
+									</tr>
+								</table>
+								<input type="submit" name="submit" id="submit" class="submit"  value="下一步" onClick="R.Recharge()">
+								<p>虚拟货币名称 ：通易币</p>
+								<p>充值比例 ：1元={$payConfig.RMB2MB}通易币</p>
+								<p>游戏币名称 ：欢乐豆</p>
+								<p>兑换比例 ：1通易币={$payConfig.MB2HPB}欢乐豆</p>
+								<span><p>我公司郑重承诺：虚拟货币不能兑换成人民币以及任何现实中的其他国家货币，发现违法兑换的行为，我公司将进行严厉打击，并上报有关部门。</p></span>
+							</div>
+					<!-- 	</form> -->
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    {include file="public/footer.tpl"}
+
+<div id = "Alipay"></div>
+
+<form name="frmWxPay" method="post" action="?n=Index&a=wxpay">	
+    <input type="hidden" name="url" id="url" value="">
+	<input type="hidden" name="amount" id="amount" value="">
+    <input type="hidden" name="goodsname" id="goodsname" value="">
+</form>
+
+<form name="frmB780" method="post" action="{$b780.PostUrl}">	
+    <input type="hidden" name="cmdno" id="cmdno" value="1" />
+    <input type="hidden" name="date" id="date" value="" />
+    <input type="hidden" name="desc" id="desc" value="" />    
+    <input type="hidden" name="purchaserId" id="purchaserId" value="" />
+    <input type="hidden" name="bargainorId" id="bargainorId" value="" />    
+    <input type="hidden" name="transactionId" id="transactionId" value="" />    
+    <input type="hidden" name="cardType" id="cardType" value="" />
+    <input type="hidden" name="sp_orderno" id="sp_orderno" value="" />    
+    <input type="hidden" name="totalFee" id="totalFee" value="" />    
+    <input type="hidden" name="burden" id="burden" value="" />
+    <input type="hidden" name="warenum" id="warenum" value="" />
+    <input type="hidden" name="returnUrl" id="returnUrl" value="" />
+	<input type="hidden" name="remark" id="remark" value="" /><!-- 
+    <input type="hidden" name="payerName" id="payerName" value="" /> -->
+    <input type="hidden" name="sign" id="sign" value="" />    
+</form>
+
+<form id='frmSubmit' method='post' name='frmSubmit' action=''>
+	<input type='hidden' name='version'  id='hee_version' value='' />
+	<input type='hidden' name='agent_id' id='hee_agent_id' value='' />
+	<input type='hidden' name='agent_bill_id' id='hee_agent_bill_id' value='' />
+	<input type='hidden' name='agent_bill_time'  id='hee_agent_bill_time'  value='' />
+	<input type='hidden' name='pay_type' id='hee_pay_type' value='' />
+	<input type='hidden' name='pay_code' id='hee_pay_code' value='' />
+	<input type='hidden' name='pay_amt'  id='hee_pay_amt' value='' />
+	<input type='hidden' name='notify_url' id='hee_notify_url' value='' />
+	<input type='hidden' name='return_url'  id='hee_return_url' value='' />
+	<input type='hidden' name='user_ip'  id='hee_user_ip' value='' />
+	<input type='hidden' name='goods_name' id='hee_goods_name'  value='' />
+	<input type='hidden' name='goods_num'   id='hee_goods_num' value='' />
+	<input type='hidden' name='goods_note'  id='hee_goods_note' value='' />
+	<input type='hidden' name='remark' id='hee_remark' value='' />
+	<input type='hidden' name='sign' id='hee_sign' value='' />
+</form>
+<script>
+{literal}
+document.getElementById("option_01").style.display="table-row";
+document.getElementById("option_02").style.display="none";
+$(function(){
+	$('#ResetCode').click(function(){
+ 		$('#vCode').attr('src', "/Common/ChkCode.class.php?" + Math.random());
+ 	});
+ 	R.Counter();
+});
+$(document).ready(function(){
+	$("#option_011").bind("click",function(){
+		document.getElementById("option_01").style.display="table-row";
+		document.getElementById("option_02").style.display="none";
+		document.getElementById('yxdk').style.display="block";
+		document.getElementById('czk').style.display="block";
+	});
+	$("#option_022").bind("click",function(){
+		document.getElementById("option_01").style.display="none";
+		document.getElementById("option_02").style.display="table-row";
+		document.getElementById('yxdk').style.display="none";
+		document.getElementById('czk').style.display="none";
+		var cardType = $("input[name='rtype']:checked");
+		var cardKind = cardType.closest('div').attr('id');
+		if(cardKind=='yxdk'||cardKind=='czk'){
+		   	var radioId = $(this).attr('name');
+		    	$('.label1').removeClass('check') &&$('label[name="ali"]').addClass('check');
+		    	$("input[name='rtype']").removeAttr('checked') && $('#ali' ).prop('checked', 'checked');
+		}
+	});
+});
+var R={	
+	Recharge:function(){
+			//$('#Msg').html('暂无法提供此项服务');
+			//return false;   
+		var codePat = /^[a-zA-Z]{1}([a-zA-Z0-9_]){3,15}$/;
+
+/*		if (codePat.test($('#LoginCode').val()) == false) {
+           $('#Msg').html('登录名必须为4-16位！');
+			$('#LoginCode').focus();
+            return false;
+        }        */
+        var LoginType = $('#LoginType').val();
+        if(LoginType == 1){
+        		if($.trim($('#LoginCode').val())==''){
+				$('#Msg').html('请输入充值账号');
+				$('#LoginCode').focus();
+				return false
+			}
+        		if($.trim($('#ConfirmCode').val())==''){
+				$('#Msg').html('请输入确认帐号');
+				$('#ConfirmCode').focus();
+				return false
+			}
+			if($.trim($('#LoginCode').val())!=$('#ConfirmCode').val()){
+				$('#Msg').html('两次输入的账号不致');
+				$('#ConfirmCode').focus();
+				return false
+			}
+        }else{        	
+        		if($.trim($('#LoginID').val())==''){
+				$('#Msg').html('请输入用户编号');
+				$('#LoginID').focus();
+				return false
+			}
+        	    if($.trim($('#ConfirmID').val())==''){
+				$('#Msg').html('请输入确认编号');
+				$('#ConfirmID').focus();
+				return false
+			}
+			if($.trim($('#LoginID').val())!=$('#ConfirmID').val()){
+				$('#Msg').html('两次输入的账号不致');
+				$('#ConfirmID').focus();
+				return false
+			}
+        }
+
+		if($.trim($('#Code').val())==''){
+			$('#Msg').html('请输入验证码');
+			$('#Code').focus();
+			return false
+		}
+		 if (!$('#ragree').attr("checked")) {
+            alert('请仔细阅读条款后勾选同意选框！');
+
+            return false;
+        }
+        //after
+        this.encrypt();
+        return false;
+        //before
+		var Url = '?n=Index&a=chkParam';
+		var cardType = $("input[name='rtype']:checked").val();
+		var Params = "CheckCode="+ $.trim($('#Code').val())+"&LoginType="+$('#LoginType').val()+"&LoginCode="+$('#LoginCode').val()+"&LoginID="+$('#LoginID').val()+'&cardType='+cardType;
+		var that = this;
+		ajax.RequestJsonCallBack(Url,Params,function(data){
+				if(data.iResult == -1001){
+					alert('账号格式错误');
+					$('#LoginCode').focus();
+				}else if(data.iResult == -1002){
+					alert('用户编号不存在');
+					$('#LoginID').focus();
+				}else 	if(data.iResult == -1){
+					alert('验证码错误');
+				}else if(data.iResult == -5) {
+					alert('支付金额错误');
+				}else if(data.iResult == -2) {
+					alert('账号不存在');
+				}else if(data.iResult == -3) {
+					alert('生成订单失败');
+				}else {
+					if(cardType == 1){
+						//that.RechargeToAlipay(data.iLoginCode,data.Rnd,data.CardID);
+						that.RechargeToIapppay(data.iLoginCode,data.Rnd,data.CardID);
+					}else if(cardType == 2){
+						that.RechargeToWx(data.iLoginCode,data.Rnd,data.CardID);
+					}else if(cardType == 36){
+						that.RechargeToHeepay(data.iLoginCode,data.Rnd,data.CardID);
+					}else{
+						that.RechargeToB780(data.iLoginCode,data.Rnd,data.CardID);
+					}
+				}
+			});
+	},
+	encrypt:function(){
+		var Price = $('#Price').val();
+		var cardType = $("input[name='rtype']:checked").val();
+		var payType = $("input[name='payType']:checked").val();
+		if(cardType == 'undefined'){
+			alert('请选择充值方式');
+			return false;
+		}
+		$('#payerName').val($('#LoginCode').val());
+		var Url = 'encrypt.php';
+		var Params =  "CheckCode="+ $.trim($('#Code').val())+"&LoginType="+$('#LoginType').val()+"&LoginCode="+$('#LoginCode').val()+"&LoginID="+$('#LoginID').val()+
+		"&Amount="+Price+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&payType='+payType;
+		if(cardType == 1){
+			Url = Url+'?Type=alipay';
+			ajax.RequestJsonCallBack(Url,Params,R.SubmitToAlipay);
+		}else if(cardType == 2){
+			Url = Url+'?Type=wx';
+			ajax.RequestJsonCallBack(Url,Params,R.SubmitToWx);
+		}else if(cardType == 36){
+			Url = Url+'?Type=heepay';
+			ajax.RequestJsonCallBack(Url,Params,R.SubmitToheepay);
+		}else{
+			Url = Url+'?Type=b780';
+			ajax.RequestJsonCallBack(Url,Params,R.SubmitToB780);
+		}
+	},
+	OutputError:function(iResult){
+		if(iResult == -1001){
+			alert('账号格式错误');
+			$('#LoginCode').focus();
+		}else if(iResult == -1002){
+			alert('用户编号不存在');
+			$('#LoginID').focus();
+		}else 	if(iResult == -1){
+			alert('验证码错误');
+		}else if(iResult == -5){
+			alert('支付金额错误');
+		}else if(iResult == -2) {
+			alert('账号不存在');
+		}else if(iResult == -3) {
+			alert('生成订单失败');
+		}else if(iResult == -4){
+			alert('充值方式错误');
+		}else{
+			alert('充值失败，请稍后再试');
+		}
+	},
+	RechargeToIapppay:function(iLoginCode,Rnd,CardID){
+		var Price = $('#Price').val();
+		var cardType = $('input:radio[name="rtype"]:checked').val();
+		var payType = $("input[name='payType']:checked").val();
+		$('#sp_orderno').val(Rnd);		
+		$('#payerName').val($('#LoginCode').val());
+		$('#cardType').val(cardType);
+		//$('#productNum').val($('#Num').val()*$('#Price').val());
+		// var Url = 'encrypt.php?Type=iapppay';
+		// var Params = "Amount="+Price+'&iLoginCode='+iLoginCode+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&sp_orderno='+Rnd+'&payType='+payType+'&CardID='+CardID;
+		// ajax.RequestJsonCallBack(Url,Params,R.SubmitToB780);
+
+		
+	},
+	RechargeToB780:function(iLoginCode,Rnd,CardID){
+		var Price = $('#Price').val();
+		var cardType = $('input:radio[name="rtype"]:checked').val();
+		var payType = $("input[name='payType']:checked").val();
+		$('#sp_orderno').val(Rnd);		
+		$('#payerName').val($('#LoginCode').val());
+		$('#cardType').val(cardType);
+		//$('#productNum').val($('#Num').val()*$('#Price').val());
+		var Url = 'encrypt.php?Type=b780';
+		var Params = "Amount="+Price+'&iLoginCode='+iLoginCode+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&sp_orderno='+Rnd+'&payType='+payType+'&CardID='+CardID;
+		ajax.RequestJsonCallBack(Url,Params,R.SubmitToB780);
+	},
+	RechargeToHeepay:function(iLoginCode,Rnd,CardID){
+		var Price = $('#Price').val();
+		var cardType = $('input:radio[name="rtype"]:checked').val();
+		var payType = $("input[name='payType']:checked").val();
+		$('#sp_orderno').val(Rnd);		
+		$('#payerName').val($('#LoginCode').val());
+		$('#cardType').val(cardType);
+		//$('#productNum').val($('#Num').val()*$('#Price').val());
+		var Url = 'encrypt.php?Type=heepay';
+		var Params = "Amount="+Price+'&iLoginCode='+iLoginCode+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&sp_orderno='+Rnd+'&payType='+payType+'&CardID='+CardID;
+		ajax.RequestJsonCallBack(Url,Params,R.SubmitToB780);
+	},
+	RechargeToWx:function(iLoginCode,Rnd,CardID){
+		var Price = $('#Price').val();
+		var cardType = $('input:radio[name="rtype"]:checked').val();
+		var payType = $("input[name='payType']:checked").val();
+		$('#sp_orderno').val(Rnd);		
+		$('#payerName').val($('#LoginCode').val());
+		$('#cardType').val(cardType);
+		//$('#productNum').val($('#Num').val()*$('#Price').val());
+		var Url = 'encrypt.php?Type=wx';
+		var Params = "Amount="+Price+'&iLoginCode='+iLoginCode+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&sp_orderno='+Rnd+'&payType='+payType+'&CardID='+CardID;
+		ajax.RequestJsonCallBack(Url,Params,R.SubmitToWx);
+	},
+	RechargeToAlipay:function(iLoginCode,Rnd,CardID){
+		var Price = $('#Price').val();
+		var cardType = $('input:radio[name="rtype"]:checked').val();
+		var payType = $("input[name='payType']:checked").val();
+		$('#sp_orderno').val(Rnd);		
+		$('#payerName').val($('#LoginCode').val());
+		$('#cardType').val(cardType);
+		//$('#productNum').val($('#Num').val()*$('#Price').val());
+		var Url = 'encrypt.php?Type=alipay';
+		var Params = "Amount="+Price+'&iLoginCode='+iLoginCode+'&payerName='+encodeURIComponent($('#LoginCode').val())+'&cardType='+cardType+'&Code='+$('#Code').val()+'&cmdno='+$('#cmdno').val()+'&sp_orderno='+Rnd+'&payType='+payType+'&CardID='+CardID;
+		ajax.RequestJsonCallBack(Url,Params,R.SubmitToAlipay);
+	},
+
+	SubmitToAlipay:function(data){
+		if(data.iResult!=0){
+			R.OutputError(data.iResult);
+			return false;
+		}
+		$('body').html(data.html);
+	},
+	SubmitToWx:function(data){
+		if(data.iResult!=0){
+			R.OutputError(data.iResult);
+			return false;
+		}
+		$('#url').val(data.url);
+		$('#amount').val(data.amount);
+		$('#goodsname').val(data.goodsname);
+		document.frmWxPay.submit();
+	},
+
+	SubmitToIapppay:function(data){
+		if(data.iResult==0){
+			//$('#purchaserId').val(data.PurchaserId);
+			$('#bargainorId').val(data.bargainorId);
+			$('#purchaserId').val(data.purchaserId);
+			$('#transactionId').val(data.transactionId);
+			$('#sign').val(data.sign);
+			$('#warenum').val(data.warenum);
+			$('#date').val(data.date);
+			$('#remark').val(data.remark);
+			$('#totalFee').val(data.totalFee);
+			$('#burden').val(data.burden);
+			$('#cardType').val(data.cardType);
+			$('#sp_orderno').val(data.sp_orderno);
+			$('#returnUrl').val(data.return_url);
+			$('#desc').val(data.desc);
+		//	console.log(data);
+			//console.log(document.forms['frmB780']);
+			// document.frmB780.submit();
+			$('body').html(data.html);
+		}else{
+			R.OutputError(data.iResult);
+			return;
+		}
+	},
+
+	SubmitToB780:function(data){
+		if(data.iResult==0){
+			//$('#purchaserId').val(data.PurchaserId);
+			$('#bargainorId').val(data.bargainorId);
+			$('#purchaserId').val(data.purchaserId);
+			$('#transactionId').val(data.transactionId);
+			$('#sign').val(data.sign);
+			$('#warenum').val(data.warenum);
+			$('#date').val(data.date);
+			$('#remark').val(data.remark);
+			$('#totalFee').val(data.totalFee);
+			$('#burden').val(data.burden);
+			$('#cardType').val(data.cardType);
+			$('#sp_orderno').val(data.sp_orderno);
+			$('#returnUrl').val(data.return_url);
+			$('#desc').val(data.desc);
+		//	console.log(data);
+			//console.log(document.forms['frmB780']);
+			document.frmB780.submit();
+		}else{
+			R.OutputError(data.iResult);
+			return;
+		}
+/*		else if(data.iResult==-4){
+			$('#Msg').html('请输入正确的验证码');
+		}
+		else
+			$('#Msg').html('下单失败');*/
+	},
+	SubmitToheepay:function(data){
+		if(data.iResult==0){
+			//$('#purchaserId').val(data.PurchaserId);
+			$('#frmSubmit').attr('action',data.pay_url);
+			$('#hee_version').val(data.version);
+			$('#hee_agent_id').val(data.agent_id);
+			$('#hee_agent_bill_id').val(data.agent_bill_id);
+			$('#hee_agent_bill_time').val(data.agent_bill_time);
+			$('#hee_pay_type').val(data.pay_type);
+			$('#hee_pay_code').val(data.pay_code);
+			$('#hee_pay_amt').val(data.pay_amt);
+			$('#hee_notify_url').val(data.notify_url);
+			$('#hee_return_url').val(data.return_url);
+			$('#hee_user_ip').val(data.user_ip);
+			$('#hee_goods_name').val(data.goods_name);
+			$('#hee_goods_num').val(data.goods_num);
+			$('#hee_goods_note').val(data.goods_note);
+			$('#hee_remark').val(data.remark);
+			$('#hee_sign').val(data.sign);
+		//	console.log(data);
+			//console.log(document.forms['frmB780']);
+			document.frmSubmit.submit();
+		}else{
+			R.OutputError(data.iResult);
+			return;
+		}
+/*		else if(data.iResult==-4){
+			$('#Msg').html('请输入正确的验证码');
+		}
+		else
+			$('#Msg').html('下单失败');*/
+	},
+	Counter:function(){
+		var money = $('#Price').val();
+		var rType = $('input:radio[name="rtype"]:checked').val();
+		ajax.RequestJsonCallBack('?n=Index&a=getHappyBeanRate','CardType='+rType,function(HappyBeanRate){
+			if(HappyBeanRate == -1){
+				alert('系统错误，请稍后再试！');
+				$('.specific').hide();
+				return false;
+			}
+			{/literal}
+					var YfMoney = parseInt(money*{$payConfig.RMB2MB}*HappyBeanRate/10000);
+					var HappyBean = parseInt(money*{$payConfig.RMB2MB}*{$payConfig.MB2HPB}*HappyBeanRate/{$payConfig.discount});
+			{literal}
+			$('#PayMoney').html('('+money+'RMB='+YfMoney+'通易币='+HappyBean+'欢乐豆)');
+		});
+
+	}
+};
+function ChangeLoginType(data){
+	var LoginType = $('#LoginType').val();
+	if(LoginType == 1){
+		$('.LoginID').hide();
+		$('.LoginCode').show();
+	}else {
+		$('.LoginID').show();
+		$('.LoginCode').hide();
+	}
+}
+{/literal}
+</script>
+</BODY>
+</HTML>

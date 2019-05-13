@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<link type="text/css" rel="stylesheet" href="/js/My97DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript">
+setting.PageUrl='{au d=Service c=ServiceCase a=caseList}';
+{literal}
+$(function(){
+	$('#btn_searchCaseInfo').click(function(){
+		var caseSerial = $.trim($("#txt_caseSerial").val()); 
+		var loginId = $.trim($("#txt_loginId").val());
+		var caseStatus = $("#sel_caseStatus").val();
+		var startDate = $.trim($("#dtBegin").val());
+		var endDate = $.trim($("#dtEnd").val());
+		
+		var Param = '';
+		if(caseSerial){
+			Param += "caseSerial="+caseSerial;
+		}
+		else{
+			if(loginId){
+				Param += "&loginId="+loginId;
+			}
+			if(caseStatus){
+				Param += "&caseStatus="+caseStatus;
+			}
+			if(startDate){
+				Param += "&startTime="+startDate;
+			}
+			if(endDate){
+				Param += "&endTime="+endDate;
+			}
+		}
+		ajax.RequestUrl(setting.PageUrl, Param,'getCaseInfoList');
+	});
+
+	$('#btn_addCase').click(function(){		
+		var url = '/?d=Service&c=ServiceCase&a=caseInsertView';
+		var title = '案件录入';
+		var iNum = 'CaseAdd';
+		
+		window.parent.main.AddTab(title,iNum,url);
+	});
+	$('#dtBegin').focus(function(){
+		WdatePicker({{/literal}minDate:'{$strStatrTime}',{literal}maxDate:"#F{$dp.$D('dtEnd')}"});
+	});
+	$('#dtEnd').focus(function(){
+		WdatePicker({minDate:"#F{$dp.$D('dtBegin')}",{/literal}maxDate:'{$strEndTime}'{literal}});
+	});
+});
+
+function getCaseInfoList(data){
+	$('#CaseList').html(data);
+	init.SetTableRows();//初始化鼠标移到表格行显示背景
+	
+	//绑定分页
+	var Param = '$(this).attr("pg"),"getCaseInfoList"';
+	var Param1 = '$(this).val(),"getCaseInfoList"';
+	evt.BindPageClick('#caseInfoPageBar ','getPagerCaseInfo',Param,Param1);	
+}
+
+function getPagerCaseInfo(curPage,Callback){
+	curPage = parseInt(curPage,10);
+	var maxPage = parseInt($('#LinkLast').attr('pg'),10);
+	var iPage = parseInt($('#lab_curpage').html(),10);
+	if(curPage != iPage && curPage > 0 && curPage <= maxPage){
+		setting.Params='curPage='+curPage;
+		ajax.RequestUrl(setting.PageUrl, setting.Params,Callback);
+	}
+}
+
+
+{/literal}
+</script>
+</head>
+<body>
+
+<div id="CaseSettleDetail">
+	<fieldset style="padding:5px;margin-bottom:5px">
+	<legend>查询</legend>
+		案件编号：<input id="txt_caseSerial" type="text" maxlength="12" />
+		玩家编号：<input id="txt_loginId" type="text" maxlength="10" />
+		案件状态：
+		<select id="sel_caseStatus" style="width: 100px;">
+			<option value="0">全 部</option>
+			{foreach from=$arrCaseStatus item=status key=index}
+			<option value="{$index}">{$status}</option>
+			{/foreach}
+		</select>
+		案发时间：
+        <input id="dtBegin" type="text" value="{$strStatrTime}" size="10" /> -- <input id="dtEnd" type="text" value="{$strEndTime}" size="10" />
+		<input id="btn_searchCaseInfo" type="button" value="查　询" class="bnStyle f2" />
+		<input id="btn_addCase" type="button" value="案件录入" class="bnStyle f2" /> 
+</fieldset>
+</div>
+
+<div id="CaseList"></div>
+</div>
+
+
+</body>
+</html>

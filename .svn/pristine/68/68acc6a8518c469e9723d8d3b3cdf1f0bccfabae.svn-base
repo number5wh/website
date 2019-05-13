@@ -1,0 +1,54 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+  <tr class="bg_color">
+    <th width="12%">比赛ID</th>
+    <th width="8%">比赛名称</th>
+    <th width="6%">比赛时间</th>
+    <th width="10%">比赛场地</th>    
+	<th width="6%">比赛单元</th>	
+	<th width="6%">报名时间</th>
+	<th width="12%">开赛时间</th>
+	<th width="12%">离赛时间</th>
+    <th width="6%">比赛成绩</th>
+	<th width="10%">获得奖励</th>
+	<th width="10%">奖励发放状态</th>
+  </tr>
+  
+  {foreach from="$MatchList" item=v}
+  <tr class="bg_color">
+  	<td><a href="javascript:void(0)" class='blue aDetail' id="{$v.MatchUnitID}" MatchTypeID="{$v.MatchTypeID}" title="{$v.MatchUnitID}">{$v.MatchUnitID}</a></td>
+  	<td>{$v.MatchName}</td>
+  	<td id="Row_{$v.MatchUnitID}">{$v.PlayDate}</td>
+  	<td>{$v.RoomName}</td>
+  	<td>{$v.iTimes}</td>
+  	<td>{$v.SignUpTime}</td>
+  	<td>{$v.MatchStartTime}</td>
+  	<td>{$v.MatchEndTime}</td>
+  	<td>第{$v.Rank}名</td>
+  	<td>{$v.Prize}</td>
+  	<td>{$v.SendStatusTip}</td>
+  </tr>	
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="11">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  {if $MatchList}
+  	<tr class="bg_color">
+  		<td colspan="11">{include file="$skin/Inc/Page.inc.html"}</td>
+  	</tr>
+  {/if}
+</table>
+<input type="hidden" id="GameMatchRoleID" value="{$RoleID}" />
+<script type="text/javascript">
+{literal}
+$(function(){
+	$(".aDetail").click(function(){
+{/literal}
+		setting.Url = '{au d=Service c=ServiceRole a=getPagerGameMatchRankList}';
+		setting.Params = '&RoleID='+$("#GameMatchRoleID").val()+'&MatchUnitID='+$(this).attr('id')+'&MatchTypeID='+$(this).attr('MatchTypeID')+'&PlayDate='+$('#Row_'+$(this).attr('id')).html();
+		window.parent.main.AddTab($(this).attr('title'),$("#GameMatchRoleID").val()+'GameMatch'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+	})
+})
+{/literal}
+</script>

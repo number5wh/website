@@ -1,0 +1,101 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var robotName={
+	/*点击显示修改服务器配置界面*/
+	BindEvent:function(){
+		$('.setServ').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=robotGame a=showrobotList}';
+				setting.Params='&NameID='+$(this).attr('id');
+{literal}
+				window.parent.main.AddTab($(this).html()+'('+$(this).attr('ip')+')',$(this).attr('id'),setting.Url+setting.Params);			
+				/*window.location.href=setting.Url+setting.Params;*/
+			});	
+		});
+		/*点击显示修改机器人配置界面*/
+		$('.edit').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=RobotNamePool a=showAddRobotNamePoolHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'NameID='+$(this).attr('id'),'callback.ShowAddRobotNamePoolHtml');
+			});	
+		});
+		/*点击显示修改机器人配置界面*/
+		$('.editAll').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=RobotNamePool a=showAddAllRobotNamePoolHtml}';
+{literal}
+				ajax.RequestUrl(setting.Url,'NameID='+$(this).attr('id'),'callback.ShowAddRobotNamePoolHtml');
+			});	
+		});
+		/*点击显示修改机器人配置界面*/
+		$('.format').each(function(){
+			$(this).unbind();
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=RobotNamePool a=formatRobotNamePool}';
+{literal}
+				ajax.RequestUrl(setting.Url,'NameID='+$(this).attr('id'),'callback.DelRobotName');
+			});	
+		});
+		/*点击删除机器人配置信息*/
+			$('.del').each(function(){
+				$(this).click(function(){
+		{/literal}
+					setting.Url='{au d=YunWei c=RobotNamePool a=delRobotNamePool}';
+		{literal}
+					if(confirm('删除后将无法恢复,确定删除?'))
+						ajax.RequestUrl(setting.Url,'NameID='+$(this).attr('id'),'callback.DelRobotName');
+				});	
+			});	
+			
+		/*点击禁用或启用服务器配置*/
+		$('.file').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=robotGame a=createFiles}';
+{literal}
+				setting.Params = 'ServID='+$(this).attr('id');
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.CreateFiles');
+			});	
+		});	
+	}
+};
+{/literal}
+</script>
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="5%" bgcolor="#FFFFFF">序号</th>
+    <th width="20%" bgcolor="#FFFFFF">昵称</th>
+    <th width="40%" bgcolor="#FFFFFF">签名</th>
+    <th width="5%" bgcolor="#FFFFFF">性别</th>
+    <th width="30%" bgcolor="#FFFFFF">操作</th> 
+  </tr>
+  {foreach from=$RobotList item=robot}
+  <tr id="Row_{$robot.NameID}">
+  	<td align ="center" bgcolor='#FFFFFF'>{$robot.NameID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$robot.Name}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $robot.Signature eq null}{else $robot.Signature} {/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $robot.Sex eq 1}男{elseif $robot.Sex eq 2}女{else}随机{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">
+   	  {if $robot.RobotID eq 0 } <a href="javascript:void(0)" class="edit" id="{$robot.NameID}">修改</a>{/if}
+   	   <a href="javascript:void(0)" class="del" id="{$robot.NameID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $RobotList}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

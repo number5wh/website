@@ -1,0 +1,30 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="20%" bgcolor="#FFFFFF">事件名称</th>
+    <th width="30%" bgcolor="#FFFFFF">事件描述</th>
+    <th width="20%" bgcolor="#FFFFFF">服务记录数</th>
+    <th width="10%" bgcolor="#FFFFFF">排序</th>
+    <th width="20%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$ServerEventList item=list}
+  <tr id="Row_{$server.ServID}">
+    <td align="center" bgcolor="#FFFFFF">{$list.EvtName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$list.EvtContent}</td>
+    <td align="center" bgcolor="#FFFFFF">{$list.ID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$list.EvtSortID}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:addServerEvent({$list.ID})">编辑</a>
+	  <!--<a href="javascript:void(0)" class="del" id="{$server.ServID}">删除</a>-->
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">很抱歉，暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $ServerEventList}
+  <tr class="bg_color txt_M">
+    <td id="caseInfoPageBar" colspan="5">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

@@ -1,0 +1,209 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2019/4/3
+ * Time: 14:19
+ */
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+
+class GamePayRelationAction extends PageBase
+{
+    public function __construct() {
+        $this->arrConfig = unserialize(SYS_CONFIG);
+        Utility::chkUserLogin($this->arrConfig);
+    }
+
+    public function index()
+    {
+        $arrResult = $this->getListData();
+        $arrTags = array('skin' => $this->arrConfig['skin'], 'Page' => $arrResult['Page'], 'RelationList' => $arrResult['RelationList']);
+        Utility::assign($this->smarty, $arrTags);
+
+        $this->smarty->display($this->arrConfig['skin'] . '/Service/GamePayRelationList.html');
+    }
+
+    public function getListData()
+    {
+        $arrUserList = null;
+        $curPage = Utility::isNumeric('curPage', $_POST);
+        $curPage = $curPage <= 0 ? 1 : $curPage;
+
+//        $arrParam['fields'] = 'Id,ClassId,AmountId,ChannelId,Descript';
+//        $arrParam['tableName'] = 'T_GamePayRelation';
+//        $arrParam['where'] = '';
+//        $arrParam['order']='';
+//        $arrParam['pagesize'] = 20;
+
+        $arrParam['fields'] = '[Id],  [ClassId],[ClassName],[AmountId],[Amount],[ChannelId],[ChannelName]';
+        $arrParam['tableName'] = 'Vw_GamePayRelation';
+        $arrParam['where'] = '';
+        $arrParam['order'] = 'Id';
+        $arrParam['pagesize'] = 20;
+
+        $objCommonBLL = new CommonBLL(0);
+        $iRecordsCount = $objCommonBLL->getRecordsCount($arrParam);
+        $Page=Utility::setPages($curPage,$iRecordsCount,$arrParam['pagesize']);
+        $arrResult = $objCommonBLL->getPageList($arrParam,$Page['CurPage']);
+        foreach ($arrResult as &$v) {
+            $v['ChannelName'] = Utility::gb2312ToUtf8($v['ChannelName']);
+            $v['ClassName'] = Utility::gb2312ToUtf8($v['ClassName']);
+        }
+        unset($v);
+        return array('RelationList' => $arrResult, 'Page' => $Page);
+
+    }
+
+    public function getList()
+    {
+        $arrResult = $this->getListData();
+        $arrTags = array('skin' => $this->arrConfig['skin'], 'Page' => $arrResult['Page'], 'RelationList' => $arrResult['RelationList']);
+        Utility::assign($this->smarty,$arrTags);
+        $html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/GamePayRelationList.html');
+        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+        echo $html;
+    }
+
+
+    //编辑
+    public function showEdit()
+    {
+        $id = Utility::isNullOrEmpty('id', $_POST);
+        $classid = Utility::isNullOrEmpty('classid', $_POST);
+        $descript = Utility::isNullOrEmpty('descript', $_POST);
+        $amountid = Utility::isNullOrEmpty('amountid', $_POST);
+        $channelid = Utility::isNullOrEmpty('channelid', $_POST);
+        $objCommonBLL = new CommonBLL(0);
+        
+        //获取类别列表
+        $arrParam['fields'] = 'ClassId,ClassName';
+        $arrParam['tableName'] = 'T_GamePayClass';
+        $arrParam['where'] = '';
+        $arrParam['order']='ClassId';
+        $arrParam['pagesize'] = 1000;
+        $classList = $objCommonBLL->getPageList($arrParam,1);
+        foreach ($classList as &$v) {
+            $v['ClassName'] = Utility::gb2312ToUtf8($v['ClassName']);
+        }
+        unset($v);
+
+        
+        //获取渠道列表
+        $arrParam2['fields'] = 'ChannelId,ChannelName';
+        $arrParam2['tableName'] = 'T_GamePayChannel';
+        $arrParam2['where'] = '';
+        $arrParam2['order']='ChannelId';
+        $arrParam2['pagesize'] = 1000;
+        $channelList = $objCommonBLL->getPageList($arrParam2,1);
+        foreach ($channelList as &$v) {
+            $v['ChannelName'] = Utility::gb2312ToUtf8($v['ChannelName']);
+        }
+        unset($v);
+        
+        //获取金额列表
+        $arrParam3['fields'] = 'AmountId,Amount';
+        $arrParam3['tableName'] = 'T_GamePayAmount';
+        $arrParam3['where'] = '';
+        $arrParam3['order']='AmountId';
+        $arrParam3['pagesize'] = 1000;
+        $amountList = $objCommonBLL->getPageList($arrParam3,1);
+
+        $arrTags = array('id'=> $id,'classid' => $classid, 'amountid' => $amountid, 'channelid' => $channelid, 'classlist' => $classList, 'channellist'=>$channelList,'amountlist'=>$amountList);
+
+        $send = array('Info'=>$arrTags);
+        Utility::assign($this->smarty, $send);
+        $html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/GamePayRelationEdit.html');
+        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+        echo $html;
+    }
+
+    public function doEdit()
+    {
+        $id = Utility::isNumeric('id', $_POST);
+        $classid = Utility::isNumeric('classid', $_POST);
+        $amountid = Utility::isNumeric('amountid', $_POST);
+        $channelid = Utility::isNumeric('channelid', $_POST);
+        if (!$id || !$classid || !$amountid || !$channelid) {
+            echo 1;
+        } else {
+            $objDataChangeBLL = new MasterBLL();
+            $ret = $objDataChangeBLL->editPayrelation($id, $classid, $amountid, $channelid);
+            echo $ret[0]['IRESULT'];
+        }
+    }
+
+    //新增
+    public function showAdd()
+    {
+        $objCommonBLL = new CommonBLL(0);
+        //获取类别列表
+        $arrParam['fields'] = 'ClassId,ClassName';
+        $arrParam['tableName'] = 'T_GamePayClass';
+        $arrParam['where'] = '';
+        $arrParam['order']='ClassId';
+        $arrParam['pagesize'] = 1000;
+        $classList = $objCommonBLL->getPageList($arrParam,1);
+        foreach ($classList as &$v) {
+            $v['ClassName'] = Utility::gb2312ToUtf8($v['ClassName']);
+        }
+        unset($v);
+
+        //获取渠道列表
+        $arrParam2['fields'] = 'ChannelId,ChannelName';
+        $arrParam2['tableName'] = 'T_GamePayChannel';
+        $arrParam2['where'] = '';
+        $arrParam2['order']='ChannelId';
+        $arrParam2['pagesize'] = 1000;
+        $channelList = $objCommonBLL->getPageList($arrParam2,1);
+        foreach ($channelList as &$v) {
+            $v['ChannelName'] = Utility::gb2312ToUtf8($v['ChannelName']);
+        }
+        unset($v);
+
+        //获取金额列表
+        $arrParam3['fields'] = 'AmountId,Amount';
+        $arrParam3['tableName'] = 'T_GamePayAmount';
+        $arrParam3['where'] = '';
+        $arrParam3['order']='AmountId';
+        $arrParam3['pagesize'] = 1000;
+        $amountList = $objCommonBLL->getPageList($arrParam3,1);
+
+        $arrTags = array('classlist' => $classList, 'channellist'=>$channelList,'amountlist'=>$amountList);
+
+        $send = array('Info'=>$arrTags);
+        Utility::assign($this->smarty, $send);
+        $html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/GamePayRelationAdd.html');
+        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+        echo $html;
+    }
+
+    public function doAdd()
+    {
+        $classid = Utility::isNumeric('classid', $_POST);
+        $amountid = Utility::isNumeric('amountid', $_POST);
+        $channelid = Utility::isNumeric('channelid', $_POST);
+        if (!$classid || !$amountid || !$channelid) {
+            echo 1;
+        } else {
+            $objDataChangeBLL = new MasterBLL();
+            $ret = $objDataChangeBLL->addPayrelation($classid, $amountid, $channelid);
+            echo $ret[0]['IRESULT'];
+        }
+    }
+
+    //删除
+    public function delete()
+    {
+        $id = Utility::isNumeric('id', $_POST);
+        if (!$id || $id<=0) {
+            echo 1;
+        } else {
+            $objDataChangeBLL = new MasterBLL();
+            $ret = $objDataChangeBLL->deletePayrelation($id);
+            echo $ret[0]['IRESULT'];
+        }
+    }
+}

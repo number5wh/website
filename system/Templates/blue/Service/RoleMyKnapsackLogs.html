@@ -1,0 +1,25 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="16%">操作时间</th>
+    <th width="48%">操作内容</th>
+    <th width="13%">IP</th> 
+    <th width="23%">机器码</th>    
+  </tr>
+  {foreach from=$LogsList item=Logs}
+  <tr class="bg_color">
+    <td>{$Logs.AddTime}</td>
+    <td align="left">{$Logs.Intro}</td>
+    <td>{$Logs.ClientIP}</td>
+    <td style="table-layout:fixed;word-break:break-all;;border-collapse:collapse">{$Logs.MachineSerial}</td>
+  </tr> 
+  {foreachelse}
+  <tr class="bg_color">
+    <td colspan="4">很抱歉，没有您要查询的信息~</td>      
+  </tr>
+  {/foreach}
+  {if $LogsList}
+  <tr class="bg_color">
+    <td colspan="4" id="RMKL">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

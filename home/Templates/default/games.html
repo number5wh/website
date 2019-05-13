@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- <meta name="renderer" content="webkit|ie-comp|ie-stand"> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>游戏介绍</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/introduce.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.SuperSlide.2.1.1.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+	{include file="public/header.tpl"}	
+	<div class="clear"></div>
+	<!-- 轮播 -->
+	<div id="slideBox" class="slideBox">
+		{include file="public/banner.tpl"}
+	</div>
+	<div class="clear"></div>
+	<!-- 主体部分 -->
+	<style>
+	
+</style>
+	<main>
+		<div class="container">
+			<div class="game clearfix">
+				<div class="game-title"><span><img src="images/icon/quality-icon.png" alt="">&nbsp;</span>精品游戏</div>
+				<div class="game-picScroll">
+					<div class="bd">
+						<ul class="gameList">
+						{foreach from=$GameKind item ="kind"}
+							<li>
+								<a href="/?n=games&a=client_game_intro&id={$kind.KindID}">
+									<div class="pic"><img src="images/games/{$kind.KindID}.png" /></div>
+									<div class="title">{$kind.KindName}</div>
+								</a>
+							</li>
+						 {/foreach}							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="game-introduction clearfix">
+				<h3>游戏介绍</h3>
+				<p>779游戏是一款以休闲娱乐为主的棋牌游戏，其中包含广受玩家欢迎的斗地主、四国军棋、五子棋、象棋等游戏。</p>
+			</div>
+		</div>
+	</main>
+    {include file="public/footer.tpl"}
+</body>
+<script>
+		// banner	
+ {literal}
+jQuery(".slideBox").slide({mainCell:".bd ul",effect:"fold",autoPlay:true,delayTime:1000});	
+{/literal}
+</script>
+</html>

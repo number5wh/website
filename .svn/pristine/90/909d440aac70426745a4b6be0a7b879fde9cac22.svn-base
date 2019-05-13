@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var pl={
+	SetProperty:function(){
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"callback.GetPagerSysAdminList"';
+		var Param1 = '$(this).val(),"callback.GetPagerSysAdminList"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+	},
+	SetPlayerS:function(LoginCode,StartNum,EndNum){
+{/literal}
+		setting.Url = '{au d=YunWei c=PlayerS a=SetPlayerS}';
+		setting.Params = 'LoginCode='+LoginCode+'&StartNum='+StartNum+'&EndNum='+EndNum;
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.SetPlayerS);
+{literal}
+	},
+	DelPlayerS:function(LoginCode,StartNum,EndNum){
+{/literal}
+		setting.Url = '{au d=YunWei c=PlayerS a=DelPlayerS}';
+		setting.Params = 'LoginCode='+LoginCode+'&StartNum='+StartNum+'&EndNum='+EndNum;
+		ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.DelPlayerS);
+{literal}
+	}
+};
+/*分页回调*/
+var callback={
+	GetPagerSysAdminList:function(data){
+		$('#PageList').html(data);
+		pl.SetProperty();
+	},
+	SetPlayerS:function(data){
+		if(data.iResult==0){
+			if(parseInt(data.StartNum)<parseInt(data.EndNum)){
+				var StartNum = parseInt(data.StartNum)+1;
+				pl.SetPlayerS(data.LoginCode,StartNum,data.EndNum);
+			}
+			else{
+				$('.red').html('√');
+				$('#StartNum').val(0);
+				$('#EndNum').val(0);
+				$('#LoginCode').val('');
+			}
+		}
+		else
+			$('.red').html('×');
+	},
+	DelPlayerS:function(data){
+		if(data.iResult==0){
+			if(parseInt(data.StartNum)<parseInt(data.EndNum)){
+				var StartNum = parseInt(data.StartNum)+1;
+				pl.DelPlayerS(data.LoginCode,StartNum,data.EndNum);
+			}
+			else{
+				$('.red').html('√');
+				$('#StartNum').val(0);
+				$('#EndNum').val(0);
+				$('#LoginCode').val('');
+			}
+		}
+		else
+			$('.red').html('×');
+	}
+};
+$(function(){
+{/literal}
+	setting.PageUrl = '{au d=YunWei c=PlayerS a=getPagerPlayerSList}';
+{literal}
+	pl.SetProperty();
+	/*批量添加*/
+	$('#btnSubmit').click(function(){
+		var LoginCode = $.trim($('#LoginCode').val());
+		var StartNum = $.trim($('#StartNum').val());
+		var EndNum = $.trim($('#EndNum').val());
+		$('.red').html('提交中');
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(StartNum) || StartNum==''){
+			$('#StartNum').focus();
+			$('#StartNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(EndNum) || EndNum==''){
+			$('#EndNum').focus();
+			$('#EndNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		pl.SetPlayerS(LoginCode,StartNum,EndNum);
+	});
+	/*批量删除*/
+	$('#btnDel').click(function(){
+		var LoginCode = $.trim($('#LoginCode').val());
+		var StartNum = $.trim($('#StartNum').val());
+		var EndNum = $.trim($('#EndNum').val());
+		$('.red').html('提交中');
+		if(LoginCode==''){
+			$('#LoginCode').focus();
+			$('#LoginCode').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(StartNum) || StartNum==''){
+			$('#StartNum').focus();
+			$('#StartNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		if(isNaN(EndNum) || EndNum==''){
+			$('#EndNum').focus();
+			$('#EndNum').css('border','1px solid #ff0000');
+			return false;
+		}
+		pl.DelPlayerS(LoginCode,StartNum,EndNum);
+	});
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset style="margin-bottom:3px;">
+	<legend>批量设置</legend>
+    通行证前缀:<input type="text" class="txt" name="LoginCode" id="LoginCode" value="" />
+    起始数值:<input type="text" class="txt" size="4" name="StartNum" id="StartNum" value="0" />
+    结束数值:<input type="text" class="txt" size="4" name="EndNum" id="EndNum" value="0" />
+    <input type="button" class="btn f2" id="btnSubmit" value="批量添加" />
+    <input type="button" class="btn f2" id="btnDel" value="批量删除" />
+    <span class="red"></span>
+</fieldset>
+<br class="clearfix" />
+<div id="PageList">
+	{include file="$skin/YunWei/PlayerSListPage.html"}
+</div>
+
+</body>
+</html>

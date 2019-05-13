@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title>实物卡充值</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/fun.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script language="javascript" type="text/javascript" src="/js/common.js"></script>
+
+</head>
+<body>
+    {include file="public/header.tpl"}
+    <div id="main">
+        <div class="content">
+            <div class="details">
+                    <div class="recharge">
+                        <div class="form" style="text-align: center;">
+                            <h1 style="color:#fff;padding-top: 20px;">
+                                <span>实物卡充值</span>
+                             </h1>
+                            
+                        <form action="" method="post" class="register">
+                            <table>
+                           <SPAN style="LINE-HEIGHT: 25px; COLOR: #ff0000" id="Msg"></SPAN> 
+                                    <tr>
+                                        <td class="one">账号类型 :</td>
+                                        <td>
+                                            <div class="dselect">
+                                                <select class="select" id="LoginType" name="LoginType" onchange="ChangeLoginType()">
+                                                    <option value="2">用户编号</option>
+                                                    <option value="1">登陆账号</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                   <tr  class="LoginCode"  style="display:none">
+                                        <td class="one">充值账号 :</td>
+                                        <td class="two"><input maxlength="16" id="LoginCode" class="input_text" type="text" value="{$LoginCode}" name="LoginCode"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="LoginCode"  style="display:none">
+                                        <td class="one">确认账号 :</td>
+                                        <td class="two"><input  maxlength="16"  id="ConfirmCode" class="input_text" type="text" value="{$LoginCode}"  name="ConfirmCode"></td>
+                                        <td></td>
+                                    </tr>
+                                 <tr  class="LoginID">
+                                        <td class="one">用户编号 :</td>
+                                        <td><input maxlength="8" id="LoginID" class="input_text" type="text" value="{$LoginID}" name="LoginCode"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="LoginID">
+                                        <td class="one">确认编号 :</td>
+                                        <td><input  maxlength="8"  id="ConfirmID" class="input_text" type="text" value="{$LoginID}"  name="ConfirmCode"></td>
+                                        <td></td>
+                                    </tr>
+                                <tr>
+                                    <td class="one">实体卡号 :</td>
+                                    <td><input type="text" maxlength="17"  name="txt_CardNo" id="txt_CardNo"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="one">实体密码 :</td>
+                                    <td><input type="text"  maxlength="8"  name="txt_CardPass" id="txt_CardPass"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="one">充值类型 :</td>
+                                    <td class="stwo">
+                                            <input type="radio" name="payType"  checked="checked" id="zmb" class="type" value ="1" style="display: none;">
+                                            <label name="zmb" id="label-check" for="zmb">通易币</label>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="one">验证码 :</td>
+                                    <td><input type="text" maxlength="4" name="txt_CheckCode" id="txt_CheckCode"  style="width:120px;margin-right:15px"></td>
+                                    <td><div class="captchas"><img  id="vCode" src="CheckCode.php" width="80" height="40" id="img_checkcode" style="cursor:pointer;"></div><a class="left"  style="cursor:pointer" id="ResetCode">看不清，换一张</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="one"></td>
+                                    <td><input type="checkbox" checked="checked" name="chk_Agreement" id="chk_Agreement" class="ragree" value="agree"><span name="ragree" class="span1 check">已阅读并同意<a href="info.htm" target="_blank" class="a_clear">《关于充值的特别提示和约定》</a></span></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <input type="button" name="submit" id="submit" class="submit" onclick="CheckInput();" value=" 提交">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+                <div style="clear: both"></div>
+        </div>
+    </div>
+    {include file="public/footer.tpl"}
+<script type="text/javascript">
+{literal}
+$(function(){
+    $('#ResetCode').click(function(){
+        $('#vCode').attr('src', "/Common/ChkCode.class.php?" + Math.random());
+    });
+});
+function CheckInput(){
+        var LoginType = $('#LoginType').val();
+        if(LoginType == 1){
+                if($.trim($('#LoginCode').val())==''){
+                $('#Msg').html('请输入充值账号');
+                $('#LoginCode').focus();
+                return false
+            }
+                if($.trim($('#ConfirmCode').val())==''){
+                $('#Msg').html('请输入确认帐号');
+                $('#ConfirmCode').focus();
+                return false
+            }
+            if($.trim($('#LoginCode').val())!=$('#ConfirmCode').val()){
+                $('#Msg').html('两次输入的账号不致');
+                $('#ConfirmCode').focus();
+                return false
+            }
+        }else{          
+                if($.trim($('#LoginID').val())==''){
+                $('#Msg').html('请输入用户编号');
+                $('#LoginID').focus();
+                return false
+            }
+                if($.trim($('#ConfirmID').val())==''){
+                $('#Msg').html('请输入确认编号');
+                $('#ConfirmID').focus();
+                return false
+            }
+            if($.trim($('#LoginID').val())!=$('#ConfirmID').val()){
+                $('#Msg').html('两次输入的账号不致');
+                $('#ConfirmID').focus();
+                return false
+            }
+        }
+        if($.trim($('#txt_CheckCode').val())==''){
+            $('#Msg').html('请输入验证码');
+            $('#txt_CheckCode').focus();
+            return false;
+        }
+        if($.trim($('#txt_CardNo').val())==''){
+            $('#Msg').html('请输入卡号');
+            $('#txt_CardNo').focus();
+            return false;
+        }
+         if($.trim($('#txt_CardPass').val())==''){
+            $('#Msg').html('请输入密码');
+            $('#txt_CardPass').focus();
+            return false;
+        }
+         if (!$('#chk_Agreement').attr("checked")) {
+            alert('请仔细阅读条款后勾选同意选框！');
+
+            return false;
+        }
+         var Url = '?n=Index&a=Recharge';
+        var PayType = $("input[name='payType']:checked").val();
+        var Params = "CheckCode="+ $.trim($('#txt_CheckCode').val())+"&LoginType="+$('#LoginType').val()+"&LoginCode="+$('#LoginCode').val()+"&LoginID="+$('#LoginID').val()+'&CardNo='+$.trim($('#txt_CardNo').val())+'&CardPass='+$.trim($('#txt_CardPass').val())+'&PayType='+PayType;
+        ajax.RequestJsonCallBack(Url,Params,function(data){
+                if(data.iResult == 0){
+                    alert('充值成功');
+                }else   if(data.iResult == -1){
+                    alert('验证码错误');
+                }else if(data.iResult == -2) {
+                    alert('卡号长度不正确');
+                }else if(data.iResult == -3) {
+                    alert('密码长度不正确');
+                }else if(data.iResult == -4) {
+                    alert('账号不存在');
+                }else if(data.iResult == -5) {
+                    alert('卡号不正确');
+                }else if(data.iResult == -6) {
+                    alert('密码错误');
+                }else if(data.iResult == -7) {
+                    alert('充值卡状态不对');
+                }else if(data.iResult == -8) {
+                    alert('该用户已使用过充值卡充值');
+                }else if(data.iResult == -9) {
+                    alert('充值卡已被使用');
+                }else if(data.iResult == -10) {
+                    alert('充值卡已被销毁');
+                }else if(data.iResult == -11) {
+                    alert('充值卡未激活');
+                }else if(data.iResult == -12) {
+                    alert('请联系客服补欢乐豆');
+                }
+            });
+}
+function ChangeLoginType(data){
+    var LoginType = $('#LoginType').val();
+    if(LoginType == 1){
+        $('.LoginID').hide();
+        $('.LoginCode').show();
+    }else {
+        $('.LoginID').show();
+        $('.LoginCode').hide();
+    }
+}
+{/literal}
+</script>
+</body>
+</html>

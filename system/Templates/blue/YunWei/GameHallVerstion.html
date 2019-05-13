@@ -1,0 +1,77 @@
+<div class="sysWin" style="width:1000px">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置大厅版本
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'GameHallVersion')"/></a>
+		<br class="clear" />
+	</h2>	
+	<div class="bdy">
+		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList clear" id="TbVer">
+			<tr id="Row_1">
+				<td width="6%" height="0" align="right" bgcolor="#FFFFFF">文件名称:</td>
+			    <td width="11%" align="left" bgcolor="#FFFFFF"><input type="text" class="txt FileName" size="15" id="FileName" value="{$GameVersion.FileName}" /></td>
+				<td width="6%" align="right" bgcolor="#FFFFFF">下载路径:</td>
+			    <td width="12%" align="left" bgcolor="#FFFFFF"><input type="text" class="txt FileURL" size="15" id="FileURL" value="{$GameVersion.FileURL}" /></td>
+				<td width="6%" align="right" bgcolor="#FFFFFF">版 本 号:</td>
+			    <td width="5%" align="left" bgcolor="#FFFFFF"><input type="text" class="txt GameVersion" size="10" id="GameVersion" value="{$GameVersion.Version}" /></td>
+				<td width="6%"  align="right" bgcolor="#FFFFFF">安装目录:</td>
+		        <td width="10%" align="left" bgcolor="#FFFFFF"><input type="text" class="txt LocalPath" size="15" id="LocalPath" value="{$GameVersion.LocalPath}" /></td>
+				<td width="8%" align="right" bgcolor="#FFFFFF">下载服务器:</td>
+				<td width="16%" align="left" bgcolor="#FFFFFF">
+					<select name="ServerID" id="ServerID" style="width:140px;" class="ServerID">
+                 	<option value="">选择服务器</option>				  
+						{foreach from=$ServerList item=server}						
+				  		<option value="{$server.ServerID}" title="{$server.ServerIP}" {if $GameVersion.ServerID==$server.ServerID}selected{/if}>{$server.FixServerIP}</option>				
+						{/foreach}	
+			    	</select>
+			    </td>
+				<td width="6%" align="right" bgcolor="#FFFFFF">安装类型:</td>
+				<td width="7%" align="left" bgcolor="#FFFFFF">
+				<select name="FileCategory" id="FileCategory" class="FileCategory">
+                  <option value="1" {if $GameVersion.FileCategory=='1'}selected{/if}>解压</option>
+                  <option value="2" {if $GameVersion.FileCategory=='2'}selected{/if}>覆盖</option>
+                  <option value="3" {if $GameVersion.FileCategory=='3'}selected{/if}>运行</option>
+                </select> <img src="/images/blue/001.gif" width="10" id="Img_Row_1" style="cursor:pointer" /> 
+			  </td>
+			</tr>	
+		</table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'GameHallVersion')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddGameVersion" />
+		<input type="hidden" id="KindID" value="0" />
+		<input type="hidden" id="VerID" value="{$GameVersion.VerID}" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*如果是修改,添加行记录的图片显示*/
+	if($('#VerID').val()>0) $('#Img_Row_1').hide();
+	
+	$('#btnAddGameVersion').click(function(){
+{/literal}
+		setting.Url='{au d=YunWei c=GameHallVersion a=addGameVersion}';
+		sys.AddGameHallVersion();
+{literal}
+	});
+	/*动态添加行*/
+	var iRow = 2;
+	$('#Row_1 #Img_Row_1').click(function(){
+		$('#TbVer').append('<tr id="Row_'+iRow+'">'+$('#Row_1').html()+'</tr>');
+		$('#Row_'+iRow+' img').attr('id','Img_Row_'+iRow);
+		$('#Row_'+iRow+' img').attr('src','/images/blue/007.gif');
+		$('#Row_'+iRow+' img').click(function(){
+			var id = $(this).attr('id').replace('Img_','');
+			$('#'+id).remove();
+		});
+		iRow++;		
+	})
+})
+{/literal}
+</script>

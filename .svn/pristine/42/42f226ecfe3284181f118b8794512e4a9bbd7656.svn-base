@@ -1,0 +1,52 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>黄钻服务</span>
+	<table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+		<tr>
+			<td class='txt_R'>延长服务期：</td>
+			<td class='txt_L pad5'><input type='text' id='iNumber' class='txt_inp' /> 天</td>
+		</tr>
+		<tr>
+			<td class='txt_R'>修改原因：<br/><br/>(250字内)</td><td class='txt_L pad5'><textarea id='Remarks' style='width:200px; height:75px;'></textarea></td>
+		</tr>
+		<tr>
+			<td colspan='2' id='errorMsg' class='txt_M pad8 orange'></td>
+		</tr>
+		<tr>
+			<td colspan='2' class='txt_M pad8'>
+				<input id='RoleID' type='hidden' name='roleID' value='{$roleID}' />
+				<input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){
+	$('#applyBtn').click(function(){
+		var roleID = $.trim($('#RoleID').val());
+		var number = $('#iNumber').val();
+		var remarks = $.trim($('#Remarks').val());
+		var re = /^[0-9]*$/;
+		if(number == ''){
+			$('#errorMsg').html('黄钻延长服务期不能为空！');
+			$('#iNumber').focus();
+			return false;
+		}
+		if(!re.test(number)){
+			$('#errorMsg').html('黄钻延长服务期必须为数字！');
+			$('#iNumber').val('').focus();
+			return false;
+		}
+		
+		if(remarks == ''){
+			$('#errorMsg').html('修改原因不能为空！');
+			$('#Remarks').focus();
+			return false;
+		}
+		
+		var params = 'number='+number+'&Remarks='+remarks+'&roleID='+roleID;
+		ajax.RequestUrl('/?d=Service&c=ServiceRole&a=lanZuanServiceTable', params, 'callback.GetEditOperationResult');
+	})
+})
+{/literal}
+</script>

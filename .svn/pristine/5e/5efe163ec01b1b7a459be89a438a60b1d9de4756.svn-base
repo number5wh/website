@@ -1,0 +1,89 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>编辑通道信息
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'GamePayChannel')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >通道名称:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="channelname" id="channelname" value="{$Info.channelname}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >商户ID:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="mchid" id="mchid" value="{$Info.mchid}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >应用ID:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="appid" id="appid" value="{$Info.appid}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >应用key:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="appkey" id="appkey" value="{$Info.appkey}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >通知url:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="noticeurl" id="noticeurl" value="{$Info.noticeurl}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >其他配置:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="config" id="config" value="{$Info.config}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >备注:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="descript" id="descript" value="{$Info.descript}"></td>
+            </tr>
+            <input type="hidden" class="txt" name="status" id="status" value="{$Info.status}">
+
+        </table>
+        <div class="bot f2">
+
+            <div class="botLeft f1 left"></div>
+
+            <div class="botRight f1 right"></div>
+            <input type="hidden" name="channelid" id="channelid" value="{$Info.channelid}" />
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'GamePayChannel')"/>
+            <input type="button" class="btn f2 right" value="确 定" id="btnAddAd" />
+
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+        {/literal}
+                setting.Url='{au d=Service c=GamePayChannel a=doHandle}';
+        {literal}
+                        $('#ResultMsg').next().html('');
+                        var channelid = $('#channelid').val();
+                        var appkey = $('#appkey').val();
+                        var appid = $('#appid').val();
+                        var channelname = $('#channelname').val();
+                        var config = $('#config').val();
+                        var noticeurl = $('#noticeurl').val();
+                        var mchid = $('#mchid').val();
+                        var descript = $('#descript').val();
+
+
+
+                        if(appkey == '' || appid=='' ||channelname==''||noticeurl==''||mchid==''){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+
+                        setting.Params = 'channelid='+channelid+'&appkey='+appkey+'&appid='+appid+'&channelname='+channelname
+                            +'&descript='+descript+'&mchid='+mchid+'&noticeurl='+noticeurl+'&config='+config;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.SetChannelRool');
+                    });
+            }
+        }
+        {/literal}
+
+    </script>

@@ -1,0 +1,72 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var SysList={
+	BindEvent:function(){		
+		/*补发*/
+		$('.bufa').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunYing c=Recharge a=supplyAgain}';
+				setting.Params = 'RoleID='+$(this).attr('RoleID')+'&OrderSerial='+$(this).attr('OrderSerial')+'&CardType='+$(this).attr('CardType')+'&RID='+$(this).attr('Rid');
+{literal}
+				if(confirm('确定要为此玩家进行补发操作吗?'))
+					ajax.RequestJsonCallBack(setting.Url,setting.Params,callback.SupplyAgain);
+			});	
+		});			
+	}
+};
+var callback = {
+	SupplyAgain:function(data){
+		if(data.iResult==0){
+			$('#Row_'+data.RID+' td:eq(6)').html('<font color="#ff0000">成功</font>');
+			$('#Row_'+data.RID+' td:eq(8)').html('----');
+		}
+		else
+			alert('补发失败,请重试或联系相关技术人员');
+	}
+};
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+	<th width="15%" bgcolor="#FFFFFF">订单号</th>
+	<th width="15%" bgcolor="#FFFFFF">第三方单号</th>
+    <th width="10%" bgcolor="#FFFFFF">玩家(编号)</th>
+    <th width="10%" bgcolor="#FFFFFF">到账金额(RMB)</th>
+    <th width="10%" bgcolor="#FFFFFF">充值金额(RMB)</th>
+    <th width="15%" bgcolor="#FFFFFF">充值类型</th>
+	<th width="15%" bgcolor="#FFFFFF">接口类型</th>
+    <th width="10%" bgcolor="#FFFFFF">充值状态</th>
+	<th width="15%" bgcolor="#FFFFFF">充值时间</th>
+    <th width="10%" bgcolor="#FFFFFF">补发</th>
+  </tr>
+  {foreach from=$RechargeList item=List}
+  <tr id="Row_{$List.OrderID}">
+    <td align="center" bgcolor="#FFFFFF">{$List.SpOrderNo}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $List.TransactionID}{$List.TransactionID}{/if}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.LoginName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.TotalFee}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.TotalFee}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.PayTypeTip}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.CardTypeTip}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.StatusTip}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.UpdateTime}</td>
+    <td align="center" bgcolor="#FFFFFF">
+    {if $List.Status!=4 && $List.Status!=0}
+    	----
+    {else}
+    	<a href="javascript:void(0)" class="bufa" RoleID="{$List.LoginID}" OrderSerial="{$List.SpOrderNo}" CardType="{$List.CardType}" RID="{$List.OrderID}">补发</a>
+    {/if}
+    </td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="10" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $RechargeList}
+  <tr>
+    <td colspan="10" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

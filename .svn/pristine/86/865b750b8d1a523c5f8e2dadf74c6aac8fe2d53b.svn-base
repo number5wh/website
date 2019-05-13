@@ -1,0 +1,4 @@
+<div class="txt_M">
+	<p style="margin:10px 50px 20px;">{$result}</p>
+	<input type="button" class="bnStyle f2" onclick="main.CloseWin('myWindow');" value="确定"/>
+</div>

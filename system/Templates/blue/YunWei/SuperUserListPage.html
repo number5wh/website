@@ -1,0 +1,73 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="10%" bgcolor="#FFFFFF">角色昵称</th>
+    <th width="10%" bgcolor="#FFFFFF">玩家性质</th>
+    <th width="10%" bgcolor="#FFFFFF">商人等级</th>
+    <th width="10%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$List item=U}
+  <tr id="Row_{$U.RID}">
+    <td align="center" bgcolor="#FFFFFF">{$U.RoleID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.RealName}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      {if $U.SuperLevel neq 0}商人{else}普通玩家{/if}
+    </td>   
+    <td align="center" bgcolor="#FFFFFF">
+		{$U.SuperLevel}
+	</td>
+  <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="DelSuperUser" id="{$U.RID}" RoleID="{$U.RoleID}" MasterRight="{$U.MasterRight}" RoleName="{$U.RoleName}" onclick="delSuperUser(this)">删除</a>
+      <a href="javascript:void(0)" class="SetRoleRight" id="{$U.RoleID}" onclick="getEditSuperUserPage(this)">修改</a>
+  </td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $List}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF"id="EditOperatePages">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*重置密码*/
+	$('.DelSuperUser').click(function(){
+		if(window.confirm('确定删除?')){
+{/literal}
+		/*window.parent.main.AddTab($(this).attr('title'),'UserP'+$(this).attr('id'),setting.Url+setting.Params);*/
+        var param = 'roleID='+$(this).attr('RoleID')
+		ajax.RequestJsonCallBack('/?d=YunWei&c=SuperUser&a=deleteSuperUser',param,);
+{literal}
+		}
+	});	
+      $('.SetRoleRight').click(function(){
+    {/literal}
+        setting.Url='{au d=YunWei c=PlayerA a=showSetRoleRightHtml}';
+        ajax.RequestUrl(setting.Url,'RoleID='+$(this).attr('id'),'SysUser.showSetRoleRightHtml');
+    {literal}
+      });
+});
+
+var SysUser={
+	/*删除用户后的回调函数*/
+	CallBackDelPlayerA:function(data){
+		if(data.iResult==0){
+			$('#Row_'+data.ID).remove();
+			alert('删除成功');
+		}
+		else
+			alert('删除失败');
+	},
+      //运维平台(账号权限管理配置),显示设置权限弹出层
+    showSetRoleRightHtml:function(data){
+      main.MsgBox(data);
+        window.parent.cfg.BindEvent();
+    }
+};
+{/literal}
+</script>

@@ -1,0 +1,45 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="9%" bgcolor="#FFFFFF">ID</th>
+    <th width="11%" bgcolor="#FFFFFF">标题</th>
+    <th width="11%" bgcolor="#FFFFFF">类别</th>
+    <th width="13%" bgcolor="#FFFFFF">发布时间</th>	
+    <th width="9%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$NoticeList item=N}
+  <tr id="Row_{$R.RID}">
+    <td align="center" bgcolor="#FFFFFF">{$N.ID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$N.Title}</td>
+    <td align="center" bgcolor="#FFFFFF">{$N.TypeName}</td>
+    <td align="center" bgcolor="#FFFFFF">{$N.AddTime}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class='btnEdit' id="{$N.ID}" title="{$N.Title}" >修改</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $NoticeList}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var NL={
+	/*绑定事件*/
+	BindEvent:function(){
+		$('.btnEdit').click(function(){
+{/literal}
+			setting.Url = '{au d=YunYing c=Notice a=showNoticeEditHtml}';
+			setting.Params = '&ID='+$(this).attr('id');
+			window.parent.main.AddTab($(this).attr('title'),'Notice'+$(this).attr('id'),setting.Url+setting.Params);
+{literal}
+		})
+	}
+};
+{/literal}
+</script>

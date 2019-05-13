@@ -1,0 +1,294 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserDataBLL.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+require ROOT_PATH . 'Class/BLL/OperationLogsBLL.class.php';
+require ROOT_PATH . 'Class/BLL/DataChangeLogsBLL.class.php';
+require ROOT_PATH . 'Link/DCQueryAllOnlinePlayer.php';
+
+require_once ROOT_PATH . 'Link/SetRoomCtrl.php';
+class OnlineAction extends PageBase {
+	public function __construct() {
+		$this->arrConfig = unserialize ( SYS_CONFIG );
+		Utility::chkUserLogin ( $this->arrConfig );
+	}
+public function index()
+	{
+
+		//0 电脑  1安卓 2 苹果
+		$arrResult = null;
+		$currpage =1;
+		$pagesize =20;
+        $arrResult =$this->getPagerUsers($pagesize);
+		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['iCurPage'],'OnlineList'=>$arrResult['OnlineList'],"onlinenum"=>$arrResult['onlinenum'],'Page'=>$arrResult['Page']);//$totalonline
+		Utility::assign($this->smarty,$arrTags);
+		$this->smarty->display($this->arrConfig['skin'].'/YunYing/OnlineUser.html');
+	}	 
+
+	/**
+	 * 分页
+	 */
+	public function getPagerUsers($pagesize)
+	{
+		$arrLogsList = null;
+		$strWhere = ' ';
+		$curPage = Utility::isNumeric('curPage',$_POST);
+		$curPage = $curPage<=0 ? 1 : $curPage;
+        $pagesize =20;
+        $arrResult = null;
+        $arrResult = DCQueryAllOnlinePlayer($curPage,$pagesize);
+		$totalonline = $arrResult["iTotalCount"];
+        $arrOnlineList = $arrResult["onlinelist"];
+        //print_r($arrOnlineList);
+       // var_dump($arrOnlineList);
+        $unique_arr = array_unique($arrOnlineList);
+        //获取重复数据
+        //$repeat_arr = array_diff_assoc($arrOnlineList , $unique_arr );
+
+        //print_r($arrOnlineList);
+      //  $arr = array_unique($arr);
+
+       // $arrOnlineList=array(array("iUserId"=>"14860410","szAccount"=>"测试","iRoomId"=>"63","iKindId"=>"","szRoomName"=>"飞禽走兽","iGameMoney"=>"3","iBankMoney"=>"0","iTotalDespoit"=>"0","iTotalTransOut"=>"0","nClientType"=>1,"nRatio"=>40,"nControlTimeLong"=>180,"nControlTimeInterval"=>2000));
+
+
+        if($arrOnlineList)
+        {
+            $iCount = 0;
+            //$arrOnlineList =array_flip($arrOnlineList);
+            foreach ($arrOnlineList as $val)
+            {
+
+                $loginset ='';
+                $LoginId =$val['iUserId'];
+                if($arrOnlineList[$iCount]['nClientType']==0)
+                {
+                    $loginset ='电脑';
+                }
+                else if($arrOnlineList[$iCount]['nClientType']==1){
+                    $loginset ='安卓';
+                }
+                else if($arrOnlineList[$iCount]['nClientType']==2){
+                    $loginset ='IOS';
+                }
+                $arrOnlineList[$iCount]['device'] = $loginset;
+               /// $roomId =$val['iRoomId'];
+               // $arrOnlineList[$iCount]['roomid'] = $roomId;
+                //$arrOnlineList[$iCount]['RoomTypeID'] =$roomId;
+                $arrOnlineList[$iCount]['iUserID'] = $val['iUserId'];
+                $arrOnlineList[$iCount]['szUsername'] = Utility::gb2312ToUtf8($val['szAccount']);
+                $objDataChangeBLL = new DataChangeLogsBLL();
+               // $olineUserData = $objDataChangeBLL->getOnlineUserInfo($val['iUserID'],$roomId);
+                $arrOnlineList[$iCount]['kindname'] = Utility::gb2312ToUtf8($val['szRoomName']);
+
+               // $arrOnlineList[$iCount]['totalmoney'] = ($val['iBankMoney']+$val['iGameMoney'])/1000;
+                $arrOnlineList[$iCount]['gamemoney'] =Utility::FormatMoney($val['iGameMoney']);
+                $arrOnlineList[$iCount]['bankmoney'] = Utility::FormatMoney($val['iBankMoney']);
+
+                $stardate = date("Y-m-d",time());
+                $enddate =  date('Y-m-d',strtotime('-30 day'));
+                $threemonth =  date('Y-m-d',strtotime('-60 day'));
+
+
+                if(!empty($val['iUserId'])) {
+                    $monthindata = $objDataChangeBLL->getUserDayOut($enddate, $stardate, $LoginId, '5');
+                    $monthoutdata = $objDataChangeBLL->getUserDayOut($enddate, $stardate, $LoginId, '2');
+
+                    $threemonthindata = $objDataChangeBLL->getUserDayOut($threemonth, $stardate, $LoginId, '5');
+                    $threemonthoutdata = $objDataChangeBLL->getUserDayOut($threemonth, $stardate, $LoginId, '2');
+
+                    if (empty($monthindata[0]['changemoney'])) {
+                        $arrOnlineList[$iCount]['monthin'] = 0;
+                    } else {
+                        $arrOnlineList[$iCount]['monthin'] =Utility::FormatMoney($monthindata[0]['changemoney']);
+                    }
+
+                    if (empty($monthoutdata[0]['changemoney'])) {
+                        $arrOnlineList[$iCount]['monthout'] = 0;
+                    } else {
+                        $arrOnlineList[$iCount]['monthout'] = Utility::FormatMoney($monthoutdata[0]['changemoney']);
+                    }
+
+                    //3个月记录
+                    if (empty($threemonthindata[0]['changemoney'])) {
+                        $arrOnlineList[$iCount]['threemonthin'] = 0;
+                    } else {
+                        $arrOnlineList[$iCount]['threemonthin'] = Utility::FormatMoney($threemonthindata[0]['changemoney']);
+                    }
+
+                    if (empty($threemonthoutdata[0]['changemoney'])) {
+                        $arrOnlineList[$iCount]['threemonthout'] = 0;
+                    } else {
+                        $arrOnlineList[$iCount]['threemonthout'] = Utility::FormatMoney($threemonthoutdata[0]['changemoney']);
+                    }
+                }
+                else
+                {
+                    $arrOnlineList[$iCount]['monthin'] = 0;
+                    $arrOnlineList[$iCount]['monthout'] = 0;
+                    $arrOnlineList[$iCount]['threemonthin'] = 0;
+                    $arrOnlineList[$iCount]['threemonthout'] = 0;
+                }
+
+                $objMasterBLL = new MasterBLL();
+                $arrColorTop = $objMasterBLL->getColorTop($LoginId);
+
+                $arrOnlineList[$iCount]['icolor'] =0;
+                $arrOnlineList[$iCount]['itop'] =0;
+                $arrOnlineList[$iCount]['colorname'] ="变色";
+                $arrOnlineList[$iCount]['topname'] ="置顶";
+                if(count($arrColorTop)>0){
+                    $arrOnlineList[$iCount]['icolor'] =$arrColorTop[0]['iscolor'];
+                    if(empty($arrColorTop[0]['iscolor'])){
+                        $arrOnlineList[$iCount]['icolor'] =0;
+                    }
+                    $arrOnlineList[$iCount]['itop'] =$arrColorTop[0]['istop'];
+                    if(empty($arrColorTop[0]['istop'])){
+                        $arrOnlineList[$iCount]['itop'] =0;
+                    }
+
+                    if($arrColorTop[0]['iscolor']==1) {
+                        $arrOnlineList[$iCount]['colorname'] = "取消变色";
+                    }
+                    if($arrColorTop[0]['istop']==1) {
+                        $arrOnlineList[$iCount]['topname'] ="取消置顶";
+                    }
+                    $arrOnlineList[$iCount]['descript'] = $arrColorTop[0]['descript'];
+                }
+                $iCount++;
+            }
+        }
+        $arrNewList = Utility::arraySort($arrOnlineList,"itop","desc");
+        //print_r($arrNewList);
+        //array_multisort(array_column($arrOnlineList,'itop'),SORT_DESC,$arrOnlineList);
+        //echo "==============";
+       // print_r($arrOnlineList);
+        $Page=Utility::setPages($curPage,$totalonline,$pagesize);
+        return array('Page'=>$arrResult['iCurPage'],'OnlineList'=>$arrNewList,"onlinenum"=>$totalonline,'Page'=>$Page);
+
+	}
+	/**
+	 * 分页读取
+	 */
+	public function getPagerUserList()
+	{
+		$arrResult = $this->getPagerUsers(20);
+		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['iCurPage'],'OnlineList'=>$arrResult['OnlineList'],"onlinenum"=>$arrResult['onlinenum'],'Page'=>$arrResult['Page']);//$totalonline
+		Utility::assign($this->smarty,$arrTags);
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/OnlineUserPage.html');
+		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+		echo $html;
+	}
+
+
+    public function settop(){
+        $RoleId = Utility::isNullOrEmpty('roleid',$_GET);
+        $color = Utility::isNumeric('color',$_GET);
+        $top = Utility::isNumeric('top',$_GET);
+
+       if($top==1)
+            $top=0;
+       else
+            $top=1;
+
+        $objMasterBLL = new MasterBLL();
+        $iResult  = $objMasterBLL->setColorTop($RoleId,$color,$top);
+        echo $iResult;
+    }
+
+
+    public function setcolor(){
+        $RoleId = Utility::isNullOrEmpty('roleid',$_GET);
+        $color = Utility::isNumeric('color',$_GET);
+        $top = Utility::isNumeric('top',$_GET);
+        if($color==1)
+            $color=0;
+        else
+            $color=1;
+        $objMasterBLL = new MasterBLL();
+        $iResult  = $objMasterBLL->setColorTop($RoleId,$color,$top);
+        echo $iResult;
+	}
+
+
+    public function showAddDesHtml()
+    {
+        $RoleId = Utility::isNumeric('RoleId',$_POST);
+        if($RoleId && $RoleId>0) {
+            $objMasterBLL = new  MasterBLL();
+            $arrRes = $objMasterBLL->getColorTop($RoleId);
+            $arrRes= $arrRes[0];
+        }
+        else
+            $arrRes=array('$RoleId'=>$RoleId,'descript'=>'');
+
+        $arrRes["descript"]= str_replace(" ","",str_replace("\n","",$arrRes["descript"]));
+        $arrTags=array('online'=>$arrRes);
+        Utility::assign($this->smarty,$arrTags);
+        $html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/OnlineEdit.html');
+        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+        echo $html;
+    }
+
+
+
+    public function showRoomCtrl(){
+        $RoleId = Utility::isNumeric('RoomId',$_POST);
+        $info = Utility::isNullOrEmpty('info',$_POST);
+
+        if(empty($RoleId) || empty($info)){
+            echo "";
+        }
+
+        $ctrlUser = explode('|',$info);
+        $arrUserCtrl = array("RoleId"=>$RoleId,"nRatio"=>$ctrlUser[0],"nControlTimeLong"=>$ctrlUser[1],"nControlTimeInterval"=>$ctrlUser[2]);
+
+        $arrTags=array('User'=>$arrUserCtrl);
+        Utility::assign($this->smarty,$arrTags);
+        $html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/OnlineCtrl.html');
+        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+        echo $html;
+    }
+
+
+    public function SendUserCtrl(){
+        $RoleId = Utility::isNumeric('RoleId',$_POST);
+        $nRatio = Utility::isNumeric('nRatio',$_POST);
+        $nControlTimeLong = Utility::isNumeric('nControlTimeLong',$_POST);
+        $nControlTimeInterval = Utility::isNumeric('nControlTimeInterval',$_POST);
+
+        if(empty($RoleId) || empty($nRatio) || empty($nControlTimeLong) || empty($nControlTimeInterval)){
+            echo  "参数错误";
+        }
+        else {
+            DSSetUserRate($RoleId, $nRatio, $nControlTimeLong, $nControlTimeInterval);
+            echo "发送控制成功";
+        }
+    }
+
+
+
+    public function addOnlineDes(){
+        $RoleId = Utility::isNumeric('RoleId',$_POST);
+        $descript = Utility::isNullOrEmpty('descript',$_POST);
+
+        //$descript = str_replace("\n","<br/>",$descript);
+        $iResult = -9999;
+        if(!empty($RoleId) && !empty($descript)){
+            $objMasterBLL = new MasterBLL();
+            $iResult  = $objMasterBLL->addOnlineDes($RoleId,$descript)[0]["iResult"];
+        }
+        if($iResult==0){
+            echo "添加成功";
+        }
+        else
+        {
+            echo "数据异常";
+        }
+
+    }
+
+}
+?>

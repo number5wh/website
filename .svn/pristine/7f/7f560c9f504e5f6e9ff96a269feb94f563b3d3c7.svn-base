@@ -1,0 +1,188 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+require ROOT_PATH . 'Class/BLL/OperationLogsBLL.class.php';
+
+class SysUserAction extends PageBase
+{	
+	public function __construct()
+	{
+		$this->arrConfig=unserialize(SYS_CONFIG);
+		Utility::chkUserLogin($this->arrConfig);		
+	}
+	public function index()
+	{		
+		$objMasterBLL = new MasterBLL();
+		$arrDeptList = $objMasterBLL->getDepartmentList();
+		$arrResult = $this->getPagerSysAdmin(1,'');
+		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'SysUserList'=>$arrResult['List'],'DeptList'=>$arrDeptList); 
+		Utility::assign($this->smarty,$arrTags);
+		$this->smarty->display($this->arrConfig['skin'].'/YunWei/SysUserList.html');
+	}	 
+	
+	/**
+	 * 分页
+	 */
+	private function getPagerSysAdmin($curPage,$strWhere)
+	{
+		$arrParam['fields']='ID,UserName,RealName,Locked,JobNumber,CONVERT(VARCHAR(20),AddTime,120) AS AddTime,DeptID,SysUserName,BindAccount';
+		$arrParam['tableName']='T_SysAdmin';
+		$arrParam['where']=' WHERE 1=1'.$strWhere;
+		$arrParam['order']='AddTime DESC';
+		$arrParam['pagesize']=20;
+
+		$objCommonBLL = new CommonBLL(0);
+		$iRecordsCount = $objCommonBLL->getRecordsCount($arrParam);
+		$Page=Utility::setPages($curPage,$iRecordsCount,$arrParam['pagesize']);
+		$arrResult = $objCommonBLL->getPageList($arrParam,$Page['CurPage']);
+		if($arrResult)
+		{
+			//读取部门列表
+			$objMasterBLL = new MasterBLL();
+			$arrDeptList = $objMasterBLL->getDepartmentList();
+		
+			$iCount = 0;
+			foreach ($arrResult as $val)
+			{
+				$arrResult[$iCount]['RealName'] = Utility::gb2312ToUtf8($val['RealName']);
+				//匹配所属部门
+				if($arrDeptList)
+				{
+					foreach ($arrDeptList as $val2)
+					{
+						if($val['DeptID']==$val2['DeptID'])
+						{
+							$arrResult[$iCount]['DeptName'] = $val2['DeptName'];
+							break;
+						}
+					}
+				}				
+				$iCount++;
+			}
+		}
+		return array('List'=>$arrResult,'Page'=>$Page);
+	}
+	
+	/**
+	 * 分页读取通行证列表
+	 */
+	public function getPagerSysAdminList()
+	{
+		$strWhere = '';
+		$DeptID = Utility::isNumeric('DeptID',$_POST);
+		$SearchType = Utility::isNullOrEmpty('SearchType',$_POST);
+		$Key = Utility::isNullOrEmpty('Key',$_POST);		
+		
+		$curPage = Utility::isNumeric('curPage',$_POST);
+		$curPage = $curPage==0 ? 1 : $curPage;
+		if($DeptID) $strWhere .= ' AND DeptID='.$DeptID;
+		if($SearchType && $Key) $strWhere .= " AND $SearchType='$Key'";
+
+		$arrResult = $this->getPagerSysAdmin($curPage,$strWhere);
+		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'SysUserList'=>$arrResult['List']); 
+		Utility::assign($this->smarty,$arrTags);
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunWei/SysUserListPage.html');
+		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+		echo $html;
+	}	
+	/**
+	 * 添加管理员
+	 */
+	public function setSysUser()
+	{
+		$iResult = -1;
+		$arrParams['DeptID'] = Utility::isNumeric('DeptID',$_POST);
+		$arrParams['RealName'] = Utility::isNullOrEmpty('RealName',$_POST);
+		$arrParams['JobNumber'] = Utility::isNullOrEmpty('JobNumber',$_POST);
+		$arrParams['UserName'] = Utility::isNullOrEmpty('UserName',$_POST);
+		$arrParams['UserPwd'] = Utility::isNullOrEmpty('UserPwd',$_POST);
+		$arrParams['BindAccount'] = Utility::isNullOrEmpty('bindaccout',$_POST);
+		if($arrParams['DeptID'] && $arrParams['RealName'] && $arrParams['JobNumber'] && $arrParams['UserName'] && $arrParams['UserPwd'] && $arrParams['BindAccount'])
+		{
+			$objSessioin = new Session($this->arrConfig['Session']['SessionLoginName']);
+			$arrParams['SysUserName'] = $objSessioin->get($this->arrConfig['SessionInfo']['UserName']);
+		
+			$objMasterBLL = new MasterBLL();
+			$iResult = $objMasterBLL->setSysUser($arrParams);
+			//添加管理员操作日志
+			$objSessioin = new Session($this->arrConfig['Session']['SessionLoginName']);
+			$iAdminID = $objSessioin->get($this->arrConfig['SessionInfo']['AdminID']);
+			$SysUserName = $objSessioin->get($this->arrConfig['SessionInfo']['UserName']);
+			$objOperationLogsBLL = new OperationLogsBLL(0);
+			$objOperationLogsBLL->addCaseOperationLogs($iAdminID, 0, 31, '权限设置,添加管理员:'.$arrParams['UserName'], $iResult, Utility::getIP(), 0, 2, $SysUserName, '');
+		
+		}
+		echo $iResult;
+	}
+	/**
+	 * 重置管理员登陆密码
+	 */
+	public function resetSysUserPwd()
+	{
+		$iResult = -1;
+		$ID = Utility::isNumeric('ID',$_POST);		
+		if($ID)
+		{
+			$objMasterBLL = new MasterBLL();
+			$iResult = $objMasterBLL->resetSysUserPwd($ID);
+			//添加管理员操作日志
+			$objSessioin = new Session($this->arrConfig['Session']['SessionLoginName']);
+			$iAdminID = $objSessioin->get($this->arrConfig['SessionInfo']['AdminID']);
+			$SysUserName = $objSessioin->get($this->arrConfig['SessionInfo']['UserName']);
+			$objOperationLogsBLL = new OperationLogsBLL(0);
+			$objOperationLogsBLL->addCaseOperationLogs($iAdminID, 0, 31, '权限设置,重置管理员密码', $iResult, Utility::getIP(), 0, 2, $SysUserName, '');
+		
+		}
+		echo json_encode(array('iResult'=>$iResult,'ID'=>$ID));
+	}
+	/**
+	 * 删除管理员
+	 */
+	public function deleteSysUser()
+	{
+		$iResult = -1; 
+		$ID = Utility::isNumeric('ID',$_POST);		
+		if($ID)
+		{
+			$objMasterBLL = new MasterBLL();
+			$date = date('Y-m-d');
+			$arrResult = $objMasterBLL->deleteSysUser($ID);
+            $SysUserName = $arrResult['SysUserName'];
+            $objOperationLogsBLL =new OperationLogsBLL(0);
+            $arrResult = $objOperationLogsBLL->deleteOperationLogs($SysUserName,$date);
+            $iResult = $arrResult[0]['iResult'];
+			//添加管理员操作日志
+			$objSessioin = new Session($this->arrConfig['Session']['SessionLoginName']);
+			$iAdminID = $objSessioin->get($this->arrConfig['SessionInfo']['AdminID']);
+			$SysUserName = $objSessioin->get($this->arrConfig['SessionInfo']['UserName']);
+			$objOperationLogsBLL = new OperationLogsBLL(0);
+			$objOperationLogsBLL->addCaseOperationLogs($iAdminID, 0, 31, '权限设置,删除管理员', $iResult, Utility::getIP(), 0, 2, $SysUserName, '');
+		
+		}
+		echo json_encode(array('iResult'=>$iResult,'ID'=>$ID));
+	}
+	/**
+	 * 解锁管理员
+	 */
+	public function UnLockSysUser()
+	{
+		$iResult = -1;
+		$ID = Utility::isNumeric('ID',$_POST);
+		if($ID)
+		{
+			$objMasterBLL = new MasterBLL();
+			$iResult = $objMasterBLL->setSysUserStatus($ID,0);
+			//添加管理员操作日志
+			$objSessioin = new Session($this->arrConfig['Session']['SessionLoginName']);
+			$iAdminID = $objSessioin->get($this->arrConfig['SessionInfo']['AdminID']);
+			$SysUserName = $objSessioin->get($this->arrConfig['SessionInfo']['UserName']);
+			$objOperationLogsBLL = new OperationLogsBLL(0);
+			$objOperationLogsBLL->addCaseOperationLogs($iAdminID, 0, 31, '权限设置,解锁管理员', $iResult, Utility::getIP(), 0, 2, $SysUserName, '');
+	
+		}
+		echo json_encode(array('iResult'=>$iResult,'ID'=>$ID));
+	}
+}
+?>

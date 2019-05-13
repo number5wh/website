@@ -1,0 +1,268 @@
+<div class="sysWin" style="width:400px;">
+  <h2 class="f2 white">
+    <div class="tLeft f1 left"></div>{$title}
+    <div class="tRight f1 right"></div>
+    <a title="关闭" class="btnCls f3 right" href="javascript:main.CloseMsgBox(false,'');" /></a> <br class="clear" />
+  </h2>
+  <div class="bdy" style="padding:10px 10px 0 10px;">
+    <table id="tb_addCase" width="100%" border="0" cellpadding="0" cellspacing="0" class="tbList">
+      <tr>
+      	<td width="20%"></td>
+      	<td><input id="CaseSerial" type="hidden" value="{$id}" /></td>
+      </tr>
+      {if $type==1}
+      <tr class="bg_color">
+        <td class="txt_R">案件进展：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40"></textarea></td>
+      </tr>
+      {elseif $type==2}
+      <tr class="bg_color">
+        <td class="txt_R">上传文件1：</td>
+        <td class="txt_L pad5"><input type="text" class="txt left" id="ImgPath_FileUpload">
+    	<div class="left"><input id="FileUpload" name="file_upload" type="file" multiple="false" class="file_upload" /></div>         
+        <div id="queue_FileUpload" class="left"></div>
+        <input type="hidden" name="ServerID" id="ServerID" value="{$serverInfo.ServerID}" />
+        <br class="clear" /></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">显示名称1：</td>
+        <td class="txt_L pad5"><input id="txt_fileName" type="text" class="txt_inp" maxlength="10" /></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">上传文件2：</td>
+        <td class="txt_L pad5"><input type="text" class="txt left" id="ImgPath_FileUpload1">
+    	<div class="left"><input id="FileUpload1" name="file_upload1" type="file" multiple="false" class="file_upload" /></div>         
+        <div id="queue_FileUpload1" class="left"></div>
+        <br class="clear" /></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">显示名称2：</td>
+        <td class="txt_L pad5"><input id="txt_fileName1" type="text" class="txt_inp" maxlength="10" /></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">上传文件3：</td>
+        <td class="txt_L pad5"><input type="text" class="txt left" id="ImgPath_FileUpload2">
+    	<div class="left"><input id="FileUpload2" name="file_upload2" type="file" multiple="false" class="file_upload" /></div>         
+        <div id="queue_FileUpload2" class="left"></div>
+        <br class="clear" /></td>
+      </tr>
+      <tr class="bg_color">
+        <td class="txt_R">显示名称3：</td>
+        <td class="txt_L pad5"><input id="txt_fileName2" type="text" class="txt_inp" maxlength="10" /></td>
+      </tr>
+      {elseif $type==3}
+      <tr class="bg_color">
+        <td class="txt_R">退回原因：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40"></textarea></td>
+      </tr>
+      {elseif $type==4}
+      <tr class="bg_color">
+        <td class="txt_R">追回金额：</td>
+        <td class="txt_L pad5"><input id="amount" type="text" class="txt_inp" maxlength="10" />
+        <input id="flag" type="hidden" value="{$param}" /></td>
+      </tr>
+      {elseif $type==5}
+      <tr class="bg_color">
+        <td class="txt_R">处罚内容：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40"></textarea></td>
+      </tr>
+      {elseif $type==6}
+      <tr class="bg_color">
+        <td class="txt_R">备注内容：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40">**</textarea></td>
+      </tr>
+      {elseif $type==7}
+      <tr class="bg_color">
+        <td class="txt_R">撤销原因：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40"></textarea></td>
+      </tr>
+      {elseif $type==8}
+      <tr class="bg_color">
+        <td class="txt_R">玩家编号：</td>
+        <td class="txt_L pad5"><input id="loginId" type="text" maxlength="8" /></td>
+      </tr>
+       <tr class="bg_color">
+        <td class="txt_R">玩家昵称：</td>
+        <td class="txt_L pad5"><span id="loginName"></span>
+        <input id="roleId" type="hidden"/></td>
+      </tr>
+      {elseif $type==9}
+      <tr class="bg_color">
+        <td class="txt_R">案件描述：</td>
+        <td class="txt_L pad5"><textarea id="content" rows="5" cols="40">***</textarea></td>
+      </tr>
+      {/if}
+       <tr>
+        <td colspan="2" align="center"><span id="errorMsg" class="orange"></span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="bot f2">
+    <div class="botLeft f1 left"></div>
+    <input id="btn_submit" type="button" class="bnStyle f2" style="margin-left:170px;" value="确&nbsp;定" />
+    <div class="botRight f1 right"></div>
+    <div class="clear"></div>
+  </div>
+</div>
+<script type="text/javascript" language="javascript" src="/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" language="javascript">
+{if $type==1}
+	var url = '{au d=Service c=ServiceCase a=addProgress}';
+{elseif $type==3}
+	var url = '{au d=Service c=ServiceCase a=addBackReason}';
+{elseif $type==5}
+	var url = '{au d=Service c=ServiceCase a=addCaseDecision}';
+{elseif $type==6}
+	var url = '{au d=Service c=ServiceCase a=addCaseRemark}';
+{elseif $type==7}
+	var url = '{au d=Service c=ServiceCase a=addCancelReason}';
+{elseif $type==9}
+	var url = '{au d=Service c=ServiceCase a=updateCaseIntro}';
+{/if}
+
+{if $type==2}
+	var url = '{au d=Service c=ServiceCase a=addCaseFiles}';
+{literal}
+	$(function(){ 
+		/*双击标签关闭页面，再重新打开页面，无法再次关闭，因为页面加载的flash中 ExternalInterface引起的bug，加上以下代码可屏蔽此问题*/
+		window.onerror = function() {return true;}; 
+		/*初始化上传控件*/
+		$('.file_upload').each(function(){
+{/literal}
+			main.InitUploadControl($(this).attr('id'),'SvrCase','http://{$serverInfo.Domain}/GameFiveUpFile.php');
+{literal}
+		});
+	});
+	
+	$('#btn_submit').click(function(){
+		var id = $('#CaseSerial').val();
+		var filePath = $.trim($('#ImgPath_FileUpload').val());
+		var fileName = $.trim($('#txt_fileName').val());
+		var filePath1 = $.trim($('#ImgPath_FileUpload1').val());
+		var fileName1 = $.trim($('#txt_fileName1').val());
+		var filePath2 = $.trim($('#ImgPath_FileUpload2').val());
+		var fileName2 = $.trim($('#txt_fileName2').val());
+		var serverId = $('#ServerID').val();
+		if(filePath == "" && filePath1=="" && filePath2==""){
+			$('#errorMsg').html('请选择上传的图片');
+			return false;
+		}else if(fileName == "" && fileName1=="" && fileName2==""){
+			$('#errorMsg').html('请填写显示名称');
+			return false;
+		}else{
+			$('#errorMsg').html('');
+			var param = 'id='+id+'&svrId='+serverId+'&filePath='+filePath+'&fileName='+encodeURIComponent(fileName)+
+						'&filePath1='+filePath1+'&fileName1='+encodeURIComponent(fileName1)+
+						'&filePath2='+filePath2+'&fileName2='+encodeURIComponent(fileName2);
+			ajax.RequestCallBack(url, param, function(result) {
+				if(result==1){
+					window.location.reload();
+				}else if(result == -1){
+					$('#errorMsg').html('请选择上传的图片');
+				}else{
+					$('#errorMsg').html('上传的图片失败');
+				}
+			});
+		}
+	});
+{/literal}
+{elseif $type==4}
+	var url = '{au d=Service c=ServiceCase a=addReturnAmount}';
+{literal}
+$('#btn_submit').click(function(){
+	var id = $('#CaseSerial').val();
+	var amount = $.trim($('#amount').val());
+	var flag = $('#flag').val();
+	if(amount == "" || isNaN(amount) || amount < 0){
+		$('#errorMsg').html('请填正确追回金额');
+		return false;
+	}else{
+		$('#errorMsg').html('');
+		var prama = 'id='+id+'&amount='+amount;
+		if(flag != ''){
+			prama = prama+'&flag='+flag;
+		}
+		ajax.RequestCallBack(url, prama,function(result) {
+			if(result==1){
+				window.location.reload();
+			}else if(result == -1){
+				$('#errorMsg').html('请填正确追回金额');
+			}else{
+				$('#errorMsg').html('填写追回金额失败');
+			}
+		});
+	}
+});
+{/literal}
+{elseif $type==8}
+	var url = '{au d=Service c=ServiceCase a=addCaseSuspect}';
+{literal}
+$('#btn_submit').click(function(){
+	var id = $('#CaseSerial').val();
+	var loginId = $.trim($('#loginId').val());
+	var loginName = $('#loginName').html();
+	var roleId = $('#roleId').val();
+	if(loginName == "" || roleId == "" || roleId <= 0){
+		$('#errorMsg').html('请填正确的玩家编号');
+		return false;
+	}else{
+		$('#errorMsg').html('');
+		var prama = 'id='+id+'&loginId='+loginId+'&loginName='+loginName+'&roleId='+roleId;		
+		ajax.RequestCallBack(url, prama,function(result) {
+			if(result==1){
+				window.location.reload();
+			}else if(result == -1){
+				$('#errorMsg').html('请填正确的玩家编号');
+			}else{
+				$('#errorMsg').html('添加涉案人员失败');
+			}
+		});
+	}
+});
+
+$('#loginId').change(function(){
+	$('#errorMsg').html('');
+	$('#loginName').html('');
+	var loginId = $.trim($(this).val());
+	if(loginId == "" || isNaN(loginId)){
+		$('#errorMsg').html('请填写正确的玩家编号');
+		return false;
+	}
+	ajax.Request('/?d=Service&c=ServiceCase&a=getLoginName','loginId='+loginId,'getLoginNameCallback');	
+});
+
+//获取玩家昵称回调
+function getLoginNameCallback(data){
+	data=$.evalJSON(data);//字符串格式转为json对象
+	if(data.iResult == 1){
+		$('#loginName').html(data.msg);
+		$('#roleId').val(data.roleId);
+	}else{
+		alert(data.msg);
+	}
+}
+{/literal}
+{else}
+{literal}
+$('#btn_submit').click(function(){
+	var id = $('#CaseSerial').val();
+	var content = textFun.Trim($('#content').val());
+	if(content == "" || content.length>1000){
+		$('#errorMsg').html('请填正确内容,不要超过1000个字');
+		return false;
+	}else{
+		$('#errorMsg').html('');
+		ajax.RequestCallBack(url, 'id='+id+'&content='+encodeURIComponent(content),function(result) {
+			if(result==1){
+				window.location.reload();
+			}else if(result == 0){
+				$('#errorMsg').html('操作失败');
+			}else{
+				$('#errorMsg').html(result);
+			}
+		});
+	}
+});
+{/literal}
+{/if}
+</script>

@@ -1,0 +1,20 @@
+<div class='borderGrayColor' style='padding:10px;'>
+	<span style='font-weight:bold;'>账号检查</span>
+	<div style='color:#ff0000;margin-top:20px; margin-bottom:20px;line-height:22px'>该玩家账户删除后将无法恢复,确定要继续永久性删除吗?点击'确认'按钮将直接删除</div>
+				<input id='RoleID' type='hidden' name='RoleID' value='{$RoleID}' />
+				<input id='Passport' type='hidden' value='{$Passport}' />
+				<input id='btnDelPlayer' type='button' class='bnStyle f2' value='确　认' />
+			
+</div>
+<script type='text/javascript'>
+{literal}
+$(function(){	
+	$('#btnDelPlayer').click(function(){
+		var RoleID = $.trim($('#RoleID').val());
+		var Passport = $.trim($('#Passport').val());		
+		var params = 'RoleID='+RoleID+'&Passport='+Passport;				
+		ajax.Request('/?d=Service&c=ServiceRole&a=DelPlayer', params, 'callback.GetDelPlayer'); 				
+	});
+})
+{/literal}
+</script>

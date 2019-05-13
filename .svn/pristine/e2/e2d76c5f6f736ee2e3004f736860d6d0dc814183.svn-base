@@ -1,0 +1,35 @@
+<div class='borderGrayColor' style='padding:10px;'>
+    <span style='font-weight:bold;'>修改代理ID</span>
+    <table width='100%' border='0' cellpadding='0' cellspacing='0' class='bg_color'>
+
+        <tr>
+            <td class='txt_R'>代理ID：</td>
+            <td class='txt_L pad5'><input type='text' class='txt' maxlength='20' id='ProxyId' value='{$proxy}' /></td>
+        </tr>
+        <tr>
+            <td colspan='2' id='errorMsg' class='txt_M pad5 orange'></td>
+        </tr>
+        <tr>
+            <td colspan='2' class='txt_M pad5'>
+                <input type='hidden' id='Passport' value='{$RoleID}' /><!--这里 参数改成使用roleID 等于 LoginID-->
+                <input id='applyBtn' type='button' class='bnStyle f2' value='确　认' />
+            </td>
+        </tr>
+    </table>
+</div>
+<script type='text/javascript'>
+    {literal}
+    $(function(){
+        $('#applyBtn').click(function(){
+            var Passport = $.trim($('#Passport').val());
+            var ProxyId = $.trim($('#ProxyId').val());
+            if(ProxyId==''){
+                $('#errorMsg').html('请输入代理ID');
+                return false;
+            }
+            var params = 'roleID='+Passport+'&ProxyId='+ProxyId;
+            ajax.Request('/?d=Service&c=ServiceRole&a=updateProxyId', params, 'callback.UpdateMobilePhone');
+        })
+    })
+    {/literal}
+</script>

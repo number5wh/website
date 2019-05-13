@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>779游戏大厅-帮助中心</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/help.css">
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.SuperSlide.2.1.1.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!--[if lt IE 9]>
+	    <script src="http://cdn.static.runoob.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	{include file="public/header.tpl"}
+	<div class="clear"></div>
+	<!-- 主体部分 -->
+	<main>
+		<div class="container clearfix">
+			<div class="help-lists fl">
+			
+				<div class="help-list-title"><img src="images/icon/help-icon01.png" alt=""> 常见问题</div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=1">> 如何在线充值购买欢乐豆</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=2">> 游戏充值流程说明</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=3">> 怎么找回银行密码</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=4">> 怎么找回游戏密码</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=5">> 怎么修改游戏密码</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=6">> 怎么进入游戏</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=7">> 怎么注册通行证</a></div>
+				<div class="help-list-title"><img src="images/icon/help-icon03.png" alt=""> 新手帮助</div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=8">> 游戏账号解绑</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=9">> 游戏登录验证安全手机</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=1">> 如何在线充值购买欢乐豆</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=2">> 游戏充值流程说明</a></div>
+				<div class="help-list"><a href="?n=helpCenter&a=problems&id=3">> 怎么找回银行密码</a></div>
+			</div>
+			<div class="help-box fl">
+				<h3>怎么进入779游戏</h3>
+				<hr>
+				<span style="font-size:18px;text-indent:2em;display: block">    
+					<div>
+					<p>
+												1、先进入779游戏官网 www.game779.com 注册通行证</p>
+											<p>
+												2、在779游戏官网下载客户端，安装好。</p>
+											<p>
+												3、点击桌面的779游戏图标，输入游戏账号和密码</p>
+											<p>
+												4、进入游戏</p>
+					
+					</div>
+				</span>
+												
+			</div>
+		</div>
+	</main>
+	 {include file="public/footer.tpl"}
+</body>
+</html>

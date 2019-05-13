@@ -1,0 +1,91 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserDataBLL.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+require ROOT_PATH . 'Class/BLL/OperationLogsBLL.class.php';
+require ROOT_PATH . 'Class/BLL/DataChangeLogsBLL.class.php';
+
+require_once ROOT_PATH . 'Link/GetRoleBaseInfo.php';
+class DayGameSortAction extends PageBase {
+	public function __construct() {
+		$this->arrConfig = unserialize ( SYS_CONFIG );
+		Utility::chkUserLogin ( $this->arrConfig );
+	}
+	public function index() {
+		$arrResult = null; // $this->getPagerGameSortSort();
+		$objMasterBLL = new MasterBLL ();
+		$GameList = $objMasterBLL->getGameKindList ( - 1, 0 );
+		// var_dump($GameList);
+		$arrTags = array (
+				'skin' => $this->arrConfig ['skin'],
+				'Page' => $arrResult ['Page'],
+				'UserList' => $arrResult ['UserList'],
+				'GameList' => $GameList,
+				'EndTime'=>date('Y-m-d')
+		);
+		Utility::assign ( $this->smarty, $arrTags );
+		
+		$this->smarty->display ( $this->arrConfig ['skin'] . '/YunYing/DayGameSortList.html' );
+	}
+	public function getPagerGameSortSort($pagesize) {
+		$arrDayUserList = null;
+		$DBName = $this->arrConfig['MasterDBCONFIG']['DBNAME'];
+		$strWhere = ' WHERE 1=1 AND RoleID NOT IN (SELECT UserID FROM '.$DBName.'.dbo.T_RobotUser) ';
+		$curPage = Utility::isNumeric ( 'curPage', $_POST );
+		$AddTime = Utility::isNullOrEmpty ( 'AddTime', $_POST ) ? $_POST ['AddTime'] : date ( 'Y-m-d' );
+		$KindID = Utility::isNumeric ( 'KindID', $_POST );
+		$OrderField = 'Money'; 
+		$curPage = $curPage <= 0 ? 1 : $curPage;
+		
+		$arrParam ['fields'] = '* ';
+		$arrParam ['tableName'] = '(SELECT RoleID,RoleName,KindID,SUM(Money) as Money,SUM(CASE WHEN ChangeType=0 THEN 1 ELSE 0 END) as WinCount,SUM(CASE WHEN ChangeType=1 THEN 1 ELSE 0 END) as LostCount,
+                            SUM(CASE WHEN ChangeType=2 THEN 1 ELSE 0 END) as DrawCount,SUM(CASE WHEN ChangeType=3 THEN 1 ELSE 0 END) as FleeCount,CONVERT(VARCHAR(100),MAX(AddTime),120) as UpdateTime' . ' FROM T_UserGameChangeLogs_' . date ( 'Ymd', strtotime ( $AddTime ) ) . ' WHERE KindID = ' . $KindID . ' GROUP BY RoleID,RoleName,KindID) T';
+		$arrParam ['where'] = $strWhere;
+		$OrderBy = Utility::isNullOrEmpty ( 'OrderBy', $_POST ) ? $_POST ['OrderBy'] : 'DESC';
+		$arrParam ['order'] = "{$OrderField} " . $OrderBy;
+		$arrParam ['pagesize'] = $pagesize;
+		
+		$objCommonBLL = new CommonBLL ( $this->arrConfig ['MapType'] ['DataChangeLogs'] );
+		$iRecordsCount = $objCommonBLL->getRecordsCountSelect ( $arrParam );
+		$Page = Utility::setPages ( $curPage, $iRecordsCount, $arrParam ['pagesize'] );
+		if ($iRecordsCount > 0)
+			$arrDayUserList = $objCommonBLL->getPageListSelect ( $arrParam, $Page ['CurPage'] );
+		if ($arrDayUserList)
+		{
+			$iCount = 0;
+			foreach ( $arrDayUserList as $val )
+			{
+				if (($val ['WinCount'] + $val ['LostCount'] + $val ['DrawCount'] + $val ['FleeCount']) != 0)
+					$arrDayUserList [$iCount] ['WinRate'] = round ( $val ['WinCount'] / ($val ['WinCount'] + $val ['LostCount'] + $val ['DrawCount'] + $val ['FleeCount']) * 100, 2 );
+				else
+					$arrDayUserList [$iCount] ['WinRate'] = 0.0;
+				$arrDayUserList[$iCount]['RoleName'] = Utility::gb2312ToUtf8($arrDayUserList[$iCount]['RoleName']);
+                $arrDayUserList[$iCount]['Money'] = Utility::FormatMoney($val ['Money']);
+				$iCount++;
+			}
+		}
+		return array (
+				'UserList' => $arrDayUserList,
+				'Page' => $Page
+		);
+	}
+	/**
+	 * 分页读取
+	 */
+	public function getPagerGameSortList() {
+		$arrResult = $this->getPagerGameSortSort ( 20 );
+		$arrTags = array (
+				'skin' => $this->arrConfig ['skin'],
+				'Page' => $arrResult ['Page'],
+				'UserList' => $arrResult ['UserList'] 
+		);
+		Utility::assign ( $this->smarty, $arrTags );
+		$html = $this->smarty->fetch ( $this->arrConfig ['skin'] . '/YunYing/DayGameSortListPage.html' );
+		$html = str_replace ( "</script>", "<\/script>", str_replace ( "\r\n", '', $html ) );
+		echo $html;
+	}
+}
+?>

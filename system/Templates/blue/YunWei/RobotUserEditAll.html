@@ -1,0 +1,166 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置机器人账号		
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right btnCancel" href="javascript:void(0);" /></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<!-- 		  <tr>
+			<td  width="17%" align="right">游戏房间:</td>
+			<td width="83%">
+				<select name="RoomID" id="RoomID">
+					{foreach from = $RoomInfo item = info}
+					<option value="{$info.RoomID}" {if $info.RoomID eq $robot.RoomID} selected="selected"{/if}>{$info.RoomName}</option>
+					{/foreach}
+				</select>
+			</td>
+		  </tr> -->
+
+		  <tr>
+			<td width="17%" align="right">服务时间:</td>
+			<td width="83%">
+				<!-- {section name="loop" loop=24}
+				<input name"ServiceTime" class="txt" type="checkbox" value= "{$smarty.section.loop.index }" {if $robot.ServiceTime & $smarty.section.loop.index}checked{/if} >{$smarty.section.loop.index} 
+				{/section} -->
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1" {if $robot.ServiceTime & 1}checked{/if} >0
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2" {if $robot.ServiceTime & 2}checked{/if} >1
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4" {if $robot.ServiceTime & 4}checked{/if} >2
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8" {if $robot.ServiceTime & 8}checked{/if} >3
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="16" {if $robot.ServiceTime & 16}checked{/if} >4
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="32" {if $robot.ServiceTime & 32}checked{/if} >5
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="64" {if $robot.ServiceTime & 64}checked{/if} >6
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="128" {if $robot.ServiceTime & 128}checked{/if} >7
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="256" {if $robot.ServiceTime & 256}checked{/if} >8
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="512" {if $robot.ServiceTime & 512}checked{/if} >9
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1024" {if $robot.ServiceTime & 1024}checked{/if} >10
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2048" {if $robot.ServiceTime & 2048}checked{/if} >11
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4096" {if $robot.ServiceTime & 4096}checked{/if} >12
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8192" {if $robot.ServiceTime & 8192}checked{/if} >13
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="16384" {if $robot.ServiceTime & 16384}checked{/if} >14
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="32768" {if $robot.ServiceTime & 32768}checked{/if} >15
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="65536" {if $robot.ServiceTime & 65536}checked{/if} >16
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="131072" {if $robot.ServiceTime & 131072}checked{/if} >17
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="262144" {if $robot.ServiceTime & 262144}checked{/if} >18
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="524288" {if $robot.ServiceTime & 524288}checked{/if} >19
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="1048576" {if $robot.ServiceTime & 1048576}checked{/if} >20
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="2097152" {if $robot.ServiceTime & 2097152}checked{/if} >21
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="4194304" {if $robot.ServiceTime & 4194304}checked{/if} >22
+				<input name"ServiceTime" class="ServiceTime txt" type="checkbox" value="8388608" {if $robot.ServiceTime & 8388608}checked{/if} >23
+			</td>
+		  </tr>  
+<!-- 		   <tr>
+			<td width="17%" align="right">最小带入分数:</td>
+			<td width="83%"><input type="text" class="txt" name="MinTakeScore" id="MinTakeScore" value="{$robot.MinTakeScore}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最大带入分数:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxTakeScore" id="MaxTakeScore" value="{$robot.MaxTakeScore}"></td>
+		  </tr>  
+		   <tr>
+			<td width="17%" align="right">最小游戏局数:</td>
+			<td width="83%"><input type="text" class="txt" name="MinPlayDraw" id="MinPlayDraw" value="{$robot.MinPlayDraw}"></td>
+		  </tr> 
+		   <tr>
+			<td width="17%" align="right">最大游戏局数:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxPlayDraw" id="MaxPlayDraw" value="{$robot.MaxPlayDraw}"></td>
+		  </tr>
+		   <tr>
+			<td width="17%" align="right">最小游戏时间:</td>
+			<td width="83%"><input type="text" class="txt" name="MinReposeTime" id="MinReposeTime" value="{$robot.MinReposeTime}"></td>
+		  </tr>  
+
+		   <tr>
+			<td width="17%" align="right">最大游戏时间:</td>
+			<td width="83%"><input type="text" class="txt" name="MaxReposeTime" id="MaxReposeTime" value="{$robot.MaxReposeTime}"></td>
+		  </tr>   -->
+		  <tr>
+			<td width="17%" align="right">服务类型:</td>
+			<td width="83%">
+				<input name"ServiceGender" class="ServiceGender txt" type="checkbox" value="1" {if $robot.ServiceGender & 1}checked{/if} >相互模拟
+				<input name"ServiceGender" class="ServiceGender txt" type="checkbox" value="2"{if $robot.ServiceGender & 2}checked{/if} >被动陪打
+			</td>
+		  </tr>  
+	  </table>
+
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right btnCancel" value="取 消" />
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddRobotUser" />
+        <div class="orange right" id="AddRobotUserMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var robotEdit={
+	BindEvent:function(TabTag,UserID){
+		/*提交*/
+		$('#btnAddRobotUser').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=RobotUser a=AddAllRobotUser}';	
+{literal}		
+			var UserID = $('#UserID').val();
+			var RoomID = $('#RoomID').val();
+			var ServiceTime = 0;
+			$('.ServiceTime').each(function(){
+				if($(this).attr('checked')) ServiceTime += parseInt($(this).val());
+			});
+			var MinTakeScore = $('#MinTakeScore').val();
+			var MaxTakeScore = $('#MaxTakeScore').val();
+			var MinPlayDraw = $('#MinPlayDraw').val();
+			var MaxPlayDraw = $('#MaxPlayDraw').val();
+			var MinReposeTime = $('#MinReposeTime').val();
+			var MaxReposeTime = $('#MaxReposeTime').val();
+			var ServiceGender = 0;
+			$('.ServiceGender').each(function(){
+				if($(this).attr('checked')) ServiceGender += parseInt($(this).val());
+			});
+			if(isNaN(MinTakeScore) || MinTakeScore==''){
+				$('#AddRobotUserMsg').html('请输入正确的最小带入分数');
+				return false;
+			}
+			if(isNaN(MaxTakeScore) || MaxTakeScore==''){
+				$('#AddRobotUserMsg').html('请输入正确的最大带入分数');
+				return false;
+			}
+			if(isNaN(MinPlayDraw) || MinPlayDraw==''){
+				$('#AddRobotUserMsg').html('请输入正确的最小游戏局数');
+				return false;
+			}
+			if(isNaN(MaxPlayDraw) || MaxPlayDraw==''){
+				$('#AddRobotUserMsg').html('请输入正确的最大游戏局数');
+				return false;
+			}
+
+			if(isNaN(MinReposeTime) || MinReposeTime==''){
+				$('#AddRobotUserMsg').html('请输入正确的最小游戏时间');
+				return false;
+			}
+			if(isNaN(MaxReposeTime) || MaxReposeTime==''){
+				$('#AddRobotUserMsg').html('请输入正确的最大游戏时间');
+				return false;
+			}
+			setting.Params='RoomID='+RoomID+'&ServiceTime='+ServiceTime+'&MinTakeScore='+MinTakeScore+'&MaxTakeScore='+MaxTakeScore+'&MinPlayDraw='+MinPlayDraw+'&MaxPlayDraw='+MaxPlayDraw+'&MinReposeTime='+MinReposeTime+'&MaxReposeTime='+MaxReposeTime+'&ServiceGender='+ServiceGender;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddRobotUser');
+		});	
+		/*关闭弹出层*/
+		$('.btnCancel').click(function(){
+			main.CloseMsgBox(false,TabTag);
+		});
+	}
+};
+{/literal}
+var ClassName='{$ClassName}';
+{literal}
+if(ClassName=='ServerGame'){
+	$('#wwwPort').removeClass('hide');
+	$('#LANServerIP').attr('disabled','disabled');
+}
+{/literal}
+</script>

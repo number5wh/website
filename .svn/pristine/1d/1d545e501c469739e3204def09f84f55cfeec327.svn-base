@@ -1,0 +1,16 @@
+<div id="myWindow" class="sysWin" style="width:auto;">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>{$windowTitle}
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseWin('myWindow');"/></a>
+		<br class="clear" />
+	</h2>
+	<div class="bdy" style="padding:10px 10px 0 10px;">
+		{$windowContent}
+	</div>
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<div class="clear"></div>
+	</div>	
+</div>

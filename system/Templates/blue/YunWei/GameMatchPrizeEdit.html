@@ -1,0 +1,250 @@
+<div class="sysWin">
+<h2 class="f2 white">
+<div class="tLeft f1 left"></div>
+比赛奖品设置
+<div class="tRight f1 right"></div>
+<a title="关闭" class="btnCls f3 right" href="javascript:void(0);"
+	onclick="main.CloseMsgBox(false,'');window.location.reload();" /></a> <br
+	class="clear" />
+</h2>
+
+<div class="bdy">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="17%" align="right">奖品等级:</td>
+		<td width="83%"><input id="matchTypeID" type="hidden"
+			value="{$MatchTypeID}" /> <input id="level" type="hidden"
+			value="{$Level}" /> <span id="">{$LevelName}</span></td>
+	</tr>
+	<tr>
+		<td align="right">奖品发放名次:</td>
+		<td><input id="rkBegin" type="text" maxlength="4" style="width: 30px;"
+			value="{$MatchLevelInfo.RankStart}" />&nbsp;— <input id="rkEnd"
+			type="text" maxlength="4" style="width: 30px;"
+			value="{$MatchLevelInfo.RankEnd}" /> <span class="orange">起始名次必须大于等于结束名次</span>
+		</td>
+	</tr>
+	<tr>
+		<td  rowspan="2" align="right">选择奖品:</td>
+		<td id="Col_Class"><select name="TypeID" id="TypeID"
+			onchange="gift.GetSpClass();">
+			{foreach from=$SpTypeList item=Sp}
+			<option value="{$Sp.TypeID}">{$Sp.TypeName}</option>
+			{/foreach}
+		</select> <select name="SubClassID" id="SubClassID"
+			onchange="gift.GetSpPublicList();" style="width: 90px">
+		</select></td>
+	</tr>
+	<tr>
+    	<td bgcolor="#FFFFFF" id="SpList">    </td>
+    </tr>
+	<tr>
+		<td align="right">已选择的奖品:</td>
+		<td id="GiftSp">
+		{foreach from=$GiftSpList item=sp}
+		<div id="Sp_{$sp.SpID}" class="left"
+			style="line-height: 22px; margin-right: 15px; margin-bottom: 3px">
+		<span class="left">{$sp.GoodsName}</span> <input type="text"
+			id="Num_{$sp.SpID}" class="txt left" size="5" maxlength="5"
+			value="{$sp.Number}" /> <a href="javascript:deleteSelected({$sp.SpID})"
+			title="点击移除" class="no icon left" style="margin-top: 5px"></a></div>
+		{/foreach}</td>
+	</tr>
+	<tr>
+		<td align="right">积分发放名次:</td>
+		<td><input id="srBegin" type="text" maxlength="4" style="width: 30px;"
+			value="{$MatchLevelInfo.ScoreRankStart}" />&nbsp;— <input id="srEnd"
+			type="text" maxlength="4" style="width: 30px;"
+			value="{$MatchLevelInfo.ScoreRankEnd}" /> <span class="orange">起始名次必须大于等于结束名次</span>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">积分数量:</td>
+		<td><input id="sNumber" type="text" maxlength="10"
+			value="{$MatchLevelInfo.ScoreNumber}" /></td>
+	</tr>
+	<tr>
+		<td align="right">实物奖品:</td>
+		<td>		
+		<input id="prizeName" type="text" maxlength="16"
+			value="{$MatchLevelInfo.PrizeName}" /><span class="orange">填写实物奖品名称</span></td>
+	</tr>
+	<tr>
+	<td align="right">奖品类型:</td>
+	<td><select id="prizeType">
+		{foreach from=$PrizeTypeList item=list key=index}
+		<option value="{$index}" {if $index==$MatchLevelInfo.PrizeType}selected="selected"{/if}>{$list}</option>
+		{/foreach}
+		</select></td>
+	</tr>
+</table>
+</div>
+
+<div class="bot f2">
+<div class="botLeft f1 left"></div>
+<div class="botRight f1 right"></div>
+<input type="button" class="btn f2 right" value="取 消"
+	onclick="main.CloseMsgBox(false,'');window.location.reload();" /> <input
+	type="button" class="btn f2 right" value="提 交" id="btnAddMatchPrize" />
+<div class="orange right" id="AddMatchPrizeMsg"></div>
+<br class="clear" />
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+	$('#btnAddMatchPrize').click(function(){
+{/literal}
+			setting.Url='{au d=YunWei c=GameMatch a=addGameMatchPrize}';			
+{literal}
+			var SpIDList = '';
+			var spNumList = '';
+			var matchTypeID = $.trim($('#matchTypeID').val());
+			var level = $.trim($('#level').val());
+			var rkBegin = $.trim($('#rkBegin').val());
+			var rkEnd =  $.trim($('#rkEnd').val());
+			var srBegin = $.trim($('#srBegin').val());
+			var srEnd = $.trim($('#srEnd').val());
+			var sNumber = $.trim($('#sNumber').val());
+			var prizeType = $('#prizeType').val();
+			var prizeName = $.trim($('#prizeName').val());
+
+			var arrSpID = Array();
+			$('#GiftSp div').each(function(){
+				var arrID = Array();		
+				arrID = $(this).attr('id').split('_');
+				if(arrID.length==2){
+					arrSpID.push(arrID[1]);
+				}
+			});
+			SpIDList = arrSpID.join(',');
+			
+			var arrNum = Array();
+			$('#GiftSp input').each(function(){
+				var num = $.trim($(this).val());
+				if(num != '' && !isNaN(num) && num>0){
+					arrNum.push(num);
+				}
+				
+			});
+			spNumList=arrNum.join(','); 
+			
+			var param = 'matchTypeID='+matchTypeID+'&level='+level+'&prizeType='+prizeType;
+			if(rkBegin != '' || rkEnd != '')
+			{
+				rkBegin = parseInt(rkBegin,10);
+				rkEnd = parseInt(rkEnd,10);
+				if(rkBegin == '' || isNaN(rkBegin) || rkBegin <= 0){					
+					$('#AddMatchPrizeMsg').html('请填正确的奖品发放起始名次');
+					$('#rkBegin').focus();
+					return false;
+				}else if(rkEnd == '' || isNaN(rkEnd) || rkEnd < rkBegin){
+					$('#AddMatchPrizeMsg').html('请填正确的奖品发放截止名次');
+					$('#rkEnd').focus();
+					return false;
+				}else{
+					param += '&rkBegin='+rkBegin+'&rkEnd='+rkEnd;
+				}
+				
+				if(SpIDList==''){
+					$('#AddMatchPrizeMsg').html('请选择奖品');
+					return false;
+				}else{	
+					param += '&SpIDList='+SpIDList;
+				}
+				
+				if(spNumList=='' || arrSpID.length != arrNum.length){
+					$('#AddMatchPrizeMsg').html('请填写已选择奖品的数量');
+					return false;
+				}else{
+					param += '&spNumList='+spNumList;
+				}
+			}
+			if(srBegin != '' || srEnd != '')
+			{
+				srBegin = parseInt(srBegin,10);
+				srEnd = parseInt(srEnd,10);
+				if(srBegin == '' || isNaN(srBegin) || srBegin<=0){					
+					$('#AddMatchPrizeMsg').html('请填正确的积分发放起始名次');
+					$('#srBegin').focus();
+					return false;
+				}else if(srEnd == '' || isNaN(srEnd) || srEnd<srBegin){
+					$('#AddMatchPrizeMsg').html('请填正确的积分发放截止名次');
+					$('#srEnd').focus();
+					return false;
+				}else{
+					param += '&srBegin='+srBegin+'&srEnd='+srEnd;
+				}
+				
+				if(sNumber=='' || isNaN(sNumber) || sNumber<=0){
+					$('#AddMatchPrizeMsg').html('请填正确的积分发放数量');
+					$('#sNumber').focus();
+					return false;
+				}else{
+					param += '&sNumber='+sNumber;
+				}
+			}
+			if(prizeName != '' && prizeName=='0'){
+				$('#AddMatchPrizeMsg').html('请填正确的实物奖品名称');
+				$('#prizeName').focus();
+				return false;
+			}else if(prizeName != '')
+			{
+				param += '&prizeName='+prizeName;
+			} 
+						
+			ajax.RequestCallBack(setting.Url, param, function(result) {
+				if(result==0){
+					$('#AddMatchPrizeMsg').html('比赛奖品设置成功');
+					$('#MatchName').val('');
+				}else if(result == -99){
+					$('#AddMatchPrizeMsg').html('参数错误，请重试');
+				}else{
+					$('#AddMatchPrizeMsg').html('比赛奖品设置失败，请重试');
+				}
+			});
+		});
+	function deleteSelected(SpID){
+		$('#GiftSp #Sp_'+SpID).remove();
+	}
+var gift={		
+		/*读取第三级类别*/
+		GetThirdClass:function(){
+	{/literal}
+			setting.Url = '{au d=YunYing c=GiftPackage a=getClassList}';		
+			setting.Params = 'ClassID='+$('#SubClassID').val();
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.GetThirdClass');
+	{literal}	
+		},
+		/*道具分类*/
+		GetSpClass:function(){
+	{/literal}
+			setting.Url = '{au d=YunYing c=GiftPackage a=getStagePropertyClass}';		
+			setting.Params = 'TypeID='+$('#TypeID').val();
+			ajax.Request(setting.Url,setting.Params,'callback.GetStagePropertyClass');
+	{literal}			
+		},
+		/*读取道具或事件*/
+		GetSpPublicList:function(){
+	{/literal}
+			var ClassID = 0;
+			setting.Url = '{au d=YunYing c=GiftPackage a=getSpPublicList}';
+			if(typeof($('#ThirdClassID').val())!='undefined')
+				ClassID = $('#ThirdClassID').val();
+			else
+				ClassID = $('#SubClassID').val();
+			setting.Params = 'TypeID='+$('#TypeID').val()+'&ClassID='+ClassID;
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.GetSpPublicList');
+	{literal}			
+		},
+		/*选择道具*/
+		GetCurSp:function(TypeID,SpID,SpName){
+			if($('#GiftSp #Sp_'+SpID).html()!=null) return;
+			$('#GiftSp').append('<div id="Sp_'+SpID+'" class="left" style="line-height:22px; margin-right:15px;margin-bottom:3px"><span class="left">'+SpName+'</span><input type="text" id="Num_'+SpID+'" class="txt left" size="5" maxlength="5" /><a href="javascript:deleteSelected('+SpID+')" title="点击移除" class="no icon left" style="margin-top:5px"></a></div>');
+			
+		}
+}
+$(function(){
+	gift.GetSpClass();
+});
+{/literal}
+</script>

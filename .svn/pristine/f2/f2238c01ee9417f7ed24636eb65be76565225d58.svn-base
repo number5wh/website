@@ -1,0 +1,72 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="12%" bgcolor="#FFFFFF">玩家编号</th>
+    <th width="10%" bgcolor="#FFFFFF">角色昵称</th>
+    <th width="10%" bgcolor="#FFFFFF">玩家性质</th>
+	<th width="20%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$PlayerList item=U}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$U.LoginID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$U.LoginName}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $U.MasterRight==1}jijiji{elseif $U.MasterRight==32}管理员{/if}</td>   
+    <td align="center" bgcolor="#FFFFFF">
+		<a href="javascript:void(0)" class="ResetUser" id="{$U.RID}" Passport="{$U.Passport}" MasterRight="{$U.MasterRight}" title="{$U.LoginName}">修改</a>
+        <a href="javascript:void(0)" class="DelUser" id="{$U.RID}" Passport="{$U.Passport}" MasterRight="{$U.MasterRight}" title="{$U.LoginName}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $PlayerList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	/*重置密码*/
+	$('.ResetUser').click(function(){
+{/literal}
+		setting.Url = '{au d=YunWei c=Player a=resetPlayer}';
+		setting.Params = '&ID='+$(this).attr('id')+'&Passport='+$(this).attr('Passport')+'&MasterRight='+$(this).attr('MasterRight');
+		window.parent.main.AddTab($(this).attr('title'),'UserP'+$(this).attr('id'),setting.Url+setting.Params);
+		/*ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackResetSysUserPwd);*/
+{literal}
+	});	
+	
+	/*删除*/
+	$('.DelUser').click(function(){
+		if(window.confirm('确定删除?')){
+{/literal}
+			setting.Url = '{au d=YunWei c=Player a=deletePlayer}';
+			setting.Params = '&ID='+$(this).attr('id')+'&Passport='+$(this).attr('Passport')+'&MasterRight='+$(this).attr('MasterRight');
+			ajax.RequestJsonCallBack(setting.Url,setting.Params,SysUser.CallBackDeletePlayer);
+{literal}
+		}
+	});	
+});
+var SysUser={
+	/*重置密码后的回调函数*/
+	CallBackResetSysUserPwd:function(data){
+		if(data.iResult==0)
+			$('#Msg_'+data.ID).html('密码重置成功');
+		else
+			$('#Msg_'+data.ID).html('密码重置失败');
+	},
+	/*删除用户后的回调函数*/
+	CallBackDeletePlayer:function(data){
+		if(data.iResult==0){
+			alert('系统玩家删除成功');
+			page.GetPage($('.txtPage').val(),"callback.GetPagerSysAdminList");
+		}
+		else
+			alert('系统玩家删除失败');
+	}
+};
+{/literal}
+</script>

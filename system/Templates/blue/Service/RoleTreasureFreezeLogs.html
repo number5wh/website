@@ -1,0 +1,33 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+    <th width="15%">操作时间</th>
+    <th width="10%">金币数量</th>
+	<!--th width="10%">永凡币数量</th-->
+    <th width="10%">案件编号</th> 
+    <th width="10%">状态</th> 
+    <th width="10%">返还给玩家</th> 
+    <th width="8%">操作人</th> 
+    <th width="27%">备注</th>   
+  </tr>
+  {foreach from=$TreasureList item=T}
+  <tr class="bg_color">
+  	<td>{$T.AddTime}</td>
+    <td>{$T.iMoney}</td>
+	<!--td>{$T.iFwMoney}</td-->
+    <td>{$T.CaseSerial}</td>
+    <td>{$T.StepName}</td>
+    <td>{$T.LoginName}</td>
+    <td>{$T.SysUserName}</td>
+    <td>{$T.Remarks}</td>
+  </tr> 
+  {foreachelse}
+   <tr class="bg_color">
+  	<td colspan="8">很抱歉，没有您要查询的信息~</td>
+   </tr>
+  {/foreach}
+  {if $TreasureList}
+  <tr class="bg_color">
+    <td id="RoleLogsPages" colspan="8">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

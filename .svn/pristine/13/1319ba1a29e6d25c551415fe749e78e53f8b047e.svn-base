@@ -1,0 +1,65 @@
+<div class="sysWin">
+    <h2 class="f2 white">
+        <div class="tLeft f1 left"></div>编辑玩家信息
+        <div class="tRight f1 right"></div>
+        <a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'HappyBeanlist1')"/></a>
+        <br class="clear" />
+    </h2>
+
+    <div class="bdy">
+        <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >玩家编号:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" readonly value="{$Info.roleid}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >玩家昵称:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="nickname" id="nickname" value="{$Info.nickname}"></td>
+            </tr>
+            <tr>
+                <td width="17%" align="right" bgcolor="#FFFFFF" >金额总和:</td>
+                <td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="totalmoney" id="totalmoney" value="{$Info.totalmoney}"></td>
+            </tr>
+
+        </table>
+        <div class="bot f2">
+
+            <div class="botLeft f1 left"></div>
+
+            <div class="botRight f1 right"></div>
+            <input type="hidden" name="RoleId" id="RoleId" value="{$Info.roleid}" />
+            <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'HappyBeanlist1')"/>
+            <input type="button" class="btn f2 right" value="确 定" id="btnAddAd" />
+
+            <div class="orange right" id="ResultMsg"></div>
+            <br class="clear" />
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        {literal}
+        var ctrlEdit={
+            BindEvent:function(){
+                $('#btnAddAd').click(function(){
+        {/literal}
+                setting.Url='{au d=Service c=HappyBeanlist a=doEdit}';
+        {literal}
+                        $('#ResultMsg').next().html('');
+                        var nickname = $('#nickname').val();
+                        var roleid   = $('#RoleId').val();
+                        var totalmoney   = $('#totalmoney').val();
+
+
+                        if(nickname=='' || roleid == ''||totalmoney == ''){
+                            $('#ResultMsg').html('*参数异常');
+                            return false;
+                        }
+
+                        setting.Params = 'nickname='+nickname+'&roleid='+roleid+'&totalmoney='+totalmoney;
+                        ajax.RequestUrl(setting.Url,setting.Params,'callback.EditBankMoney');
+                    });
+            }
+        }
+        {/literal}
+
+    </script>

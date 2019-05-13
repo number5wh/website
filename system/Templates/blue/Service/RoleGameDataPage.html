@@ -1,0 +1,79 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+  	<th width="5%">K图</th>
+    <th width="7%">游戏ID</th>
+    <th width="7%">游戏名称</th>
+    <th width="7%">数据类型</th>
+    <th width="9%">当前金币/积分</th>  
+    <th width="7%">赢（次）</th>  
+    <th width="7%">输（次）</th>  
+    <th width="7%">和（次）</th>  
+    <th width="7%">逃跑（次）</th>  
+    <th width="7%">胜率</th>  
+    <th width="7%">逃跑率</th>   
+    <th width="9%">成绩汇总</th>
+    <th width="10%">上次签到时间</th>
+    <th width="7%">连签次数</th>
+    <th width="7%">成绩明细</th>   
+    <th width="7%">游戏记录</th>
+  </tr>
+  {foreach from=$BillDetailList item=bill}
+  <tr class="bg_color">
+    <td><a href="javascript:void(0)" class="K blue" KindID="{$bill.KindID}" RoleID="{$bill.RoleID}">查看</a></td>
+    <td>{$bill.KindID}</td>
+    <td>{$bill.KindName}</td>
+    <td>{if $bill.RoomType==1}积分{elseif $bill.RoomType==2}金币{/if}</td>
+    <td>{if $bill.RoomType==1}{$bill.Score}{elseif $bill.RoomType==2}{$bill.Money}{/if}</td>
+    <td>{$bill.WinCount}</td>
+    <td>{$bill.LostCount}</td>
+    <td>{$bill.DrawCount}</td>
+    <td>{$bill.FleeCount}</td>
+    <td>{$bill.Win}%</td>
+    <td>{$bill.Flee}%</td>
+    <td>{if $bill.RoomType==1}{$bill.TotalScore}{elseif $bill.RoomType==2}{$bill.TotalMoney}{/if}</td>
+    <td>{$bill.LastSignTime}</td>
+    <td>{$bill.ContinuousSign}</td>
+    <td><a href="javascript:void(0)" class="ScoreDetail" title="{$bill.KindName}成绩明细" KindID="{$bill.KindID}" RoleID="{$bill.RoleID}" RoomType="{$bill.RoomType}">查看明细</a></td>
+    <td><a href="javascript:void(0)" class="GameDetail" title="{$bill.KindName}游戏记录" KindID="{$bill.KindID}" RoleID="{$bill.RoleID}" RoomType="{$bill.RoomType}">查看明细</a></td>
+  </tr> 
+  {foreachelse} 
+  <tr class="bg_color">
+    <td colspan="20">很抱歉，没有您要查询的信息~</td>    
+  </tr>  
+  {/foreach} 
+  {if $BillDetailList}
+  <tr class="bg_color">
+    <td id="RGDSP" colspan="20">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
+<script type="text/javascript" language="javascript">
+{literal}
+var rgdp={
+	GetUserGameDataDetail:function(){
+		$('.ScoreDetail').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getUserGameDataDetail}';
+			setting.Params = '&RoleID='+$(this).attr('RoleID')+'&KindID='+$(this).attr('KindID')+'&RoomType='+$(this).attr('RoomType');
+			window.parent.main.AddTab($(this).attr('title'),$(this).attr('RoleID')+'ScoreDetail'+$(this).attr('KindID'),setting.Url+setting.Params);
+{literal}	
+		});
+		$('.GameDetail').click(function(){
+{/literal}
+			setting.Url='{au d=Service c=ServiceRole a=getUserGameDetail}';
+			setting.Params = '&RoleID='+$(this).attr('RoleID')+'&KindID='+$(this).attr('KindID')+'&RoomType='+$(this).attr('RoomType');
+			window.parent.main.AddTab($(this).attr('title'),$(this).attr('RoleID')+'GameDetail'+$(this).attr('KindID'),setting.Url+setting.Params);
+{literal}	
+		});
+		$('.K').click(function(){
+{/literal}
+			var RoleBaseInfoLoginID = $('#RoleBaseInfoLoginID').html();
+			setting.Url='{au d=YunYing c=GameRate a=showLineCharts}';
+			setting.Params = '&RoleID='+$(this).attr('RoleID')+'&KindID='+$(this).attr('KindID')+'&LoginID='+RoleBaseInfoLoginID+'&Date={$Date}';
+			window.parent.main.AddTab(RoleBaseInfoLoginID,'GameRate'+$(this).attr('RoleID')+$(this).attr('KindID'),setting.Url+setting.Params);
+{literal}	
+		});
+	}
+};
+{/literal}
+</script>

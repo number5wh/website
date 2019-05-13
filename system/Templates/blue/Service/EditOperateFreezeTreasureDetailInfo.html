@@ -1,0 +1,159 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" id="EditOperateLockDetailInfo" class="tbList txt_M">
+	<tr class="bg_color">
+		<th width="10%">金币冻结时间</th>
+		<th width="40%">案件编号</th>
+		<th width="25%">冻结备注</th>
+		<th width="7%">冻结金额</th>
+		<th width="5%">冻结客服</th>
+		<th width="8%">可返还余额</th>
+		<th width="8%">返还</th>
+		<th width="5%">其他</th>
+	</tr>
+{foreach from="$FreezeInfoList" item=v}
+	<tr class="bg_color">
+		<td>{$v.AddTime}</td>
+		<td id="tdCaseSerial_{$v.FID}">
+			{$v.CaseSerial} {if $v.iNumber}<input type="button" onclick="editOperate.addCaseSerial({$v.FID});" value="添加" />
+			<div id="addCaseserialDiv_{$v.FID}" class="addCaseserialDiv"></div>{/if}
+		</td>
+		<td id="tdReason_{$v.FID}">{if $v.iNumber}<textarea id="Reason_{$v.FID}">{$v.Remarks}</textarea><input type="button" onclick="editOperate.updateRemarks({$v.FID}, '{$v.Remarks}')" value="保存" />{else}{$v.Remarks}{/if}</td>		
+		<td>{$v.iNumber+$v.ReturnNumber}</td>
+		<td>{$v.SysUserName}</td>
+		<td>{$v.iNumber}</td>
+        <td>{if $v.iNumber>0}<a class="blue" href="javascript:editOperate.getApplicationPage({$v.FID},{$v.iNumber},{$v.LoginID},'{$v.LoginName}');">申请返还</a>{/if}</td>
+        <td>{if $v.ReturnNumber>0}<a class="blue" href="javascript:editOperate.getApplicationList({$v.FID})">申返记录</a>{/if}</td>
+	</tr>
+{foreachelse}
+	<tr class="bg_color">
+		<td colspan="7">很抱歉，没有您要查询的信息~</td>
+	</tr>
+{/foreach}
+{if $FreezeInfoList}	
+	<tr class="bg_color">
+		<td id="EditOperatePages" colspan="7">{include file="$skin/Inc/Page.inc.html"}</td>
+	</tr>
+{/if}
+</table>
+<input type="hidden" id="EditOperateRoleID" value="{$RoleID}" />
+<script type="text/javascript">
+{literal}
+function getCaseDetailPage(id) {
+	var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+	var title = '案件'+id;
+	var iNum = 'CaseInfo'+id;
+	var param = '&id='+id+'&flag=1';
+	window.parent.main.AddTab(title,iNum,url+param);
+}
+var editOperate={
+		getCaseDetailPage:function(id,flag) {
+			var url = '/?d=Service&c=ServiceCase&a=caseHandle';
+			var title = '案件'+id;
+			var iNum = 'CaseInfo'+id;
+			var param = '&id='+id;
+			if(flag){
+				param = param +'&flag=1';
+			}
+			window.parent.main.AddTab(title,iNum,url+param);
+		},
+		showImg:function(fid,caseSerial){
+			$("#Img_"+fid+"_"+caseSerial).css({visibility:'visible'});
+		},
+		hidImg:function(fid,caseSerial){
+			$("#Img_"+fid+"_"+caseSerial).css({visibility:'hidden'});
+		},
+		updateRemarks:function(fid, remarks){
+			var newRemark = $.trim($("#Reason_"+fid).val());
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(newRemark !='' && newRemark != remarks){
+				var Param = "fid="+fid+"&Reason="+newRemark+"&roleID="+roleID+"&opType=2";
+				ajax.Request('/?d=Service&c=ServiceRole&a=updateCaseOperateUserRemarks', Param,'callback.GetUpdateEditOperateResult');
+			}
+		},
+		addCaseSerial:function(fid){
+			var sHtml = $("#tdCaseSerial_"+fid).html();
+			$(".addCaseserialDiv").each(function(){
+				$(this).empty();
+			});
+			var addShtml = '<input type="text" class="txt" id="iCaseSerial" value="请输入案件编号" onfocus="editOperate.HideDefaultTips(this);" onblur="editOperate.ShowDefaultTips(this)" />';
+			addShtml += '<span id="Msg" class="orange"></span>';
+			addShtml += '<input type="hidden" id="fid" value="'+fid+'" />';
+			addShtml += '<input type="hidden" id="chkResult" value="0" /><br/><br/>';
+			addShtml += '<input type="button" class="bnStyle f2" onclick="editOperate.ApplyInfo();" id="applyCaseserialBtn" value="提交" /> <input type="button" class="bnStyle f2" onclick="editOperate.hidCaseSerial(this);" value="取消" />';
+			$("#addCaseserialDiv_"+fid).html(addShtml);
+		},
+		hidCaseSerial:function(obj){
+			$(obj).parent().empty();
+		},
+		delCaseSerial:function(fid,caseSerial){
+			if(confirm("确定删除案件编号"+caseSerial+"?")){
+				$.post('/?d=Service&c=ServiceRole&a=delCaseSerial', 'fid='+fid+"&iCaseSerial="+caseSerial,function(data){
+					if(data == 1){
+						$("#caseDiv_"+fid+"_"+caseSerial).css({display:'none'});
+					}
+				});
+			}
+		},
+		HideDefaultTips:function(obj){
+			var val = $.trim($(obj).val());			
+			if(val=='请输入案件编号')
+				$(obj).val('');			
+		},
+		ShowDefaultTips:function(obj){
+			var caseSerial = $.trim($(obj).val());
+			var tips='请输入案件编号';
+			if(caseSerial == ''){
+				$(obj).val(tips);
+				return false;
+			}
+			if(caseSerial){
+				$.post("/?d=Service&c=ServiceRole&a=checkCaseSerial", {iCaseSerial:caseSerial}, function(data){
+					if(data == 1){
+						$("#Msg").html('<img src="images/common/check.gif" />');
+						$("#chkResult").val(1);
+					}else{
+						$("#Msg").html("案件编号匹配失败");
+						$("#chkResult").val(0);
+					}
+				})
+			}
+		},
+		ApplyInfo:function(){
+			var chkVal = $.trim($("#chkResult").val());
+			var fid = $.trim($("#fid").val());
+			var caseSerial = $.trim($("#iCaseSerial").val()); 
+			var roleID = $.trim($("#EditOperateRoleID").val()); 
+			if(chkVal == 1 && fid && caseSerial){
+				$.post("/?d=Service&c=ServiceRole&a=insertCaseSerial", {fid:fid, iCaseSerial:caseSerial, roleID:roleID, opType:2}, function(data){
+					if(data == 1){
+						$("#tdCaseSerial_"+fid).prepend('<div id="caseDiv_'+fid+'_'+caseSerial+'" onmouseout="editOperate.hidImg('+fid+','+caseSerial+');" onmouseover="editOperate.showImg('+fid+','+caseSerial+');" style="width:110px;"><a class="hand blue" href="javascript:editOperate.getCaseDetailPage('+caseSerial+',1);">'+caseSerial+'</a><img id="Img_'+fid+'_'+caseSerial+'" class="close_btn" onclick="editOperate.delCaseSerial('+fid+','+caseSerial+');" src="/images/common/del.gif"></div>');
+						editOperate.hidCaseSerial("#applyCaseserialBtn");
+					}else{
+						$("#Msg").html("案件编号插入失败");					
+					}
+				})
+			}
+		},
+		getApplicationList:function(fid){
+			var param = '&fid='+fid;		
+			ajax.RequestCallBack('/?d=Service&c=ServiceRole&a=getApplyWealthBackList', param,function(data) {
+				if(data == -1){
+					alert('参数异常');
+				}else{
+					main.OpenBox(data);
+				}
+			});
+		},
+        getApplicationPage: function(id,num,loginId,loginName) {
+            var param = '&id='+id+'&num='+num+'&loginId='+loginId+'&loginName='+encodeURIComponent(loginName);
+
+            ajax.RequestCallBack('/?d=Service&c=ServiceWealth&a=getApplicationPageConst', param,function(data) {
+                if(data == -1){
+                    alert('参数异常');
+                }else{
+                    main.OpenBox(data);
+                }
+            });
+        }
+}
+{/literal}
+</script>

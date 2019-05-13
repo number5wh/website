@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+</head>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('.btnSubmit').click(function(){
+		var MatchTypeID = $(this).attr('id');		
+		var MaxNumber = $('#MaxNumber').val();
+		var StopNumber = $('#StopNumber').val();
+		var TopNumber = $('#TopNumber').val();
+		var BaseScore1 = $('#BaseScore1').val();
+		var BaseBumber1 = $('#BaseBumber1').val();		
+		var BaseBumberIncrease = $('#BaseBumberIncrease').val();		
+		var GameOverNumber = $('#GameOverNumber').val();
+		var BaseScore2 = $('#BaseScore2').val();
+		var BaseBumber2 = $('#BaseBumber2').val();		
+		var GameRounds = $('#GameRounds').val();
+		var GameTimes = $('#GameTimes').val();
+		var GameTitle = $('#GameTitle').val();
+		var PageUrl = $('#PageUrl').val();
+		var MatchRule1 = $('#MatchRule1').val();
+		var MatchRule2 = $('#MatchRule2').val();
+		setting.Params='MatchTypeID='+MatchTypeID+'&MaxNumber='+MaxNumber+'&StopNumber='+StopNumber+
+					   '&TopNumber='+TopNumber+'&BaseScore1='+BaseScore1+'&BaseBumber1='+BaseBumber1+'&BaseBumberIncrease='+BaseBumberIncrease+
+					   '&GameOverNumber='+GameOverNumber+'&BaseScore2='+BaseScore2+'&BaseBumber2='+BaseBumber2+'&GameRounds='+GameRounds+
+					   '&GameTimes='+GameTimes+'&GameTitle='+encodeURIComponent(GameTitle)+'&PageUrl='+PageUrl+'&MatchRule1='+encodeURIComponent(MatchRule1)+
+					   '&MatchRule2='+encodeURIComponent(MatchRule2);
+{/literal}
+		setting.Url='{au d=YunWei c=GameMatch a=addGameMatch1}';
+		ajax.RequestCallBack(setting.Url,setting.Params,Match.CallBackAddGameMatch);
+{literal}
+	})
+});
+
+var Match={
+	CallBackAddGameMatch:function(data){
+		if(data==0)
+			$('#ResultMsg').html('规则设置成功');
+		else
+			$('#ResultMsg').html('规则设置失败');
+	}
+};
+{/literal}
+</script>
+<body>
+<input type="button" class="btnSubmit btn f2" value="设置规则" id="{$Match.MatchTypeID}" /><span class="orange" id="ResultMsg"></span>
+<table width="100%" border="0" cellspacing="1" cellpadding="1" style="margin:0px" >
+  <tr>
+	<th align="left" bgcolor="#FFFFFF" colspan="6">&nbsp;基础设置</th>		
+  </tr>	
+  <tr>
+	<td align="right" bgcolor="#FFFFFF">比赛标题:</td>
+	<td bgcolor="#FFFFFF"><input type="text" class="txt" id="GameTitle" value="{$Match.GameTitle}" /></td>				
+	<td align="right" bgcolor="#FFFFFF">游戏规则介绍:</td>
+	<td bgcolor="#FFFFFF" colspan="3">
+		<input type="text" class="txt" id="PageUrl" value="{$Match.PageUrl}" />
+	</td>
+  </tr>	      
+  <tr>
+	<td width="16%" align="right" bgcolor="#FFFFFF">单房间开赛上限人数:</td>
+	<td width="21%" bgcolor="#FFFFFF" id="DropSp"><input type="text" class="txt" id="MaxNumber" size="10" maxlength="4" value="{$Match.MaxNumber}" /></td>
+
+	<td width="16%" align="right" bgcolor="#FFFFFF">淘汰截止人数:</td>
+	<td width="17%" bgcolor="#FFFFFF" id="DropSp"><input type="text" class="txt" id="StopNumber" size="10" maxlength="4" value="{$Match.StopNumber}" /></td>
+
+	<td width="12%" align="right" bgcolor="#FFFFFF">晋级人数:</td>
+	<td width="18%" bgcolor="#FFFFFF" id="DropSp"><input type="text" class="txt" id="TopNumber" size="10" maxlength="4" value="{$Match.TopNumber}" /></td>
+  </tr>			  
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="1" style="margin-top:5px" >
+  <tr>
+	<th align="left" bgcolor="#FFFFFF" colspan="8">&nbsp;初赛设置</th>		
+  </tr>	
+  <tr>
+	<td width="10%" align="right" bgcolor="#FFFFFF">基础底分:</td>
+	<td width="13%" bgcolor="#FFFFFF"><input type="text" class="txt" id="BaseScore1" size="10" value="{$Match.BaseScore1}" /></td>				
+	<td width="7%" align="right" bgcolor="#FFFFFF">基数:</td>
+	<td width="11%" bgcolor="#FFFFFF"><input type="text" class="txt" id="BaseBumber1" size="10" value="{$Match.BaseBumber1}" /></td>
+	<td width="17%" align="right" bgcolor="#FFFFFF">基数增长速率:</td>
+	<td width="12%" bgcolor="#FFFFFF"><input type="text" class="txt" id="BaseBumberIncrease" size="10" value="{$Match.BaseBumberIncrease}" /></td>
+	<td width="17%" align="right" bgcolor="#FFFFFF">出局分数倍率:</td>
+	<td width="13%" bgcolor="#FFFFFF"><input type="text" class="txt" id="GameOverNumber" size="10" value="{$Match.GameOverNumber}" /></td>
+  </tr>	
+  <tr>
+  	<td align="right" bgcolor="#FFFFFF">初赛规则描述:</td>
+	<td colspan="7" bgcolor="#FFFFFF"><textarea cols="50" rows="5" id="MatchRule1">{$Match.MatchRule1}</textarea></td>
+  </tr>	  	  
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="1" style="margin-top:5px" >
+  <tr>
+	<th align="left" bgcolor="#FFFFFF" colspan="8">&nbsp;复赛设置</th>		
+  </tr>	
+  <tr>
+	<td width="10%" align="right" bgcolor="#FFFFFF">基础底分:</td>
+	<td width="13%" bgcolor="#FFFFFF"><input type="text" class="txt" id="BaseScore2" size="10" value="{$Match.BaseScore2}" /></td>				
+	<td width="7%" align="right" bgcolor="#FFFFFF">基数:</td>
+	<td width="11%" bgcolor="#FFFFFF"><input type="text" class="txt" id="BaseBumber2" size="10" value="{$Match.BaseBumber2}" /></td>
+	<td width="17%" align="right" bgcolor="#FFFFFF">总轮数(打几轮):</td>
+	<td width="12%" bgcolor="#FFFFFF"><input type="text" class="txt" id="GameRounds" size="10" value="{$Match.GameRounds}" /></td>
+	<td width="17%" align="right" bgcolor="#FFFFFF">每轮局数:</td>
+	<td width="13%" bgcolor="#FFFFFF"><input type="text" class="txt" id="GameTimes" size="10" value="{$Match.GameTimes}" /></td>
+  </tr>		  
+  <tr>
+  	<td align="right" bgcolor="#FFFFFF">复赛规则描述:</td>
+	<td colspan="7" bgcolor="#FFFFFF"><textarea cols="50" rows="5" id="MatchRule2">{$Match.MatchRule2}</textarea></td>
+  </tr>		  
+</table>
+
+				
+</body>
+</html>

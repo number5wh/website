@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript">
+{literal}
+function addServerEvent(id){	
+	var url = '/?d=Service&c=ServiceManager&a=getServerEventEditPage';
+	ajax.RequestCallBack(url, 'id='+id,function(data) {
+		if(data!=''){
+			main.OpenBox(data);
+		}
+	});
+}
+
+function refreash(){
+	window.location.reload();
+}
+{/literal}
+</script>
+</head>
+<body>
+
+<div id="TreasureLockedDetail">	
+	<div class="searchNavBar">
+		<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="refreash()">
+			<div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+		</div>
+	    <p>当前服务事件：<input type="button" value="新增服务事件" class="bnStyle f2" style="margin-left:500px;" onClick="addServerEvent(0);" /></p>        
+	</div>
+	<div id="TreasureLockedList">
+    	{include file="$skin/Service/ServerEventListPage.html"}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<div class="sysWin">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>设置广告位
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(true,'AdPos')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">广告位类型:</td>
+		<td bgcolor="#FFFFFF">
+			<select id="PositionTypeID">
+			{section name=n loop=$PositionTypeList}
+        	<option value="{$smarty.section.n.iteration}" {if $smarty.section.n.iteration==$adp.PositionType}selected{/if}>{$PositionTypeList[$smarty.section.n.iteration]}</option>
+        	{/section}
+			</select>
+		</td>
+	  </tr>
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">广告位名称:</td>
+		<td width="83%" bgcolor="#FFFFFF"><input type="text" class="txt" name="PositionName" id="PositionName" value="{$adp.PositionName}"></td>
+	  </tr>
+	  <tr>
+		<td width="17%" align="right" bgcolor="#FFFFFF">广告位ID:</td>
+		<td width="83%" bgcolor="#FFFFFF">
+		<input name="PositionID" id="PositionID" class="txt" type="text" value="{$adp.PositionID}" maxlength="8" size="8" {$adp.Disabled}/> <span class="orange">*</span>
+		</td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">广告位宽度:</td>
+		<td bgcolor="#FFFFFF">
+		<input type="text" class="txt" name="PositionWidth" id="PositionWidth" value="{$adp.PositionWidth}" maxlength="4" size="6">px <span class="orange">*</span>
+		</td>
+	  </tr>
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">广告位高度:</td>
+		<td bgcolor="#FFFFFF">
+		<input type="text" class="txt" name="PositionHeight" id="PositionHeight" value="{$adp.PositionHeight}" maxlength="4" size="6">px <span class="orange">*</span>
+		</td>
+	  </tr>		 
+	  <tr>
+		<td align="right" bgcolor="#FFFFFF">广告位描述:</td>
+		<td bgcolor="#FFFFFF"><textarea name="Intro" id="Intro" cols="30" rows="5" class="textarea">{$adp.Intro}</textarea></td>
+	  </tr>	 
+	</table>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+		<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'AdPos')"/>
+		<input type="button" class="btn f2 right" value="提 交" id="btnAddAdPos" />
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+var adp={
+	BindEvent:function(){
+		/*提交*/
+		$('#btnAddAdPos').click(function(){
+			$('#PositionID').next().html('*');
+			$('#PositionWidth').next().html('*');
+			$('#PositionHeight').next().html('*');
+			var PositionTypeID = $('#PositionTypeID').val();
+			var PositionName = $('#PositionName').val();
+			var PositionID = $('#PositionID').val();
+			var PositionWidth = $('#PositionWidth').val();
+			var PositionHeight = $('#PositionHeight').val();
+			var Intro = $('#Intro').val();
+			if(isNaN(PositionID) || PositionID<=0){
+				$('#PositionID').next().html('*广告位ID必须为大于0的正整数');
+				$('#PositionID').focus();
+				return false;
+			}
+			if(isNaN(PositionWidth) || PositionWidth<0){
+				$('#PositionWidth').next().html('*宽度必须为正整数');
+				$('#PositionWidth').focus();
+				return false;
+			}
+			if(isNaN(PositionHeight) || PositionHeight<0){
+				$('#PositionHeight').next().html('*高度必须为正整数');
+				$('#PositionHeight').focus();
+				return false;
+			}
+			setting.Params = 'PositionTypeID='+PositionTypeID+'&PositionName='+encodeURIComponent(PositionName)+'&PositionID='+PositionID+'&PositionWidth='+PositionWidth+'&PositionHeight='+PositionHeight+'&Intro='+encodeURIComponent(Intro);
+{/literal}
+			setting.Url='{au d=YunWei c=AdPos a=addAdPos}';	
+{literal}
+			ajax.RequestUrl(setting.Url,setting.Params,'callback.AddAdPos');	
+		});
+	}
+};
+{/literal}
+</script>

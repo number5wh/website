@@ -1,0 +1,57 @@
+<script type="text/javascript" language="javascript">
+{literal}
+var lvl={
+	BindEvent:function(){
+		/*点击显示角色等级配置界面*/
+		$('.edit').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=SysRoleLevel a=showAddRoleLevelHtml}';
+				setting.Params = 'LvlID='+$(this).attr('id');
+{literal}
+				ajax.RequestUrl(setting.Url,setting.Params,'callback.ShowAddRoleLevelHtml');
+			});	
+		});		
+		/*点击删除角色等级配置信息*/
+		$('.del').each(function(){
+			$(this).click(function(){
+{/literal}
+				setting.Url='{au d=YunWei c=SysRoleLevel a=delRoleLevel}';
+				setting.Params = 'LvlID='+$(this).attr('id');
+{literal}
+				if(confirm('删除后将无法恢复,确定删除?'))
+					ajax.RequestUrl(setting.Url,setting.Params,'callback.DelRoleLevel');
+			});	
+		});			
+	}
+}
+{/literal}
+</script>
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="17%" bgcolor="#FFFFFF">角色等级</th>
+    <th width="27%" bgcolor="#FFFFFF">成长点</th>
+    <th width="27%" bgcolor="#FFFFFF">每日最大成长值</th>
+    <th width="29%" bgcolor="#FFFFFF">操作</th>
+  </tr>
+  {foreach from=$LevelList item=Lvl}
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">{$Lvl.LvlID}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Lvl.LvlExperience}</td>
+    <td align="center" bgcolor="#FFFFFF">{$Lvl.MaxScoreDay}</td>
+    <td align="center" bgcolor="#FFFFFF">
+      <a href="javascript:void(0)" class="edit" id="{$Lvl.LvlID}">修改</a>
+	  <a href="javascript:void(0)" class="del" id="{$Lvl.LvlID}">删除</a>
+	</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $LevelList}
+  <tr>
+    <td colspan="4" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

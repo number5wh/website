@@ -1,0 +1,48 @@
+<div class="sysWin sysWindow">
+	<h2 class="f2 white">
+		<div class="tLeft f1 left"></div>日工资明细
+		<div class="tRight f1 right"></div>
+		<a title="关闭" class="btnCls f3 right" href="javascript:void(0);" onclick="main.CloseMsgBox(false,'ServiceRole')"/></a>
+		<br class="clear" />
+	</h2>
+	
+	<div class="bdy">
+    	起止时间:<input id="StartTime" type="text" value="{$strStime}" size="10" class="txt hide" /> <input id="EndTime" type="text" value="{$strEtime}" size="10" class="txt"/>
+        <input type="button" class="btn f2" value="查 询" id="btnSearch" />
+		<input type="hidden" id="CurRoleID" value="{$RoleID}" />
+		<input type="hidden" id="VipOpenTime" value="{$VipOpenTime}" />
+        <div id="SalaryDetailList">
+        </div>
+	</div>
+
+	<div class="bot f2">
+		<div class="botLeft f1 left"></div>
+		<div class="botRight f1 right"></div>
+        <div class="orange right" id="ResultMsg"></div>
+		<br class="clear" />
+	</div>
+</div>
+<script type="text/javascript" language="javascript">
+{literal}
+$(function(){
+	$('#btnSearch').click(function(){
+		sd.GetPagerSalaryDetail();
+	});
+	$('#StartTime').focus(function(){
+		WdatePicker({{/literal}minDate:'{$strStime}',{literal}maxDate:"#F{$dp.$D('EndTime')}"});
+	});
+	$('#EndTime').focus(function(){
+		WdatePicker({minDate:"#F{$dp.$D('StartTime')}",{/literal}maxDate:'{$strEtime}'{literal}});
+	});
+});
+var sd={
+	GetPagerSalaryDetail:function(){
+{/literal}
+		setting.PageUrl='{au d=Service c=ServiceRole a=getPagerSalaryDetail}';
+		setting.Params = 'RoleID='+$('#CurRoleID').val()+'&StartTime='+$('#EndTime').val()+'&EndTime='+$('#EndTime').val()+'&VipOpenTime='+encodeURIComponent($('#VipOpenTime').val());
+{literal}	
+		ajax.RequestUrl(setting.PageUrl,setting.Params,'callback.GetPagerSalaryDetail');
+	}
+};
+{/literal}
+</script>

@@ -1,0 +1,27 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>
+    <th width="55%" bgcolor="#FFFFFF">日志内容</th>
+    <th width="10%" bgcolor="#FFFFFF">操作结果</th>
+    <th width="10%" bgcolor="#FFFFFF">IP地址</th>
+	<th width="10%" bgcolor="#FFFFFF">操作人</th>
+	<th width="15%" bgcolor="#FFFFFF">操作时间</th>
+  </tr>
+  {foreach from=$LogsList item=List}
+  <tr>
+    <td align="left" bgcolor="#FFFFFF">{$List.OpContent}</td>
+    <td align="center" bgcolor="#FFFFFF">{if $List.OpResult==0}成功{else}失败{/if}</td>
+    <td align="center" bgcolor="#FFFFFF">{$List.ClientIP}</td>	
+	<td align="center" bgcolor="#FFFFFF">{$List.SysUserName}</td>	
+	<td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>     
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $LogsList}
+  <tr>
+    <td colspan="5" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
