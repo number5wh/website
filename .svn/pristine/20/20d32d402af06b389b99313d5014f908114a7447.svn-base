@@ -36,7 +36,7 @@ class RechargeAction extends PageBase
             'EndTime'=>date('Y-m-d'),'RechargeStatusType'=>$this->arrConfig['RechargeStatusType'],'PayType'=>[1=>'金币',2=>'黄钻']);
 		Utility::assign($this->smarty,$arrTags);	
 		
-		$this->smarty->display($this->arrConfig['skin'].'/YunYing/RechargeList.html');
+		$this->smarty->display($this->arrConfig['skin'].'/Service/RechargeList.html');
 	}	 
 
 	/**
@@ -100,7 +100,9 @@ class RechargeAction extends PageBase
 
         $objMasterBLL = new MasterBLL();
 
+        $beiwangCardCharge = $objMasterBLL->getBeiwangCardRateList();
         $allCardCharge = $objMasterBLL->getCardChargeRateList();
+        $beiwangCardName = Utility::array_column($beiwangCardCharge,'CardName','CardID');
         $allCardName = Utility::array_column($allCardCharge,'CardName','CardID');
 
 		if($arrRechargeList)
@@ -121,11 +123,11 @@ class RechargeAction extends PageBase
 				{
 					$arrRechargeList[$iCount]['LoginName'] = $iLoginName.'('.$val['LoginID'].')';
                     //1 支付宝  2 微信    3北网
-//                    if(!array_key_exists($val['CardType'],$beiwangCardName)){
-//                        $arrRechargeList[$iCount]['CardTypeTip'] = Utility::gb2312ToUtf8($allCardName[$val['CardType']]);
-//                    }else{
-//                        $arrRechargeList[$iCount]['CardTypeTip'] = '骏付通';
-//                    }
+                    if(!array_key_exists($val['CardType'],$beiwangCardName)){
+                        $arrRechargeList[$iCount]['CardTypeTip'] = Utility::gb2312ToUtf8($allCardName[$val['CardType']]);
+                    }else{
+                        $arrRechargeList[$iCount]['CardTypeTip'] = '骏付通';
+                    }
                     /*switch($val['CardType']){
                         case 1:$arrRechargeList[$iCount]['CardTypeTip'] = '支付宝';break;
                         case 2:$arrRechargeList[$iCount]['CardTypeTip'] = '微信';break;
@@ -172,7 +174,7 @@ class RechargeAction extends PageBase
 		$arrResult = $this->getPagerRecharge(20);
 		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'RechargeList'=>$arrResult['arrRechargeList']);
 		Utility::assign($this->smarty,$arrTags);
-		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/RechargeListPage.html');
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/RechargeListPage.html');
 		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
 		echo $html;
 	}
@@ -337,7 +339,7 @@ class RechargeAction extends PageBase
 		$arrCodeList = $this->objStagePropertyBLL->getRegularCodeList(1);
 		$arrTags=array('RegularCodeList'=>$arrCodeList);
 		Utility::assign($this->smarty,$arrTags);
-		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/CardEdit.html');
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/CardEdit.html');
 		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
 
 		echo $html;

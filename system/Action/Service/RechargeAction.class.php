@@ -36,7 +36,7 @@ class RechargeAction extends PageBase
             'EndTime'=>date('Y-m-d'),'RechargeStatusType'=>$this->arrConfig['RechargeStatusType'],'PayType'=>[1=>'金币',2=>'黄钻']);
 		Utility::assign($this->smarty,$arrTags);	
 		
-		$this->smarty->display($this->arrConfig['skin'].'/YunYing/RechargeList.html');
+		$this->smarty->display($this->arrConfig['skin'].'/Service/RechargeList.html');
 	}	 
 
 	/**
@@ -100,7 +100,9 @@ class RechargeAction extends PageBase
 
         $objMasterBLL = new MasterBLL();
 
+        $beiwangCardCharge = $objMasterBLL->getBeiwangCardRateList();
         $allCardCharge = $objMasterBLL->getCardChargeRateList();
+        $beiwangCardName = Utility::array_column($beiwangCardCharge,'CardName','CardID');
         $allCardName = Utility::array_column($allCardCharge,'CardName','CardID');
 
 		if($arrRechargeList)
@@ -111,21 +113,50 @@ class RechargeAction extends PageBase
 				if(empty($arrUserInfo))
 				{
 					    $objUserBLL = new UserBLL($val['RoleID']);
-					    $arrUserInfo = $objUserBLL->getRoleInfo($val['RoleID']);
-
+					    //$arrUserInfo = $objUserBLL->getRoleInfo($val['RoleID']);
                     //$iLoginName = getUserLoginName($val['LoginID']);
                     //$arrUserInfo = getUserBaseInfo($val['LoginID']);
-                    $iLoginName = $arrUserInfo['RealName'];
+                    //$iLoginName = $arrUserInfo['RealName'];
 				}
+
+                $arrRechargeList[$iCount]['TransactionID'] = Utility::gb2312ToUtf8($val['TransactionID']);
+
+                //0待付款  1 付款成功  2付款失败  3充值成功 4充值失败
+                switch($val['Status']){
+                    case 0:
+                        $arrRechargeList[$iCount]['StatusTip'] = '待付款';break;
+                    case 1:
+                        $arrRechargeList[$iCount]['StatusTip'] = '付款成功';break;
+                    case 2:
+                        $arrRechargeList[$iCount]['StatusTip'] = '付款失败';break;
+                    case 3:
+                        $arrRechargeList[$iCount]['StatusTip'] = '充值成功';break;
+                    case 4:
+                        $arrRechargeList[$iCount]['StatusTip'] = '充值失败';break;
+                    default:
+                        $arrRechargeList[$iCount]['StatusTip'] = '状态错误';break;
+                }
+                $payTypeArr = $this->arrConfig['ChannelType'];
+                $arrRechargeList[$iCount]['PayTypeTip'] = $payTypeArr[$val['PayType']] ? $payTypeArr[$val['PayType']] : '';
+
+                $classArr = $this->arrConfig['ClassType'];
+                $arrRechargeList[$iCount]['CardTypeTip'] = $classArr[$val['CardType']] ? $classArr[$val['CardType']] : '';
+                //spOrderNo 内部订单编号
+//                switch($val['PayType']){
+//                    case 1:$arrRechargeList[$iCount]['PayTypeTip'] = '金币充值';break;
+//                    case 2:$arrRechargeList[$iCount]['PayTypeTip'] = '黄钻充值';break;
+//                    default:$arrRechargeList[$iCount]['PayTypeTip'] = '';break;
+//                }
+//                //1 支付宝  2 微信    3北网
+//                if(!array_key_exists($val['CardType'],$beiwangCardName)){
+//                    $arrRechargeList[$iCount]['CardTypeTip'] = Utility::gb2312ToUtf8($allCardName[$val['CardType']]);
+//                }else{
+//                    $arrRechargeList[$iCount]['CardTypeTip'] = '骏付通';
+//                }
 				if(isset($iLoginName))
 				{
 					$arrRechargeList[$iCount]['LoginName'] = $iLoginName.'('.$val['LoginID'].')';
-                    //1 支付宝  2 微信    3北网
-//                    if(!array_key_exists($val['CardType'],$beiwangCardName)){
-//                        $arrRechargeList[$iCount]['CardTypeTip'] = Utility::gb2312ToUtf8($allCardName[$val['CardType']]);
-//                    }else{
-//                        $arrRechargeList[$iCount]['CardTypeTip'] = '骏付通';
-//                    }
+
                     /*switch($val['CardType']){
                         case 1:$arrRechargeList[$iCount]['CardTypeTip'] = '支付宝';break;
                         case 2:$arrRechargeList[$iCount]['CardTypeTip'] = '微信';break;
@@ -133,22 +164,7 @@ class RechargeAction extends PageBase
                         //case 3:$arrRechargeList[$iCount]['CardTypeTip'] = '北网';break;
                         default :$arrRechargeList[$iCount]['CardTypeTip'] = '北网';break;
                     }*/
-                    //spOrderNo 内部订单编号
 
-                    //0待付款  1 付款成功  2付款失败  3充值成功 4充值失败
-                    switch($val['Status']){
-                        case 0:$arrRechargeList[$iCount]['StatusTip'] = '待付款';break;
-                        case 1:$arrRechargeList[$iCount]['StatusTip'] = '付款成功';break;
-                        case 2:$arrRechargeList[$iCount]['StatusTip'] = '付款失败';break;
-                        case 3:$arrRechargeList[$iCount]['StatusTip'] = '充值成功';break;
-                        case 4:$arrRechargeList[$iCount]['StatusTip'] = '充值失败';break;
-                        default:$arrRechargeList[$iCount]['StatusTip'] = '状态错误';break;
-                    }
-                    switch($val['PayType']){
-                        case 1:$arrRechargeList[$iCount]['PayTypeTip'] = '金币充值';break;
-                        case 2:$arrRechargeList[$iCount]['PayTypeTip'] = '黄钻充值';break;
-                        default:$arrRechargeList[$iCount]['PayTypeTip'] = '';break;
-                    }
 					//$arrRechargeList[$iCount]['Corp'] = Utility::gb2312ToUtf8($val['Corp']);//==1 ? '快钱充值' : ($val['TypeID']==2 ? '聚宝充值' : '北网充值');
 					$arrRechargeList[$iCount]['StatusName'] = $val['Status']==1 ? '成功' : ($val['Status']==-1 ? '未付款' : '失败');
 				}
@@ -172,7 +188,7 @@ class RechargeAction extends PageBase
 		$arrResult = $this->getPagerRecharge(20);
 		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'RechargeList'=>$arrResult['arrRechargeList']);
 		Utility::assign($this->smarty,$arrTags);
-		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/RechargeListPage.html');
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/RechargeListPage.html');
 		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
 		echo $html;
 	}
@@ -201,7 +217,7 @@ class RechargeAction extends PageBase
 				
 				if( $arrOrderInfo['Status'] ==0 || $arrOrderInfo['Status'] ==4)//未付款也能补发mlgt
 				{					
-					if($arrOrderInfo['PayType'] == 1)//充值金币
+					if($arrOrderInfo['CardType'] == 1500 || $arrOrderInfo['CardType'] == 1600)//充值金币
 					{
 //					    $GameConfig = $objMasterBLL->getGameConfig(0);
 //					    foreach ($GameConfig as $val){
@@ -337,7 +353,7 @@ class RechargeAction extends PageBase
 		$arrCodeList = $this->objStagePropertyBLL->getRegularCodeList(1);
 		$arrTags=array('RegularCodeList'=>$arrCodeList);
 		Utility::assign($this->smarty,$arrTags);
-		$html = $this->smarty->fetch($this->arrConfig['skin'].'/YunYing/CardEdit.html');
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/CardEdit.html');
 		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
 
 		echo $html;
