@@ -40,7 +40,7 @@ public function index()
 
 		$curPage = $curPage<=0 ? 1 : $curPage;
         //echo 'currpage:'.$curPage;
-        $pagesize =15;
+        $pagesize =20;
         $arrResult = null;
         $arrResult = DCQueryAllOnlinePlayer($curPage,$pagesize);
 		$totalonline = $arrResult["iTotalCount"];

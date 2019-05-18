@@ -33,14 +33,11 @@ public function index()
 	{
 		$arrLogsList = null;
 		$strWhere = ' ';
-       // var_dump($_POST['curPage']);
-//        die;
-
 		$curPage = Utility::isNumeric('curPage',$_POST);
 
 		$curPage = $curPage<=0 ? 1 : $curPage;
-        //echo 'currpage:'.$curPage;
-        $pagesize =15;
+        echo 'currpage:'.$curPage;
+        $pagesize =20;
         $arrResult = null;
         $arrResult = DCQueryAllOnlinePlayer($curPage,$pagesize);
 		$totalonline = $arrResult["iTotalCount"];
@@ -60,17 +57,16 @@ public function index()
        // $next = $page -+1; //初始化下一页
 
 
-//        echo "\r\n";
-//        echo $start;
-//        echo "\r\n";
-//        echo $end;
+        echo "\r\n";
+        echo $start;
+        echo "\r\n";
+        echo $end;
         $arrOnlineList = array();
         for($i=$start;$i<$end;$i++){
             //输出数据
             $arrOnlineList[] = $pagedata[$i];
 
         }
-        //var_dump($arrOnlineList);
         //获取重复数据
         //$repeat_arr = array_diff_assoc($arrOnlineList , $unique_arr );
 
@@ -187,14 +183,11 @@ public function index()
             }
         }
         $arrNewList = Utility::arraySort($arrOnlineList,"itop","desc");
-        //var_dump($arrNewList);
         //print_r($arrNewList);
         //array_multisort(array_column($arrOnlineList,'itop'),SORT_DESC,$arrOnlineList);
         //echo "==============";
        // print_r($arrOnlineList);
         $Page=Utility::setPages($curPage,$rows,$pagesize);
-//        var_dump($Page);
-//        die;
         return array('OnlineList'=>$arrNewList,"onlinenum"=>$totalonline,'Page'=>$Page);
 
 	}

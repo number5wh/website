@@ -1,0 +1,29 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+  <tr>   
+    <th width="15%" bgcolor="#FFFFFF">银商ID</th>
+    <th width="15%" bgcolor="#FFFFFF">银商名称</th>
+ 	<th width="15%" bgcolor="#FFFFFF">玩家ID</th>
+ 	<th width="15%" bgcolor="#FFFFFF">玩家名称</th>
+ 	<th width="15%" bgcolor="#FFFFFF">金额</th>
+	<th width="25%" bgcolor="#FFFFFF">到账时间</th>
+  </tr>
+  {foreach from=$BankSellout item=List}
+  <tr>
+   <td align="center" bgcolor="#FFFFFF">{$List.RoleID}</td>
+   <td align="center" bgcolor="#FFFFFF">{$List.RoleName}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.TargetID}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.TargetName}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.ChangeMoney}</td>
+	<td align="center" bgcolor="#FFFFFF">{$List.AddTime}</td>
+  </tr>
+  {foreachelse}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">暂无记录</td>
+  </tr>
+  {/foreach}
+  {if $BankSellout}
+  <tr>
+    <td colspan="6" align="center" bgcolor="#FFFFFF">{include file="$skin/Inc/Page.inc.html"}</td>
+  </tr>
+  {/if}
+</table>
