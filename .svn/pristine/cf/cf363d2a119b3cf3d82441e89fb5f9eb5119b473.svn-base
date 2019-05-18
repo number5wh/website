@@ -1,0 +1,74 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
+    <tr>
+        <th width="10%">ID</th>
+        <th width="20%">金额ID</th>
+        <th width="20%">金额</th>
+        <th width="20%">操作</th>
+    </tr>
+    {foreach from=$AmountList item=GameClass}
+    <tr class="bg_color">
+        <td>{$GameClass.Id}</td>
+        <td>{$GameClass.AmountId}</td>
+        <td>{$GameClass.Amount}</td>
+        <td>
+            <a href="javascript:void(0)" class="edit" amountid="{$GameClass.AmountId}" amount="{$GameClass.Amount}" tid="{$GameClass.Id}">修改</a>
+            <a href="javascript:void(0)" class="delete" amountid="{$GameClass.AmountId}" amount="{$GameClass.Amount}" tid="{$GameClass.Id}">删除</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr class="bg_color">
+        <td colspan="4">暂无记录</td>
+    </tr>
+    {/foreach}
+    {if $AmountList}
+    <tr class="bg_color">
+        <td colspan="4">{include file="$skin/Inc/Page.inc.html"}</td>
+    </tr>
+    {/if}
+</table>
+<script type="text/javascript" language="javascript">
+    {literal}
+    var rm={
+        /*点击显示设置游戏种类界面*/
+        BindEvent:function(){
+            /*修改类别*/
+            $('.edit').each(function(){
+                $(this).click(function(){
+                    {/literal}
+                        setting.Url='';
+                        setting.Url='{au d=Yunwei c=GamePayAmount a=showEdit}';
+                        {literal}
+                        ajax.RequestUrl(setting.Url,'id='+$(this).attr('tid')+'&amountid='+$(this).attr('amountid')+'&amount='+$(this).attr('amount'),'callback.ShowEditAmount');
+                    });
+            });
+            $('.delete').each(function(){
+                $(this).click(function(){
+
+                    if(window.confirm('确定删除?')){
+                        {/literal}
+                            setting.Url='';
+                            setting.Url='{au d=Yunwei c=GamePayAmount a=delete}';
+                            {literal}
+                            ajax.RequestUrl(setting.Url,'amountid='+$(this).attr('amountid'),'Sysback.del');
+                    }
+                    });
+            });
+            $('#addAmount').click(function(){
+                {/literal}
+                    setting.Url='';
+                    setting.Url='{au d=Yunwei c=GamePayAmount a=showAdd}';
+                    {literal}
+                    ajax.RequestUrl(setting.Url,'','callback.ShowAddAmount');
+             });
+        }
+    }
+
+    var Sysback = {
+        del:function(data) {
+            if(data == 0){alert('删除成功');window.location.reload();
+            } else {alert('删除失败');
+            }
+        }
+    }
+    {/literal}
+</script>

@@ -1,0 +1,77 @@
+﻿<?php
+
+class JinkaPay {
+    private $merno = '10071';
+    private $url = 'https://www.cs689.cn/Pay_Index.html';
+    private $key = '9ojt2nk2y03p3xbzl3cr8k1teiftn7mm';
+
+    public function index($amount, $orderId, $notifyUrl, $method)
+    {
+
+        $request = array(
+            "pay_memberid"  => $this->merno,
+            "pay_orderid" => $orderId,
+            "pay_applydate" => date('Y-m-d H:i:s'),
+            "pay_bankcode" =>$method,
+            "pay_notifyurl" => $notifyUrl, //异步返回地址根据这个地址回调
+            "pay_callbackurl" => $notifyUrl,//订单号
+            "pay_amount" => $amount,
+            "pay_type" => 1, //支付方式，后台看1.支付宝扫码;2.支付宝H5;3.微信扫码;4.微信H5; 5.银联扫码;6.网关;7.快捷;8.固码
+        );
+        $request['pay_md5sign'] = $this->psign($this->key, $request);
+
+        $request['pay_productname'] = '金咖支付';
+
+
+        $re = $this->send($this->url, $request);
+        return $re;
+    }
+
+    //签名
+    public function psign($key, $arr)
+    {
+        $str = '';
+        ksort($arr);
+        foreach($arr as $key=>$value)
+        {
+            $str.=$key.'='.$value.'&';
+        }
+        $str .= 'key='.$key;
+        $checksign = strtoupper(md5($str));
+        return $checksign;
+    }
+
+    public function send($url, $request)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request));
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
+    public function notice()
+    {
+        $request = (array)$this->request->param();
+        $returnArray = array( //
+                              "merchant_number" => $request["merchant_number"],
+                              "order_id" =>  $request["order_id"],
+                              "cash" =>  $request["cash"],
+                              "order_time" =>  $request["order_time"],
+                              "status" =>  $request["status"],
+                              "notify_type" => $request["notify_type"]
+        );
+        //验证签名
+//        if () {
+//            //你的逻辑
+//            exit('success');//给我们返回Success
+//        }
+    }
+}
+
+
+
+

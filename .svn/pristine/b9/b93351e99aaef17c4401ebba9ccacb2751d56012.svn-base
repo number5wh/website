@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维后台</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/blue.css" />
+<link type="text/css" rel="stylesheet" href="/css/wbox.css" />
+<script type="text/javascript" language="javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/js/init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/common.js"></script>
+<script type="text/javascript" language="javascript" src="/js/extend.js"></script>
+<script type="text/javascript" language="javascript" src="/js/event.js"></script>
+<script type="text/javascript" language="javascript" src="/js/wbox.js"></script>
+<script type="text/javascript" language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" language="javascript">
+{literal}
+var Sys={
+	SetProperty:function(){
+		//setting.Params = '';
+		init.SetTableRows();//初始化鼠标移到表格行显示背景
+		//绑定分页
+		var Param = '$(this).attr("pg"),"Sys.CallBackGetPagerRecharge"';
+		var Param1 = '$(this).val(),"Sys.CallBackGetPagerRecharge"';
+		evt.BindPageClick('','page.GetPage',Param,Param1);
+		SysList.BindEvent();
+	},
+	/*分页回调*/
+	CallBackGetPagerRecharge:function(data){
+        $('#PageList').html(data);
+        Sys.SetProperty();
+    },
+    CallBackSumData:function(data){
+	    $('#st1').html(data.sumData['total']);
+	    $('#st2').html(data.sumData['todaypay']);
+	    $('#st3').html(data.sumData['todayunpay']);
+	    $('#st4').html(data.sumData['sumpay']);
+	    $('#st5').html(data.sumData['sumunpay']);
+    },
+    CallBackDelRecharge:function(data){
+		if(data==0){
+			//setting.Params = '';
+			page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerRecharge');
+		}
+		else
+			main.OpenBox(data);
+	}
+};
+
+$(function(){	
+{/literal}
+	setting.PageUrl = '{au d=Service c=Transfer a=getPagerRechargeList}';
+{literal}
+	Sys.SetProperty();		
+	/*点击搜索*/
+		$('#btnSearch').click(function(){
+{/literal}
+			$('#Msg').html('');
+			//var RechargeType = $('#RechargeType').val();
+			var StartTime = $('#StartTime').val();
+			var EndTime = $('#EndTime').val();
+			var LoginID = $('#LoginID').val();
+			var OrderID = $('#OrderID').val();
+			var Amount = $('#Amount').val();
+            var RechargeStatus = $('#RechargeStatus').val();
+            var TransactionID = $('#TransactionID').val();
+            var ClassType = $("#ClassType").val();
+            var ChannelType = $("#ChannelType").val();
+			if({$DeptID}!=3)
+{literal}
+			
+			//if(LoginID=='' && OrderID=='' || LoginID!='' && isNaN(LoginID) || OrderID!='' && isNaN(OrderID) || TransactionID != '' && isNaN(TransactionID)){
+			if(LoginID=='' && OrderID=='' && TransactionID==''){
+				//$('#Msg').html('玩家编号和订单号必须填写其中一项');
+				//return;
+			}
+{/literal}
+			setting.Params = '&StartTime='+StartTime+'&EndTime='+EndTime+'&OrderID='+OrderID+'&Amount='+Amount
+                                +'&LoginID='+LoginID+'&RechargeStatus='+RechargeStatus+'&ClassType='+ClassType
+            {literal}                           ;
+            $.ajax({
+                type: "POST",
+                url: '?d=Service&c=Transfer&a=sumDataAjax',
+                data: {
+                    'StartTime' : StartTime,
+                    'EndTime' : EndTime,
+                    'OrderID':OrderID,
+                    'Amount':Amount,
+                    'LoginID':LoginID,
+                    'RechargeStatus':RechargeStatus,
+                    'ClassType':ClassType
+                },
+                success: function(response){
+                    var jsObject = JSON.parse(response);
+                    $('#st1').html(jsObject.sumData.total);
+                    $('#st2').html(jsObject.sumData.todayPay);
+                    $('#st3').html(jsObject.sumData.todayunpay);
+                    $('#st4').html(jsObject.sumData.sumpay);
+                    $('#st5').html(jsObject.sumData.sumunpay);
+                }
+            });
+            {/literal}
+			ajax.RequestUrl(setting.PageUrl,setting.Params,'Sys.CallBackGetPagerRecharge');
+{literal}
+		});	
+		$('#StartTime').focus(function(){
+			WdatePicker({{/literal}minDate:'{$StartTime}',{literal}maxDate:"#F{$dp.$D('EndTime')}"});
+		});
+		$('#EndTime').focus(function(){
+			WdatePicker({minDate:"#F{$dp.$D('StartTime')}",{/literal}maxDate:'{$EndTime}'{literal}});
+		});	
+	
+});
+{/literal}
+</script>
+</head>
+
+<body>
+<fieldset class="left">
+	<legend>查询</legend>
+	<!--<span class="left" style="margin:0">充值方式：</span>
+	<select id="RechargeType" class="left">
+		{ section name=n loop=$RechargeType}
+		<option value="{$smarty.section.n.index}">{$RechargeType[n]}</option>
+		{ /section}
+	</select>-->
+	<span class="left" style="margin:0">时间范围：</span>
+	<input id="StartTime" class="txt left " type="text" value="{$StartTime}" size="10" style="display: none" />
+    <input id="EndTime" class="txt left " type="text" value="{$EndTime}" size="10" />
+	<span class="left" style="margin:0">玩家编号：</span>
+	<input type="text" class="txt left" name="LoginID" id="LoginID" value="" size="8" maxlength="12"/>
+	<span class="left" style="margin:0">订单号：</span>
+	<input type="text" class="txt left" name="OrderID" id="OrderID" value="" size="16" maxlength="32"/>
+    <!--<span class="left" style="margin:0">第三方交易号：</span>-->
+	<!--<input type="text" class="txt left" name="TransactionID" id="TransactionID" value="" size="20" maxlength="32"/>-->
+
+    <span class="left" style="margin:0">状态:</span>
+    <select name="RechargeStatus" class="left" id="RechargeStatus" >
+        <option value="-1">全部</option>
+        {foreach from=$RechargeStatusType item=Vo key=key}
+            <option value="{$key}">{$Vo}</option>
+        {/foreach}
+    </select>
+
+    <span class="left" style="margin:0">通道类型:</span>
+    <select name="ClassType" class="left" id="ClassType" >
+        <option value="-1">全部</option>
+        {foreach from=$classType item=Vo key=key}
+        <option value="{$key}">{$Vo}</option>
+        {/foreach}
+    </select>
+
+    <span class="left" style="margin:0">转账金额：</span>
+	<input type="text" class="txt left" name="Amount" id="Amount" value="" size="10" maxlength="10" />
+	<input type="button" id="btnSearch" class="btn f2 left" value="查询" /><span id="Msg" class="red"></span>
+	<br class="clear" />
+</fieldset>
+
+<div class="right" style="line-height:22px;cursor:pointer;width:50px;" onclick="page.GetPage($('.txtPage').val(),'Sys.CallBackGetPagerRecharge');">
+	<div class="refresh icon left" style="margin-top:2px"></div><span class="left">刷新</span>
+</div>
+<br class="clear" />
+<div id="sum">
+    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList">
+        <tr>
+            <th width="15%" bgcolor="#FFFFFF">总订单量</th>
+            <th width="15%" bgcolor="#FFFFFF">转账总数</th>
+            <th width="10%" bgcolor="#FFFFFF">未转账总数</th>
+            <th width="10%" bgcolor="#FFFFFF">转账总金额</th>
+            <th width="10%" bgcolor="#FFFFFF">未转账总金额</th>
+        </tr>
+        <tr>
+            <td align="center" bgcolor="#FFFFFF" id="st1">{$sumData.total}</td>
+            <td align="center" bgcolor="#FFFFFF" id="st2">{$sumData.todaypay}</td>
+            <td align="center" bgcolor="#FFFFFF" id="st3">{$sumData.todayunday}</td>
+            <td align="center" bgcolor="#FFFFFF" id="st4">{$sumData.sumpay}</td>
+            <td align="center" bgcolor="#FFFFFF" id="st5">{$sumData.sumunpay}</td>
+        </tr>
+    </table>
+</div>
+<br>
+<div id="PageList">
+{include file="$skin/Service/TransferListPage.html"}
+</div>
+
+</body>
+</html>

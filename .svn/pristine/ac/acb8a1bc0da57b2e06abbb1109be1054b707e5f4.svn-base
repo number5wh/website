@@ -1,0 +1,40 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M" style="margin-top:10px">
+  <tr>
+  	<th width="20%">日期</th>
+    <th width="10%">游戏ID</th>
+    <th width="10%">赢（次）</th>
+    <th width="10%">输（次）</th>  
+    <th width="10%">和（次）</th>  
+    <th width="10%">逃跑（次）</th>
+    <th width="10%">成绩</th>
+    <!--<th width="15%">金币(积分)成绩</th>-->
+    <th width="15%">当前金币(积分)</th>
+  </tr>
+  {foreach from=$GameDetailList item=detail}
+  <tr class="bg_color {if $detail.Money lt 0}orange{/if}">
+  	<td>{$detail.AddTime}</td>
+    <td>{$detail.KindID}</td>
+    <td>{$detail.WinCount}</td>
+    <td>{$detail.LostCount}</td>
+    <td>{$detail.DrawCount}</td>
+    <td>{$detail.FleeCount}</td>
+    <td>{$detail.ChangeTypeTip}</td>
+      {if $detail.RoomType eq 2}
+      <td>{$detail.Money}</td>
+      <!--<td>{$detail.LastMoney}</td>-->
+      {else}
+      <td>{$detail.Score}</td>
+      <!--<td>{$detail.LastScore}</td>-->
+      {/if}
+  </tr>    
+  {foreachelse}
+  <tr class="bg_color">
+  	<td colspan="8">很抱歉，没有您要查询的信息~</td>
+  </tr>
+  {/foreach}
+  {if $GameDetailList}
+  <tr class="bg_color">
+    <td colspan="8" id="RGDDP">{include file="$skin/Inc/simplePage.inc.html"}</td>
+  </tr>
+  {/if}
+</table>

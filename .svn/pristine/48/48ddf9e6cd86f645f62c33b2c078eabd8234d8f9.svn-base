@@ -1,0 +1,392 @@
+<?php
+require ROOT_PATH . 'Common/PageBase.class.php';
+require ROOT_PATH . 'Common/Session.class.php';
+require ROOT_PATH . 'Class/BLL/StagePropertyBLL.class.php';
+require ROOT_PATH . 'Class/BLL/CommonBLL.class.php';
+require ROOT_PATH . 'Class/BLL/BankBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserBLL.class.php';
+require ROOT_PATH . 'Class/BLL/MatchBLL.class.php';
+require ROOT_PATH . 'Class/BLL/UserDataBLL.class.php';
+require ROOT_PATH . 'Class/BLL/DataChangeLogsBLL.class.php';
+require ROOT_PATH . 'Class/BLL/OperationLogsBLL.class.php';
+require ROOT_PATH . 'Class/BLL/PayLogsBLL.class.php';
+require ROOT_PATH . 'Class/BLL/MasterBLL.class.php';
+
+require_once ROOT_PATH . 'Link/GetRoleBaseInfo.php';
+require_once ROOT_PATH . 'Link/AddRoleMonery.php';
+require_once ROOT_PATH . 'Link/BuyRoleVip.php';
+
+class TransferAction extends PageBase
+{	
+	private $objMatchBLL = null;	
+	public function __construct()
+	{
+		$this->arrConfig=unserialize(SYS_CONFIG);
+		Utility::chkUserLogin($this->arrConfig);
+		//$this->objMatchBLL = new MatchLL();
+	}
+	public function index()
+	{
+		$objSessioinLogin = new Session($this->arrConfig['Session']['SessionLoginName']);
+		$DeptID = $objSessioinLogin->get($this->arrConfig['SessionInfo']['DeptID']);
+		$sumData = [];
+		$sumData = $this->sumData();
+        $sumData = json_decode($sumData, true);
+        $sumData = $sumData['sumData'];
+
+		$arrResult =$this->getPagerRecharge(20);
+		$classType = [
+            '1500' => '银行卡转账',
+            '1600' => '支付宝转账'
+        ];
+		//$channelType = $this->arrConfig['ChannelType'];
+
+        $arrTags=array('classType' => $classType, 'skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'RechargeList'=>$arrResult['arrRechargeList'],
+                'RechargeType'=>$this->arrConfig['RechargeType'],'DeptID'=>$DeptID,'StartTime'=>date('Y-m-d',strtotime("-15 day")),
+            'EndTime'=>date('Y-m-d'),'RechargeStatusType'=>$this->arrConfig['RechargeStatusType'],'PayType'=>[1=>'金币',2=>'黄钻'],
+            'sumData' => $sumData);
+		Utility::assign($this->smarty,$arrTags);	
+		
+		$this->smarty->display($this->arrConfig['skin'].'/Service/TransferList.html');
+	}	 
+
+	/**
+	 * 分页
+	 */
+	public function getPagerRecharge($pagesize)
+	{
+		$strWhere = ' WHERE 1=1';
+		$curPage = Utility::isNumeric('curPage',$_POST);
+		//$RechargeType = Utility::isNumeric('RechargeType',$_POST);
+		$StartTime = Utility::isNullOrEmpty('StartTime',$_POST) ? $_POST['StartTime'] : '';
+		$EndTime = Utility::isNullOrEmpty('EndTime',$_POST) ? $_POST['EndTime'] : date('Y-m-d');
+		$LoginID = Utility::isNullOrEmpty('LoginID',$_POST) ? str_replace(" ","",$_POST['LoginID']) : '';
+		$OrderID = Utility::isNullOrEmpty('OrderID',$_POST) ? str_replace(" ","",$_POST['OrderID']) : '';
+		$Amount = Utility::isNumeric('Amount',$_POST);
+		$RechargeStatus = Utility::isNumeric('RechargeStatus',$_POST);
+        $ClassType = Utility::isNumeric('ClassType',$_POST);
+        //$ChannelType = Utility::isNumeric('ChannelType',$_POST);
+        //$TransactionID = Utility::isNullOrEmpty('TransactionID',$_POST)? str_replace(" ","",$_POST['TransactionID']):'';
+		//$StartSortNumber = $Prefix.$RegularCode.$StartSortNumber;
+		//$EndSortNumber = $Prefix.$RegularCode.$EndSortNumber;
+				
+		$curPage = $curPage<=0 ? 1 : $curPage;
+		//if($RechargeType) $strWhere .= " AND TypeID=$RechargeType";
+		if($LoginID)
+		{
+			//$objUserBLL = new UserBLL(0);
+			//$arrUserInfo = $objUserBLL->getRole(1,$LoginID);
+			//if(!empty($arrUserInfo))
+				$strWhere .= " AND LoginID=".$LoginID;
+			//else
+			//	return array('arrRechargeList'=>null,'Page'=>null);
+		}
+		if($OrderID) $strWhere .= " AND SpOrderNo='$OrderID' ";
+		if($Amount) $strWhere .= " AND TotalFee=$Amount ";
+		//if($StartTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$StartTime')<=0 ";
+		//if($EndTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$EndTime')>=0 ";
+		if(!empty($RechargeStatus) && $RechargeStatus != -1){
+            $strWhere .= " AND Status={$RechargeStatus}";
+        }
+//        if(!empty($ChannelType) && $ChannelType!=-1){
+//            $strWhere .= " AND PayType={$ChannelType}";
+//        }
+        if(!empty($ClassType) && $ClassType!=-1){
+            $strWhere .= " AND CardType={$ClassType}";
+        } else {
+            $strWhere .= " AND (CardType=1500 or CardType=1600)";
+        }
+//        if(!empty($TransactionID)){
+//            $strWhere .= " AND TransactionID='{$TransactionID}' ";
+//            //var_dump($strWhere);
+//        }
+        //var_dump($strWhere);
+		$arrParam['fields']='OrderID, Status, TransactionID, SpOrderNo,  TotalFee, LoginID, CONVERT(VARCHAR(100),UpdateTime,120) AS UpdateTime,PayType,CardType';
+		$arrParam['tableName']='T_PayOrder_';
+		$arrParam['where']=$strWhere;
+		$arrParam['order']='OrderID desc';
+        $arrParam['Page'] = $curPage;
+		$arrParam['PageSize']=$pagesize;
+        $arrParam['StartDate'] = $EndTime;
+        $arrParam['EndDate'] = $EndTime;
+		$objPayLogsBLL = new PayLogsBLL($this->arrConfig['MapType']['PayLogs']);
+		$iRecordsCount = $objPayLogsBLL->getRecordsCount($arrParam);
+        //var_dump($iRecordsCount);
+		$Page=Utility::setPages($curPage,$iRecordsCount,$arrParam['PageSize']);
+		$arrRechargeList = $objPayLogsBLL->getPageList($arrParam,0);
+
+        $objMasterBLL = new MasterBLL();
+
+        $beiwangCardCharge = $objMasterBLL->getBeiwangCardRateList();
+        $allCardCharge = $objMasterBLL->getCardChargeRateList();
+        $beiwangCardName = Utility::array_column($beiwangCardCharge,'CardName','CardID');
+        $allCardName = Utility::array_column($allCardCharge,'CardName','CardID');
+
+		if($arrRechargeList)
+		{
+			$iCount = 0;
+			foreach ($arrRechargeList as $val)
+			{
+				if(empty($arrUserInfo))
+				{
+					    $objUserBLL = new UserBLL($val['RoleID']);
+					    //$arrUserInfo = $objUserBLL->getRoleInfo($val['RoleID']);
+                    //$iLoginName = getUserLoginName($val['LoginID']);
+                    //$arrUserInfo = getUserBaseInfo($val['LoginID']);
+                    //$iLoginName = $arrUserInfo['RealName'];
+				}
+
+                $arrRechargeList[$iCount]['TransactionID'] = Utility::gb2312ToUtf8($val['TransactionID']);
+
+                $querytime =date("Ymd", strtotime($EndTime));
+
+				$realfee =$objPayLogsBLL->getPlayLog($val['SpOrderNo'],$querytime);
+				if(!empty($realfee))
+                {
+                    $arrRechargeList[$iCount]['realfeetip'] =$realfee['TotalFee'];
+                }
+                else
+                {
+                    $arrRechargeList[$iCount]['realfeetip'] ="";
+                }
+
+
+                //0待付款  1 付款成功  2付款失败  3充值成功 4充值失败
+                switch($val['Status']){
+                    case 0:
+                        $arrRechargeList[$iCount]['StatusTip'] = '待付款';break;
+                    case 1:
+                        $arrRechargeList[$iCount]['StatusTip'] = '付款成功';break;
+                    case 2:
+                        $arrRechargeList[$iCount]['StatusTip'] = '付款失败';break;
+                    case 3:
+                        $arrRechargeList[$iCount]['StatusTip'] = '充值成功';break;
+                    case 4:
+                        $arrRechargeList[$iCount]['StatusTip'] = '充值失败';break;
+                    default:
+                        $arrRechargeList[$iCount]['StatusTip'] = '状态错误';break;
+                }
+//                $payTypeArr = $this->arrConfig['ChannelType'];
+//                $arrRechargeList[$iCount]['PayTypeTip'] = $payTypeArr[$val['PayType']] ? $payTypeArr[$val['PayType']] : '';
+
+                $classArr = $this->arrConfig['ClassType'];
+                $arrRechargeList[$iCount]['CardTypeTip'] = $classArr[$val['CardType']] ? $classArr[$val['CardType']] : '';
+                //spOrderNo 内部订单编号
+//                switch($val['PayType']){
+//                    case 1:$arrRechargeList[$iCount]['PayTypeTip'] = '金币充值';break;
+//                    case 2:$arrRechargeList[$iCount]['PayTypeTip'] = '黄钻充值';break;
+//                    default:$arrRechargeList[$iCount]['PayTypeTip'] = '';break;
+//                }
+//                //1 支付宝  2 微信    3北网
+//                if(!array_key_exists($val['CardType'],$beiwangCardName)){
+//                    $arrRechargeList[$iCount]['CardTypeTip'] = Utility::gb2312ToUtf8($allCardName[$val['CardType']]);
+//                }else{
+//                    $arrRechargeList[$iCount]['CardTypeTip'] = '骏付通';
+//                }
+				if(isset($iLoginName))
+				{
+					$arrRechargeList[$iCount]['LoginName'] = $iLoginName.'('.$val['LoginID'].')';
+
+                    /*switch($val['CardType']){
+                        case 1:$arrRechargeList[$iCount]['CardTypeTip'] = '支付宝';break;
+                        case 2:$arrRechargeList[$iCount]['CardTypeTip'] = '微信';break;
+                        case 33:$arrRechargeList[$iCount]['CardTypeTip'] = 'ios';break;
+                        //case 3:$arrRechargeList[$iCount]['CardTypeTip'] = '北网';break;
+                        default :$arrRechargeList[$iCount]['CardTypeTip'] = '北网';break;
+                    }*/
+
+					//$arrRechargeList[$iCount]['Corp'] = Utility::gb2312ToUtf8($val['Corp']);//==1 ? '快钱充值' : ($val['TypeID']==2 ? '聚宝充值' : '北网充值');
+					$arrRechargeList[$iCount]['StatusName'] = $val['Status']==1 ? '成功' : ($val['Status']==-1 ? '未付款' : '失败');
+				}
+				else 
+				{
+					$arrRechargeList[$iCount]['LoginName'] = '';
+					$arrRechargeList[$iCount]['Corp'] = '';
+					$arrRechargeList[$iCount]['StatusName'] = '';
+				}
+				if(!$LoginID) $arrUserInfo=null;
+				$iCount++;
+			}
+		}
+		return array('arrRechargeList'=>$arrRechargeList,'Page'=>$Page);
+	}
+	/**
+	 * 分页读取
+	 */
+	public function getPagerRechargeList()
+	{
+		$arrResult = $this->getPagerRecharge(20);
+		$arrTags=array('skin'=>$this->arrConfig['skin'],'Page'=>$arrResult['Page'],'RechargeList'=>$arrResult['arrRechargeList']);
+		Utility::assign($this->smarty,$arrTags);
+		$html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/TransferListPage.html');
+		$html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
+		echo $html;
+	}
+	/**
+	 * 补发
+	 */
+	public function supplyAgain()
+	{
+		$iResults = -1;
+		$OpType = -1;
+		$OpContent = '';
+		$RoleID = Utility::isNumeric('RoleID',$_POST);
+		$OrderSerial = Utility::isNullOrEmpty('OrderSerial',$_POST);
+        $CardType = Utility::isNumeric('CardType',$_POST);
+		$RID = Utility::isNumeric('RID',$_POST);
+		if($RoleID && $OrderSerial)
+		{
+			$objPayOrderBLL = new PayLogsBLL($RoleID);
+            $objMasterBLL = new MasterBLL($RoleID);
+			$arrOrderInfo = $objPayOrderBLL->getPayOrder($OrderSerial,$CardType);
+			if(!empty($arrOrderInfo) )
+			{
+
+				//充值操作
+				//$arrResult = $objUserDataBLL->setUserBankRecharge($OrderSerial,$arrOrderInfo['Money'],'',$arrOrderInfo['Money'],$arrOrderInfo['RechargeFrom']);
+				
+				if( $arrOrderInfo['Status'] ==0 || $arrOrderInfo['Status'] ==4)//未付款也能补发mlgt
+				{					
+					if($arrOrderInfo['CardType'] == 1500 || $arrOrderInfo['CardType'] == 1600)//充值金币
+					{
+
+                        $money = intval (1000 * $arrOrderInfo['TotalFee']);
+                        $OpType = 7;
+						$OpContent = '后台补发金币充值记录';
+						$arrResult = DSAddRoleMonery($RoleID,$money);
+                        if(is_array($arrResult)){
+                            if($arrResult['iResult'] != 0){
+                                $iResults = -2;
+                            } else {
+                                $iResults = 0;
+                            }
+                        }
+					}
+					else //充值黄钻
+					{
+					}
+
+                    if($iResults == 0){//更新订单状态
+                        $objPayOrderBLL->setPayOrderStatus($arrOrderInfo['CardType'],$arrOrderInfo['TransactionID'],$arrOrderInfo['SpOrderNo'],3);
+                    }
+				}	
+			}			
+		}
+		
+		//操作日志
+		$objSessioinLogin = new Session($this->arrConfig['Session']['SessionLoginName']);
+		$SysUserName = $objSessioinLogin->get($this->arrConfig['SessionInfo']['UserName']);
+		$objOperationLogsBLL = new OperationLogsBLL($RoleID);
+		$objOperationLogsBLL->addCaseOperationLogs($RoleID, 0, $OpType, $OpContent, $iResults, Utility::getIP(), 0, 2, $SysUserName, '');
+		
+		echo json_encode(array('iResult'=>$iResults,'RID'=>$RID));
+	}
+
+
+    public function sumData()
+    {
+        $strWhere = ' WHERE 1=1';
+        //$RechargeType = Utility::isNumeric('RechargeType',$_POST);
+        //$StartTime = Utility::isNullOrEmpty('StartTime',$_POST) ? $_POST['StartTime'] : '';
+        $EndTime = Utility::isNullOrEmpty('EndTime',$_POST) ? $_POST['EndTime'] : date('Y-m-d');
+        $EndTime = date('Ymd',strtotime($EndTime));
+        $date = $EndTime;
+
+        $LoginID = Utility::isNullOrEmpty('LoginID',$_POST) ? str_replace(" ","",$_POST['LoginID']) : '';
+        $OrderID = Utility::isNullOrEmpty('OrderID',$_POST) ? str_replace(" ","",$_POST['OrderID']) : '';
+        $Amount = Utility::isNumeric('Amount',$_POST);
+        $RechargeStatus = Utility::isNumeric('RechargeStatus',$_POST);
+        $ClassType = Utility::isNumeric('ClassType',$_POST);
+//        $ChannelType = Utility::isNumeric('ChannelType',$_POST);
+//        $TransactionID = Utility::isNullOrEmpty('TransactionID',$_POST)? str_replace(" ","",$_POST['TransactionID']):'';
+
+        if($LoginID)
+        {
+            //$objUserBLL = new UserBLL(0);
+            //$arrUserInfo = $objUserBLL->getRole(1,$LoginID);
+            //if(!empty($arrUserInfo))
+            $strWhere .= " AND LoginID=".$LoginID;
+            //else
+            //	return array('arrRechargeList'=>null,'Page'=>null);
+        }
+        if($OrderID) $strWhere .= " AND SpOrderNo='$OrderID' ";
+        if($Amount) $strWhere .= " AND TotalFee=$Amount ";
+        //if($StartTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$StartTime')<=0 ";
+        //if($EndTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$EndTime')>=0 ";
+        if(!empty($RechargeStatus) && $RechargeStatus != -1){
+            $strWhere .= " AND Status={$RechargeStatus}";
+        }
+//        if(!empty($ChannelType) && $ChannelType!=-1){
+//            $strWhere .= " AND PayType={$ChannelType}";
+//        }
+        if(!empty($ClassType) && $ClassType!=-1){
+            $strWhere .= " AND CardType={$ClassType}";
+        } else {
+            $strWhere .= " AND CardType IN (1500, 1600)";
+        }
+//        if(!empty($TransactionID)){
+//            $strWhere .= " AND TransactionID='{$TransactionID}' ";
+//            //var_dump($strWhere);
+//        }
+
+//        var_dump($date, $strWhere);
+//        die;
+        $payLogBll = new PayLogsBLL($this->arrConfig['MapType']['PayLogs']);
+        $res = $payLogBll->getPayOrderSummary($date, $strWhere);
+        return json_encode(['sumData' => $res]);
+	}
+
+    public function sumDataAjax()
+    {
+        $strWhere = ' 1=1';
+        //$RechargeType = Utility::isNumeric('RechargeType',$_POST);
+        //$StartTime = Utility::isNullOrEmpty('StartTime',$_POST) ? $_POST['StartTime'] : '';
+        $EndTime = Utility::isNullOrEmpty('EndTime',$_POST) ? $_POST['EndTime'] : date('Y-m-d');
+        $EndTime = date('Ymd',strtotime($EndTime));
+        $date = $EndTime;
+
+        $LoginID = Utility::isNullOrEmpty('LoginID',$_POST) ? str_replace(" ","",$_POST['LoginID']) : '';
+        $OrderID = Utility::isNullOrEmpty('OrderID',$_POST) ? str_replace(" ","",$_POST['OrderID']) : '';
+        $Amount = Utility::isNumeric('Amount',$_POST);
+        $RechargeStatus = Utility::isNumeric('RechargeStatus',$_POST);
+        $ClassType = Utility::isNumeric('ClassType',$_POST);
+//        $ChannelType = Utility::isNumeric('ChannelType',$_POST);
+//        $TransactionID = Utility::isNullOrEmpty('TransactionID',$_POST)? str_replace(" ","",$_POST['TransactionID']):'';
+
+        if($LoginID)
+        {
+            //$objUserBLL = new UserBLL(0);
+            //$arrUserInfo = $objUserBLL->getRole(1,$LoginID);
+            //if(!empty($arrUserInfo))
+            $strWhere .= " AND LoginID=".$LoginID;
+            //else
+            //	return array('arrRechargeList'=>null,'Page'=>null);
+        }
+        if($OrderID) $strWhere .= " AND SpOrderNo='$OrderID' ";
+        if($Amount) $strWhere .= " AND TotalFee=$Amount ";
+        //if($StartTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$StartTime')<=0 ";
+        //if($EndTime) $strWhere .= " AND DATEDIFF(d,AddTime,'$EndTime')>=0 ";
+        if(!empty($RechargeStatus) && $RechargeStatus != -1){
+            $strWhere .= " AND Status={$RechargeStatus}";
+        }
+//        if(!empty($ChannelType) && $ChannelType!=-1){
+//            $strWhere .= " AND PayType={$ChannelType}";
+//        }
+        if(!empty($ClassType) && $ClassType!=-1){
+            $strWhere .= " AND CardType={$ClassType}";
+        } else {
+            $strWhere .= " AND CardType IN (1500, 1600)";
+        }
+//        if(!empty($TransactionID)){
+//            $strWhere .= " AND TransactionID='{$TransactionID}' ";
+//            //var_dump($strWhere);
+//        }
+
+//        var_dump($date, $strWhere);
+//        die;
+        $payLogBll = new PayLogsBLL($this->arrConfig['MapType']['PayLogs']);
+        $res = $payLogBll->getPayOrderSummary($date, $strWhere);
+        echo json_encode(['sumData' => $res]);
+    }
+}
+?>

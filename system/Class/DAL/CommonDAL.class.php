@@ -58,7 +58,7 @@ class CommonDAL extends DALBase {
 				array($arrParam['tableName'], SQLSRV_PARAM_IN),
 				array($arrParam['where'], SQLSRV_PARAM_IN),
 				array($arrParam['order'], SQLSRV_PARAM_IN),
-				array($arrParam['Page'], SQLSRV_PARAM_IN),
+				array($curPage, SQLSRV_PARAM_IN),
 				array($arrParam['pagesize'], SQLSRV_PARAM_IN),
 			);
 
