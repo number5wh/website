@@ -55,7 +55,7 @@ $result_code = $tradeState == '00' ? 0 : 1;
 $order = OSGetPayOrder ($order_no, $cardType);
 Utility::Log($file_name, '订单信息：', json_encode($order));
 //file_put_contents("./param".date('H:i:s').rand(0,100).".txt",$order);
-OSAddPayLogs ($result_code, '', date ('Ymd', time ()), $merId, $outTradeNo, $order_no, (float) ($amount), '', $cardType, $order ['iLoginID'] );
+OSAddPayLogs ($result_code, '', date ('Ymd', time ()), $merId, $outTradeNo, $order_no, (float) ($amount*100), '', $cardType, $order ['iLoginID'] );
 
 if ($checksign !== $sign) {
     echo "Signature error";

@@ -49,7 +49,7 @@ if ($data = $ydpay->VerifySign($str->transData)){
     $order = OSGetPayOrder($order_no, $cardType);
     Utility::Log($file_name, '订单信息：', json_encode($order));
 //file_put_contents("./param".date('H:i:s').rand(0,100).".txt",$order);
-    OSAddPayLogs($result_code, '', date('Ymd', time()), $merNo, $outTradeNo, $order_no, (float)($amount), '', $cardType, $order ['iLoginID']);
+    OSAddPayLogs($result_code, '', date('Ymd', time()), $merNo, $outTradeNo, $order_no, (float)($amount*100), '', $cardType, $order ['iLoginID']);
     //处理业务逻辑
     if (OSLockOrder($cardType, $order_no)['iResult'] == 0) {
         if (OSFindPayOrder($cardType, '', $order_no, 0)['iResult'] != 0) {   //这笔订单已经处理过了
