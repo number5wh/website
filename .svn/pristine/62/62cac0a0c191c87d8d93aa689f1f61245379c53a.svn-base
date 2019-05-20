@@ -19,43 +19,37 @@ require_once ROOT_PATH . 'Link/UnLockOrder.php';
 
 $file_name = basename($_SERVER['PHP_SELF'], '.php');
 Utility::Log($file_name, 'receive_info', json_encode($_REQUEST));
-$order_no   = $_POST["order_id"];
-$outTradeNo = $_POST['plat_order_id'];
-$timestamp  = $_POST['timestamp'];
+
+$order_no   = $_POST["merchantOrderNo"];
+$outTradeNo = $_POST['transNo'];
 $amount     = $_POST["amount"];
-$tradeState = $_POST["trade_status"];
-$trateDate  = $_POST["trade_date"];
-$goodInfo   = $_POST["goods_info"];
-$sign       = $_POST["sign_data"];
-$orgId       = $_POST["orgid"];
-$merNo       = $_POST["merno"];
+$real       = $_POST['real'];
+$tradeState = $_POST["status"];
+
+$sign       = $_POST["sign"];
+$merNo       = $_POST["merchantNo"];
 
 //验证sign
 $str = '';
 $arr = $_POST;
 ksort($arr);
-$last = end($arr);
 foreach ($arr as $key => $value) {
-    if ($key != "sign_data") {
-        if ($value == $last) {
-            $str .= $key . '=' . $value;
-        } else {
-            $str .= $key . '=' . $value . '&';
-        }
+    if ($key != "sign") {
+        $str .= $value;
     }
 }
-$str         .= 'SNEm85pcCJzaMpzchmmffdBjHBHjXMFz';
+$str         .= '6bb148080fb34c61ad4601db0d17515c';
 $checkSign   = strtolower(md5($str));
 $cardType    = 1200;//支付宝
-$result_code = $tradeState == '0' ? 0 : 1;
+$result_code = $tradeState == '00' ? 0 : 1;
 
 $order = OSGetPayOrder($order_no, $cardType);
 Utility::Log($file_name, '订单信息：', json_encode($order));
 //file_put_contents("./param".date('H:i:s').rand(0,100).".txt",$order);
-OSAddPayLogs($result_code, '', date('Ymd', time()), $merNo, $outTradeNo, $order_no, (float)($amount), '', $cardType, $order ['iLoginID']);
+OSAddPayLogs($result_code, '', date('Ymd', time()), $merNo, $outTradeNo, $order_no, (float)($real), '', $cardType, $order ['iLoginID']);
 //echo $checkSign;
 if ($checkSign !== $sign) {
-    echo json_encode(['responseCode' => '1000']); //签名不对
+    echo 'wrong sign'; //签名不对
     Utility::Log($file_name, '签名失败：', 'checksign:'.$checkSign.' sign:'.$sign);
 } else {
     //处理业务逻辑
@@ -69,15 +63,7 @@ if ($checkSign !== $sign) {
                     //这笔订单已经支付成功过了
                 } else {
                     OSSetPayOrderStatus($cardType, '', $order_no, 1);
-					/*
-                    if ($order['iPayType'] == 130) { //欢乐豆
-                       
-                    } else {//黄钻会员
-                        $result = DCBuyVIP($order ['iLoginID'], floor($amount / $arrConfig['VipPrice']) * $arrConfig['VipDays'], $cardType);
-                        Utility::Log($file_name, '购买黄专：', json_encode($result));
-                    }
-					*/
-					 $result = DCBuyHappyBean($order ['iLoginID'], floor($amount), $cardType);   //充值欢乐豆 单位分
+					 $result = DCBuyHappyBean($order ['iLoginID'], floor($real), $cardType);   //充值欢乐豆 单位分
                      Utility::Log($file_name, '购买欢乐豆：', json_encode($result));
 
                     if ($result['iResult'] == 0) {
@@ -95,7 +81,7 @@ if ($checkSign !== $sign) {
         }
         OSUnLockOrder($order_no);		
     }
-    echo json_encode(['responseCode' => '0000']);
+    echo 'success';
 }
 
 

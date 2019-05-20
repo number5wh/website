@@ -100,10 +100,6 @@ class AppAction extends PageBase {
                         $returnArr = $this->charge_jiufupay2($data);
                     }elseif ($data['payType'] == 220) {
                         $returnArr = $this->charge_yunchenpay($data);
-                    }elseif ($data['payType'] == 230) {
-                        $returnArr = $this->charge_yilianbaopay($data);
-                    }elseif ($data['payType'] == 240) {
-                        $returnArr = $this->charge_98pay($data);
                     }
                 }
 
@@ -322,17 +318,8 @@ class AppAction extends PageBase {
         }
         $wlpay = new weilian($method, $param['order_amount'],$param["order_no"], $notifyUrl);
         $res = $wlpay->send();
-        $preg='/<a .*?href="(.*?)".*?>/is';
-        preg_match_all($preg, $res, $matches);
-
-        return $matches[1];
-//        $dom = new DOMDocument;
-//        $dom->loadHTML($res);
-//        $data = '';
-//        foreach ($dom->getElementsByTagName('a') as $node) {
-//            $data = $node->getAttribute( 'href' );
-//        }
-//        return $data;
+        var_dump($res);
+        die;
     }
 
     //谷岚
@@ -562,64 +549,6 @@ class AppAction extends PageBase {
         {
             //echo $obj->retMsg;
             return "";
-        }
-    }
-
-
-    /**
-     * 易联保(金额单位分)
-     */
-    public function charge_yilianbaopay($param)
-    {
-        require_once ROOT_PATH.'Common/yilianbaopay/test.php';
-
-        $yilianbao = new Yilianbao();
-        $method = $notifyUrl = $type =  '';
-        if ($param['cardType'] == 1200) {//
-            $notifyUrl = $this->CFG['URL']['Order']."/yilianbao_notify_zfb.php";
-            $method = '01';//zfb
-            $type = '02';//h5
-        }  else {
-            return '';
-        }
-
-        $res = $yilianbao->pay($param['order_no'], $param['order_amount']*100, $notifyUrl, $method, $type);
-        $res = json_decode($res, true);
-        if ($res['resultCode'] == '000000') {
-            return $res['payInfo'];
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * 98支付H5 单位分
-     */
-    public function charge_98pay($param)
-    {
-        require_once ROOT_PATH.'Common/98pay/pay.php';
-        $method = $notifyUrl = $type =  $cid= $key ='';
-        if ($param['cardType'] == 1200) {//
-            $notifyUrl = $this->CFG['URL']['Order']."/lefu98_notify_zfb.php";
-            $type = '1004';//zfb
-            $cid =10446;
-            $key = 'CB4C23C80471E26E38B4E065EB2B236B';
-        }  elseif ($param['cardType'] == 1300) {
-            $notifyUrl = $this->CFG['URL']['Order']."/lefu98_notify_wx.php";
-            $type = '1001';//wx
-            $cid =10445;
-            $key = '2FBDAC6C4F4828D8480D2E265A86BFFD';
-        } else {
-            return '';
-        }
-        $model = new Lefu($param['LoginCode'],$param['order_amount']*100,$param['order_no'],$notifyUrl, $type, $cid,$key);
-        $res = $model->send();
-        $res = json_decode($res, true);
-
-        if ($res['code'] == 0) {
-            return $res['payUrl'];
-        } else {
-            return '';
         }
     }
 }

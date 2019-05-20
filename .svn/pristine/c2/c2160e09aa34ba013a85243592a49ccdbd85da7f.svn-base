@@ -102,8 +102,6 @@ class AppAction extends PageBase {
                         $returnArr = $this->charge_yunchenpay($data);
                     }elseif ($data['payType'] == 230) {
                         $returnArr = $this->charge_yilianbaopay($data);
-                    }elseif ($data['payType'] == 240) {
-                        $returnArr = $this->charge_98pay($data);
                     }
                 }
 
@@ -587,37 +585,6 @@ class AppAction extends PageBase {
         $res = json_decode($res, true);
         if ($res['resultCode'] == '000000') {
             return $res['payInfo'];
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * 98支付H5 单位分
-     */
-    public function charge_98pay($param)
-    {
-        require_once ROOT_PATH.'Common/98pay/pay.php';
-        $method = $notifyUrl = $type =  $cid= $key ='';
-        if ($param['cardType'] == 1200) {//
-            $notifyUrl = $this->CFG['URL']['Order']."/lefu98_notify_zfb.php";
-            $type = '1004';//zfb
-            $cid =10446;
-            $key = 'CB4C23C80471E26E38B4E065EB2B236B';
-        }  elseif ($param['cardType'] == 1300) {
-            $notifyUrl = $this->CFG['URL']['Order']."/lefu98_notify_wx.php";
-            $type = '1001';//wx
-            $cid =10445;
-            $key = '2FBDAC6C4F4828D8480D2E265A86BFFD';
-        } else {
-            return '';
-        }
-        $model = new Lefu($param['LoginCode'],$param['order_amount']*100,$param['order_no'],$notifyUrl, $type, $cid,$key);
-        $res = $model->send();
-        $res = json_decode($res, true);
-
-        if ($res['code'] == 0) {
-            return $res['payUrl'];
         } else {
             return '';
         }

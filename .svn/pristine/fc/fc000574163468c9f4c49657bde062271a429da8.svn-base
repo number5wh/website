@@ -792,17 +792,6 @@ var callback={
         evt.BindPageClick('','page.GetPage',Param,Param1);
         //rm.BindEvent();
     },
-    //运维平台(游戏配置),房间列表
-    GetPayRelation:function(data){//alert(data);
-        $('#PageList').html(data);
-        init.SetTableRows();//初始化鼠标移到表格行显示背景
-        //rm.BindEvent();//初始化绑定事件(GameRoomPage.html)
-        //绑定分页
-        var Param = '$(this).attr("pg"),"callback.GetPayRelation"';
-        var Param1 = '$(this).val(),"callback.GetPayRelation"';
-        evt.BindPageClick('','page.GetPage',Param,Param1);
-        rm.BindEvent();
-    },
 	//运维平台(游戏配置),显示游戏节点列表
 	GetGameType:function(data){
 		$('#'+setting.ObjID).after(data);		
