@@ -6,31 +6,28 @@
         <br class="clear" />
     </h2>
 
-    <div class="bdy">
+    <div>
         <table id="mytable" width="100%" border="0" cellpadding="1" cellspacing="1" class="tbList txt_M">
             <tr>
-                <th width="33%">库存</th>
-                <th width="33%">概率</th>
-                <th width="33%">操作</th>
+                <th width="50%">库存</th>
+                <th width="50%">概率</th>
             </tr>
+
             {foreach from=$storage item=info}
             <tr class="bg_color">
-                <td>
-                    <input type="text" class="edit"  value="{$info[0]}" maxlength="6" name="storage" style="width: 33%">
-                </td>
-                  <td><input type="text" class="edit"  value="{$info[1]}" maxlength="4" name="rate" style="width: 33%"></td>
-                <td style="width: 33%"><a href="javascript:;" onclick="$(this).parent().parent().remove()">删除</a></td>
-              </tr>
+                <td>{$info[0]}</td>
+                <td>{$info[1]}</td>
+            </tr>
               {/foreach}
           </table>
           <div class="bot f2">
-              <div class="botLeft f1 left">
-                  <input type="button" class="btn f2 left" value="新增一行" id="sadd" />
-              </div>
-              <div class="botRight f1 right"></div>
-              <input type="hidden" name="RoomId" id="RoomId" value="{$Room.nServerID}" />
-              <input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'ControlleUser')"/>
-              <input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />
+              <!--<div class="botLeft f1 left">-->
+                  <!--<input type="button" class="btn f2 left" value="新增一行" id="sadd" />-->
+              <!--</div>-->
+              <!--<div class="botRight f1 right"></div>-->
+              <!--<input type="hidden" name="RoomId" id="RoomId" value="{$Room.nServerID}" />-->
+              <!--<input type="button" class="btn f2 right" value="取 消" onclick="main.CloseMsgBox(true,'ControlleUser')"/>-->
+              <!--<input type="button" class="btn f2 right" value="提 交" id="btnAddAd" />-->
               <div class="orange right" id="ResultMsg"></div>
               <br class="clear" />
           </div>

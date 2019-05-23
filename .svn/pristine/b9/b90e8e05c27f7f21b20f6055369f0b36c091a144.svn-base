@@ -54,7 +54,7 @@ class ControlleUserAction extends PageBase
         $strWhere = ' WHERE isShow=0 ';
         $KindID = Utility::isNumeric('KindID',$_POST);
         $RoomName = Utility::isNullOrEmpty('RoomName',$_POST);
-        if($KindID) $strWhere .= ' AND KindID='.$KindID;
+        if($KindID) $strWhere .= ' AND R.KindID='.$KindID;
         if($RoomName) $strWhere .= ' AND RoomName like \'%'.Utility::utf8ToGb2312($RoomName).'%\'';
         $curPage = Utility::isNumeric('curPage',$_POST);
         $curPage = $curPage==0 ? 1 : $curPage;
@@ -196,66 +196,29 @@ class ControlleUserAction extends PageBase
             exit;
         }
 
-        sort($storageInfo);
-        rsort($ratioInfo);
-
-        $storageInfo = array_unique($storageInfo);
-        $ratioInfo = array_unique($ratioInfo);
-
-        if (count($storageInfo) != count($ratioInfo)) {
-            echo -9999;
-            exit;
-        }
-
         $storageStr = '';
         for ($i=0; $i<count($storageInfo);$i++) {
             $storageStr .= $storageInfo[$i].'#'.$ratioInfo[$i].'#';
         }
         $storageStr = rtrim($storageStr, '#');
-
-
-//        var_dump($RoomCtrl);
-//        die;
-
-
-
 //        var_dump($storageStr);
 //        die;
-        DSSetRoomRate($RoomID,$RoomCtrl[0]['nCtrlRatio'],$RoomCtrl[0]['nInitStorage'],$RoomCtrl[0]['nCurrentStorage'], $storageStr);
+        DSSetRoomRate($RoomID,$RoomCtrl['nCtrlRatio'],$RoomCtrl['nInitStorage'],$RoomCtrl['nCurrentStorage'], $storageStr);
         echo 0;
     }
 
-    //查看
-    public function showInfo()
-    {
-        $RoomID = Utility::isNullOrEmpty('RoomId',$_POST);
-        $RoomCtrl  = DSQueryRoom($RoomID);
-        $roomInfo = $RoomCtrl[0];
-//        var_dump($roomInfo);
-//        die;
-        $storage = explode('#', $roomInfo['szStorageRatio']);
-        $info = array_chunk($storage,2);
+    public function sendctrl(){
+        $RoomID = Utility::isNumeric('RoomId',$_GET);
+        $Ratio = Utility::isNumeric('Ratio',$_GET);
+        $Storage = Utility::isNumeric('Storage',$_GET);
+        $CurrentStorage = Utility::isNumeric('CurrentStorage',$_GET);
+		
 
-        $arrTags=array("storage"=>$info, "Room" => $roomInfo);
-        //print_r($arrTags);
-        Utility::assign($this->smarty,$arrTags);
-        $html = $this->smarty->fetch($this->arrConfig['skin'].'/Service/ControlRoomShow.html');
-        $html=str_replace("</script>","<\/script>",str_replace("\r\n",'',$html));
-        echo $html;
+        if(empty($RoomID) || empty($Ratio) || empty($Storage) || empty($CurrentStorage)){
+            echo -9999;
+        }
+        DSSetRoomRate($RoomID,$Ratio,$Storage*1000,$CurrentStorage*1000);
+        echo 0;
     }
-
-//    public function sendctrl(){
-//        $RoomID = Utility::isNumeric('RoomId',$_GET);
-//        $Ratio = Utility::isNumeric('Ratio',$_GET);
-//        $Storage = Utility::isNumeric('Storage',$_GET);
-//        $CurrentStorage = Utility::isNumeric('CurrentStorage',$_GET);
-//
-//
-//        if(empty($RoomID) || empty($Ratio) || empty($Storage) || empty($CurrentStorage)){
-//            echo -9999;
-//        }
-//        DSSetRoomRate($RoomID,$Ratio,$Storage*1000,$CurrentStorage*1000);
-//        echo 0;
-//    }
 
 }

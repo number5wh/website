@@ -38,7 +38,6 @@
         <td>
             <span id="setfinish_{$GameRoom.RoomID}" style="color: red"></span>
             <a href="javascript:void(0)" onclick="showEdit('{$GameRoom.RoomID}');" class="edit" id="setctrl">设置概率</a>
-            <a href="javascript:void(0)" onclick="showInfo('{$GameRoom.RoomID}');" class="edit" >查看概率</a>
         </td>
     </tr>
     {foreachelse}
@@ -67,20 +66,8 @@
                 return false;
         }
         ajax.RequestUrl(setting.Url,params,'callback.ShowEditRoom');
+
     }
 
-    function showInfo(RoomId){
-        {/literal}
-        setting.Url='{au d=Service c=ControlleUser a=showInfo}';
-        {literal}
-
-        var params ='RoomId='+RoomId;
-
-        if(isNaN(RoomId) || RoomId=='' ){
-            alert('*参数异常');
-            return false;
-        }
-        ajax.RequestUrl(setting.Url,params,'callback.ShowEditRoom');
-    }
     {/literal}
 </script>

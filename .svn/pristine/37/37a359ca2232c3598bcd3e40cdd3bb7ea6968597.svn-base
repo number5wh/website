@@ -214,14 +214,12 @@ class ControlleUserAction extends PageBase
         $storageStr = rtrim($storageStr, '#');
 
 
-//        var_dump($RoomCtrl);
-//        die;
 
 
 
 //        var_dump($storageStr);
 //        die;
-        DSSetRoomRate($RoomID,$RoomCtrl[0]['nCtrlRatio'],$RoomCtrl[0]['nInitStorage'],$RoomCtrl[0]['nCurrentStorage'], $storageStr);
+        DSSetRoomRate($RoomID,$RoomCtrl['nCtrlRatio'],$RoomCtrl['nInitStorage'],$RoomCtrl['nCurrentStorage'], $storageStr);
         echo 0;
     }
 
