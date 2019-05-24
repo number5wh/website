@@ -1554,11 +1554,6 @@ class MasterBLL
         return $this->objMasterDAL->getRegdata();
     }
 
-    //折线图
-    function getOrderData() {
-        return $this->objMasterDAL->getOrderdata();
-    }
-
     function getUserGameRank($roleId) {
         return $this->objMasterDAL->getUserGameRank($roleId);
     }

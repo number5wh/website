@@ -3029,11 +3029,6 @@ class MasterDAL extends DALBase
         $arrResults = $this->objMasterDB->fetchAllAssoc("P_IndexDashBoard_RegData", $params);
         return $arrResults;
     }
-    function getOrderdata() {
-        $params = array();
-        $arrResults = $this->objMasterDB->fetchAllAssoc("P_IndexDashBoard_OrderData", $params);
-        return $arrResults;
-    }
 
     function getUserGameRank($roleId) {
         $params = array(
