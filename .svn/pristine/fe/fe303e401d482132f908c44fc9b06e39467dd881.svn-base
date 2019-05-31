@@ -56,7 +56,7 @@
     {literal}
     var sys = {
         callback : function (data) {
-            alert('修改成功');
+            
         }
     };
 
